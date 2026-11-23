@@ -130,7 +130,11 @@ Prototipe EduTrack Pro telah berhasil mengimplementasikan seluruh skenario bisni
 - Obrolan dua arah terenkripsi antara pelapor dan tim investigasi sekolah.
 - Orang tua hanya dapat melihat tiket aduannya sendiri (`Pengaduan Saya`), Wali Kelas melihat aduan kelas binaan, Guru BK & Admin mengawasi seluruh aduan se-sekolah. Siswa tidak dibebani menu aduan publik demi perlindungan psikologis anak.
 
-### 3.7 Manajemen Siswa, Orang Tua & Pengguna
+### 3.7 Manajemen Guru & Tenaga Kependidikan (GTK), Siswa, Orang Tua & Pengguna
+- **Manajemen Guru & Pegawai (GTK - Khusus Super Admin)**:
+  - Akses terisolasi ketat: Hanya tampil pada navigasi saat login sebagai **Super Admin / Kepala Sekolah**.
+  - Menyimpan master NIP, NUPTK, Nama & Gelar, Status Kepegawaian (PNS / PPPK / GTT / Honorer / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, WhatsApp, Email, dan Status Aktif.
+  - Operasi CRUD penuh: Tambah Guru/Pegawai baru, Edit profil penugasan, Hapus data pegawai dengan audit log ISO 27001 (`CREATE_TEACHER`, `UPDATE_TEACHER`, `DELETE_TEACHER`), multi-filter pencarian cepat, dan fitur ekspor data.
 - **Dropdown Scope Dinamis**: Pada modul Tambah/Edit Pengguna, kolom Cakupan Data otomatis terisolasi berdasarkan peran (Admin = Seluruh Sekolah; BK = Tingkat Kelas/Semua; Wali Kelas = Pilihan Kelas; Ortu/Siswa = Pilihan Siswa).
 - **Akses Profil Mandiri**: Siswa memiliki menu **Data Diri Siswa**; Orang Tua memiliki menu **Data Siswa (Anak)** dan **Data Orang Tua / Wali**.
 
@@ -201,6 +205,28 @@ CREATE TABLE classrooms (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+```
+
+#### Tabel `teachers` (Master Guru & Tenaga Kependidikan / GTK)
+```sql
+CREATE TABLE teachers (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT UNIQUE REFERENCES users(id) ON DELETE SET NULL,
+    nip VARCHAR(30) UNIQUE,                 -- NIP 18 Digit (PNS/PPPK)
+    nuptk VARCHAR(25) UNIQUE,               -- NUPTK 16 Digit
+    full_name VARCHAR(150) NOT NULL,
+    gender VARCHAR(15) NOT NULL CHECK (gender IN ('Laki-laki', 'Perempuan')),
+    employment_status VARCHAR(30) NOT NULL CHECK (employment_status IN ('PNS', 'PPPK', 'GTT', 'Honorer', 'Kontrak')),
+    role_title VARCHAR(100) NOT NULL,       -- Kepala Sekolah, Wali Kelas, Guru BK, Guru Mapel, Operator Dapodik, Sarpras
+    assigned_subject VARCHAR(100),          -- Mapel / Rombel binaan
+    phone_number VARCHAR(25) NOT NULL,      -- WhatsApp resmi
+    email VARCHAR(100) NOT NULL UNIQUE,
+    status VARCHAR(20) DEFAULT 'Aktif' CHECK (status IN ('Aktif', 'Nonaktif', 'Cuti')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+CREATE INDEX idx_teachers_nip ON teachers(nip);
+CREATE INDEX idx_teachers_status ON teachers(status);
 ```
 
 #### Tabel `students` (Master Pokok Siswa)

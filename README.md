@@ -147,3 +147,12 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
     - **Tombol Login Popup**: Tombol **"GET A DEMO / LOGIN"** pada navbar dan **"LEARN NOW"** pada hero memicu jendela sembulan (*modal popup*) login interaktif dengan pemilih peran kilat (*Quick Role Switcher*).
     - **Pembaruan Identitas Resmi**: Seluruh nama instansi, kop surat SP, kartu pelajar ISO CR-80, dan breadcrumb repositori resmi diperbarui menjadi **SDN Kebonagung Kota Pasuruan**.
     - **Navigasi Bolak-Balik**: Tersedia tombol **"🌐 Halaman Depan"** di header sistem untuk kembali melihat Welcome Page kapan saja tanpa kehilangan sesi.
+23. **Modul Manajemen Guru & Tenaga Kependidikan (GTK) — Eksklusif Role Admin (Full CRUD)**:
+    - **Akses Terbatas Khusus Admin**: Modul `Manajemen Guru & Pegawai` hanya muncul pada tab navigasi horizontal dan hanya dapat diakses saat masuk sebagai **Super Admin / Kepala Sekolah**. Modul ini disembunyikan secara ketat dari Guru BK, Wali Kelas, Orang Tua, dan Siswa sesuai prinsip *Least Privilege* (ISO/IEC 27001).
+    - **Informasi Master GTK Lengkap**: Menyimpan Nomor Induk Pegawai (NIP), NUPTK, Nama Lengkap & Gelar, Jenis Kelamin, Status Kepegawaian (PNS / PPPK / GTT / Honorer / Kontrak), Jabatan / Tugas Utama (Kepala Sekolah, Wali Kelas, Guru Mata Pelajaran, Tenaga Administrasi / Operator Dapodik, Sarpras & Keamanan), Rombel / Mapel Pembina, Nomor WhatsApp Aktif, Email Kedinasan, serta Status Keaktifan.
+    - **Operasi CRUD Penuh & Log Audit**:
+      - **Tambah Guru / Pegawai Baru**: Tombol **"+ Tambah Guru / Pegawai"** dengan formulir popup validasi input lengkap, penomoran ID GTK otomatis, dan pencatatan audit trail ISO 27001 (`CREATE_TEACHER`).
+      - **Edit / Perbarui Data GTK**: Tombol **"✏️ Edit"** untuk memperbarui status penugasan, nomor kontak WA, rombel binaan, maupun status keaktifan secara instan (`UPDATE_TEACHER`).
+      - **Hapus Data GTK**: Tombol **"🗑️ Hapus"** dengan dialog konfirmasi penghapusan data pegawai dan pencatatan audit trail (`DELETE_TEACHER`).
+      - **Pencarian & Multi-Filter**: Filter instan pencarian nama, NIP, email, tugas/jabatan, dan status kepegawaian (PNS / PPPK / Honorer).
+      - **Ekspor Data GTK**: Tombol **"📥 Ekspor Data GTK"** untuk mengunduh rekapitulasi data seluruh pendidik dan tenaga kependidikan ke format file simulasi.

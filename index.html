@@ -485,6 +485,7 @@
                 <svg v-else-if="item.id === 'aduan'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>
                 <svg v-else-if="item.id === 'siswa_mgmt'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8.75 8a2.25 2.25 0 1 0-1.5 0c-1.392.278-2.678.932-3.69 1.879A.75.75 0 0 0 4.5 11h7a.75.75 0 0 0 .94-1.121c-1.012-.947-2.298-1.601-3.69-1.879ZM8 4.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5ZM2 8.75A2.75 2.75 0 0 1 4.75 6h6.5A2.75 2.75 0 0 1 14 8.75v5.5A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Z"></path></svg>
                 <svg v-else-if="item.id === 'ortu_mgmt'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-6.898-1.92A.75.75 0 0 1 1.75 10.5 5.5 5.5 0 0 1 2 5.5Zm3.5-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6.25 1.75a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Zm0 1.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"></path></svg>
+                <svg v-else-if="item.id === 'guru_mgmt'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 0a2.5 2.5 0 0 0-2.5 2.5V3H1a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-1v-.5A2.5 2.5 0 0 0 11.5 0h-7ZM3.5 3v-.5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1V3h-9ZM8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4Zm-4 5.25a3.25 3.25 0 0 1 6.5 0 .75.75 0 0 1-1.5 0 1.75 1.75 0 0 0-3.5 0 .75.75 0 0 1-1.5 0Z"></path></svg>
                 <svg v-else-if="item.id === 'users'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a2.5 2.5 0 0 0-2.45 2H1.75a.75.75 0 0 0 0 1.5h2.3a2.5 2.5 0 0 0 4.9 0h5.3a.75.75 0 0 0 0-1.5H8.95A2.5 2.5 0 0 0 6.5 1Zm0 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"></path></svg>
                 <svg v-else-if="item.id === 'backup'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 0 0-7 7v1a7 7 0 0 0 14 0V8a7 7 0 0 0-7-7Zm0 1.5c3.038 0 5.5 1.12 5.5 2.5S11.038 7.5 8 7.5 2.5 6.38 2.5 5 4.962 2.5 8 2.5ZM2.5 8c0 .245.14.636.564 1.026C3.896 9.774 5.672 10.5 8 10.5s4.104-.726 4.936-1.474c.424-.39.564-.781.564-1.026v1c0 1.38-2.462 2.5-5.5 2.5S2.5 10.38 2.5 9V8Z"></path></svg>
                 <svg v-else class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM1.5 14.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"></path></svg>
@@ -2722,6 +2723,186 @@
 
 
           <!-- ============================================== -->
+          <!-- PAGE: MANAJEMEN GURU & PEGAWAI (ADMIN ONLY)    -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'guru_mgmt'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Manajemen Guru & Tenaga Kependidikan (GTK)</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                    Data Pokok Pendidik (Dapodik / Kemendikbud)
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Kelola data guru PNS/PPPK/GTT, NIP/NUPTK, penugasan rombel kelas binaan, dan nomor kontak resmi</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  @click="exportMockData('Data_Guru_Pegawai')" 
+                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  📥 Export Data GTK
+                </button>
+                <button 
+                  @click="openTeacherModal()"
+                  class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs cursor-pointer"
+                >
+                  <span>+</span>
+                  <span>Tambah Guru / Pegawai</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter GTK -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="relative sm:col-span-2">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="teacherFilters.search" 
+                    type="text" 
+                    placeholder="Cari nama guru, NIP, NUPTK, mapel, atau email..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+                <div>
+                  <select 
+                    v-model="teacherFilters.rolePosition" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Jabatan</option>
+                    <option value="Kepala Sekolah">Kepala Sekolah</option>
+                    <option value="Wali Kelas / Guru Kelas">Wali Kelas / Guru Kelas</option>
+                    <option value="Guru Mapel">Guru Mapel</option>
+                    <option value="Guru BK / Konseling">Guru BK / Konseling</option>
+                    <option value="Tenaga Administrasi / TU">Tenaga Administrasi / TU</option>
+                    <option value="Petugas Sarpras & Keamanan">Petugas Sarpras & Keamanan</option>
+                  </select>
+                </div>
+                <div>
+                  <select 
+                    v-model="teacherFilters.employmentStatus" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Status Kepegawaian</option>
+                    <option value="PNS / ASN">PNS / ASN</option>
+                    <option value="PPPK">PPPK</option>
+                    <option value="Honorer Daerah (PTT)">Honorer Daerah (PTT/GTT)</option>
+                    <option value="Pegawai Kontrak">Pegawai Kontrak</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabel GTK (Clean GitHub Table Style) -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-600">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-900 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">Nama Lengkap & Identitas</th>
+                      <th class="py-3 px-3">NIP / NUPTK</th>
+                      <th class="py-3 px-3">Jabatan & Tugas</th>
+                      <th class="py-3 px-3">Status ASN</th>
+                      <th class="py-3 px-3">Kontak & Email</th>
+                      <th class="py-3 px-3">Status</th>
+                      <th class="py-3 px-4 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100">
+                    <tr v-for="t in paginatedTeachersList" :key="t.id" class="hover:bg-slate-50/70 transition-colors">
+                      <td class="py-3 px-4">
+                        <div class="flex items-center gap-2.5">
+                          <div class="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0">
+                            {{ t.name.substring(0, 2).toUpperCase() }}
+                          </div>
+                          <div>
+                            <div class="font-bold text-slate-900">{{ t.name }}</div>
+                            <div class="text-[10px] text-slate-400">{{ t.gender }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="py-3 px-3 font-mono text-[11px] text-slate-700">
+                        <div>NIP: {{ t.nip }}</div>
+                        <div class="text-[10px] text-slate-400">NUPTK: {{ t.nuptk }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <div class="font-semibold text-slate-900">{{ t.rolePosition }}</div>
+                        <div class="text-[10px] text-purple-700 font-medium">{{ t.subjectOrClass }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span 
+                          :class="[
+                            t.employmentStatus.includes('PNS') ? 'bg-amber-50 text-amber-800 border-amber-200' : 
+                            (t.employmentStatus.includes('PPPK') ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-slate-100 text-slate-700 border-slate-200'),
+                            'px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block'
+                          ]"
+                        >
+                          {{ t.employmentStatus }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-3">
+                        <div class="font-mono text-emerald-700 font-medium">{{ t.phone }}</div>
+                        <div class="text-[10px] text-slate-400">{{ t.email }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 inline-block">
+                          {{ t.status }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                        <button 
+                          @click="openTeacherModal(t)"
+                          class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors cursor-pointer"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          @click="deleteTeacher(t)"
+                          class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors cursor-pointer"
+                        >
+                          🗑️ Hapus
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredTeachersList.length === 0">
+                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data guru atau tenaga kependidikan yang cocok dengan kriteria pencarian.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination GTK -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(teacherPage, teacherPerPage, filteredTeachersList.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredTeachersList.length }}</span> pegawai/GTK
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="teacherPage--" 
+                    :disabled="teacherPage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ teacherPage }} / {{ maxTeacherPages }}</span>
+                  <button 
+                    @click="teacherPage++" 
+                    :disabled="teacherPage >= maxTeacherPages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          
+          <!-- ============================================== -->
           <!-- PAGE: MANAJEMEN PENGGUNA (ADMIN ONLY)          -->
           <!-- ============================================== -->
           <div v-if="activePage === 'users'" class="space-y-4">
@@ -3469,6 +3650,104 @@
 
 
     <!-- ========================================== -->
+    <!-- MODAL: TAMBAH / EDIT GURU & PEGAWAI (GTK)  -->
+    <!-- ========================================== -->
+    <div v-if="showTeacherModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">{{ isEditingTeacher ? 'Edit Data Guru & Pegawai' : 'Tambah Guru / Pegawai Baru' }}</h3>
+            <p class="text-[11px] text-slate-400">Data Pokok Pendidikan (Dapodik) Guru & Tenaga Kependidikan</p>
+          </div>
+          <button @click="showTeacherModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveTeacher" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+            <input v-model="currentTeacherForm.name" required placeholder="Contoh: Budi Santoso S.Pd, M.Pd" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nomor Induk Pegawai (NIP)</label>
+              <input v-model="currentTeacherForm.nip" placeholder="18 Digit NIP (atau '-' jika non-ASN)" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">NUPTK</label>
+              <input v-model="currentTeacherForm.nuptk" placeholder="16 Digit NUPTK..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+              <select v-model="currentTeacherForm.gender" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Status Kepegawaian</label>
+              <select v-model="currentTeacherForm.employmentStatus" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="PNS / ASN">PNS / ASN</option>
+                <option value="PPPK">PPPK</option>
+                <option value="Honorer Daerah (PTT)">Honorer Daerah (PTT/GTT)</option>
+                <option value="Pegawai Kontrak">Pegawai Kontrak</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Jabatan / Penugasan</label>
+              <select v-model="currentTeacherForm.rolePosition" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="Kepala Sekolah">Kepala Sekolah</option>
+                <option value="Wali Kelas / Guru Kelas">Wali Kelas / Guru Kelas</option>
+                <option value="Guru Mapel">Guru Mapel</option>
+                <option value="Guru BK / Konseling">Guru BK / Konseling</option>
+                <option value="Tenaga Administrasi / TU">Tenaga Administrasi / TU</option>
+                <option value="Petugas Sarpras & Keamanan">Petugas Sarpras & Keamanan</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Rombel / Mata Pelajaran</label>
+              <input v-model="currentTeacherForm.subjectOrClass" required placeholder="Contoh: Kelas 4-A / PJOK / TU Kesiswaan" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nomor WhatsApp Aktif</label>
+              <input v-model="currentTeacherForm.phone" required placeholder="081234567890" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Email Resmi Sekolah</label>
+              <input v-model="currentTeacherForm.email" type="email" placeholder="nama@sdnkebonagung.sch.id" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status Keaktifan</label>
+            <select v-model="currentTeacherForm.status" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <option value="Aktif">Aktif Mengajar / Bekerja</option>
+              <option value="Cuti">Cuti Kerja</option>
+              <option value="Tugas Belajar">Tugas Belajar</option>
+              <option value="Pensiun">Pensiun</option>
+            </select>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showTeacherModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 cursor-pointer">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800 cursor-pointer">
+              {{ isEditingTeacher ? 'Perbarui Data GTK' : 'Simpan Data GTK' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
     <!-- MODAL: TAMBAH PENGGUNA BARU                -->
     <!-- ========================================== -->
     <div v-if="showAddUserModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
@@ -4041,6 +4320,7 @@
           }
 
           if (role === 'admin') {
+            items.push({ id: 'guru_mgmt', title: 'Manajemen Guru & Pegawai', icon: '👔' });
             items.push({ id: 'users', title: 'Manajemen Pengguna', icon: '👥' });
             items.push({ id: 'backup', title: 'Backup Data ISO 27001', icon: '💾' });
             items.push({ id: 'audit_log', title: 'Log Audit ISO 27001', icon: '🔒' });
@@ -4048,6 +4328,206 @@
 
           return items;
         });
+
+        // ==========================================
+        // DATA GURU & TENAGA KEPENDIDIKAN (GTK - ADMIN ONLY)
+        // ==========================================
+        const teachers = ref([
+          {
+            id: 1,
+            nip: '197005121996031002',
+            nuptk: '4538748650200003',
+            name: 'Drs. H. Mulyadi M.Pd',
+            gender: 'Laki-laki',
+            rolePosition: 'Kepala Sekolah',
+            employmentStatus: 'PNS / ASN',
+            subjectOrClass: 'Manajerial & Supervisi',
+            phone: '081234567801',
+            email: 'kepsek@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 2,
+            nip: '198203152009022005',
+            nuptk: '7845760662210032',
+            name: 'Bambang S.Pd',
+            gender: 'Laki-laki',
+            rolePosition: 'Wali Kelas / Guru Kelas',
+            employmentStatus: 'PNS / ASN',
+            subjectOrClass: 'Kelas 4-A (Wali Kelas)',
+            phone: '081333444555',
+            email: 'bambang@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 3,
+            nip: '198507202010012014',
+            nuptk: '8956763665300021',
+            name: 'Dra. Hj. Nurjanah M.Pd',
+            gender: 'Perempuan',
+            rolePosition: 'Guru BK / Konseling',
+            employmentStatus: 'PNS / ASN',
+            subjectOrClass: 'Bimbingan & Konseling Siswa',
+            phone: '081299887711',
+            email: 'bk@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 4,
+            nip: '199009182020121008',
+            nuptk: '1234768669110043',
+            name: 'Dewi Anggraeni S.Pd',
+            gender: 'Perempuan',
+            rolePosition: 'Guru Mapel',
+            employmentStatus: 'PPPK',
+            subjectOrClass: 'Pendidikan Agama Islam (PAI)',
+            phone: '081577889922',
+            email: 'dewi@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 5,
+            nip: '199211052022211003',
+            nuptk: '5678770671200052',
+            name: 'Rahmat Hidayat S.Pd',
+            gender: 'Laki-laki',
+            rolePosition: 'Guru Mapel',
+            employmentStatus: 'PPPK',
+            subjectOrClass: 'PJOK / Olahraga',
+            phone: '081344556688',
+            email: 'rahmat.pjok@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 6,
+            nip: '-',
+            nuptk: '9012773673300061',
+            name: 'Siti Fatimah S.Kom',
+            gender: 'Perempuan',
+            rolePosition: 'Tenaga Administrasi / TU',
+            employmentStatus: 'Honorer Daerah (PTT)',
+            subjectOrClass: 'Administrasi Kesiswaan & Dapodik',
+            phone: '081722334466',
+            email: 'tu.fatimah@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          },
+          {
+            id: 7,
+            nip: '-',
+            nuptk: '-',
+            name: 'Agus Setiawan',
+            gender: 'Laki-laki',
+            rolePosition: 'Petugas Sarpras & Keamanan',
+            employmentStatus: 'Pegawai Kontrak',
+            subjectOrClass: 'Keamanan Gerbang & Presensi Tap',
+            phone: '081833445577',
+            email: 'satpam@sdnkebonagung.sch.id',
+            status: 'Aktif'
+          }
+        ]);
+
+        const teacherFilters = ref({
+          search: '',
+          rolePosition: '',
+          employmentStatus: '',
+          status: ''
+        });
+        const teacherPage = ref(1);
+        const teacherPerPage = 6;
+
+        const filteredTeachersList = computed(() => {
+          return teachers.value.filter(t => {
+            const q = teacherFilters.value.search.toLowerCase();
+            const matchSearch = !q || 
+              t.name.toLowerCase().includes(q) || 
+              t.nip.includes(q) || 
+              t.nuptk.includes(q) || 
+              t.email.toLowerCase().includes(q) ||
+              t.subjectOrClass.toLowerCase().includes(q);
+            const matchRole = !teacherFilters.value.rolePosition || t.rolePosition === teacherFilters.value.rolePosition;
+            const matchEmp = !teacherFilters.value.employmentStatus || t.employmentStatus === teacherFilters.value.employmentStatus;
+            const matchStatus = !teacherFilters.value.status || t.status === teacherFilters.value.status;
+            return matchSearch && matchRole && matchEmp && matchStatus;
+          });
+        });
+
+        const maxTeacherPages = computed(() => Math.max(1, Math.ceil(filteredTeachersList.value.length / teacherPerPage)));
+
+        const paginatedTeachersList = computed(() => {
+          const start = (teacherPage.value - 1) * teacherPerPage;
+          return filteredTeachersList.value.slice(start, start + teacherPerPage);
+        });
+
+        const showTeacherModal = ref(false);
+        const isEditingTeacher = ref(false);
+        const currentTeacherForm = ref({
+          id: null,
+          nip: '',
+          nuptk: '',
+          name: '',
+          gender: 'Laki-laki',
+          rolePosition: 'Wali Kelas / Guru Kelas',
+          employmentStatus: 'PNS / ASN',
+          subjectOrClass: '',
+          phone: '',
+          email: '',
+          status: 'Aktif'
+        });
+
+        const openTeacherModal = (teacherToEdit = null) => {
+          if (teacherToEdit) {
+            isEditingTeacher.value = true;
+            currentTeacherForm.value = { ...teacherToEdit };
+          } else {
+            isEditingTeacher.value = false;
+            currentTeacherForm.value = {
+              id: null,
+              nip: '19' + Math.floor(700000 + Math.random() * 250000) + '20' + Math.floor(100000 + Math.random() * 150000) + '100' + Math.floor(1 + Math.random() * 9),
+              nuptk: '' + Math.floor(1000000000000000 + Math.random() * 9000000000000000),
+              name: '',
+              gender: 'Laki-laki',
+              rolePosition: 'Wali Kelas / Guru Kelas',
+              employmentStatus: 'PNS / ASN',
+              subjectOrClass: 'Kelas 1-A (Guru Kelas)',
+              phone: '0812' + Math.floor(10000000 + Math.random() * 90000000),
+              email: '',
+              status: 'Aktif'
+            };
+          }
+          showTeacherModal.value = true;
+        };
+
+        const saveTeacher = () => {
+          if (isEditingTeacher.value) {
+            const idx = teachers.value.findIndex(t => t.id === currentTeacherForm.value.id);
+            if (idx !== -1) {
+              teachers.value[idx] = { ...teachers.value[idx], ...currentTeacherForm.value };
+              showToast(`Data guru/pegawai ${currentTeacherForm.value.name} berhasil diperbarui.`);
+              logAudit('UPDATE_TEACHER', `Memperbarui biodata GTK ${currentTeacherForm.value.name} (${currentTeacherForm.value.nip})`);
+            }
+          } else {
+            const newId = Date.now();
+            const newTeacher = {
+              id: newId,
+              ...currentTeacherForm.value
+            };
+            if (!newTeacher.email) {
+              newTeacher.email = newTeacher.name.toLowerCase().replace(/[^a-z]/g, '') + '@sdnkebonagung.sch.id';
+            }
+            teachers.value.unshift(newTeacher);
+            showToast(`Guru/Pegawai baru ${newTeacher.name} berhasil ditambahkan.`);
+            logAudit('CREATE_TEACHER', `Menambahkan GTK baru ${newTeacher.name} (${newTeacher.nip})`);
+          }
+          showTeacherModal.value = false;
+        };
+
+        const deleteTeacher = (teacher) => {
+          if (confirm(`Apakah Anda yakin ingin menghapus data guru/pegawai ${teacher.name} (${teacher.rolePosition})? Tindakan ini akan dicatat dalam Log Audit ISO 27001.`)) {
+            teachers.value = teachers.value.filter(t => t.id !== teacher.id);
+            showToast(`Data guru/pegawai ${teacher.name} berhasil dihapus.`);
+            logAudit('DELETE_TEACHER', `Menghapus data GTK ${teacher.name} (${teacher.nip})`);
+          }
+        };
 
         // ==========================================
         // MOCK DATA STORE
@@ -5580,6 +6060,21 @@
           saveNewUser,
           deleteUser,
           isEditingUser,
+
+          // Manajemen Guru & Pegawai (GTK - Admin Only)
+          teachers,
+          teacherFilters,
+          teacherPage,
+          teacherPerPage,
+          filteredTeachersList,
+          maxTeacherPages,
+          paginatedTeachersList,
+          showTeacherModal,
+          isEditingTeacher,
+          currentTeacherForm,
+          openTeacherModal,
+          saveTeacher,
+          deleteTeacher,
 
           // Siswa Management & CRUD
           parents,
