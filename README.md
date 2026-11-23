@@ -134,9 +134,16 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
       - Menu **"Manajemen Siswa"** dan **"Manajemen Orang Tua"** mencakup seluruh data siswa dan wali murid se-sekolah dengan kewenangan penuh (CRUD Master).
 21. **Desain Tampilan GitHub Repository Theme & Logo Resmi EduTrack Pro**:
     - **Logo Resmi Aplikasi**: Simbol vektor modern yang memadukan perisai toga kesiswaan, gelombang pemindai barcode gerbang, dan titik verifikasi presensi (*emerald pulse*).
-    - **Header Global GitHub**: Breadcrumb repositori (`smk-negeri-unggulan-1 / school_app`), badge status `Public`, kolom pencarian repositori (`Type / to search`), dan pemilih peran akun (*Role Switcher*).
+    - **Header Global GitHub**: Breadcrumb repositori (`sdn-kebonagung-pasuruan / school_app`), badge status `Public`, kolom pencarian repositori (`Type / to search`), dan pemilih peran akun (*Role Switcher*).
     - **Tab Navigasi Horizontal Berikon Octicons**: Tab atas dengan ikon SVG GitHub Octicons lengkap (`Dashboard`, `Presensi`, `Scanner`, `Kartu Pelajar`, `Kedisiplinan`, `Bank Prestasi`, `Aduan`, dsb.) dengan garis bawah oranye khas GitHub pada tab aktif.
     - **Sub-Header Kontrol Git**: Pemilih branch (`main ▾`), counter branch & tag, serta tombol hijau khas GitHub (`<> Code ▾`).
     - **Tata Letak 2 Kolom (Main Content + Right Sidebar 'About')**:
       - **Kolom Utama (Kiri)**: Banner komit GitHub (*Commit Bar* memuat author, pesan komit, hash terverifikasi `34acc33`, dan counter komit) di atas modul kesiswaan aktif.
       - **Sidebar Kanan ('About')**: Persis seperti bilah samping repositori GitHub asli: bagian *About* (deskripsi, Readme, Activity, Stars/Prestasi, Watching/Siswa Aktif, Forks/Peran), bagian *Releases* (`v2.4-Production-Ready`), bagian *Deployments* (Server Daemon, AWS S3 Vault, WA Gateway), dan bagian *Hak Akses Pengguna* (Cakupan Data / Data Scope).
+22. **Halaman Welcome Page Edukasi & Identitas SDN Kebonagung Kota Pasuruan**:
+    - **Welcome Page (Landing Page)**: Mengadopsi desain edukasi modern (referensi Dribbble) berlatar *soft lavender* dengan kartu kanvas putih elegan.
+    - **Karakter Guru PNS**: Mengganti karakter umum menjadi ilustrasi 3D Guru ASN/PNS laki-laki berseragam dinas khaki rapi memegang buku pelajaran dengan senyum ramah menyambut di depan kubah (*arch*) ungu.
+    - **Lencana Terapung Edukasi**: Dilengkapi ornamen lencana mengapung (Google Drive, YouTube Pembelajaran, dan Lencana Identitas SDN Kebonagung Kota Pasuruan).
+    - **Tombol Login Popup**: Tombol **"GET A DEMO / LOGIN"** pada navbar dan **"LEARN NOW"** pada hero memicu jendela sembulan (*modal popup*) login interaktif dengan pemilih peran kilat (*Quick Role Switcher*).
+    - **Pembaruan Identitas Resmi**: Seluruh nama instansi, kop surat SP, kartu pelajar ISO CR-80, dan breadcrumb repositori resmi diperbarui menjadi **SDN Kebonagung Kota Pasuruan**.
+    - **Navigasi Bolak-Balik**: Tersedia tombol **"🌐 Halaman Depan"** di header sistem untuk kembali melihat Welcome Page kapan saja tanpa kehilangan sesi.
