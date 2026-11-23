@@ -1,0 +1,63 @@
+# school_app - EduTrack Pro
+
+Aplikasi Mockup Interaktif Sistem Monitoring Terpadu Sekolah (Kehadiran, Pelanggaran, Prestasi, Aduan/Whistleblower, Portal Orang Tua) berbasis standar **ISO/IEC 27001** dengan desain **Clean White Minimalist**.
+
+---
+
+## 🚀 Cara Menjalankan & Menguji Aplikasi
+
+Aplikasi dibuat mandiri (*standalone single-page application*) sehingga dapat dijalankan dengan 2 cara:
+
+### Cara 1: Menjalankan Server Lokal (PHP)
+Buka terminal / PowerShell di direktori `c:\scholl_app` lalu jalankan:
+```bash
+php -S 127.0.0.1:8000
+```
+Buka browser Anda dan kunjungi:
+👉 **http://127.0.0.1:8000**
+
+### Cara 2: Membuka Langsung File di Browser
+Cukup klik ganda (*double click*) file `c:\scholl_app\index.html` atau buka melalui browser Google Chrome / Edge:
+```
+file:///c:/scholl_app/index.html
+```
+
+---
+
+## 👥 5 Peran (Roles) & Akses Halaman
+
+Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk menguji sistem dari berbagai sudut pandang:
+
+| Role | Akun Demo | Hak Akses & Fitur yang Dapat Diuji |
+| :--- | :--- | :--- |
+| **👑 Super Admin / Kepala Sekolah** | `admin@edutrack.sch.id` | Akses penuh ke seluruh modul, Dashboard Eksekutif, Manajemen Presensi & Pelanggaran, Verifikasi Prestasi, Pusat Aduan, serta **Log Audit ISO/IEC 27001 (A.12.4)**. |
+| **🛡️ Guru BK / Kesiswaan** | `bk@edutrack.sch.id` | Modul Pelanggaran (catat poin tatib, otomatisasi SP), Penerbitan Surat Peringatan ber-QR code, **Kanal Aduan & Whistleblower Terenkripsi** (chat investigasi rahasia), dan verifikasi poin prestasi. |
+| **📋 Wali Kelas (X-RPL-1)** | `walikelas@edutrack.sch.id` | Modul Presensi Harian Cepat (*Bulk Attendance Mode*), mengubah status siswa (H/S/I/A/T) dengan trigger notifikasi instan ke orang tua, memantau siswa kelas binaan. |
+| **👨‍👩‍👦 Orang Tua Siswa** | `ortu@edutrack.sch.id` | Dashboard khusus ananda (Ahmad Rifai), rekap kehadiran persentase bulanan, riwayat poin kedisiplinan, prestasi anak, formulir pengaduan ke sekolah, dan **Simulasi Notifikasi WhatsApp**. |
+| **🎓 Siswa** | `siswa@edutrack.sch.id` | Dashboard mandiri siswa, riwayat kehadiran, buku saku poin kedisiplinan, portofolio prestasi digital, dan **Kanal Pengaduan Rahasia (Anti-Bullying Whistleblowing)**. |
+
+---
+
+## 🧪 Skenario Pengujian Interaktif
+
+1. **Uji Coba Pencarian & Filter Cepat (Searching & Filtering)**:
+   - Masuk ke menu **Kehadiran Siswa**, ketik nama "Ahmad" di kotak pencarian. Data langsung terfilter secara *real-time*.
+   - Coba dropdown **Filter Kelas** atau **Filter Status** untuk memfilter data.
+   - Klik tombol **Reset Filter** untuk mengembalikan data awal.
+2. **Uji Coba Paginasi Dinamis (Pagination)**:
+   - Gunakan tombol *Sebelumnya* / *Berikutnya* di bagian bawah tabel untuk berpindah halaman secara halus tanpa reload.
+3. **Uji Coba Presensi Cepat (Bulk Mode)**:
+   - Sebagai Wali Kelas, klik tombol **"✓ Set Semua Hadir"** atau klik tombol cepat `H`, `S`, `I`, `A`, `T` pada baris siswa.
+   - Jika diset `A` (Alpa), sistem akan memicu simulasi peringatan WhatsApp ke orang tua.
+4. **Uji Coba Pencatatan Pelanggaran & Cetak SP**:
+   - Masuk ke menu **Kedisiplinan & Tatib**, klik **"+ Catat Pelanggaran Siswa"**.
+   - Pilih siswa dan jenis pelanggaran (misal: *Merokok di area kantin*). Poin (-50) dan tingkat keparahan otomatis terisi.
+   - Klik simpan, lalu klik tombol **"📄 Lihat SP"** pada tabel untuk melihat pratinjau dokumen resmi Surat Peringatan (SP) ber-QR Code verifikasi.
+5. **Uji Coba Kanal Aduan & Whistleblowing (Anti-Bullying)**:
+   - Masuk ke menu **Pusat Aduan / Whistle**, klik **"+ Tulis Aduan Baru"**.
+   - Centang opsi *"Kirim sebagai Anonim (Whistleblower)"* untuk menguji fitur perlindungan identitas siswa/orang tua.
+   - Klik tombol **"💬 Buka Obrolan Investigasi"** untuk menguji komunikasi dua arah terenkripsi antara pelapor dan pihak sekolah.
+6. **Uji Coba Notifikasi WhatsApp**:
+   - Klik tombol **"📱 Tes Notif WA"** di header atas untuk melihat jendela simulasi pesan WhatsApp resmi yang diterima di ponsel orang tua secara *real-time*.
+7. **Uji Coba Kepatuhan ISO 27001 (Admin)**:
+   - Masuk ke menu **Log Audit ISO 27001** (Role Admin) untuk memeriksa pencatatan audit trail *immutable* (*Who, What, When, IP Address, Compliance Status*).

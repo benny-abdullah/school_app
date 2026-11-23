@@ -1,0 +1,2388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTrack Pro - Sistem Monitoring Terpadu Sekolah (ISO 27001 Compliant)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#F8FAFC',
+              100: '#F1F5F9',
+              200: '#E2E8F0',
+              500: '#0F172A',
+              600: '#020617',
+              accent: '#2563EB',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAFAFA;
+      color: #0F172A;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Clean minimal scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F8FAFC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="bg-[#FAFAFA] text-slate-800 antialiased selection:bg-slate-900 selection:text-white min-h-screen">
+
+  <div id="app" v-cloak>
+
+    <!-- ========================================== -->
+    <!-- 1. LOGIN SCREEN WITH QUICK ROLE SWITCHER   -->
+    <!-- ========================================== -->
+    <div v-if="!isLoggedIn" class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-white">
+      <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <!-- Logo -->
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-950 text-white shadow-md mb-4">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold tracking-tight text-slate-900">EduTrack Pro</h2>
+        <p class="mt-1 text-sm text-slate-500">Sistem Monitoring Terpadu Sekolah & Kepatuhan ISO 27001</p>
+      </div>
+
+      <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-lg px-4 sm:px-0">
+        <div class="bg-white py-8 px-6 shadow-sm border border-slate-200 rounded-2xl sm:px-10">
+          
+          <!-- Security Badges -->
+          <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100 text-xs text-slate-500">
+            <span class="inline-flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium border border-emerald-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+              ISO/IEC 27001 Active
+            </span>
+            <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full font-medium">
+              🔒 AES-256 Encrypted
+            </span>
+            <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-2.5 py-1 rounded-full font-medium">
+              🛡️ OWASP Verified
+            </span>
+          </div>
+
+          <!-- Role Demo Selector -->
+          <div class="mb-6">
+            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+              Pilih Role untuk Uji Coba Cepat (Mockup Demo):
+            </label>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <button 
+                v-for="(r, key) in roles" 
+                :key="key"
+                @click="selectDemoRole(key)"
+                type="button"
+                :class="[
+                  selectedRoleKey === key 
+                    ? 'border-slate-900 bg-slate-900 text-white font-medium shadow-sm' 
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50',
+                  'p-2.5 text-xs rounded-xl border text-left transition-all flex flex-col justify-between'
+                ]"
+              >
+                <div class="font-bold flex items-center gap-1.5">
+                  <span>{{ r.icon }}</span>
+                  <span class="truncate">{{ r.label }}</span>
+                </div>
+                <div class="text-[10px] opacity-80 mt-1 truncate">{{ r.email }}</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Regular Login Form -->
+          <form @submit.prevent="login">
+            <div>
+              <label for="email" class="block text-xs font-semibold text-slate-700">Email Pengguna</label>
+              <div class="mt-1">
+                <input 
+                  id="email" 
+                  v-model="loginForm.email" 
+                  type="email" 
+                  required 
+                  class="block w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 text-sm"
+                />
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <label for="password" class="block text-xs font-semibold text-slate-700">Kata Sandi</label>
+              <div class="mt-1">
+                <input 
+                  id="password" 
+                  v-model="loginForm.password" 
+                  type="password" 
+                  required 
+                  class="block w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900 text-sm"
+                />
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-4">
+              <div class="flex items-center">
+                <input id="remember" type="checkbox" checked class="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900">
+                <label for="remember" class="ml-2 block text-xs text-slate-600">Ingat sesi ini (30 hari)</label>
+              </div>
+              <div class="text-xs">
+                <a href="#" class="font-medium text-slate-900 hover:underline">Lupa sandi?</a>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button 
+                type="submit" 
+                class="flex w-full justify-center items-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 transition-colors"
+              >
+                <span>Masuk ke Sistem</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <!-- Disclaimer / Info -->
+          <div class="mt-6 border-t border-slate-100 pt-4 text-center">
+            <p class="text-[11px] text-slate-400">
+              Sistem dilindungi pembatasan akses berbasis peran (RBAC). Setiap tindakan diaudit secara otomatis sesuai kontrol ISO/IEC 27001.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- 2. MAIN APPLICATION INTERFACE (LOGGED IN)  -->
+    <!-- ========================================== -->
+    <div v-else class="min-h-screen flex flex-col bg-[#FAFAFA]">
+      
+      <!-- TOP NAVIGATION BAR (CLEAN WHITE) -->
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+            
+            <!-- Brand & Mobile Menu Button -->
+            <div class="flex items-center gap-3">
+              <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+              </button>
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                  EP
+                </div>
+                <div>
+                  <div class="text-sm font-bold text-slate-900 leading-none">EduTrack Pro</div>
+                  <div class="text-[10px] text-slate-400 mt-0.5 font-medium">SMK Negeri Unggulan 1</div>
+                </div>
+              </div>
+
+              <!-- ISO Status Indicator Pill -->
+              <span class="hidden sm:inline-flex items-center gap-1.5 ml-4 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                ISO 27001 Certified
+              </span>
+            </div>
+
+            <!-- Right Controls: Role Switcher, WhatsApp Preview, Profile -->
+            <div class="flex items-center gap-3">
+              
+              <!-- Quick Switch Role Dropdown in Header -->
+              <div class="relative">
+                <select 
+                  v-model="selectedRoleKey" 
+                  @change="changeRole(selectedRoleKey)"
+                  class="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl px-3 py-1.5 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer"
+                >
+                  <option v-for="(r, key) in roles" :key="key" :value="key">
+                    {{ r.icon }} Role: {{ r.label }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Simulation Button: WhatsApp Alert -->
+              <button 
+                @click="openWhatsAppModal"
+                class="hidden md:inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                title="Simulasikan Notifikasi WhatsApp yang terkirim ke Orang Tua"
+              >
+                <span>📱</span>
+                <span>Tes Notif WA</span>
+              </button>
+
+              <!-- User Profile & Logout -->
+              <div class="flex items-center pl-3 border-l border-slate-200 gap-2">
+                <div class="text-right hidden sm:block">
+                  <div class="text-xs font-bold text-slate-900">{{ currentUser.name }}</div>
+                  <div class="text-[10px] text-slate-500">{{ roles[currentUser.role].label }}</div>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-xs text-slate-700">
+                  {{ currentUser.avatarInitials }}
+                </div>
+                <button 
+                  @click="logout" 
+                  class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                  title="Keluar (Logout)"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </header>
+
+      <!-- BODY WRAPPER: SIDEBAR + MAIN CONTENT -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex py-6 gap-6">
+
+        <!-- SIDEBAR NAVIGATION (DYNAMIC ACCORDING TO ROLE) -->
+        <aside 
+          :class="[
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+            'fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 p-4 transition-transform lg:static lg:w-56 lg:bg-transparent lg:border-none lg:p-0 flex flex-col justify-between'
+          ]"
+        >
+          <div>
+            <!-- Mobile Close Button -->
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 lg:hidden">
+              <span class="font-bold text-sm text-slate-900">Menu Navigasi</span>
+              <button @click="sidebarOpen = false" class="text-slate-400 hover:text-slate-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
+            <!-- Role Scope Indicator Card -->
+            <div class="mb-4 p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
+              <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Akses Anda:</div>
+              <div class="text-xs font-bold text-slate-900 mt-0.5 flex items-center gap-1.5">
+                <span>{{ roles[currentUser.role].icon }}</span>
+                <span>{{ roles[currentUser.role].label }}</span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-1 line-clamp-2">
+                {{ roles[currentUser.role].description }}
+              </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="space-y-1">
+              <button 
+                v-for="item in visibleNavItems" 
+                :key="item.id"
+                @click="activePage = item.id; sidebarOpen = false"
+                :class="[
+                  activePage === item.id 
+                    ? 'bg-slate-900 text-white font-semibold shadow-xs' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium',
+                  'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-colors'
+                ]"
+              >
+                <div class="flex items-center gap-2.5">
+                  <span class="text-sm">{{ item.icon }}</span>
+                  <span>{{ item.title }}</span>
+                </div>
+                <!-- Badge Count if any -->
+                <span 
+                  v-if="item.badge" 
+                  :class="[
+                    activePage === item.id ? 'bg-white text-slate-900' : 'bg-slate-200 text-slate-700',
+                    'px-1.5 py-0.5 rounded-full text-[10px] font-bold'
+                  ]"
+                >
+                  {{ item.badge }}
+                </span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- Quick System Specs footer -->
+          <div class="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-400 hidden lg:block">
+            <div class="font-medium text-slate-500">EduTrack v2.5.0</div>
+            <div>Laravel 11.x Core</div>
+            <div>ISO/IEC 27001 ISMS</div>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 min-w-0">
+          
+          <!-- ============================================== -->
+          <!-- PAGE: DASHBOARD                                -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'dashboard'" class="space-y-6">
+            
+            <!-- Welcome Header -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 class="text-xl font-bold text-slate-900">
+                  Selamat Datang, {{ currentUser.name }}
+                </h1>
+                <p class="text-xs text-slate-500 mt-1">
+                  Portal Terintegrasi Presensi, Kedisiplinan, Prestasi, dan Pengaduan Sekolah — Data per {{ currentDateFormatted }}
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  v-if="canRecordViolation"
+                  @click="openViolationModal()" 
+                  class="inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors"
+                >
+                  <span>⚠️</span>
+                  <span>Catat Pelanggaran</span>
+                </button>
+                <button 
+                  v-if="canRecordAchievement"
+                  @click="openAchievementModal()" 
+                  class="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors"
+                >
+                  <span>🏆</span>
+                  <span>Tambah Prestasi</span>
+                </button>
+                <button 
+                  v-if="canSubmitComplaint"
+                  @click="openComplaintModal()" 
+                  class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition-colors"
+                >
+                  <span>📢</span>
+                  <span>Buat Aduan / Laporan</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- KPI Summary Cards (Minimalist Clean White) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              
+              <!-- Card 1: Kehadiran -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span>Kehadiran Hari Ini</span>
+                  <span class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">✅</span>
+                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">
+                  {{ stats.attendanceRate }}%
+                </div>
+                <div class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                  <span class="text-emerald-600 font-semibold">{{ stats.presentCount }} Hadir</span>
+                  <span>•</span>
+                  <span class="text-rose-600 font-semibold">{{ stats.absentCount }} Alpa</span>
+                </div>
+              </div>
+
+              <!-- Card 2: Pelanggaran -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span>Pelanggaran Bulan Ini</span>
+                  <span class="p-1.5 bg-amber-50 text-amber-700 rounded-lg">⚠️</span>
+                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">
+                  {{ violations.length }} Kasus
+                </div>
+                <div class="text-[11px] text-slate-500 mt-1">
+                  <span class="text-rose-600 font-semibold">2 SP Aktif</span> butuh tindak lanjut BK
+                </div>
+              </div>
+
+              <!-- Card 3: Prestasi -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span>Total Prestasi Siswa</span>
+                  <span class="p-1.5 bg-blue-50 text-blue-700 rounded-lg">🏆</span>
+                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">
+                  {{ achievements.length }} Piagam
+                </div>
+                <div class="text-[11px] text-slate-500 mt-1">
+                  1 Tingkat Nasional, 3 Kota/Kab
+                </div>
+              </div>
+
+              <!-- Card 4: Aduan / Whistleblower -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span>Aduan / Whistleblowing</span>
+                  <span class="p-1.5 bg-purple-50 text-purple-700 rounded-lg">🛡️</span>
+                </div>
+                <div class="text-2xl font-bold text-slate-900 mt-2">
+                  {{ complaints.length }} Tiket
+                </div>
+                <div class="text-[11px] text-purple-700 font-semibold mt-1">
+                  {{ pendingComplaintsCount }} Menunggu Investigasi
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Parent Portal Quick Card (If Role Ortu) -->
+            <div v-if="currentUser.role === 'orang_tua'" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-slate-950 text-white flex items-center justify-center font-bold text-lg">
+                    AR
+                  </div>
+                  <div>
+                    <div class="text-sm font-bold text-slate-900">Ahmad Rifai</div>
+                    <div class="text-xs text-slate-500">Kelas: X-RPL-1 • NISN: 0081234567 • Wali Kelas: Bpk. Bambang S.Pd</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-bold rounded-full border border-emerald-200">
+                    Status: Siswa Aktif
+                  </span>
+                  <button @click="openWhatsAppModal" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-xl">
+                    Cek WhatsApp Notifikasi
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="p-3 bg-slate-50 rounded-xl">
+                  <div class="text-xs text-slate-500 font-medium">Persentase Hadir Bulan Ini</div>
+                  <div class="text-lg font-bold text-slate-900 mt-1">96.5% (21 dari 22 Hari)</div>
+                  <div class="text-[11px] text-emerald-600 mt-0.5">Sangat Baik (1x Izin)</div>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl">
+                  <div class="text-xs text-slate-500 font-medium">Poin Pelanggaran Kedisiplinan</div>
+                  <div class="text-lg font-bold text-slate-900 mt-1">5 Poin (Batas SP: 50)</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">1x Terlambat (10 Menit)</div>
+                </div>
+                <div class="p-3 bg-slate-50 rounded-xl">
+                  <div class="text-xs text-slate-500 font-medium">Prestasi & Penghargaan</div>
+                  <div class="text-lg font-bold text-slate-900 mt-1">100 Poin Merit</div>
+                  <div class="text-[11px] text-blue-600 mt-0.5">Juara 1 LKS Web Technologies</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two-Column Section: Recent Activities & Fast Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              <!-- Recent Violations & Disciplinary Feed (2 cols) -->
+              <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-900">Aktivitas Terkini Kedisiplinan & Pelanggaran</h2>
+                    <p class="text-[11px] text-slate-500">Data otomatis ter-sinkronisasi dengan laporan orang tua</p>
+                  </div>
+                  <button @click="activePage = 'pelanggaran'" class="text-xs font-semibold text-slate-900 hover:underline">
+                    Lihat Semua &rarr;
+                  </button>
+                </div>
+
+                <div class="space-y-3">
+                  <div 
+                    v-for="v in violations.slice(0, 4)" 
+                    :key="v.id"
+                    class="p-3 rounded-xl border border-slate-100 hover:border-slate-200 bg-white flex items-center justify-between gap-3 text-xs"
+                  >
+                    <div class="flex items-center gap-3">
+                      <span 
+                        :class="[
+                          v.severity === 'Berat' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                          v.severity === 'Sedang' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                          'bg-slate-100 text-slate-700 border-slate-200',
+                          'px-2 py-1 rounded-lg font-bold border text-[10px]'
+                        ]"
+                      >
+                        -{{ v.points }} Poin
+                      </span>
+                      <div>
+                        <div class="font-bold text-slate-900">{{ v.studentName }} <span class="text-slate-400 font-normal">({{ v.classroom }})</span></div>
+                        <div class="text-slate-600 mt-0.5">{{ v.title }}</div>
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <span 
+                        :class="[
+                          v.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                          v.status === 'SP-1' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                          'bg-amber-50 text-amber-700 border-amber-200',
+                          'px-2 py-0.5 rounded-full text-[10px] font-semibold border inline-block mb-1'
+                        ]"
+                      >
+                        {{ v.status }}
+                      </span>
+                      <div class="text-[10px] text-slate-400">{{ v.date }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Whistleblower & Aduan Status (1 col) -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                    <h2 class="text-sm font-bold text-slate-900">Kanal Aduan & Anti-Bullying</h2>
+                    <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded font-semibold">Terenkripsi</span>
+                  </div>
+                  <p class="text-xs text-slate-600 mb-4">
+                    Sistem pelaporan terenkripsi AES-256 untuk perlindungan siswa dan transparansi penanganan kekerasan di sekolah.
+                  </p>
+                  <div class="space-y-2.5">
+                    <div v-for="c in complaints.slice(0, 3)" :key="c.id" class="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                      <div class="flex items-center justify-between font-semibold text-[11px]">
+                        <span class="text-slate-900">{{ c.ticketNumber }}</span>
+                        <span class="text-purple-700">{{ c.isAnonymous ? '👤 Anonim' : c.reporter }}</span>
+                      </div>
+                      <div class="text-slate-700 font-medium truncate mt-1">{{ c.title }}</div>
+                      <div class="mt-1 text-[10px] text-slate-400 flex justify-between">
+                        <span>{{ c.category }}</span>
+                        <span class="font-semibold text-slate-600">{{ c.status }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100">
+                  <button 
+                    @click="activePage = 'aduan'" 
+                    class="w-full text-center py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition-colors"
+                  >
+                    Buka Pusat Aduan
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: PRESENSI & KEHADIRAN (SEARCH/FILTER/PAG) -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'presensi'" class="space-y-4">
+            
+            <!-- Page Header -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 class="text-lg font-bold text-slate-900">Monitoring Presensi & Kehadiran Siswa</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Pencatatan kehadiran harian, keterlambatan, dan rekap otomatis ke orang tua</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  v-if="canEditAttendance"
+                  @click="markAllPresent()" 
+                  class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  ✓ Set Semua Hadir
+                </button>
+                <button 
+                  @click="exportMockData('Presensi')"
+                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  📥 Export Excel
+                </button>
+              </div>
+            </div>
+
+            <!-- Data Table Control Bar (Instant Search, Filter, Reset) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                
+                <!-- Search Box -->
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    🔍
+                  </span>
+                  <input 
+                    v-model="attendanceFilters.search" 
+                    type="text" 
+                    placeholder="Cari nama siswa / NISN..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+
+                <!-- Filter Kelas -->
+                <div>
+                  <select 
+                    v-model="attendanceFilters.classroom" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Kelas</option>
+                    <option value="X-RPL-1">X-RPL-1</option>
+                    <option value="XI-TKJ-2">XI-TKJ-2</option>
+                    <option value="XII-MM-1">XII-MM-1</option>
+                  </select>
+                </div>
+
+                <!-- Filter Status -->
+                <div>
+                  <select 
+                    v-model="attendanceFilters.status" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Status Kehadiran</option>
+                    <option value="Hadir">Hadir</option>
+                    <option value="Terlambat">Terlambat</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Alpa">Alpa</option>
+                  </select>
+                </div>
+
+                <!-- Reset Filter Button -->
+                <div class="flex items-center gap-2">
+                  <button 
+                    @click="resetAttendanceFilters" 
+                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Clean White Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">NISN / Siswa</th>
+                      <th class="py-3 px-3">Kelas</th>
+                      <th class="py-3 px-3">Waktu Masuk</th>
+                      <th class="py-3 px-4">Status Kehadiran</th>
+                      <th class="py-3 px-3">Catatan / Geofence</th>
+                      <th class="py-3 px-4 text-right">Aksi Cepat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-700">
+                    <tr v-for="att in paginatedAttendance" :key="att.id" class="hover:bg-slate-50/60 transition-colors">
+                      <td class="py-3 px-4">
+                        <div class="font-bold text-slate-900">{{ att.studentName }}</div>
+                        <div class="text-[11px] text-slate-400">NISN: {{ att.nisn }}</div>
+                      </td>
+                      <td class="py-3 px-3 font-medium">{{ att.classroom }}</td>
+                      <td class="py-3 px-3">
+                        <span class="font-mono text-[11px]">{{ att.checkInTime || '-' }}</span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <span 
+                          :class="[
+                            att.status === 'Hadir' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            att.status === 'Terlambat' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                            att.status === 'Sakit' ? 'bg-blue-50 text-blue-700 border-blue-200' :
+                            att.status === 'Izin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                            'bg-rose-50 text-rose-700 border-rose-200',
+                            'inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold border text-[11px]'
+                          ]"
+                        >
+                          <span class="w-1.5 h-1.5 rounded-full" :class="{
+                            'bg-emerald-500': att.status === 'Hadir',
+                            'bg-amber-500': att.status === 'Terlambat',
+                            'bg-blue-500': att.status === 'Sakit',
+                            'bg-purple-500': att.status === 'Izin',
+                            'bg-rose-500': att.status === 'Alpa'
+                          }"></span>
+                          {{ att.status }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-3 text-slate-500 text-[11px]">
+                        {{ att.notes || 'Hadir via Scan Kartu' }}
+                      </td>
+                      <td class="py-3 px-4 text-right">
+                        <!-- Fast Change Status Toggle (If permitted) -->
+                        <div v-if="canEditAttendance" class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50">
+                          <button 
+                            @click="changeAttendanceStatus(att, 'Hadir')"
+                            :class="att.status === 'Hadir' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'"
+                            class="px-2 py-0.5 rounded text-[10px] font-bold"
+                            title="Set Hadir"
+                          >H</button>
+                          <button 
+                            @click="changeAttendanceStatus(att, 'Sakit')"
+                            :class="att.status === 'Sakit' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:text-slate-900'"
+                            class="px-2 py-0.5 rounded text-[10px] font-bold"
+                            title="Set Sakit"
+                          >S</button>
+                          <button 
+                            @click="changeAttendanceStatus(att, 'Izin')"
+                            :class="att.status === 'Izin' ? 'bg-purple-600 text-white' : 'text-slate-600 hover:text-slate-900'"
+                            class="px-2 py-0.5 rounded text-[10px] font-bold"
+                            title="Set Izin"
+                          >I</button>
+                          <button 
+                            @click="changeAttendanceStatus(att, 'Alpa')"
+                            :class="att.status === 'Alpa' ? 'bg-rose-600 text-white' : 'text-slate-600 hover:text-slate-900'"
+                            class="px-2 py-0.5 rounded text-[10px] font-bold"
+                            title="Set Alpa (Memicu Notif WA Ortu)"
+                          >A</button>
+                          <button 
+                            @click="changeAttendanceStatus(att, 'Terlambat')"
+                            :class="att.status === 'Terlambat' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:text-slate-900'"
+                            class="px-2 py-0.5 rounded text-[10px] font-bold"
+                            title="Set Terlambat"
+                          >T</button>
+                        </div>
+                        <span v-else class="text-slate-400 text-[11px]">Hanya Lihat</span>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredAttendance.length === 0">
+                      <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data siswa yang cocok dengan kriteria filter pencarian.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Footer -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(attendancePage, attendancePerPage, filteredAttendance.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredAttendance.length }}</span> siswa
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="attendancePage--" 
+                    :disabled="attendancePage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ attendancePage }} / {{ maxAttendancePages }}</span>
+                  <button 
+                    @click="attendancePage++" 
+                    :disabled="attendancePage >= maxAttendancePages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: PELANGGARAN & DISIPLIN (POIN & SP)       -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'pelanggaran'" class="space-y-4">
+            
+            <!-- Page Header -->
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 class="text-lg font-bold text-slate-900">Pencatatan Pelanggaran & Buku Kedisiplinan</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Sistem akumulasi poin demerit, trigger Surat Peringatan (SP), dan pemanggilan wali murid</p>
+              </div>
+              <button 
+                v-if="canRecordViolation"
+                @click="openViolationModal()"
+                class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+              >
+                <span>+</span>
+                <span>Catat Pelanggaran Siswa</span>
+              </button>
+            </div>
+
+            <!-- Control Bar (Filter & Search) -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="violationFilters.search" 
+                    type="text" 
+                    placeholder="Cari siswa, kasus, kelas..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+
+                <div>
+                  <select 
+                    v-model="violationFilters.severity" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Tingkat (Ringan/Sedang/Berat)</option>
+                    <option value="Ringan">Ringan (5-15 Poin)</option>
+                    <option value="Sedang">Sedang (20-40 Poin)</option>
+                    <option value="Berat">Berat (50+ Poin)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <select 
+                    v-model="violationFilters.status" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Status Tindak Lanjut</option>
+                    <option value="Diproses">Diproses BK</option>
+                    <option value="SP-1">Surat Peringatan 1</option>
+                    <option value="Selesai">Selesai / Dibina</option>
+                  </select>
+                </div>
+
+                <div>
+                  <button 
+                    @click="resetViolationFilters" 
+                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Violations Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">Tanggal</th>
+                      <th class="py-3 px-4">Siswa & Kelas</th>
+                      <th class="py-3 px-4">Jenis Pelanggaran</th>
+                      <th class="py-3 px-3">Tingkat</th>
+                      <th class="py-3 px-3">Poin Demerit</th>
+                      <th class="py-3 px-3">Status</th>
+                      <th class="py-3 px-4 text-right">Aksi Dokumen</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-700">
+                    <tr v-for="v in paginatedViolations" :key="v.id" class="hover:bg-slate-50/60">
+                      <td class="py-3 px-4 text-slate-500 font-mono text-[11px]">{{ v.date }}</td>
+                      <td class="py-3 px-4">
+                        <div class="font-bold text-slate-900">{{ v.studentName }}</div>
+                        <div class="text-[11px] text-slate-400">{{ v.classroom }} • NISN: {{ v.nisn }}</div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">{{ v.title }}</div>
+                        <div class="text-[11px] text-slate-500">{{ v.notes }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span 
+                          :class="[
+                            v.severity === 'Berat' ? 'text-rose-700 font-bold' :
+                            v.severity === 'Sedang' ? 'text-amber-700 font-semibold' :
+                            'text-slate-600 font-medium'
+                          ]"
+                        >
+                          {{ v.severity }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-bold border border-rose-200 text-[11px]">
+                          -{{ v.points }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span 
+                          :class="[
+                            v.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            v.status === 'SP-1' ? 'bg-rose-50 text-rose-700 border-rose-200' :
+                            'bg-amber-50 text-amber-700 border-amber-200',
+                            'px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block'
+                          ]"
+                        >
+                          {{ v.status }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-right space-x-1">
+                        <button 
+                          @click="previewSP(v)" 
+                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold"
+                          title="Preview Surat Peringatan Resmi (PDF)"
+                        >
+                          📄 Lihat SP
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredViolations.length === 0">
+                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data pelanggaran yang sesuai dengan filter.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Footer -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(violationPage, violationPerPage, filteredViolations.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredViolations.length }}</span> kasus
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="violationPage--" 
+                    :disabled="violationPage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ violationPage }} / {{ maxViolationPages }}</span>
+                  <button 
+                    @click="violationPage++" 
+                    :disabled="violationPage >= maxViolationPages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: PRESTASI SISWA (BANK PRESTASI)           -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'prestasi'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <h1 class="text-lg font-bold text-slate-900">Bank Prestasi & Portofolio Siswa</h1>
+                <p class="text-xs text-slate-500 mt-0.5">Pencatatan prestasi akademik, non-akademik, poin apresiasi (merit points), dan sertifikat</p>
+              </div>
+              <button 
+                v-if="canRecordAchievement"
+                @click="openAchievementModal()"
+                class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+              >
+                <span>+</span>
+                <span>Tambah Prestasi Baru</span>
+              </button>
+            </div>
+
+            <!-- Controls -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="achievementFilters.search" 
+                    type="text" 
+                    placeholder="Cari nama lomba, siswa, atau penyelenggara..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+
+                <div>
+                  <select 
+                    v-model="achievementFilters.level" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Tingkat Kejuaraan</option>
+                    <option value="Sekolah">Tingkat Sekolah</option>
+                    <option value="Kota/Kabupaten">Tingkat Kota / Kabupaten</option>
+                    <option value="Provinsi">Tingkat Provinsi</option>
+                    <option value="Nasional">Tingkat Nasional</option>
+                    <option value="Internasional">Tingkat Internasional</option>
+                  </select>
+                </div>
+
+                <div>
+                  <button 
+                    @click="resetAchievementFilters" 
+                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Achievements Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">Tanggal</th>
+                      <th class="py-3 px-4">Siswa & Kelas</th>
+                      <th class="py-3 px-4">Nama Kejuaraan / Prestasi</th>
+                      <th class="py-3 px-3">Tingkat</th>
+                      <th class="py-3 px-3">Peringkat</th>
+                      <th class="py-3 px-3">Poin Merit</th>
+                      <th class="py-3 px-4 text-right">Sertifikat</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-700">
+                    <tr v-for="a in paginatedAchievements" :key="a.id" class="hover:bg-slate-50/60">
+                      <td class="py-3 px-4 text-slate-500 font-mono text-[11px]">{{ a.date }}</td>
+                      <td class="py-3 px-4">
+                        <div class="font-bold text-slate-900">{{ a.studentName }}</div>
+                        <div class="text-[11px] text-slate-400">{{ a.classroom }}</div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-900">{{ a.title }}</div>
+                        <div class="text-[11px] text-slate-500">{{ a.organizer }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium text-[10px] border border-slate-200">
+                          {{ a.level }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-3 font-semibold text-slate-800">{{ a.rank }}</td>
+                      <td class="py-3 px-3">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 text-[11px]">
+                          +{{ a.points }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-right">
+                        <button 
+                          @click="showToast('Sertifikat digital terverifikasi via QR Code')"
+                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold"
+                        >
+                          🎖️ Unduh E-Sertifikat
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredAchievements.length === 0">
+                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data prestasi yang cocok.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(achievementPage, achievementPerPage, filteredAchievements.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredAchievements.length }}</span> prestasi
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="achievementPage--" 
+                    :disabled="achievementPage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ achievementPage }} / {{ maxAchievementPages }}</span>
+                  <button 
+                    @click="achievementPage++" 
+                    :disabled="achievementPage >= maxAchievementPages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: PUSAT ADUAN & WHISTLEBLOWING             -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'aduan'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Kanal Pengaduan & Whistleblowing Terlindungi</h1>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                    AES-256 Encrypted
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Layanan pengaduan aman untuk pencegahan perundungan (bullying), fasilitas, dan keluhan orang tua/siswa</p>
+              </div>
+              <button 
+                @click="openComplaintModal()"
+                class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+              >
+                <span>+</span>
+                <span>Tulis Aduan Baru</span>
+              </button>
+            </div>
+
+            <!-- Controls -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="complaintFilters.search" 
+                    type="text" 
+                    placeholder="Cari nomor tiket, judul aduan..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+
+                <div>
+                  <select 
+                    v-model="complaintFilters.status" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                    <option value="">Semua Status Laporan</option>
+                    <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+                    <option value="Investigasi">Dalam Investigasi BK</option>
+                    <option value="Selesai">Selesai Ditindaklanjuti</option>
+                  </select>
+                </div>
+
+                <div>
+                  <button 
+                    @click="resetComplaintFilters" 
+                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Complaints Cards / Table -->
+            <div class="space-y-3">
+              <div 
+                v-for="c in filteredComplaints" 
+                :key="c.id"
+                class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all"
+              >
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono font-bold text-xs text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg">
+                      {{ c.ticketNumber }}
+                    </span>
+                    <span 
+                      :class="c.isAnonymous ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-slate-100 text-slate-700 border-slate-200'"
+                      class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
+                    >
+                      {{ c.isAnonymous ? '🛡️ Whistleblower Anonim' : '👤 Pelapor: ' + c.reporter }}
+                    </span>
+                    <span class="text-slate-400 text-xs">•</span>
+                    <span class="text-xs text-slate-500">{{ c.category }}</span>
+                  </div>
+                  <div>
+                    <span 
+                      :class="[
+                        c.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                        c.status === 'Investigasi' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-blue-50 text-blue-700 border-blue-200',
+                        'px-2.5 py-1 rounded-full text-[11px] font-bold border inline-block'
+                      ]"
+                    >
+                      {{ c.status }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="mt-3">
+                  <h3 class="text-sm font-bold text-slate-900">{{ c.title }}</h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">{{ c.description }}</p>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
+                  <div>
+                    <span>Dilaporkan pada: <strong>{{ c.date }}</strong></span>
+                    <span class="mx-2">•</span>
+                    <span>Penanggung Jawab: <strong>{{ c.assignedTo }}</strong></span>
+                  </div>
+                  <button 
+                    @click="openTicketChat(c)" 
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-colors"
+                  >
+                    💬 Buka Obrolan Investigasi ({{ c.messages.length }})
+                  </button>
+                </div>
+              </div>
+
+              <div v-if="filteredComplaints.length === 0" class="p-8 text-center bg-white rounded-2xl border border-slate-200 text-xs text-slate-400">
+                Tidak ada tiket pengaduan yang ditemukan.
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: AUDIT LOG ISO/IEC 27001 (ADMIN ONLY)     -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'audit_log'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Audit Trail & Security Event Logs</h1>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    ISO 27001 A.12.4 Compliant
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Log aktivitas pencatatan dan mutasi data yang bersifat immutable (tidak dapat dihapus)</p>
+              </div>
+              <button 
+                @click="showToast('Log integrity check passed: Hash SHA-256 verified')"
+                class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+              >
+                🔒 Verifikasi Integritas Log
+              </button>
+            </div>
+
+            <!-- Table of Audit Logs -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">Waktu (UTC+7)</th>
+                      <th class="py-3 px-3">Pengguna</th>
+                      <th class="py-3 px-3">Peran (Role)</th>
+                      <th class="py-3 px-4">Aktivitas / Event</th>
+                      <th class="py-3 px-3">IP Address</th>
+                      <th class="py-3 px-3">Status Kepatuhan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 font-mono text-[11px] text-slate-700">
+                    <tr v-for="log in auditLogs" :key="log.id" class="hover:bg-slate-50/60">
+                      <td class="py-3 px-4 text-slate-500">{{ log.timestamp }}</td>
+                      <td class="py-3 px-3 font-sans font-bold text-slate-900">{{ log.user }}</td>
+                      <td class="py-3 px-3 font-sans">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px]">
+                          {{ log.role }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 font-sans text-slate-800">{{ log.action }}</td>
+                      <td class="py-3 px-3 text-slate-500">{{ log.ip }}</td>
+                      <td class="py-3 px-3 font-sans">
+                        <span class="inline-flex items-center gap-1 text-emerald-700 font-semibold text-[10px]">
+                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Verified
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </main>
+      </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: CATAT PELANGGARAN SISWA             -->
+    <!-- ========================================== -->
+    <div v-if="showViolationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="font-bold text-sm text-slate-900">Catat Pelanggaran Kedisiplinan</h3>
+          <button @click="showViolationModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveViolation" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Pilih Siswa</label>
+            <select v-model="newViolation.studentId" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+              <option value="" disabled>Pilih nama siswa...</option>
+              <option v-for="s in students" :key="s.id" :value="s.id">
+                {{ s.name }} ({{ s.classroom }}) - Poin sekarang: {{ s.demeritPoints }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Katalog Jenis Pelanggaran</label>
+            <select v-model="newViolation.presetIndex" @change="onPresetViolationChange" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+              <option value="" disabled>Pilih katalog tata tertib...</option>
+              <option v-for="(cat, idx) in violationPresets" :key="idx" :value="idx">
+                [{{ cat.severity }} - {{ cat.points }} Poin] {{ cat.title }}
+              </option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Tingkat</label>
+              <input v-model="newViolation.severity" readonly class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-600 font-bold">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Poin Minus</label>
+              <input v-model="newViolation.points" readonly class="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-rose-700 font-bold">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Catatan Kejadian & Lokasi</label>
+            <textarea v-model="newViolation.notes" rows="2" placeholder="Uraikan waktu, lokasi, dan saksi..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"></textarea>
+          </div>
+
+          <div class="p-3 bg-amber-50 rounded-xl text-[11px] text-amber-800 border border-amber-200">
+            ⚠️ <strong>Sistem Otomatisasi:</strong> Jika akumulasi poin siswa mencapai ≥ 50 poin, sistem akan langsung menerbitkan Surat Peringatan (SP-1) dan mengirim peringatan WhatsApp ke orang tua.
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showViolationModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan & Notifikasi Ortu</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: TAMBAH PRESTASI SISWA               -->
+    <!-- ========================================== -->
+    <div v-if="showAchievementModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h3 class="font-bold text-sm text-slate-900">Catat Prestasi Siswa Baru</h3>
+          <button @click="showAchievementModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveAchievement" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Pilih Siswa</label>
+            <select v-model="newAchievement.studentId" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+              <option value="" disabled>Pilih nama siswa...</option>
+              <option v-for="s in students" :key="s.id" :value="s.id">
+                {{ s.name }} ({{ s.classroom }})
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Lomba / Kejuaraan</label>
+            <input v-model="newAchievement.title" required placeholder="Contoh: Lomba Cipta Web Desain Tingkat Kota" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Tingkat</label>
+              <select v-model="newAchievement.level" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+                <option value="Sekolah">Sekolah</option>
+                <option value="Kota/Kabupaten">Kota / Kabupaten</option>
+                <option value="Provinsi">Provinsi</option>
+                <option value="Nasional">Nasional</option>
+                <option value="Internasional">Internasional</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Peringkat / Juara</label>
+              <select v-model="newAchievement.rank" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+                <option value="Juara 1">Juara 1</option>
+                <option value="Juara 2">Juara 2</option>
+                <option value="Juara 3">Juara 3</option>
+                <option value="Harapan">Harapan / Finalis</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Penyelenggara</label>
+            <input v-model="newAchievement.organizer" required placeholder="Contoh: Dinas Pendidikan Provinsi" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showAchievementModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan Prestasi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: FORM ADUAN / WHISTLEBLOWING         -->
+    <!-- ========================================== -->
+    <div v-if="showComplaintModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">Ajukan Pengaduan / Whistleblowing</h3>
+            <p class="text-[11px] text-slate-400">Jalur komunikasi aman terlindungi standar keamanan ISO 27001</p>
+          </div>
+          <button @click="showComplaintModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveComplaint" class="space-y-3 text-xs">
+          
+          <!-- Anonymous Checkbox -->
+          <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 flex items-start gap-2.5">
+            <input id="anonCheck" v-model="newComplaint.isAnonymous" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-purple-300 text-purple-700 focus:ring-purple-600">
+            <label for="anonCheck" class="text-[11px] text-purple-900">
+              <strong>Kirim sebagai Anonim (Whistleblower):</strong><br>
+              Nama dan kontak Anda akan disamarkan secara matematis (hashing enkripsi). Guru dan pihak sekolah hanya melihat isi aduan tanpa identitas Anda.
+            </label>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Kategori Pengaduan</label>
+            <select v-model="newComplaint.category" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+              <option value="Perundungan / Bullying">Perundungan / Bullying (Anti-Kekerasan)</option>
+              <option value="Fasilitas & Sarpras">Fasilitas & Sarana Prasarana Sekolah</option>
+              <option value="Pungutan Liar / Keuangan">Pungutan Liar / Masalah Keuangan</option>
+              <option value="Akademik & Pelayanan Guru">Pelayanan Akademik / Guru</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Judul Ringkas Aduan</label>
+            <input v-model="newComplaint.title" required placeholder="Contoh: Dugaan pemalakan siswa di area parkir" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Uraian Detail Kejadian</label>
+            <textarea v-model="newComplaint.description" required rows="3" placeholder="Sebutkan perkiraan waktu, tempat, dan detail kronologi..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"></textarea>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showComplaintModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Kirimkan Aduan Aman</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: DETAIL CHAT INVESTIGASI ADUAN       -->
+    <!-- ========================================== -->
+    <div v-if="showChatModal && selectedComplaint" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 flex flex-col max-h-[85vh]">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-xs bg-slate-100 px-2 py-0.5 rounded">{{ selectedComplaint.ticketNumber }}</span>
+              <span class="text-xs font-bold text-slate-900 truncate max-w-[200px]">{{ selectedComplaint.title }}</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Status: {{ selectedComplaint.status }} • Enkripsi AES-256</div>
+          </div>
+          <button @click="showChatModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <!-- Chat Timeline Container -->
+        <div class="flex-1 overflow-y-auto space-y-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+          <!-- Initial Complaint Description -->
+          <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+            <div class="text-[10px] font-bold text-slate-400 uppercase">Uraian Laporan Awal:</div>
+            <div class="text-slate-800 mt-1">{{ selectedComplaint.description }}</div>
+          </div>
+
+          <!-- Messages in Thread -->
+          <div 
+            v-for="(msg, idx) in selectedComplaint.messages" 
+            :key="idx"
+            :class="msg.sender === 'Pihak Sekolah' ? 'ml-6 bg-slate-900 text-white' : 'mr-6 bg-white text-slate-900 border border-slate-200'"
+            class="p-3 rounded-xl shadow-xs"
+          >
+            <div class="flex items-center justify-between text-[10px] opacity-75 mb-1 font-semibold">
+              <span>{{ msg.sender }}</span>
+              <span>{{ msg.time }}</span>
+            </div>
+            <div class="text-xs leading-relaxed">{{ msg.text }}</div>
+          </div>
+        </div>
+
+        <!-- Response Input Form -->
+        <form @submit.prevent="sendTicketMessage" class="flex gap-2 text-xs">
+          <input 
+            v-model="newTicketMessage" 
+            type="text" 
+            placeholder="Tulis balasan atau tindak lanjut investigasi..." 
+            required 
+            class="flex-1 px-3 py-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+          >
+          <button type="submit" class="px-4 py-2 bg-slate-950 text-white font-semibold rounded-xl hover:bg-slate-800">
+            Kirim
+          </button>
+        </form>
+
+        <!-- Status update for BK / Admin -->
+        <div v-if="canManageComplaints" class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500 font-medium">Ubah Status Tiket:</span>
+          <div class="flex gap-1.5">
+            <button @click="updateComplaintStatus('Investigasi')" class="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg font-semibold text-[11px]">Investigasi</button>
+            <button @click="updateComplaintStatus('Selesai')" class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg font-semibold text-[11px]">Tandai Selesai</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: PREVIEW SURAT PERINGATAN (SP) PDF   -->
+    <!-- ========================================== -->
+    <div v-if="showSPModal && selectedViolationForSP" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-2xl w-full p-8 shadow-2xl border border-slate-200 space-y-6">
+        
+        <!-- Header Print Style -->
+        <div class="flex items-center justify-between pb-4 border-b-2 border-slate-900 text-center">
+          <div class="text-left">
+            <div class="text-base font-bold text-slate-900 uppercase tracking-wide">SMK NEGERI UNGGULAN 1</div>
+            <div class="text-[11px] text-slate-500">Jl. Pendidikan No. 45, Kota Teladan • Telp: (021) 7890123</div>
+          </div>
+          <button @click="showSPModal = false" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
+        </div>
+
+        <div class="text-center">
+          <div class="text-sm font-bold text-slate-900 underline uppercase tracking-wider">SURAT PERINGATAN KEDISIPLINAN (SP-1)</div>
+          <div class="text-xs text-slate-500 font-mono mt-0.5">Nomor: 421.5/BK-SP1/XI/2026</div>
+        </div>
+
+        <div class="text-xs text-slate-800 leading-relaxed space-y-2">
+          <p>Diberikan kepada siswa berikut:</p>
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-2 gap-2 font-medium">
+            <div>Nama: <strong>{{ selectedViolationForSP.studentName }}</strong></div>
+            <div>Kelas: <strong>{{ selectedViolationForSP.classroom }}</strong></div>
+            <div>NISN: <strong>{{ selectedViolationForSP.nisn }}</strong></div>
+            <div>Akumulasi Poin: <strong class="text-rose-700">-{{ selectedViolationForSP.points }} Poin</strong></div>
+          </div>
+          <p>
+            Berdasarkan catatan buku tata tertib sekolah, siswa yang bersangkutan telah melakukan pelanggaran disiplin berupa:
+            <strong>{{ selectedViolationForSP.title }}</strong> pada tanggal {{ selectedViolationForSP.date }}.
+          </p>
+          <p>
+            Surat ini diterbitkan sebagai pembinaan resmi tahap pertama. Orang tua/wali murid diimbau untuk turut membimbing ananda di rumah agar tidak mengulangi perbuatan serupa.
+          </p>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="grid grid-cols-2 pt-6 text-xs text-center text-slate-800">
+          <div>
+            <div>Mengetahui,</div>
+            <div class="font-bold mt-1">Wali Kelas</div>
+            <div class="mt-12 font-bold underline">Bambang S.Pd</div>
+            <div class="text-[10px] text-slate-500">NIP: 19850312 201001 1 008</div>
+          </div>
+          <div>
+            <div>Kota Teladan, {{ currentDateFormatted }}</div>
+            <div class="font-bold mt-1">Guru Bimbingan Konseling (BK)</div>
+            <div class="mt-12 font-bold underline">Dra. Hj. Nurjanah M.Pd</div>
+            <div class="text-[10px] text-slate-500">NIP: 19780514 200501 2 004</div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[10px] text-slate-400 font-mono">Kode Verifikasi Digital: QR-ISO27001-{{ selectedViolationForSP.id }}</span>
+          <div class="flex gap-2">
+            <button @click="showSPModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 text-xs rounded-xl font-semibold">Tutup</button>
+            <button @click="showToast('Mencetak dokumen PDF resmi ber-QR Code...')" class="px-4 py-2 bg-slate-950 text-white text-xs rounded-xl font-semibold hover:bg-slate-800">🖨️ Cetak Dokumen PDF</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: SIMULASI NOTIFIKASI WHATSAPP ORTU   -->
+    <!-- ========================================== -->
+    <div v-if="showWhatsAppModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-3xl max-w-sm w-full p-4 shadow-2xl border border-slate-200 space-y-3">
+        <!-- Phone Mockup Top Bar -->
+        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+              WA
+            </div>
+            <div>
+              <div class="text-xs font-bold text-slate-900">EduTrack Official Bot</div>
+              <div class="text-[10px] text-emerald-600 font-medium">Online • Terverifikasi Sekolah</div>
+            </div>
+          </div>
+          <button @click="showWhatsAppModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <!-- WhatsApp Chat Bubble -->
+        <div class="p-3 bg-[#E7FEDE] rounded-2xl border border-emerald-200 text-xs text-slate-800 space-y-2 leading-relaxed shadow-xs">
+          <div class="font-bold text-emerald-950 flex items-center gap-1">
+            <span>📢</span> PEMBERITAHUAN PRESENSI SISWA
+          </div>
+          <p>
+            Yth. <strong>Bapak Hendra (Orang Tua / Wali)</strong>,
+          </p>
+          <p>
+            Kami informasikan bahwa ananda <strong>Ahmad Rifai (X-RPL-1)</strong> pada hari ini:
+          </p>
+          <div class="bg-white/80 p-2 rounded-xl text-[11px] font-mono border border-emerald-100">
+            • Tanggal : {{ currentDateFormatted }}<br>
+            • Status  : <strong class="text-amber-800">Terlambat (15 Menit)</strong><br>
+            • Masuk   : 07.15 WIB<br>
+            • Poin    : -5 Poin Tatib
+          </div>
+          <p class="text-[11px] text-slate-600">
+            Mohon bantuannya agar ananda dapat hadir tepat waktu esok hari. Terima kasih atas kerja samanya.
+          </p>
+          <div class="text-[9px] text-right text-slate-400">07:16 WIB ✓✓</div>
+        </div>
+
+        <!-- Simulation Actions -->
+        <div class="pt-2">
+          <button 
+            @click="showToast('Notifikasi simulasi WhatsApp terkirim ke 0812-3456-7890'); showWhatsAppModal = false"
+            class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
+          >
+            Kirim Ulang Notifikasi WA
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- FLOATING TOAST NOTIFICATION                -->
+    <!-- ========================================== -->
+    <transition 
+      enter-active-class="transform ease-out duration-300 transition" 
+      enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2" 
+      enter-to-class="translate-y-0 opacity-100 sm:translate-x-0" 
+      leave-active-class="transition ease-in duration-200" 
+      leave-from-class="opacity-100" 
+      leave-to-class="opacity-0"
+    >
+      <div v-if="toast.show" class="fixed bottom-5 right-5 z-50 max-w-sm w-full bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-slate-800">
+        <span class="text-emerald-400 text-base">✓</span>
+        <div class="text-xs font-medium">{{ toast.message }}</div>
+      </div>
+    </transition>
+
+  </div>
+
+  <!-- VUE APPLICATION LOGIC -->
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        // App State
+        const isLoggedIn = ref(true);
+        const sidebarOpen = ref(false);
+        const activePage = ref('dashboard');
+        const currentDateFormatted = ref('23 November 2026');
+
+        // Available Demo Roles
+        const roles = {
+          admin: {
+            label: 'Super Admin / Kepsek',
+            icon: '👑',
+            email: 'admin@edutrack.sch.id',
+            description: 'Akses penuh ke seluruh modul, audit log ISO 27001, dan konfigurasi sistem.'
+          },
+          bk: {
+            label: 'Guru BK / Kesiswaan',
+            icon: '🛡️',
+            email: 'bk@edutrack.sch.id',
+            description: 'Fokus penanganan pelanggaran, konseling siswa, penerbitan SP, dan aduan whistleblower.'
+          },
+          wali_kelas: {
+            label: 'Wali Kelas (X-RPL-1)',
+            icon: '📋',
+            email: 'walikelas@edutrack.sch.id',
+            description: 'Pencatatan presensi harian kelas binaan, monitoring kedisiplinan dan nilai siswa.'
+          },
+          orang_tua: {
+            label: 'Orang Tua Siswa',
+            icon: '👨‍👩‍👦',
+            email: 'ortu@edutrack.sch.id',
+            description: 'Portal mandiri memantau kehadiran, poin pelanggaran, prestasi anak, dan kirim aduan.'
+          },
+          siswa: {
+            label: 'Siswa (Ahmad Rifai)',
+            icon: '🎓',
+            email: 'siswa@edutrack.sch.id',
+            description: 'Akses mandiri melihat status kehadiran, buku saku tatib, poin prestasi, dan aduan rahasia.'
+          }
+        };
+
+        const selectedRoleKey = ref('admin');
+
+        const currentUser = ref({
+          name: 'Drs. H. Mulyadi M.Pd',
+          role: 'admin',
+          avatarInitials: 'MY'
+        });
+
+        const loginForm = ref({
+          email: 'admin@edutrack.sch.id',
+          password: '••••••••'
+        });
+
+        // Toast State
+        const toast = ref({
+          show: false,
+          message: ''
+        });
+
+        const showToast = (msg) => {
+          toast.value.message = msg;
+          toast.value.show = true;
+          setTimeout(() => {
+            toast.value.show = false;
+          }, 3500);
+        };
+
+        // Switch role helper
+        const changeRole = (roleKey) => {
+          selectedRoleKey.value = roleKey;
+          currentUser.value.role = roleKey;
+          
+          if (roleKey === 'admin') {
+            currentUser.value.name = 'Drs. H. Mulyadi M.Pd (Kepala Sekolah)';
+            currentUser.value.avatarInitials = 'MY';
+            activePage.value = 'dashboard';
+          } else if (roleKey === 'bk') {
+            currentUser.value.name = 'Dra. Hj. Nurjanah M.Pd (Guru BK)';
+            currentUser.value.avatarInitials = 'NJ';
+            activePage.value = 'dashboard';
+          } else if (roleKey === 'wali_kelas') {
+            currentUser.value.name = 'Bambang S.Pd (Wali Kelas X-RPL-1)';
+            currentUser.value.avatarInitials = 'BS';
+            activePage.value = 'presensi';
+          } else if (roleKey === 'orang_tua') {
+            currentUser.value.name = 'Bpk. Hendra (Ayah Ahmad Rifai)';
+            currentUser.value.avatarInitials = 'HD';
+            activePage.value = 'dashboard';
+          } else if (roleKey === 'siswa') {
+            currentUser.value.name = 'Ahmad Rifai (Siswa X-RPL-1)';
+            currentUser.value.avatarInitials = 'AR';
+            activePage.value = 'dashboard';
+          }
+          showToast(`Berhasil beralih ke Role: ${roles[roleKey].label}`);
+        };
+
+        const selectDemoRole = (key) => {
+          selectedRoleKey.value = key;
+          loginForm.value.email = roles[key].email;
+          loginForm.value.password = 'password123';
+        };
+
+        const login = () => {
+          changeRole(selectedRoleKey.value);
+          isLoggedIn.value = true;
+        };
+
+        const logout = () => {
+          isLoggedIn.value = false;
+          showToast('Sesi telah diakhiri secara aman.');
+        };
+
+        // Permissions / Visibility Checks
+        const canEditAttendance = computed(() => ['admin', 'wali_kelas', 'bk'].includes(currentUser.value.role));
+        const canRecordViolation = computed(() => ['admin', 'bk', 'wali_kelas'].includes(currentUser.value.role));
+        const canRecordAchievement = computed(() => ['admin', 'bk', 'wali_kelas', 'siswa'].includes(currentUser.value.role));
+        const canSubmitComplaint = computed(() => ['orang_tua', 'siswa', 'admin'].includes(currentUser.value.role));
+        const canManageComplaints = computed(() => ['admin', 'bk'].includes(currentUser.value.role));
+
+        // Navigation Items based on active Role
+        const visibleNavItems = computed(() => {
+          const role = currentUser.value.role;
+          const items = [
+            { id: 'dashboard', title: 'Dashboard', icon: '📊' }
+          ];
+
+          if (['admin', 'wali_kelas', 'bk', 'orang_tua', 'siswa'].includes(role)) {
+            items.push({ id: 'presensi', title: 'Kehadiran Siswa', icon: '✅' });
+          }
+
+          if (['admin', 'bk', 'wali_kelas', 'orang_tua', 'siswa'].includes(role)) {
+            items.push({ id: 'pelanggaran', title: 'Kedisiplinan & Tatib', icon: '⚠️', badge: '2 SP' });
+          }
+
+          if (['admin', 'bk', 'wali_kelas', 'orang_tua', 'siswa'].includes(role)) {
+            items.push({ id: 'prestasi', title: 'Bank Prestasi', icon: '🏆' });
+          }
+
+          items.push({ id: 'aduan', title: 'Pusat Aduan / Whistle', icon: '📢', badge: '3 Tiket' });
+
+          if (role === 'admin') {
+            items.push({ id: 'audit_log', title: 'Log Audit ISO 27001', icon: '🔒' });
+          }
+
+          return items;
+        });
+
+        // ==========================================
+        // MOCK DATA STORE
+        // ==========================================
+
+        const students = ref([
+          { id: 1, nisn: '0081234567', name: 'Ahmad Rifai', classroom: 'X-RPL-1', demeritPoints: 5, meritPoints: 100 },
+          { id: 2, nisn: '0081234568', name: 'Siti Nurhaliza', classroom: 'X-RPL-1', demeritPoints: 0, meritPoints: 50 },
+          { id: 3, nisn: '0081234569', name: 'Budi Santoso', classroom: 'XI-TKJ-2', demeritPoints: 55, meritPoints: 20 },
+          { id: 4, nisn: '0081234570', name: 'Dimas Anggara', classroom: 'XII-MM-1', demeritPoints: 30, meritPoints: 10 },
+          { id: 5, nisn: '0081234571', name: 'Rina Kartika', classroom: 'X-RPL-1', demeritPoints: 0, meritPoints: 75 },
+          { id: 6, nisn: '0081234572', name: 'Fajar Pratama', classroom: 'XI-TKJ-2', demeritPoints: 15, meritPoints: 30 },
+          { id: 7, nisn: '0081234573', name: 'Annisa Putri', classroom: 'XII-MM-1', demeritPoints: 0, meritPoints: 40 },
+          { id: 8, nisn: '0081234574', name: 'Bayu Aditya', classroom: 'X-RPL-1', demeritPoints: 10, meritPoints: 0 },
+          { id: 9, nisn: '0081234575', name: 'Nadia Safitri', classroom: 'XI-TKJ-2', demeritPoints: 5, meritPoints: 60 },
+          { id: 10, nisn: '0081234576', name: 'Reza Rahardian', classroom: 'XII-MM-1', demeritPoints: 25, meritPoints: 0 }
+        ]);
+
+        const attendanceList = ref([
+          { id: 1, nisn: '0081234567', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', checkInTime: '07:15', status: 'Terlambat', notes: 'Terlambat 15 menit karena ban bocor' },
+          { id: 2, nisn: '0081234568', studentName: 'Siti Nurhaliza', classroom: 'X-RPL-1', checkInTime: '06:45', status: 'Hadir', notes: 'Hadir tepat waktu' },
+          { id: 3, nisn: '0081234569', studentName: 'Budi Santoso', classroom: 'XI-TKJ-2', checkInTime: '', status: 'Alpa', notes: 'Tidak ada konfirmasi wali murid' },
+          { id: 4, nisn: '0081234570', studentName: 'Dimas Anggara', classroom: 'XII-MM-1', checkInTime: '06:55', status: 'Hadir', notes: 'Hadir tepat waktu' },
+          { id: 5, nisn: '0081234571', studentName: 'Rina Kartika', classroom: 'X-RPL-1', checkInTime: '06:50', status: 'Hadir', notes: 'Hadir tepat waktu' },
+          { id: 6, nisn: '0081234572', studentName: 'Fajar Pratama', classroom: 'XI-TKJ-2', checkInTime: '', status: 'Sakit', notes: 'Surat dokter terlampir via WA' },
+          { id: 7, nisn: '0081234573', studentName: 'Annisa Putri', classroom: 'XII-MM-1', checkInTime: '06:40', status: 'Hadir', notes: 'Hadir tepat waktu' },
+          { id: 8, nisn: '0081234574', studentName: 'Bayu Aditya', classroom: 'X-RPL-1', checkInTime: '07:05', status: 'Terlambat', notes: 'Terlambat 5 menit' },
+          { id: 9, nisn: '0081234575', studentName: 'Nadia Safitri', classroom: 'XI-TKJ-2', checkInTime: '06:58', status: 'Hadir', notes: 'Hadir tepat waktu' },
+          { id: 10, nisn: '0081234576', studentName: 'Reza Rahardian', classroom: 'XII-MM-1', checkInTime: '', status: 'Izin', notes: 'Izin urusan keluarga' }
+        ]);
+
+        const violations = ref([
+          { id: 1, date: '23/11/2026', nisn: '0081234567', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', title: 'Terlambat Hadir (3x berturut-turut)', severity: 'Ringan', points: 5, status: 'Diproses', notes: 'Peringatan lisan oleh wali kelas' },
+          { id: 2, date: '22/11/2026', nisn: '0081234569', studentName: 'Budi Santoso', classroom: 'XI-TKJ-2', title: 'Merokok di area kantin belakang', severity: 'Berat', points: 50, status: 'SP-1', notes: 'Penerbitan Surat Peringatan 1 dan pemanggilan orang tua' },
+          { id: 3, date: '20/11/2026', nisn: '0081234570', studentName: 'Dimas Anggara', classroom: 'XII-MM-1', title: 'Membolos pada jam pelajaran ke-5 & 6', severity: 'Sedang', points: 25, status: 'Diproses', notes: 'Dalam pemantauan guru BK' },
+          { id: 4, date: '18/11/2026', nisn: '0081234572', studentName: 'Fajar Pratama', classroom: 'XI-TKJ-2', title: 'Tidak memakai seragam lengkap & dasi', severity: 'Ringan', points: 10, status: 'Selesai', notes: 'Sudah dibina dan melengkapi atribut' },
+          { id: 5, date: '15/11/2026', nisn: '0081234576', studentName: 'Reza Rahardian', classroom: 'XII-MM-1', title: 'Membawa barang terlarang (vape)', severity: 'Sedang', points: 25, status: 'Diproses', notes: 'Barang disita pihak sekolah' }
+        ]);
+
+        const achievements = ref([
+          { id: 1, date: '19/11/2026', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', title: 'LKS Bidang Web Technologies', level: 'Nasional', rank: 'Juara 1', points: 100, organizer: 'Kemendikbudristek RI' },
+          { id: 2, date: '12/11/2026', studentName: 'Rina Kartika', classroom: 'X-RPL-1', title: 'Olimpiade Sains Matematika Terapan', level: 'Provinsi', rank: 'Juara 2', points: 75, organizer: 'Universitas Indonesia' },
+          { id: 3, date: '05/11/2026', studentName: 'Nadia Safitri', classroom: 'XI-TKJ-2', title: 'Lomba Network Administration Skill', level: 'Kota/Kabupaten', rank: 'Juara 1', points: 60, organizer: 'Dinas Pendidikan Kota' },
+          { id: 4, date: '28/10/2026', studentName: 'Siti Nurhaliza', classroom: 'X-RPL-1', title: 'Festival Seni Tari Tradisional', level: 'Kota/Kabupaten', rank: 'Juara 3', points: 50, organizer: 'Dispora Kota' }
+        ]);
+
+        const complaints = ref([
+          {
+            id: 1,
+            ticketNumber: 'WB-202611-001',
+            date: '22/11/2026',
+            category: 'Perundungan / Bullying',
+            title: 'Dugaan pemalakan siswa baru di area kantin belakang',
+            description: 'Ada sekelompok siswa kelas 12 yang sering meminta uang paksa kepada siswa kelas 10 saat istirahat kedua di lorong sepi belakang kantin.',
+            isAnonymous: true,
+            reporter: 'Whistleblower',
+            status: 'Investigasi',
+            assignedTo: 'Dra. Hj. Nurjanah (BK)',
+            messages: [
+              { sender: 'Pelapor (Anonim)', time: '22/11 10:15', text: 'Mohon dirahasiakan nama saya, kejadian terjadi setiap hari Selasa dan Kamis.' },
+              { sender: 'Pihak Sekolah', time: '22/11 13:40', text: 'Terima kasih atas laporannya. Tim BK dan satpam sekolah sudah mulai melakukan patroli tertutup di area tersebut.' }
+            ]
+          },
+          {
+            id: 2,
+            ticketNumber: 'WB-202611-002',
+            date: '20/11/2026',
+            category: 'Fasilitas & Sarpras',
+            title: 'AC di Lab Komputer 2 mati menyebabkan perangkat overheat',
+            description: 'Pendingin ruangan tidak berfungsi sejak hari Senin lalu sehingga praktik siswa terganggu.',
+            isAnonymous: false,
+            reporter: 'Bpk. Bambang S.Pd',
+            status: 'Selesai',
+            assignedTo: 'Bagian Sarpras',
+            messages: [
+              { sender: 'Pihak Sekolah', time: '21/11 09:00', text: 'Teknisi AC sudah melakukan servis dan unit kembali normal.' }
+            ]
+          },
+          {
+            id: 3,
+            ticketNumber: 'WB-202611-003',
+            date: '18/11/2026',
+            category: 'Pungutan Liar / Keuangan',
+            title: 'Iuran liar tidak resmi untuk kegiatan ekskul',
+            description: 'Ada penarikan dana di luar ketetapan resmi sekolah sebesar Rp 50.000 per siswa tanpa kuitansi.',
+            isAnonymous: true,
+            reporter: 'Whistleblower',
+            status: 'Menunggu Verifikasi',
+            assignedTo: 'Kepala Sekolah',
+            messages: []
+          }
+        ]);
+
+        const auditLogs = ref([
+          { id: 1, timestamp: '2026-11-23 07:15:22', user: 'bambang@edutrack.sch.id', role: 'Wali Kelas', action: 'CREATE: Presensi Siswa Ahmad Rifai (Terlambat 15m)', ip: '192.168.1.45' },
+          { id: 2, timestamp: '2026-11-22 13:40:11', user: 'bk@edutrack.sch.id', role: 'Guru BK', action: 'UPDATE: Status Aduan WB-202611-001 -> Investigasi', ip: '192.168.1.12' },
+          { id: 3, timestamp: '2026-11-22 11:20:05', user: 'bk@edutrack.sch.id', role: 'Guru BK', action: 'DISPATCH: WhatsApp Alert SP-1 Siswa Budi Santoso', ip: '192.168.1.12' },
+          { id: 4, timestamp: '2026-11-21 09:12:00', user: 'admin@edutrack.sch.id', role: 'Admin', action: 'BACKUP: Daily Encrypted Snapshot S3 Verified', ip: '10.0.4.1' },
+          { id: 5, timestamp: '2026-11-20 16:00:30', user: 'admin@edutrack.sch.id', role: 'Admin', action: 'KEY_ROTATION: AES-256 Secret Re-keyed (ISO A.10)', ip: '10.0.4.1' }
+        ]);
+
+        // Preset Katalog Pelanggaran
+        const violationPresets = [
+          { title: 'Terlambat Hadir ke Sekolah', severity: 'Ringan', points: 5 },
+          { title: 'Atribut Seragam Tidak Lengkap', severity: 'Ringan', points: 10 },
+          { title: 'Meninggalkan Jam Pelajaran (Bolos)', severity: 'Sedang', points: 25 },
+          { title: 'Membawa Rokok / Vape ke Sekolah', severity: 'Sedang', points: 30 },
+          { title: 'Melakukan Perundungan / Bullying Verbal', severity: 'Sedang', points: 35 },
+          { title: 'Tawuran / Berkelahi Fisik di Lingkungan Sekolah', severity: 'Berat', points: 75 },
+          { title: 'Pelecehan Seksual / Tindakan Asusila', severity: 'Berat', points: 100 }
+        ];
+
+        // ==========================================
+        // FILTERS & PAGINATION STATE
+        // ==========================================
+
+        // Attendance
+        const attendanceFilters = ref({ search: '', classroom: '', status: '' });
+        const attendancePage = ref(1);
+        const attendancePerPage = ref(6);
+
+        const filteredAttendance = computed(() => {
+          return attendanceList.value.filter(item => {
+            const matchesSearch = !attendanceFilters.value.search || 
+              item.studentName.toLowerCase().includes(attendanceFilters.value.search.toLowerCase()) ||
+              item.nisn.includes(attendanceFilters.value.search);
+            const matchesClass = !attendanceFilters.value.classroom || item.classroom === attendanceFilters.value.classroom;
+            const matchesStatus = !attendanceFilters.value.status || item.status === attendanceFilters.value.status;
+            return matchesSearch && matchesClass && matchesStatus;
+          });
+        });
+
+        const maxAttendancePages = computed(() => Math.max(1, Math.ceil(filteredAttendance.value.length / attendancePerPage.value)));
+
+        const paginatedAttendance = computed(() => {
+          const start = (attendancePage.value - 1) * attendancePerPage.value;
+          return filteredAttendance.value.slice(start, start + attendancePerPage.value);
+        });
+
+        const resetAttendanceFilters = () => {
+          attendanceFilters.value = { search: '', classroom: '', status: '' };
+          attendancePage.value = 1;
+        };
+
+        // Violations
+        const violationFilters = ref({ search: '', severity: '', status: '' });
+        const violationPage = ref(1);
+        const violationPerPage = ref(5);
+
+        const filteredViolations = computed(() => {
+          return violations.value.filter(item => {
+            const matchesSearch = !violationFilters.value.search || 
+              item.studentName.toLowerCase().includes(violationFilters.value.search.toLowerCase()) ||
+              item.title.toLowerCase().includes(violationFilters.value.search.toLowerCase()) ||
+              item.classroom.toLowerCase().includes(violationFilters.value.search.toLowerCase());
+            const matchesSeverity = !violationFilters.value.severity || item.severity === violationFilters.value.severity;
+            const matchesStatus = !violationFilters.value.status || item.status === violationFilters.value.status;
+            return matchesSearch && matchesSeverity && matchesStatus;
+          });
+        });
+
+        const maxViolationPages = computed(() => Math.max(1, Math.ceil(filteredViolations.value.length / violationPerPage.value)));
+
+        const paginatedViolations = computed(() => {
+          const start = (violationPage.value - 1) * violationPerPage.value;
+          return filteredViolations.value.slice(start, start + violationPerPage.value);
+        });
+
+        const resetViolationFilters = () => {
+          violationFilters.value = { search: '', severity: '', status: '' };
+          violationPage.value = 1;
+        };
+
+        // Achievements
+        const achievementFilters = ref({ search: '', level: '' });
+        const achievementPage = ref(1);
+        const achievementPerPage = ref(5);
+
+        const filteredAchievements = computed(() => {
+          return achievements.value.filter(item => {
+            const matchesSearch = !achievementFilters.value.search || 
+              item.title.toLowerCase().includes(achievementFilters.value.search.toLowerCase()) ||
+              item.studentName.toLowerCase().includes(achievementFilters.value.search.toLowerCase()) ||
+              item.organizer.toLowerCase().includes(achievementFilters.value.search.toLowerCase());
+            const matchesLevel = !achievementFilters.value.level || item.level === achievementFilters.value.level;
+            return matchesSearch && matchesLevel;
+          });
+        });
+
+        const maxAchievementPages = computed(() => Math.max(1, Math.ceil(filteredAchievements.value.length / achievementPerPage.value)));
+
+        const paginatedAchievements = computed(() => {
+          const start = (achievementPage.value - 1) * achievementPerPage.value;
+          return filteredAchievements.value.slice(start, start + achievementPerPage.value);
+        });
+
+        const resetAchievementFilters = () => {
+          achievementFilters.value = { search: '', level: '' };
+          achievementPage.value = 1;
+        };
+
+        // Complaints
+        const complaintFilters = ref({ search: '', status: '' });
+        const filteredComplaints = computed(() => {
+          return complaints.value.filter(item => {
+            const matchesSearch = !complaintFilters.value.search || 
+              item.title.toLowerCase().includes(complaintFilters.value.search.toLowerCase()) ||
+              item.ticketNumber.toLowerCase().includes(complaintFilters.value.search.toLowerCase());
+            const matchesStatus = !complaintFilters.value.status || item.status === complaintFilters.value.status;
+            return matchesSearch && matchesStatus;
+          });
+        });
+
+        const resetComplaintFilters = () => {
+          complaintFilters.value = { search: '', status: '' };
+        };
+
+        // Pagination Range helper
+        const paginationRangeText = (page, perPage, total) => {
+          if (total === 0) return '0 - 0';
+          const start = (page - 1) * perPage + 1;
+          const end = Math.min(page * perPage, total);
+          return `${start} - ${end}`;
+        };
+
+        // Dashboard Stats
+        const stats = computed(() => {
+          const total = attendanceList.value.length;
+          const present = attendanceList.value.filter(a => a.status === 'Hadir' || a.status === 'Terlambat').length;
+          const absent = attendanceList.value.filter(a => a.status === 'Alpa').length;
+          const rate = total > 0 ? Math.round((present / total) * 100) : 0;
+          return {
+            attendanceRate: rate,
+            presentCount: present,
+            absentCount: absent
+          };
+        });
+
+        const pendingComplaintsCount = computed(() => {
+          return complaints.value.filter(c => c.status !== 'Selesai').length;
+        });
+
+        // ==========================================
+        // MODALS & ACTIONS
+        // ==========================================
+
+        const showViolationModal = ref(false);
+        const newViolation = ref({
+          studentId: '',
+          presetIndex: '',
+          title: '',
+          severity: 'Ringan',
+          points: 5,
+          notes: ''
+        });
+
+        const openViolationModal = () => {
+          newViolation.value = {
+            studentId: '',
+            presetIndex: '',
+            title: '',
+            severity: 'Ringan',
+            points: 5,
+            notes: ''
+          };
+          showViolationModal.value = true;
+        };
+
+        const onPresetViolationChange = () => {
+          const p = violationPresets[newViolation.value.presetIndex];
+          if (p) {
+            newViolation.value.title = p.title;
+            newViolation.value.severity = p.severity;
+            newViolation.value.points = p.points;
+          }
+        };
+
+        const saveViolation = () => {
+          const st = students.value.find(s => s.id === parseInt(newViolation.value.studentId));
+          if (!st) return;
+
+          const created = {
+            id: Date.now(),
+            date: '23/11/2026',
+            nisn: st.nisn,
+            studentName: st.name,
+            classroom: st.classroom,
+            title: newViolation.value.title,
+            severity: newViolation.value.severity,
+            points: newViolation.value.points,
+            status: newViolation.value.points >= 50 ? 'SP-1' : 'Diproses',
+            notes: newViolation.value.notes || 'Dicatat oleh BK'
+          };
+
+          violations.value.unshift(created);
+          st.demeritPoints += newViolation.value.points;
+          showViolationModal.value = false;
+          showToast(`Pelanggaran siswa ${st.name} berhasil dicatat & notifikasi WhatsApp terkirim.`);
+        };
+
+        const showAchievementModal = ref(false);
+        const newAchievement = ref({
+          studentId: '',
+          title: '',
+          level: 'Kota/Kabupaten',
+          rank: 'Juara 1',
+          organizer: '',
+          points: 50
+        });
+
+        const openAchievementModal = () => {
+          newAchievement.value = {
+            studentId: '',
+            title: '',
+            level: 'Kota/Kabupaten',
+            rank: 'Juara 1',
+            organizer: '',
+            points: 50
+          };
+          showAchievementModal.value = true;
+        };
+
+        const saveAchievement = () => {
+          const st = students.value.find(s => s.id === parseInt(newAchievement.value.studentId));
+          if (!st) return;
+
+          let points = 50;
+          if (newAchievement.value.level === 'Nasional') points = 100;
+          if (newAchievement.value.level === 'Provinsi') points = 75;
+
+          const created = {
+            id: Date.now(),
+            date: '23/11/2026',
+            studentName: st.name,
+            classroom: st.classroom,
+            title: newAchievement.value.title,
+            level: newAchievement.value.level,
+            rank: newAchievement.value.rank,
+            points: points,
+            organizer: newAchievement.value.organizer
+          };
+
+          achievements.value.unshift(created);
+          st.meritPoints += points;
+          showAchievementModal.value = false;
+          showToast(`Prestasi berhasil ditambahkan (+${points} poin merit)!`);
+        };
+
+        const showComplaintModal = ref(false);
+        const newComplaint = ref({
+          category: 'Perundungan / Bullying',
+          title: '',
+          description: '',
+          isAnonymous: true
+        });
+
+        const openComplaintModal = () => {
+          newComplaint.value = {
+            category: 'Perundungan / Bullying',
+            title: '',
+            description: '',
+            isAnonymous: true
+          };
+          showComplaintModal.value = true;
+        };
+
+        const saveComplaint = () => {
+          const ticketId = 'WB-202611-' + Math.floor(100 + Math.random() * 900);
+          const created = {
+            id: Date.now(),
+            ticketNumber: ticketId,
+            date: '23/11/2026',
+            category: newComplaint.value.category,
+            title: newComplaint.value.title,
+            description: newComplaint.value.description,
+            isAnonymous: newComplaint.value.isAnonymous,
+            reporter: newComplaint.value.isAnonymous ? 'Whistleblower' : currentUser.value.name,
+            status: 'Menunggu Verifikasi',
+            assignedTo: 'Tim Satgas Anti-Kekerasan',
+            messages: []
+          };
+
+          complaints.value.unshift(created);
+          showComplaintModal.value = false;
+          showToast(`Tiket aduan #${ticketId} berhasil dikirim secara aman & terenkripsi AES-256.`);
+        };
+
+        // Chat in Ticket
+        const showChatModal = ref(false);
+        const selectedComplaint = ref(null);
+        const newTicketMessage = ref('');
+
+        const openTicketChat = (complaint) => {
+          selectedComplaint.value = complaint;
+          showChatModal.value = true;
+        };
+
+        const sendTicketMessage = () => {
+          if (!newTicketMessage.value.trim() || !selectedComplaint.value) return;
+          const senderName = currentUser.value.role === 'admin' || currentUser.value.role === 'bk' 
+            ? 'Pihak Sekolah' 
+            : (selectedComplaint.value.isAnonymous ? 'Pelapor (Anonim)' : currentUser.value.name);
+
+          selectedComplaint.value.messages.push({
+            sender: senderName,
+            time: '23/11 17:15',
+            text: newTicketMessage.value
+          });
+
+          newTicketMessage.value = '';
+          showToast('Pesan terenkripsi berhasil dikirim ke ruang investigasi.');
+        };
+
+        const updateComplaintStatus = (newStatus) => {
+          if (!selectedComplaint.value) return;
+          selectedComplaint.value.status = newStatus;
+          showToast(`Status tiket diperbarui menjadi: ${newStatus}`);
+        };
+
+        // Attendance Quick Updates
+        const changeAttendanceStatus = (att, newStatus) => {
+          att.status = newStatus;
+          if (newStatus === 'Alpa') {
+            showToast(`Status ${att.studentName} diset Alpa! Alert WhatsApp dikirim ke wali murid.`);
+          } else {
+            showToast(`Status ${att.studentName} diubah ke ${newStatus}.`);
+          }
+        };
+
+        const markAllPresent = () => {
+          attendanceList.value.forEach(a => {
+            a.status = 'Hadir';
+            a.checkInTime = '07:00';
+          });
+          showToast('Semua siswa berhasil ditandai Hadir!');
+        };
+
+        // SP Preview Modal
+        const showSPModal = ref(false);
+        const selectedViolationForSP = ref(null);
+
+        const previewSP = (v) => {
+          selectedViolationForSP.value = v;
+          showSPModal.value = true;
+        };
+
+        // WhatsApp Modal
+        const showWhatsAppModal = ref(false);
+        const openWhatsAppModal = () => {
+          showWhatsAppModal.value = true;
+        };
+
+        const exportMockData = (type) => {
+          showToast(`File ${type}_SMK1_2026.xlsx berhasil digenerate.`);
+        };
+
+        return {
+          isLoggedIn,
+          sidebarOpen,
+          activePage,
+          currentDateFormatted,
+          roles,
+          selectedRoleKey,
+          currentUser,
+          loginForm,
+          toast,
+          showToast,
+          changeRole,
+          selectDemoRole,
+          login,
+          logout,
+          canEditAttendance,
+          canRecordViolation,
+          canRecordAchievement,
+          canSubmitComplaint,
+          canManageComplaints,
+          visibleNavItems,
+          students,
+          attendanceList,
+          violations,
+          achievements,
+          complaints,
+          auditLogs,
+          violationPresets,
+          stats,
+          pendingComplaintsCount,
+
+          // Attendance Filters & Pagination
+          attendanceFilters,
+          attendancePage,
+          attendancePerPage,
+          filteredAttendance,
+          maxAttendancePages,
+          paginatedAttendance,
+          resetAttendanceFilters,
+          changeAttendanceStatus,
+          markAllPresent,
+
+          // Violation Filters & Pagination
+          violationFilters,
+          violationPage,
+          violationPerPage,
+          filteredViolations,
+          maxViolationPages,
+          paginatedViolations,
+          resetViolationFilters,
+
+          // Achievement Filters & Pagination
+          achievementFilters,
+          achievementPage,
+          achievementPerPage,
+          filteredAchievements,
+          maxAchievementPages,
+          paginatedAchievements,
+          resetAchievementFilters,
+
+          // Complaint Filters
+          complaintFilters,
+          filteredComplaints,
+          resetComplaintFilters,
+
+          // Modals
+          showViolationModal,
+          newViolation,
+          openViolationModal,
+          onPresetViolationChange,
+          saveViolation,
+
+          showAchievementModal,
+          newAchievement,
+          openAchievementModal,
+          saveAchievement,
+
+          showComplaintModal,
+          newComplaint,
+          openComplaintModal,
+          saveComplaint,
+
+          showChatModal,
+          selectedComplaint,
+          newTicketMessage,
+          openTicketChat,
+          sendTicketMessage,
+          updateComplaintStatus,
+
+          showSPModal,
+          selectedViolationForSP,
+          previewSP,
+
+          showWhatsAppModal,
+          openWhatsAppModal,
+
+          paginationRangeText,
+          exportMockData
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
