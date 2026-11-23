@@ -880,8 +880,16 @@
                       <td class="py-3 px-3 text-slate-500 text-[11px]">
                         {{ att.notes || 'Hadir via Scan Kartu' }}
                       </td>
-                      <td class="py-3 px-4 text-right">
+                      <td class="py-3 px-4 text-right whitespace-nowrap">
                         <!-- Fast Change Status Toggle (If permitted) -->
+                        <button 
+                          v-if="canEditAttendance"
+                          @click="openEditAttendanceNote(att)"
+                          class="px-2 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-[10px] font-semibold transition-colors mr-1.5 bg-white"
+                          title="Koreksi Kehadiran & Catatan Khusus"
+                        >
+                          ✏️ Catatan
+                        </button>
                         <div v-if="canEditAttendance" class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50">
                           <button 
                             @click="changeAttendanceStatus(att, 'Hadir')"
@@ -1081,8 +1089,22 @@
                       </td>
                       <td class="py-3 px-4 text-right space-x-1">
                         <button 
+                          @click="openEditViolation(v)" 
+                          class="px-2 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold transition-colors"
+                          title="Edit Pelanggaran"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          @click="deleteViolation(v)" 
+                          class="px-2 py-1 rounded-lg border border-rose-200 bg-white hover:bg-rose-50 text-rose-700 text-[10px] font-semibold transition-colors"
+                          title="Batalkan Pelanggaran"
+                        >
+                          🗑️ Batalkan
+                        </button>
+                        <button 
                           @click="previewSP(v)" 
-                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold"
+                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold"
                           title="Preview Surat Peringatan Resmi (PDF)"
                         >
                           📄 Lihat SP
@@ -1221,12 +1243,28 @@
                           +{{ a.points }}
                         </span>
                       </td>
-                      <td class="py-3 px-4 text-right">
+                      <td class="py-3 px-4 text-right space-x-1">
+                        <button 
+                          v-if="canRecordAchievement"
+                          @click="openAchievementModal(a)" 
+                          class="px-2 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold transition-colors"
+                          title="Edit Prestasi"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          v-if="canRecordAchievement"
+                          @click="deleteAchievement(a)" 
+                          class="px-2 py-1 rounded-lg border border-rose-200 bg-white hover:bg-rose-50 text-rose-700 text-[10px] font-semibold transition-colors"
+                          title="Hapus Prestasi"
+                        >
+                          🗑️ Hapus
+                        </button>
                         <button 
                           @click="showToast('Sertifikat digital terverifikasi via QR Code')"
-                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[11px] font-semibold"
+                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold"
                         >
-                          🎖️ Unduh E-Sertifikat
+                          🎖️ E-Sertifikat
                         </button>
                       </td>
                     </tr>
@@ -2036,6 +2074,349 @@
 
 
           <!-- ============================================== -->
+          <!-- PAGE: MANAJEMEN DATA SISWA (MASTER SISWA)      -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'siswa_mgmt'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Manajemen Data Siswa (Master Siswa)</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                    Master Data Pokok Pendidikan
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Kelola biodata siswa, integrasi barcode kartu pelajar, nomor WhatsApp orang tua, dan rombel</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  @click="exportMockData('Data_Siswa')" 
+                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  📥 Export Data
+                </button>
+                <button 
+                  @click="openStudentModal()"
+                  class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+                >
+                  <span>+</span>
+                  <span>Tambah Siswa Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Siswa -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="relative sm:col-span-2">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="studentFilters.search" 
+                    type="text" 
+                    placeholder="Cari NISN, nama siswa, atau orang tua..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+                <div>
+                  <select 
+                    v-model="studentFilters.classroom" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Kelas</option>
+                    <option value="X-RPL-1">X-RPL-1</option>
+                    <option value="X-RPL-2">X-RPL-2</option>
+                    <option value="XI-TKJ-1">XI-TKJ-1</option>
+                    <option value="XI-TKJ-2">XI-TKJ-2</option>
+                    <option value="XII-MM-1">XII-MM-1</option>
+                  </select>
+                </div>
+                <div>
+                  <select 
+                    v-model="studentFilters.status" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Status</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif / Cuti">Nonaktif / Cuti</option>
+                    <option value="Mutasi Keluar">Mutasi Keluar</option>
+                    <option value="Lulus">Lulus</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabel Siswa -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">NISN & Nama Siswa</th>
+                      <th class="py-3 px-3">Gender</th>
+                      <th class="py-3 px-3">Kelas</th>
+                      <th class="py-3 px-4">Orang Tua / Wali Murid</th>
+                      <th class="py-3 px-3">Poin Disiplin / Merit</th>
+                      <th class="py-3 px-3">Status</th>
+                      <th class="py-3 px-4 text-right">Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                    <tr v-for="st in paginatedStudentsList" :key="st.id" class="hover:bg-slate-50/60 transition-colors">
+                      <td class="py-3 px-4">
+                        <div class="font-bold text-slate-900">{{ st.name }}</div>
+                        <div class="text-[10px] text-slate-400 font-mono">NISN: {{ st.nisn }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span class="text-slate-600 text-[11px]">{{ st.gender || 'Laki-laki' }}</span>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-800 font-mono text-[11px] font-semibold border border-slate-200">
+                          {{ st.classroom }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">{{ st.parentName || 'Belum Terhubung' }}</div>
+                        <div class="text-[10px] text-emerald-700 font-mono">WA: {{ st.parentPhone || '-' }}</div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <div class="flex items-center gap-1.5 text-[11px]">
+                          <span class="px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 font-bold border border-rose-200 text-[10px]">
+                            -{{ st.demeritPoints }}
+                          </span>
+                          <span class="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 text-[10px]">
+                            +{{ st.meritPoints }}
+                          </span>
+                        </div>
+                      </td>
+                      <td class="py-3 px-3">
+                        <span :class="st.status === 'Aktif' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'" class="px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block">
+                          {{ st.status || 'Aktif' }}
+                        </span>
+                      </td>
+                      <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                        <button 
+                          @click="openStudentModal(st)"
+                          class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          @click="deleteStudent(st)"
+                          class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          🗑️ Hapus
+                        </button>
+                        <button 
+                          @click="selectedStudentCardId = st.id; activePage = 'kartu_pelajar'"
+                          class="px-2 py-1 rounded-lg border border-blue-200 hover:bg-blue-50 text-blue-700 text-[10px] font-semibold bg-white transition-colors"
+                          title="Cetak Kartu Pelajar ISO CR-80"
+                        >
+                          🪪 Kartu
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredStudentsList.length === 0">
+                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data siswa yang cocok dengan kriteria pencarian.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Siswa -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(studentPage, studentPerPage, filteredStudentsList.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredStudentsList.length }}</span> siswa
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="studentPage--" 
+                    :disabled="studentPage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ studentPage }} / {{ maxStudentPages }}</span>
+                  <button 
+                    @click="studentPage++" 
+                    :disabled="studentPage >= maxStudentPages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: MANAJEMEN ORANG TUA / WALI MURID         -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'ortu_mgmt'" class="space-y-4">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Manajemen Orang Tua & Wali Murid</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    Aktivasi WhatsApp & Portal Ortu
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Direktori kontak orang tua, relasi siswa binaan, dan kontrol akses portal pemantauan</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  @click="exportMockData('Data_Orang_Tua')" 
+                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  📥 Export Kontak
+                </button>
+                <button 
+                  @click="openParentModal()"
+                  class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+                >
+                  <span>+</span>
+                  <span>Tambah Orang Tua Baru</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Ortu -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                <div class="relative sm:col-span-2">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
+                  <input 
+                    v-model="parentFilters.search" 
+                    type="text" 
+                    placeholder="Cari nama orang tua, siswa, nomor WA, atau email..." 
+                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
+                  >
+                </div>
+                <div>
+                  <select 
+                    v-model="parentFilters.status" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Status Portal</option>
+                    <option value="Terhubung (Aktif)">Terhubung (Aktif)</option>
+                    <option value="Belum Terhubung">Belum Terhubung</option>
+                  </select>
+                </div>
+                <div>
+                  <select 
+                    v-model="parentFilters.relation" 
+                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium"
+                  >
+                    <option value="">Semua Hubungan</option>
+                    <option value="Ayah Kandung">Ayah Kandung</option>
+                    <option value="Ibu Kandung">Ibu Kandung</option>
+                    <option value="Wali Murid">Wali Murid</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabel Orang Tua -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+                    <tr>
+                      <th class="py-3 px-4">Nama Orang Tua & Hubungan</th>
+                      <th class="py-3 px-4">Anak Asuh / Siswa</th>
+                      <th class="py-3 px-4">Kontak WhatsApp & Email</th>
+                      <th class="py-3 px-3">Pekerjaan</th>
+                      <th class="py-3 px-3">Status Portal</th>
+                      <th class="py-3 px-4 text-right">Tindakan</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
+                    <tr v-for="p in paginatedParentsList" :key="p.id" class="hover:bg-slate-50/60 transition-colors">
+                      <td class="py-3 px-4">
+                        <div class="font-bold text-slate-900">{{ p.name }}</div>
+                        <div class="text-[10px] text-slate-400">{{ p.relation }}</div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="font-semibold text-slate-800">{{ p.studentName }}</div>
+                        <div class="text-[10px] text-slate-500 font-mono">{{ p.classroom }} • NISN: {{ p.studentNisn }}</div>
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="font-mono text-emerald-700 font-semibold">📱 {{ p.phone }}</div>
+                        <div class="text-[10px] text-slate-400 font-mono">{{ p.email || '-' }}</div>
+                      </td>
+                      <td class="py-3 px-3 text-slate-600">
+                        {{ p.job || 'Wiraswasta' }}
+                      </td>
+                      <td class="py-3 px-3">
+                        <span :class="p.portalStatus === 'Terhubung (Aktif)' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-600 border-slate-200'" class="px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block">
+                          {{ p.portalStatus }}
+                        </span>
+                        <div v-if="p.lastLogin" class="text-[9px] text-slate-400 mt-0.5">Sesi: {{ p.lastLogin }}</div>
+                      </td>
+                      <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
+                        <button 
+                          @click="sendPortalInvite(p)"
+                          class="px-2 py-1 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[10px] font-semibold transition-colors"
+                          title="Kirim link aktivasi portal via WhatsApp"
+                        >
+                          📲 Kirim Akses
+                        </button>
+                        <button 
+                          @click="openParentModal(p)"
+                          class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          @click="deleteParent(p)"
+                          class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          🗑️ Hapus
+                        </button>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredParentsList.length === 0">
+                      <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
+                        Tidak ada data orang tua yang cocok.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Ortu -->
+              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div>
+                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(parentPage, parentPerPage, filteredParentsList.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredParentsList.length }}</span> wali murid
+                </div>
+                <div class="flex items-center gap-1">
+                  <button 
+                    @click="parentPage--" 
+                    :disabled="parentPage === 1"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Sebelumnya
+                  </button>
+                  <span class="px-2 font-semibold text-slate-900">{{ parentPage }} / {{ maxParentPages }}</span>
+                  <button 
+                    @click="parentPage++" 
+                    :disabled="parentPage >= maxParentPages"
+                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
+                  >
+                    Berikutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
           <!-- PAGE: MANAJEMEN PENGGUNA (ADMIN ONLY)          -->
           <!-- ============================================== -->
           <div v-if="activePage === 'users'" class="space-y-4">
@@ -2151,6 +2532,18 @@
                         </span>
                       </td>
                       <td class="py-3 px-4 text-right space-x-1">
+                        <button 
+                          @click="openEditUserModal(u)"
+                          class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button 
+                          @click="deleteUser(u)"
+                          class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors"
+                        >
+                          🗑️ Hapus
+                        </button>
                         <button 
                           @click="toggleUserStatus(u)"
                           :class="u.is_active ? 'hover:bg-rose-50 text-rose-700 border-rose-200' : 'hover:bg-emerald-50 text-emerald-700 border-emerald-200'"
@@ -2303,7 +2696,7 @@
     <div v-if="showViolationModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 class="font-bold text-sm text-slate-900">Catat Pelanggaran Kedisiplinan</h3>
+          <h3 class="font-bold text-sm text-slate-900">{{ isEditingViolation ? 'Edit Catatan Pelanggaran' : 'Catat Pelanggaran Kedisiplinan' }}</h3>
           <button @click="showViolationModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
         </div>
 
@@ -2350,7 +2743,7 @@
 
           <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
             <button type="button" @click="showViolationModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan & Notifikasi Ortu</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">{{ isEditingViolation ? 'Perbarui Pelanggaran' : 'Simpan & Notifikasi Ortu' }}</button>
           </div>
         </form>
       </div>
@@ -2363,7 +2756,7 @@
     <div v-if="showAchievementModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 class="font-bold text-sm text-slate-900">Catat Prestasi Siswa Baru</h3>
+          <h3 class="font-bold text-sm text-slate-900">{{ isEditingAchievement ? 'Edit Prestasi Siswa' : 'Catat Prestasi Siswa Baru' }}</h3>
           <button @click="showAchievementModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
         </div>
 
@@ -2412,7 +2805,7 @@
 
           <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
             <button type="button" @click="showAchievementModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan Prestasi</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">{{ isEditingAchievement ? 'Perbarui Prestasi' : 'Simpan Prestasi' }}</button>
           </div>
         </form>
       </div>
@@ -2665,7 +3058,7 @@
       <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
-            <h3 class="font-bold text-sm text-slate-900">Tambah Akun Pengguna Baru</h3>
+            <h3 class="font-bold text-sm text-slate-900">{{ isEditingUser ? 'Edit Akun Pengguna' : 'Tambah Akun Pengguna Baru' }}</h3>
             <p class="text-[11px] text-slate-400">Atur peran dan batasan isolasi data pengguna</p>
           </div>
           <button @click="showAddUserModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
@@ -2705,7 +3098,216 @@
 
           <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
             <button type="button" @click="showAddUserModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan Akun</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">{{ isEditingUser ? 'Perbarui Akun' : 'Simpan Akun' }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: KELOLA DATA SISWA (TAMBAH / EDIT)   -->
+    <!-- ========================================== -->
+    <div v-if="showStudentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">{{ isEditingStudent ? 'Edit Data Siswa' : 'Tambah Siswa Baru' }}</h3>
+            <p class="text-[11px] text-slate-400">Data induk siswa terintegrasi dengan kartu barcode & presensi</p>
+          </div>
+          <button @click="showStudentModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveStudent" class="space-y-3 text-xs">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
+              <input v-model="currentStudentForm.nisn" required placeholder="10 Digit NISN..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
+              <select v-model="currentStudentForm.gender" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap Siswa</label>
+            <input v-model="currentStudentForm.name" required placeholder="Nama lengkap sesuai akta / ijazah" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Rombongan Belajar (Kelas)</label>
+              <select v-model="currentStudentForm.classroom" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="X-RPL-1">X-RPL-1</option>
+                <option value="X-RPL-2">X-RPL-2</option>
+                <option value="XI-TKJ-1">XI-TKJ-1</option>
+                <option value="XI-TKJ-2">XI-TKJ-2</option>
+                <option value="XII-MM-1">XII-MM-1</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Status Kesiswaan</label>
+              <select v-model="currentStudentForm.status" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="Aktif">Aktif</option>
+                <option value="Nonaktif / Cuti">Nonaktif / Cuti</option>
+                <option value="Mutasi Keluar">Mutasi Keluar</option>
+                <option value="Lulus">Lulus</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
+            <div class="font-bold text-[11px] text-slate-800 flex items-center gap-1.5">
+              <span>👨‍👩‍👦</span>
+              <span>Informasi Orang Tua / Wali Murid Terhubung</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-slate-500 mb-0.5">Nama Orang Tua</label>
+                <input v-model="currentStudentForm.parentName" required placeholder="Contoh: Bpk. Hendra" class="w-full p-2 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-500 mb-0.5">Hubungan</label>
+                <select v-model="currentStudentForm.parentRelation" class="w-full p-2 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:outline-none font-medium">
+                  <option value="Ayah Kandung">Ayah Kandung</option>
+                  <option value="Ibu Kandung">Ibu Kandung</option>
+                  <option value="Wali Murid">Wali Murid</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-500 mb-0.5">Nomor WhatsApp Orang Tua (Untuk Notif Presensi & SP)</label>
+              <input v-model="currentStudentForm.parentPhone" required placeholder="081234567890" class="w-full p-2 bg-white border border-slate-200 rounded-lg focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Alamat Domisili Siswa</label>
+            <input v-model="currentStudentForm.address" placeholder="Jalan, RT/RW, Kelurahan, Kota" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showStudentModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">
+              {{ isEditingStudent ? 'Perbarui Data Siswa' : 'Simpan Siswa Baru' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: KELOLA ORANG TUA (TAMBAH / EDIT)    -->
+    <!-- ========================================== -->
+    <div v-if="showParentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">{{ isEditingParent ? 'Edit Data Orang Tua / Wali' : 'Tambah Orang Tua / Wali Baru' }}</h3>
+            <p class="text-[11px] text-slate-400">Pemberian akses akun portal pemantauan dan nomor WhatsApp darurat</p>
+          </div>
+          <button @click="showParentModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveParent" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Nama Lengkap Orang Tua / Wali</label>
+            <input v-model="currentParentForm.name" required placeholder="Contoh: Bpk. Bambang Wijaya" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Hubungan dengan Siswa</label>
+              <select v-model="currentParentForm.relation" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+                <option value="Ayah Kandung">Ayah Kandung</option>
+                <option value="Ibu Kandung">Ibu Kandung</option>
+                <option value="Wali Murid">Wali Murid</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Pekerjaan</label>
+              <input v-model="currentParentForm.job" placeholder="PNS / Swasta / Wiraswasta" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Hubungkan ke Siswa Binaan</label>
+            <select v-model="currentParentForm.studentId" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <option v-for="s in students" :key="s.id" :value="s.id">
+                {{ s.name }} (NISN: {{ s.nisn }} • Kelas: {{ s.classroom }})
+              </option>
+            </select>
+            <p class="text-[10px] text-slate-400 mt-1">Orang tua hanya dapat memantau data anak yang terhubung dengan akun ini.</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">No. WhatsApp Aktif</label>
+              <input v-model="currentParentForm.phone" required placeholder="081234567890" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">Alamat Email</label>
+              <input v-model="currentParentForm.email" type="email" placeholder="nama@gmail.com" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status Portal Monitoring</label>
+            <select v-model="currentParentForm.portalStatus" class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <option value="Terhubung (Aktif)">Terhubung (Aktif)</option>
+              <option value="Belum Terhubung">Belum Terhubung (Menunggu Undangan)</option>
+            </select>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showParentModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">
+              {{ isEditingParent ? 'Perbarui Data Orang Tua' : 'Simpan Data Orang Tua' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MODAL: KOREKSI PRESENSI & CATATAN KHUSUS   -->
+    <!-- ========================================== -->
+    <div v-if="showAttendanceNoteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="font-bold text-sm text-slate-900">Koreksi Kehadiran Siswa</h3>
+            <p class="text-[11px] text-slate-400">{{ editingAttendance.studentName }} ({{ editingAttendance.classroom }})</p>
+          </div>
+          <button @click="showAttendanceNoteModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
+        </div>
+
+        <form @submit.prevent="saveAttendanceNote" class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Status Kehadiran</label>
+            <select v-model="editingAttendance.status" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <option value="Hadir">Hadir Tepat Waktu</option>
+              <option value="Terlambat">Terlambat (T-1 / T-2 / T-3)</option>
+              <option value="Sakit">Sakit (Dengan Keterangan)</option>
+              <option value="Izin">Izin (Keperluan Khusus)</option>
+              <option value="Alpa">Alpa (Tanpa Keterangan)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Catatan Koreksi / Alasan</label>
+            <textarea v-model="editingAttendance.notes" rows="3" required placeholder="Tuliskan catatan khusus atau alasan koreksi kehadiran..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"></textarea>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+            <button type="button" @click="showAttendanceNoteModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Simpan Perubahan</button>
           </div>
         </form>
       </div>
@@ -2994,6 +3596,11 @@
 
           items.push({ id: 'aduan', title: 'Pusat Aduan / Whistle', icon: '📢', badge: '3 Tiket' });
 
+          if (role === 'admin' || role === 'bk' || role === 'wali_kelas') {
+            items.push({ id: 'siswa_mgmt', title: 'Manajemen Siswa', icon: '🎓' });
+            items.push({ id: 'ortu_mgmt', title: 'Manajemen Orang Tua', icon: '👨‍👩‍👦' });
+          }
+
           if (role === 'admin') {
             items.push({ id: 'users', title: 'Manajemen Pengguna', icon: '👥' });
             items.push({ id: 'backup', title: 'Backup Data ISO 27001', icon: '💾' });
@@ -3008,16 +3615,26 @@
         // ==========================================
 
         const students = ref([
-          { id: 1, nisn: '0081234567', name: 'Ahmad Rifai', classroom: 'X-RPL-1', demeritPoints: 5, meritPoints: 100 },
-          { id: 2, nisn: '0081234568', name: 'Siti Nurhaliza', classroom: 'X-RPL-1', demeritPoints: 0, meritPoints: 50 },
-          { id: 3, nisn: '0081234569', name: 'Budi Santoso', classroom: 'XI-TKJ-2', demeritPoints: 55, meritPoints: 20 },
-          { id: 4, nisn: '0081234570', name: 'Dimas Anggara', classroom: 'XII-MM-1', demeritPoints: 30, meritPoints: 10 },
-          { id: 5, nisn: '0081234571', name: 'Rina Kartika', classroom: 'X-RPL-1', demeritPoints: 0, meritPoints: 75 },
-          { id: 6, nisn: '0081234572', name: 'Fajar Pratama', classroom: 'XI-TKJ-2', demeritPoints: 15, meritPoints: 30 },
-          { id: 7, nisn: '0081234573', name: 'Annisa Putri', classroom: 'XII-MM-1', demeritPoints: 0, meritPoints: 40 },
-          { id: 8, nisn: '0081234574', name: 'Bayu Aditya', classroom: 'X-RPL-1', demeritPoints: 10, meritPoints: 0 },
-          { id: 9, nisn: '0081234575', name: 'Nadia Safitri', classroom: 'XI-TKJ-2', demeritPoints: 5, meritPoints: 60 },
-          { id: 10, nisn: '0081234576', name: 'Reza Rahardian', classroom: 'XII-MM-1', demeritPoints: 25, meritPoints: 0 }
+          { id: 1, nisn: '0081234567', name: 'Ahmad Rifai', gender: 'Laki-laki', classroom: 'X-RPL-1', parentName: 'Bpk. Hendra Gunawan', parentPhone: '081234567890', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 5, meritPoints: 100, address: 'Jl. Melati No. 12, Kota' },
+          { id: 2, nisn: '0081234568', name: 'Siti Nurhaliza', gender: 'Perempuan', classroom: 'X-RPL-1', parentName: 'Ibu Rahmawati', parentPhone: '081298765432', parentRelation: 'Ibu Kandung', status: 'Aktif', demeritPoints: 0, meritPoints: 50, address: 'Jl. Mawar No. 45, Kota' },
+          { id: 3, nisn: '0081234569', name: 'Budi Santoso', gender: 'Laki-laki', classroom: 'XI-TKJ-2', parentName: 'Ibu Siti Khodijah', parentPhone: '081377889900', parentRelation: 'Ibu Kandung', status: 'Aktif', demeritPoints: 55, meritPoints: 20, address: 'Jl. Anggrek No. 8, Kota' },
+          { id: 4, nisn: '0081234570', name: 'Dimas Anggara', gender: 'Laki-laki', classroom: 'XII-MM-1', parentName: 'Bpk. Bambang Wijaya', parentPhone: '081566778899', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 30, meritPoints: 10, address: 'Jl. Kenanga No. 21, Kota' },
+          { id: 5, nisn: '0081234571', name: 'Rina Kartika', gender: 'Perempuan', classroom: 'X-RPL-1', parentName: 'Bpk. Suryanto', parentPhone: '081344556677', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 0, meritPoints: 75, address: 'Jl. Cempaka No. 33, Kota' },
+          { id: 6, nisn: '0081234572', name: 'Fajar Pratama', gender: 'Laki-laki', classroom: 'XI-TKJ-2', parentName: 'Bpk. Gunawan Wibowo', parentPhone: '081223344556', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 15, meritPoints: 30, address: 'Jl. Flamboyan No. 14, Kota' },
+          { id: 7, nisn: '0081234573', name: 'Annisa Putri', gender: 'Perempuan', classroom: 'XII-MM-1', parentName: 'Ibu Sri Wahyuni', parentPhone: '081399887766', parentRelation: 'Ibu Kandung', status: 'Aktif', demeritPoints: 0, meritPoints: 40, address: 'Jl. Bougenville No. 19, Kota' },
+          { id: 8, nisn: '0081234574', name: 'Bayu Aditya', gender: 'Laki-laki', classroom: 'X-RPL-1', parentName: 'Bpk. Dedi Supriyadi', parentPhone: '081711223344', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 10, meritPoints: 0, address: 'Jl. Dahlia No. 5, Kota' },
+          { id: 9, nisn: '0081234575', name: 'Nadia Safitri', gender: 'Perempuan', classroom: 'XI-TKJ-2', parentName: 'Ibu Endang Lestari', parentPhone: '081822334455', parentRelation: 'Ibu Kandung', status: 'Aktif', demeritPoints: 5, meritPoints: 60, address: 'Jl. Teratai No. 7, Kota' },
+          { id: 10, nisn: '0081234576', name: 'Reza Rahardian', gender: 'Laki-laki', classroom: 'XII-MM-1', parentName: 'Bpk. Agus Salim', parentPhone: '081933445566', parentRelation: 'Ayah Kandung', status: 'Aktif', demeritPoints: 25, meritPoints: 0, address: 'Jl. Kamboja No. 11, Kota' }
+        ]);
+
+        const parents = ref([
+          { id: 1, name: 'Bpk. Hendra Gunawan', relation: 'Ayah Kandung', studentId: 1, studentName: 'Ahmad Rifai', studentNisn: '0081234567', classroom: 'X-RPL-1', phone: '081234567890', email: 'hendra.gunawan@gmail.com', job: 'Wiraswasta', portalStatus: 'Terhubung (Aktif)', lastLogin: '23/11/2026 07:15 WIB' },
+          { id: 2, name: 'Ibu Rahmawati', relation: 'Ibu Kandung', studentId: 2, studentName: 'Siti Nurhaliza', studentNisn: '0081234568', classroom: 'X-RPL-1', phone: '081298765432', email: 'rahmawati82@gmail.com', job: 'PNS Guru', portalStatus: 'Terhubung (Aktif)', lastLogin: '22/11/2026 19:40 WIB' },
+          { id: 3, name: 'Ibu Siti Khodijah', relation: 'Ibu Kandung', studentId: 3, studentName: 'Budi Santoso', studentNisn: '0081234569', classroom: 'XI-TKJ-2', phone: '081377889900', email: 'siti.khodijah@gmail.com', job: 'Ibu Rumah Tangga', portalStatus: 'Terhubung (Aktif)', lastLogin: '21/11/2026 14:20 WIB' },
+          { id: 4, name: 'Bpk. Bambang Wijaya', relation: 'Ayah Kandung', studentId: 4, studentName: 'Dimas Anggara', studentNisn: '0081234570', classroom: 'XII-MM-1', phone: '081566778899', email: 'bambang.wijaya@gmail.com', job: 'Karyawan Swasta', portalStatus: 'Belum Terhubung', lastLogin: '-' },
+          { id: 5, name: 'Bpk. Suryanto', relation: 'Ayah Kandung', studentId: 5, studentName: 'Rina Kartika', studentNisn: '0081234571', classroom: 'X-RPL-1', phone: '081344556677', email: 'suryanto.mkt@gmail.com', job: 'Wiraswasta', portalStatus: 'Terhubung (Aktif)', lastLogin: '23/11/2026 06:10 WIB' },
+          { id: 6, name: 'Bpk. Gunawan Wibowo', relation: 'Ayah Kandung', studentId: 6, studentName: 'Fajar Pratama', studentNisn: '0081234572', classroom: 'XI-TKJ-2', phone: '081223344556', email: 'gunawan.w@gmail.com', job: 'TNI/Polri', portalStatus: 'Terhubung (Aktif)', lastLogin: '20/11/2026 21:00 WIB' },
+          { id: 7, name: 'Ibu Sri Wahyuni', relation: 'Ibu Kandung', studentId: 7, studentName: 'Annisa Putri', studentNisn: '0081234573', classroom: 'XII-MM-1', phone: '081399887766', email: 'sri.wahyuni@gmail.com', job: 'Dosen', portalStatus: 'Terhubung (Aktif)', lastLogin: '22/11/2026 18:30 WIB' }
         ]);
 
         const attendanceList = ref([
@@ -3094,6 +3711,24 @@
             messages: []
           }
         ]);
+
+        const logAudit = (actionType, details) => {
+          const now = new Date();
+          const timeStr = now.getFullYear() + '-' + 
+            String(now.getMonth()+1).padStart(2,'0') + '-' + 
+            String(now.getDate()).padStart(2,'0') + ' ' + 
+            String(now.getHours()).padStart(2,'0') + ':' + 
+            String(now.getMinutes()).padStart(2,'0') + ':' + 
+            String(now.getSeconds()).padStart(2,'0');
+          auditLogs.value.unshift({
+            id: Date.now(),
+            timestamp: timeStr,
+            user: currentUser.value.email,
+            role: roles[currentUser.value.role]?.label || 'User',
+            action: `${actionType}: ${details}`,
+            ip: '192.168.1.100'
+          });
+        };
 
         const auditLogs = ref([
           { id: 1, timestamp: '2026-11-23 07:15:22', user: 'bambang@edutrack.sch.id', role: 'Wali Kelas', action: 'CREATE: Presensi Siswa Ahmad Rifai (Terlambat 15m)', ip: '192.168.1.45' },
@@ -3217,7 +3852,9 @@
           newUser.value.scope = scopes.length > 0 ? scopes[0] : 'Sesuai Hak Akses';
         };
 
+        const isEditingUser = ref(false);
         const openAddUserModal = () => {
+          isEditingUser.value = false;
           newUser.value = { 
             name: '', 
             email: '', 
@@ -3227,18 +3864,294 @@
           showAddUserModal.value = true;
         };
 
+        const openEditUserModal = (u) => {
+          isEditingUser.value = true;
+          newUser.value = { ...u };
+          showAddUserModal.value = true;
+        };
+
         const saveNewUser = () => {
-          usersList.value.unshift({
-            id: Date.now(),
-            name: newUser.value.name,
-            email: newUser.value.email,
-            role: newUser.value.role,
-            scope: newUser.value.scope || availableScopesForNewUser.value[0],
-            two_factor: false,
-            is_active: true
-          });
+          if (isEditingUser.value) {
+            const idx = usersList.value.findIndex(u => u.id === newUser.value.id);
+            if (idx !== -1) {
+              usersList.value[idx] = { ...usersList.value[idx], ...newUser.value };
+              showToast(`Data akun ${newUser.value.name} (${roles[newUser.value.role]?.label}) berhasil diperbarui!`);
+              logAudit('UPDATE_USER', `Memperbarui akun pengguna ${newUser.value.name} (${newUser.value.email})`);
+            }
+          } else {
+            usersList.value.unshift({
+              id: Date.now(),
+              name: newUser.value.name,
+              email: newUser.value.email,
+              role: newUser.value.role,
+              scope: newUser.value.scope || availableScopesForNewUser.value[0],
+              two_factor: false,
+              is_active: true
+            });
+            showToast(`Pengguna baru ${newUser.value.name} (${roles[newUser.value.role]?.label}) dengan cakupan [${newUser.value.scope}] berhasil didaftarkan!`);
+            logAudit('CREATE_USER', `Mendaftarkan pengguna baru ${newUser.value.name}`);
+          }
           showAddUserModal.value = false;
-          showToast(`Pengguna baru ${newUser.value.name} (${roles[newUser.value.role].label}) dengan cakupan [${newUser.value.scope}] berhasil didaftarkan!`);
+        };
+
+        const deleteUser = (u) => {
+          if (u.id === 1) {
+            alert('Super Admin utama sistem tidak dapat dihapus.');
+            return;
+          }
+          if (confirm(`Apakah Anda yakin ingin menghapus akun ${u.name} (${u.email})? Pengguna tidak akan dapat mengakses sistem lagi.`)) {
+            usersList.value = usersList.value.filter(item => item.id !== u.id);
+            showToast(`Akun ${u.name} berhasil dihapus dari sistem.`);
+            logAudit('DELETE_USER', `Menghapus akun pengguna ${u.name} (${u.email})`);
+          }
+        };
+
+        // ==========================================
+        // CRUD: MANAJEMEN SISWA (MASTER SISWA)
+        // ==========================================
+        const studentFilters = ref({ search: '', classroom: '', status: '' });
+        const studentPage = ref(1);
+        const studentPerPage = 8;
+        const showStudentModal = ref(false);
+        const isEditingStudent = ref(false);
+        const currentStudentForm = ref({
+          id: null,
+          nisn: '',
+          name: '',
+          gender: 'Laki-laki',
+          classroom: 'X-RPL-1',
+          parentName: '',
+          parentPhone: '',
+          parentRelation: 'Ayah Kandung',
+          status: 'Aktif',
+          address: ''
+        });
+
+        const filteredStudentsList = computed(() => {
+          return students.value.filter(s => {
+            if (currentUser.value.role === 'wali_kelas' && s.classroom !== 'X-RPL-1') {
+              return false;
+            }
+            if ((currentUser.value.role === 'orang_tua' || currentUser.value.role === 'siswa') && s.id !== 1) {
+              return false;
+            }
+            const q = studentFilters.value.search.toLowerCase();
+            const matchSearch = !q || s.name.toLowerCase().includes(q) || s.nisn.includes(q) || (s.parentName && s.parentName.toLowerCase().includes(q));
+            const matchClass = !studentFilters.value.classroom || s.classroom === studentFilters.value.classroom;
+            const matchStatus = !studentFilters.value.status || s.status === studentFilters.value.status;
+            return matchSearch && matchClass && matchStatus;
+          });
+        });
+
+        const maxStudentPages = computed(() => Math.max(1, Math.ceil(filteredStudentsList.value.length / studentPerPage)));
+        const paginatedStudentsList = computed(() => {
+          const start = (studentPage.value - 1) * studentPerPage;
+          return filteredStudentsList.value.slice(start, start + studentPerPage);
+        });
+
+        const openStudentModal = (studentToEdit = null) => {
+          if (studentToEdit) {
+            isEditingStudent.value = true;
+            currentStudentForm.value = { ...studentToEdit };
+          } else {
+            isEditingStudent.value = false;
+            currentStudentForm.value = {
+              id: null,
+              nisn: '008' + Math.floor(1000000 + Math.random() * 9000000),
+              name: '',
+              gender: 'Laki-laki',
+              classroom: 'X-RPL-1',
+              parentName: '',
+              parentPhone: '0812' + Math.floor(10000000 + Math.random() * 90000000),
+              parentRelation: 'Ayah Kandung',
+              status: 'Aktif',
+              address: 'Jl. Pendidikan No. ' + Math.floor(1 + Math.random() * 50)
+            };
+          }
+          showStudentModal.value = true;
+        };
+
+        const saveStudent = () => {
+          if (isEditingStudent.value) {
+            const idx = students.value.findIndex(s => s.id === currentStudentForm.value.id);
+            if (idx !== -1) {
+              students.value[idx] = { ...students.value[idx], ...currentStudentForm.value };
+              // sync with parent name if exists
+              const p = parents.value.find(item => item.studentId === currentStudentForm.value.id);
+              if (p) {
+                p.studentName = currentStudentForm.value.name;
+                p.studentNisn = currentStudentForm.value.nisn;
+                p.classroom = currentStudentForm.value.classroom;
+              }
+              showToast(`Data siswa ${currentStudentForm.value.name} berhasil diperbarui.`);
+              logAudit('UPDATE_STUDENT', `Memperbarui biodata siswa NISN ${currentStudentForm.value.nisn}`);
+            }
+          } else {
+            const newId = Date.now();
+            const newStu = {
+              id: newId,
+              ...currentStudentForm.value,
+              demeritPoints: 0,
+              meritPoints: 0
+            };
+            students.value.unshift(newStu);
+            if (newStu.parentName) {
+              parents.value.unshift({
+                id: Date.now() + 1,
+                name: newStu.parentName,
+                relation: newStu.parentRelation,
+                studentId: newId,
+                studentName: newStu.name,
+                studentNisn: newStu.nisn,
+                classroom: newStu.classroom,
+                phone: newStu.parentPhone,
+                email: newStu.parentName.toLowerCase().replace(/[^a-z]/g, '') + '@gmail.com',
+                job: 'Wiraswasta',
+                portalStatus: 'Belum Terhubung',
+                lastLogin: '-'
+              });
+            }
+            showToast(`Siswa baru ${newStu.name} (NISN: ${newStu.nisn}) berhasil ditambahkan ke database.`);
+            logAudit('CREATE_STUDENT', `Menambahkan siswa baru ${newStu.name} (NISN: ${newStu.nisn})`);
+          }
+          showStudentModal.value = false;
+        };
+
+        const deleteStudent = (student) => {
+          if (confirm(`Apakah Anda yakin ingin menghapus data siswa ${student.name} (NISN: ${student.nisn})? Riwayat tatib & presensi akan dihapus sesuai regulasi ISO/IEC 27001.`)) {
+            students.value = students.value.filter(s => s.id !== student.id);
+            showToast(`Data siswa ${student.name} berhasil dihapus dari sistem.`);
+            logAudit('DELETE_STUDENT', `Menghapus data siswa ${student.name} (${student.nisn})`);
+          }
+        };
+
+        // ==========================================
+        // CRUD: MANAJEMEN ORANG TUA / WALI MURID
+        // ==========================================
+        const parentFilters = ref({ search: '', status: '', relation: '' });
+        const parentPage = ref(1);
+        const parentPerPage = 8;
+        const showParentModal = ref(false);
+        const isEditingParent = ref(false);
+        const currentParentForm = ref({
+          id: null,
+          name: '',
+          relation: 'Ayah Kandung',
+          studentId: 1,
+          phone: '',
+          email: '',
+          job: '',
+          portalStatus: 'Terhubung (Aktif)'
+        });
+
+        const filteredParentsList = computed(() => {
+          return parents.value.filter(p => {
+            if (currentUser.value.role === 'wali_kelas' && p.classroom !== 'X-RPL-1') {
+              return false;
+            }
+            if (currentUser.value.role === 'orang_tua' && p.id !== 1) {
+              return false;
+            }
+            const q = parentFilters.value.search.toLowerCase();
+            const matchSearch = !q || p.name.toLowerCase().includes(q) || p.studentName.toLowerCase().includes(q) || p.phone.includes(q) || (p.email && p.email.toLowerCase().includes(q));
+            const matchStatus = !parentFilters.value.status || p.portalStatus === parentFilters.value.status;
+            const matchRel = !parentFilters.value.relation || p.relation === parentFilters.value.relation;
+            return matchSearch && matchStatus && matchRel;
+          });
+        });
+
+        const maxParentPages = computed(() => Math.max(1, Math.ceil(filteredParentsList.value.length / parentPerPage)));
+        const paginatedParentsList = computed(() => {
+          const start = (parentPage.value - 1) * parentPerPage;
+          return filteredParentsList.value.slice(start, start + parentPerPage);
+        });
+
+        const openParentModal = (parentToEdit = null) => {
+          if (parentToEdit) {
+            isEditingParent.value = true;
+            currentParentForm.value = { ...parentToEdit };
+          } else {
+            isEditingParent.value = false;
+            currentParentForm.value = {
+              id: null,
+              name: '',
+              relation: 'Ayah Kandung',
+              studentId: students.value[0]?.id || 1,
+              phone: '0812' + Math.floor(10000000 + Math.random() * 90000000),
+              email: '',
+              job: 'Wiraswasta',
+              portalStatus: 'Belum Terhubung'
+            };
+          }
+          showParentModal.value = true;
+        };
+
+        const saveParent = () => {
+          const linkedStudent = students.value.find(s => s.id === Number(currentParentForm.value.studentId)) || students.value[0];
+          if (isEditingParent.value) {
+            const idx = parents.value.findIndex(p => p.id === currentParentForm.value.id);
+            if (idx !== -1) {
+              parents.value[idx] = {
+                ...parents.value[idx],
+                ...currentParentForm.value,
+                studentName: linkedStudent.name,
+                studentNisn: linkedStudent.nisn,
+                classroom: linkedStudent.classroom
+              };
+              showToast(`Data orang tua ${currentParentForm.value.name} berhasil diperbarui.`);
+              logAudit('UPDATE_PARENT', `Memperbarui biodata orang tua ${currentParentForm.value.name}`);
+            }
+          } else {
+            const newParent = {
+              id: Date.now(),
+              ...currentParentForm.value,
+              studentName: linkedStudent.name,
+              studentNisn: linkedStudent.nisn,
+              classroom: linkedStudent.classroom,
+              lastLogin: '-'
+            };
+            parents.value.unshift(newParent);
+            showToast(`Data orang tua ${newParent.name} (Wali dari ${linkedStudent.name}) berhasil ditambahkan.`);
+            logAudit('CREATE_PARENT', `Menambahkan orang tua baru ${newParent.name}`);
+          }
+          showParentModal.value = false;
+        };
+
+        const deleteParent = (parent) => {
+          if (confirm(`Apakah Anda yakin ingin menghapus data wali murid ${parent.name} (Orang tua dari ${parent.studentName})? Akses portal WhatsApp akan dinonaktifkan.`)) {
+            parents.value = parents.value.filter(p => p.id !== parent.id);
+            showToast(`Data orang tua ${parent.name} berhasil dihapus.`);
+            logAudit('DELETE_PARENT', `Menghapus orang tua ${parent.name}`);
+          }
+        };
+
+        const sendPortalInvite = (parent) => {
+          parent.portalStatus = 'Terhubung (Aktif)';
+          parent.lastLogin = 'Baru saja';
+          showToast(`📲 Link aktivasi portal WhatsApp berhasil dikirim ke nomor ${parent.phone} (${parent.name}).`);
+          logAudit('DISPATCH_INVITE', `Mengirim undangan WhatsApp portal ke ${parent.name} (${parent.phone})`);
+        };
+
+        // ==========================================
+        // KOREKSI CATATAN PRESENSI
+        // ==========================================
+        const showAttendanceNoteModal = ref(false);
+        const editingAttendance = ref({ id: null, studentName: '', classroom: '', status: 'Hadir', notes: '' });
+
+        const openEditAttendanceNote = (att) => {
+          editingAttendance.value = { ...att };
+          showAttendanceNoteModal.value = true;
+        };
+
+        const saveAttendanceNote = () => {
+          const idx = attendanceList.value.findIndex(a => a.id === editingAttendance.value.id);
+          if (idx !== -1) {
+            attendanceList.value[idx].status = editingAttendance.value.status;
+            attendanceList.value[idx].notes = editingAttendance.value.notes;
+            showToast(`Koreksi kehadiran untuk ${editingAttendance.value.studentName} berhasil disimpan.`);
+            logAudit('UPDATE_ATTENDANCE', `Koreksi presensi ${editingAttendance.value.studentName} -> ${editingAttendance.value.status}`);
+          }
+          showAttendanceNoteModal.value = false;
         };
 
         // ==========================================
@@ -3594,6 +4507,8 @@
         // ==========================================
 
         const showViolationModal = ref(false);
+        const isEditingViolation = ref(false);
+        const editingViolationId = ref(null);
         const newViolation = ref({
           studentId: '',
           presetIndex: '',
@@ -3604,13 +4519,30 @@
         });
 
         const openViolationModal = () => {
+          isEditingViolation.value = false;
+          editingViolationId.value = null;
           newViolation.value = {
-            studentId: '',
+            studentId: scopedStudents.value[0]?.id || students.value[0]?.id || '',
             presetIndex: '',
             title: '',
             severity: 'Ringan',
             points: 5,
             notes: ''
+          };
+          showViolationModal.value = true;
+        };
+
+        const openEditViolation = (v) => {
+          isEditingViolation.value = true;
+          editingViolationId.value = v.id;
+          const st = students.value.find(s => s.nisn === v.nisn || s.name === v.studentName);
+          newViolation.value = {
+            studentId: st ? st.id : (students.value[0]?.id || 1),
+            presetIndex: '',
+            title: v.title,
+            severity: v.severity,
+            points: v.points,
+            notes: v.notes
           };
           showViolationModal.value = true;
         };
@@ -3628,26 +4560,61 @@
           const st = students.value.find(s => s.id === parseInt(newViolation.value.studentId));
           if (!st) return;
 
-          const created = {
-            id: Date.now(),
-            date: '23/11/2026',
-            nisn: st.nisn,
-            studentName: st.name,
-            classroom: st.classroom,
-            title: newViolation.value.title,
-            severity: newViolation.value.severity,
-            points: newViolation.value.points,
-            status: newViolation.value.points >= 50 ? 'SP-1' : 'Diproses',
-            notes: newViolation.value.notes || 'Dicatat oleh BK'
-          };
+          if (isEditingViolation.value && editingViolationId.value) {
+            const idx = violations.value.findIndex(v => v.id === editingViolationId.value);
+            if (idx !== -1) {
+              const oldPoints = violations.value[idx].points;
+              violations.value[idx] = {
+                ...violations.value[idx],
+                nisn: st.nisn,
+                studentName: st.name,
+                classroom: st.classroom,
+                title: newViolation.value.title,
+                severity: newViolation.value.severity,
+                points: newViolation.value.points,
+                notes: newViolation.value.notes
+              };
+              st.demeritPoints = Math.max(0, st.demeritPoints - oldPoints + newViolation.value.points);
+              showToast(`Data pelanggaran ${st.name} berhasil diperbarui.`);
+              logAudit('UPDATE_VIOLATION', `Memperbarui pelanggaran ${st.name}`);
+            }
+          } else {
+            const created = {
+              id: Date.now(),
+              date: '23/11/2026',
+              nisn: st.nisn,
+              studentName: st.name,
+              classroom: st.classroom,
+              title: newViolation.value.title,
+              severity: newViolation.value.severity,
+              points: newViolation.value.points,
+              status: newViolation.value.points >= 50 ? 'SP-1' : 'Diproses',
+              notes: newViolation.value.notes || 'Dicatat oleh BK'
+            };
 
-          violations.value.unshift(created);
-          st.demeritPoints += newViolation.value.points;
+            violations.value.unshift(created);
+            st.demeritPoints += newViolation.value.points;
+            showToast(`Pelanggaran siswa ${st.name} berhasil dicatat & notifikasi WhatsApp terkirim.`);
+            logAudit('CREATE_VIOLATION', `Mencatat pelanggaran ${st.name} (-${newViolation.value.points} poin)`);
+          }
           showViolationModal.value = false;
-          showToast(`Pelanggaran siswa ${st.name} berhasil dicatat & notifikasi WhatsApp terkirim.`);
+        };
+
+        const deleteViolation = (v) => {
+          if (confirm(`Batalkan / hapus catatan pelanggaran '${v.title}' untuk siswa ${v.studentName}? Poin demerit (-${v.points}) akan dipulihkan.`)) {
+            violations.value = violations.value.filter(item => item.id !== v.id);
+            const stu = students.value.find(s => s.nisn === v.nisn || s.name === v.studentName);
+            if (stu) {
+              stu.demeritPoints = Math.max(0, stu.demeritPoints - v.points);
+            }
+            showToast(`Catatan pelanggaran dibatalkan. Poin tatib ${v.studentName} berhasil dipulihkan.`);
+            logAudit('DELETE_VIOLATION', `Membatalkan pelanggaran '${v.title}' siswa ${v.studentName}`);
+          }
         };
 
         const showAchievementModal = ref(false);
+        const isEditingAchievement = ref(false);
+        const editingAchievementId = ref(null);
         const newAchievement = ref({
           studentId: '',
           title: '',
@@ -3657,15 +4624,31 @@
           points: 50
         });
 
-        const openAchievementModal = () => {
-          newAchievement.value = {
-            studentId: '',
-            title: '',
-            level: 'Kota/Kabupaten',
-            rank: 'Juara 1',
-            organizer: '',
-            points: 50
-          };
+        const openAchievementModal = (achToEdit = null) => {
+          if (achToEdit) {
+            isEditingAchievement.value = true;
+            editingAchievementId.value = achToEdit.id;
+            const st = students.value.find(s => s.name === achToEdit.studentName);
+            newAchievement.value = {
+              studentId: st ? st.id : (students.value[0]?.id || 1),
+              title: achToEdit.title,
+              level: achToEdit.level,
+              rank: achToEdit.rank,
+              organizer: achToEdit.organizer,
+              points: achToEdit.points
+            };
+          } else {
+            isEditingAchievement.value = false;
+            editingAchievementId.value = null;
+            newAchievement.value = {
+              studentId: scopedStudents.value[0]?.id || students.value[0]?.id || 1,
+              title: '',
+              level: 'Kota/Kabupaten',
+              rank: 'Juara 1',
+              organizer: '',
+              points: 50
+            };
+          }
           showAchievementModal.value = true;
         };
 
@@ -3674,25 +4657,59 @@
           if (!st) return;
 
           let points = 50;
+          if (newAchievement.value.level === 'Internasional') points = 150;
           if (newAchievement.value.level === 'Nasional') points = 100;
           if (newAchievement.value.level === 'Provinsi') points = 75;
 
-          const created = {
-            id: Date.now(),
-            date: '23/11/2026',
-            studentName: st.name,
-            classroom: st.classroom,
-            title: newAchievement.value.title,
-            level: newAchievement.value.level,
-            rank: newAchievement.value.rank,
-            points: points,
-            organizer: newAchievement.value.organizer
-          };
+          if (isEditingAchievement.value && editingAchievementId.value) {
+            const idx = achievements.value.findIndex(a => a.id === editingAchievementId.value);
+            if (idx !== -1) {
+              const oldPoints = achievements.value[idx].points;
+              achievements.value[idx] = {
+                ...achievements.value[idx],
+                studentName: st.name,
+                classroom: st.classroom,
+                title: newAchievement.value.title,
+                level: newAchievement.value.level,
+                rank: newAchievement.value.rank,
+                points: points,
+                organizer: newAchievement.value.organizer
+              };
+              st.meritPoints = Math.max(0, st.meritPoints - oldPoints + points);
+              showToast(`Data prestasi ${st.name} berhasil diperbarui.`);
+              logAudit('UPDATE_ACHIEVEMENT', `Memperbarui prestasi ${st.name} (${newAchievement.value.title})`);
+            }
+          } else {
+            const created = {
+              id: Date.now(),
+              date: '23/11/2026',
+              studentName: st.name,
+              classroom: st.classroom,
+              title: newAchievement.value.title,
+              level: newAchievement.value.level,
+              rank: newAchievement.value.rank,
+              points: points,
+              organizer: newAchievement.value.organizer
+            };
 
-          achievements.value.unshift(created);
-          st.meritPoints += points;
+            achievements.value.unshift(created);
+            st.meritPoints += points;
+            showToast(`Prestasi berhasil ditambahkan (+${points} poin merit)!`);
+            logAudit('CREATE_ACHIEVEMENT', `Mencatat prestasi baru ${st.name} (+${points} poin)`);
+          }
           showAchievementModal.value = false;
-          showToast(`Prestasi berhasil ditambahkan (+${points} poin merit)!`);
+        };
+
+        const deleteAchievement = (a) => {
+          if (confirm(`Hapus catatan prestasi '${a.title}' milik ${a.studentName}? Poin merit (+${a.points}) akan ditarik.`)) {
+            achievements.value = achievements.value.filter(item => item.id !== a.id);
+            const st = students.value.find(s => s.name === a.studentName);
+            if (st) {
+              st.meritPoints = Math.max(0, st.meritPoints - a.points);
+            }
+            showToast(`Catatan prestasi ${a.title} berhasil dihapus.`);
+            logAudit('DELETE_ACHIEVEMENT', `Menghapus prestasi '${a.title}' milik ${a.studentName}`);
+          }
         };
 
         const showComplaintModal = ref(false);
@@ -4019,7 +5036,7 @@
           roleDataScope,
           scopedStudents,
 
-          // User Management
+          // User Management & CRUD
           usersList,
           userFilters,
           filteredUsers,
@@ -4030,7 +5047,54 @@
           availableScopesForNewUser,
           onNewUserRoleChange,
           openAddUserModal,
+          openEditUserModal,
           saveNewUser,
+          deleteUser,
+          isEditingUser,
+
+          // Siswa Management & CRUD
+          parents,
+          studentFilters,
+          studentPage,
+          studentPerPage,
+          showStudentModal,
+          isEditingStudent,
+          currentStudentForm,
+          filteredStudentsList,
+          maxStudentPages,
+          paginatedStudentsList,
+          openStudentModal,
+          saveStudent,
+          deleteStudent,
+
+          // Orang Tua Management & CRUD
+          parentFilters,
+          parentPage,
+          parentPerPage,
+          showParentModal,
+          isEditingParent,
+          currentParentForm,
+          filteredParentsList,
+          maxParentPages,
+          paginatedParentsList,
+          openParentModal,
+          saveParent,
+          deleteParent,
+          sendPortalInvite,
+
+          // Presensi Note Correction
+          showAttendanceNoteModal,
+          editingAttendance,
+          openEditAttendanceNote,
+          saveAttendanceNote,
+
+          // Pelanggaran & Prestasi CRUD
+          isEditingViolation,
+          openEditViolation,
+          deleteViolation,
+          isEditingAchievement,
+          deleteAchievement,
+          logAudit,
 
           // Backup ISO 27001
           backupList,

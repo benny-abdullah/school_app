@@ -98,3 +98,19 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
     - Buka menu **Kehadiran Siswa**, lalu klik tab **"📚 Presensi KBM Jam Mapel (Guru Kelas)"**.
     - Pilih mata pelajaran (misal: *Pemrograman Web & Mobile* atau *Matematika Terapan*).
     - Guru memantau kehadiran siswa di jam pelajaran. Jika siswa hadir di gerbang pagi namun tidak berada di kelas saat KBM (status: *Membolos*), klik tombol **"🚨 Lapor Membolos ke BK"** untuk langsung mendokumentasikan pelanggaran disiplin KBM (+10 Poin Tatib) dan notifikasi ke Guru BK & Wali Kelas.
+16. **Uji Coba Manajemen Siswa (Master Siswa - Full CRUD)**:
+    - Buka menu **Manajemen Siswa** (Role Admin / BK / Wali Kelas).
+    - Coba tombol **"+ Tambah Siswa Baru"** untuk mendaftarkan data siswa lengkap dengan NISN, kelas, nama orang tua, dan nomor WhatsApp.
+    - Coba tombol **"✏️ Edit"** untuk memperbarui biodata siswa atau kontak orang tua secara *real-time*.
+    - Coba tombol **"🗑️ Hapus"** untuk simulasi penghapusan data siswa yang tercatat dalam log audit ISO 27001.
+    - Coba tombol **"🪪 Kartu"** untuk langsung membuka pratinjau kartu pelajar ber-barcode Code 128 & QR HMAC-SHA256.
+17. **Uji Coba Manajemen Orang Tua & Wali Murid (Full CRUD & Aktivasi WhatsApp)**:
+    - Buka menu **Manajemen Orang Tua** (Role Admin / BK / Wali Kelas).
+    - Coba tombol **"+ Tambah Orang Tua Baru"** untuk menambahkan wali murid dan menghubungkannya dengan akun anak yang diasuh.
+    - Klik tombol **"📲 Kirim Akses"** pada baris orang tua untuk mensimulasikan pengiriman undangan dan aktivasi portal monitoring via WhatsApp.
+    - Gunakan tombol **"✏️ Edit"** dan **"🗑️ Hapus"** untuk mengelola data kontak wali murid.
+18. **Uji Coba Lengkap CRUD di Seluruh Modul**:
+    - **Manajemen Pengguna**: Mendukung Tambah, Edit Akun, Hapus Akun, Toggle Status, dan Reset Sandi.
+    - **Kedisiplinan & Tatib**: Mendukung Tambah Pelanggaran, Edit Kasus, dan Batalkan/Hapus Pelanggaran (poin tatib otomatis dipulihkan).
+    - **Bank Prestasi**: Mendukung Tambah Prestasi, Edit Prestasi, dan Hapus Prestasi (poin merit otomatis disesuaikan).
+    - **Kehadiran Siswa**: Mendukung Tombol Cepat (H/S/I/A/T) serta tombol **"✏️ Catatan"** untuk koreksi status dan keterangan khusus per siswa.
