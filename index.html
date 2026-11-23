@@ -1313,14 +1313,23 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div class="flex items-center gap-2">
-                  <h1 class="text-lg font-bold text-slate-900">Kanal Pengaduan & Whistleblowing Terlindungi</h1>
+                  <h1 class="text-lg font-bold text-slate-900">
+                    <span v-if="currentUser.role === 'orang_tua'">Pengaduan Saya (Wali Murid)</span>
+                    <span v-else-if="currentUser.role === 'wali_kelas'">Aduan Wali Murid & Siswa (Kelas X-RPL-1)</span>
+                    <span v-else>Pusat Aduan & Whistleblowing Terlindungi (ISO 27001)</span>
+                  </h1>
                   <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
                     AES-256 Encrypted
                   </span>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">Layanan pengaduan aman untuk pencegahan perundungan (bullying), fasilitas, dan keluhan orang tua/siswa</p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  <span v-if="currentUser.role === 'orang_tua'">Kanal mandiri orang tua untuk menyampaikan keluhan fasilitas, bimbingan, atau perundungan anak secara aman</span>
+                  <span v-else-if="currentUser.role === 'wali_kelas'">Pemantauan laporan aduan dari orang tua siswa kelas binaan untuk tindak lanjut bersama Guru BK</span>
+                  <span v-else>Pusat investigasi pengaduan sekolah lintas rombel, pencegahan perundungan (anti-bullying), dan audit kepatuhan</span>
+                </p>
               </div>
               <button 
+                v-if="currentUser.role === 'orang_tua' || currentUser.role === 'admin'"
                 @click="openComplaintModal()"
                 class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
               >
@@ -1408,15 +1417,32 @@
                 <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
                   <div>
                     <span>Dilaporkan pada: <strong>{{ c.date }}</strong></span>
+                    <span v-if="c.studentName" class="mx-1">• Siswa: <strong class="text-slate-800">{{ c.studentName }} ({{ c.classroom }})</strong></span>
                     <span class="mx-2">•</span>
                     <span>Penanggung Jawab: <strong>{{ c.assignedTo }}</strong></span>
                   </div>
-                  <button 
-                    @click="openTicketChat(c)" 
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-colors"
-                  >
-                    💬 Buka Obrolan Investigasi ({{ c.messages.length }})
-                  </button>
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    <button 
+                      v-if="currentUser.role === 'orang_tua' && c.status !== 'Selesai'"
+                      @click="openEditComplaint(c)"
+                      class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors"
+                    >
+                      ✏️ Edit Aduan
+                    </button>
+                    <button 
+                      v-if="currentUser.role === 'orang_tua' || currentUser.role === 'admin'"
+                      @click="deleteComplaint(c)"
+                      class="px-2.5 py-1.5 rounded-xl border border-rose-200 bg-white hover:bg-rose-50 text-rose-700 font-semibold text-xs transition-colors"
+                    >
+                      🗑️ Hapus
+                    </button>
+                    <button 
+                      @click="openTicketChat(c)" 
+                      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs transition-colors"
+                    >
+                      💬 Buka Obrolan ({{ c.messages.length }})
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -2819,7 +2845,7 @@
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
-            <h3 class="font-bold text-sm text-slate-900">Ajukan Pengaduan / Whistleblowing</h3>
+            <h3 class="font-bold text-sm text-slate-900">{{ isEditingComplaint ? 'Edit Pengaduan Saya' : (currentUser.role === 'orang_tua' ? 'Tulis Pengaduan Baru (Wali Murid)' : 'Ajukan Pengaduan / Whistleblowing') }}</h3>
             <p class="text-[11px] text-slate-400">Jalur komunikasi aman terlindungi standar keamanan ISO 27001</p>
           </div>
           <button @click="showComplaintModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
@@ -2859,7 +2885,7 @@
 
           <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
             <button type="button" @click="showComplaintModal = false" class="px-4 py-2 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50">Batal</button>
-            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">Kirimkan Aduan Aman</button>
+            <button type="submit" class="px-4 py-2 bg-slate-950 text-white rounded-xl font-semibold hover:bg-slate-800">{{ isEditingComplaint ? 'Perbarui Pengaduan' : 'Kirimkan Aduan Aman' }}</button>
           </div>
         </form>
       </div>
@@ -3533,7 +3559,7 @@
             currentUser.value.avatarInitials = 'BS';
             activePage.value = 'presensi';
           } else if (roleKey === 'orang_tua') {
-            currentUser.value.name = 'Bpk. Hendra (Ayah Ahmad Rifai)';
+            currentUser.value.name = 'Bpk. Hendra Gunawan (Wali Murid)';
             currentUser.value.avatarInitials = 'HD';
             activePage.value = 'dashboard';
           } else if (roleKey === 'siswa') {
@@ -3582,7 +3608,8 @@
             items.push({ id: 'scanner', title: 'Scanner Barcode Gerbang', icon: '📷', badge: 'Live' });
           }
 
-          if (['admin', 'wali_kelas', 'bk', 'orang_tua', 'siswa'].includes(role)) {
+          // Hak Akses Cetak Kartu Pelajar: Hanya Admin dan Guru BK
+          if (['admin', 'bk'].includes(role)) {
             items.push({ id: 'kartu_pelajar', title: 'Cetak Kartu Pelajar', icon: '🪪' });
           }
 
@@ -3594,7 +3621,18 @@
             items.push({ id: 'prestasi', title: 'Bank Prestasi', icon: '🏆' });
           }
 
-          items.push({ id: 'aduan', title: 'Pusat Aduan / Whistle', icon: '📢', badge: '3 Tiket' });
+          // Hak Akses Aduan:
+          // - Admin & BK: Pusat Aduan Sekolah (Investigasi & Lihat Semua)
+          // - Orang Tua: Pengaduan Saya (CRUD Aduan Mandiri)
+          // - Wali Kelas: Aduan Siswa Kelas (Monitoring Aduan Murid Binaan)
+          // - Siswa: Menu Dihilangkan
+          if (['admin', 'bk'].includes(role)) {
+            items.push({ id: 'aduan', title: 'Pusat Aduan / Whistle', icon: '📢', badge: pendingComplaintsCount.value + ' Tiket' });
+          } else if (role === 'orang_tua') {
+            items.push({ id: 'aduan', title: 'Pengaduan Saya', icon: '📢' });
+          } else if (role === 'wali_kelas') {
+            items.push({ id: 'aduan', title: 'Aduan Siswa Kelas', icon: '📢' });
+          }
 
           if (role === 'admin' || role === 'bk' || role === 'wali_kelas') {
             items.push({ id: 'siswa_mgmt', title: 'Manajemen Siswa', icon: '🎓' });
@@ -3670,27 +3708,37 @@
             id: 1,
             ticketNumber: 'WB-202611-001',
             date: '22/11/2026',
+            studentId: 1,
+            studentName: 'Ahmad Rifai',
+            classroom: 'X-RPL-1',
+            parentId: 1,
+            parentName: 'Bpk. Hendra Gunawan',
             category: 'Perundungan / Bullying',
-            title: 'Dugaan pemalakan siswa baru di area kantin belakang',
-            description: 'Ada sekelompok siswa kelas 12 yang sering meminta uang paksa kepada siswa kelas 10 saat istirahat kedua di lorong sepi belakang kantin.',
-            isAnonymous: true,
-            reporter: 'Whistleblower',
+            title: 'Dugaan intimidasi saat jam istirahat di lorong kantin',
+            description: 'Ananda Ahmad menceritakan adanya siswa kelas atas yang meminta uang saku secara paksa di lorong samping kantin.',
+            isAnonymous: false,
+            reporter: 'Bpk. Hendra Gunawan (Wali Murid)',
             status: 'Investigasi',
             assignedTo: 'Dra. Hj. Nurjanah (BK)',
             messages: [
-              { sender: 'Pelapor (Anonim)', time: '22/11 10:15', text: 'Mohon dirahasiakan nama saya, kejadian terjadi setiap hari Selasa dan Kamis.' },
-              { sender: 'Pihak Sekolah', time: '22/11 13:40', text: 'Terima kasih atas laporannya. Tim BK dan satpam sekolah sudah mulai melakukan patroli tertutup di area tersebut.' }
+              { sender: 'Bpk. Hendra Gunawan', time: '22/11 10:15', text: 'Mohon dibantu bimbingan dan perlindungan keamanannya bapak/ibu guru.' },
+              { sender: 'Pihak Sekolah (BK)', time: '22/11 13:40', text: 'Terima kasih laporannya Bapak Hendra. Tim BK dan satpam sekolah sudah mulai melakukan patroli tertutup di area tersebut.' }
             ]
           },
           {
             id: 2,
             ticketNumber: 'WB-202611-002',
             date: '20/11/2026',
+            studentId: 3,
+            studentName: 'Budi Santoso',
+            classroom: 'XI-TKJ-2',
+            parentId: 3,
+            parentName: 'Ibu Siti Khodijah',
             category: 'Fasilitas & Sarpras',
             title: 'AC di Lab Komputer 2 mati menyebabkan perangkat overheat',
-            description: 'Pendingin ruangan tidak berfungsi sejak hari Senin lalu sehingga praktik siswa terganggu.',
+            description: 'Pendingin ruangan tidak berfungsi sejak hari Senin lalu sehingga praktik siswa kelas XI terganggu.',
             isAnonymous: false,
-            reporter: 'Bpk. Bambang S.Pd',
+            reporter: 'Ibu Siti Khodijah (Wali Murid)',
             status: 'Selesai',
             assignedTo: 'Bagian Sarpras',
             messages: [
@@ -3701,11 +3749,16 @@
             id: 3,
             ticketNumber: 'WB-202611-003',
             date: '18/11/2026',
+            studentId: 4,
+            studentName: 'Dimas Anggara',
+            classroom: 'XII-MM-1',
+            parentId: 4,
+            parentName: 'Bpk. Bambang Wijaya',
             category: 'Pungutan Liar / Keuangan',
             title: 'Iuran liar tidak resmi untuk kegiatan ekskul',
-            description: 'Ada penarikan dana di luar ketetapan resmi sekolah sebesar Rp 50.000 per siswa tanpa kuitansi.',
+            description: 'Ada penarikan dana di luar ketetapan resmi sekolah sebesar Rp 50.000 per siswa tanpa kuitansi resmi.',
             isAnonymous: true,
-            reporter: 'Whistleblower',
+            reporter: 'Whistleblower Anonim',
             status: 'Menunggu Verifikasi',
             assignedTo: 'Kepala Sekolah',
             messages: []
@@ -4463,10 +4516,36 @@
         // Complaints
         const complaintFilters = ref({ search: '', status: '' });
         const filteredComplaints = computed(() => {
+          const role = currentUser.value.role;
           return complaints.value.filter(item => {
-            const matchesSearch = !complaintFilters.value.search || 
-              item.title.toLowerCase().includes(complaintFilters.value.search.toLowerCase()) ||
-              item.ticketNumber.toLowerCase().includes(complaintFilters.value.search.toLowerCase());
+            // 1. Role Scoping
+            if (role === 'orang_tua') {
+              // Orang tua hanya melihat aduannya sendiri (Ahmad Rifai / Hendra)
+              const isOwner = item.parentId === 1 || 
+                item.reporter.includes('Hendra') || 
+                item.studentName === 'Ahmad Rifai' ||
+                item.studentId === 1;
+              if (!isOwner) return false;
+            } else if (role === 'wali_kelas') {
+              // Wali Kelas (X-RPL-1) hanya melihat aduan dari siswa/ortu di kelasnya
+              const isClassComplaint = item.classroom === 'X-RPL-1' || 
+                item.studentName === 'Ahmad Rifai' || 
+                item.studentName === 'Siti Nurhaliza' || 
+                item.studentName === 'Rina Kartika';
+              if (!isClassComplaint) return false;
+            } else if (role === 'siswa') {
+              // Siswa tidak memiliki akses ke modul aduan
+              return false;
+            }
+            // Guru BK dan Admin melihat SEMUA aduan se-sekolah
+
+            // 2. Search & Status Filtering
+            const q = complaintFilters.value.search.toLowerCase();
+            const matchesSearch = !q || 
+              item.title.toLowerCase().includes(q) || 
+              item.ticketNumber.toLowerCase().includes(q) ||
+              (item.description && item.description.toLowerCase().includes(q)) ||
+              (item.studentName && item.studentName.toLowerCase().includes(q));
             const matchesStatus = !complaintFilters.value.status || item.status === complaintFilters.value.status;
             return matchesSearch && matchesStatus;
           });
@@ -4713,42 +4792,90 @@
         };
 
         const showComplaintModal = ref(false);
+        const isEditingComplaint = ref(false);
+        const editingComplaintId = ref(null);
         const newComplaint = ref({
           category: 'Perundungan / Bullying',
           title: '',
           description: '',
-          isAnonymous: true
+          isAnonymous: false
         });
 
         const openComplaintModal = () => {
+          isEditingComplaint.value = false;
+          editingComplaintId.value = null;
           newComplaint.value = {
             category: 'Perundungan / Bullying',
             title: '',
             description: '',
-            isAnonymous: true
+            isAnonymous: currentUser.value.role === 'orang_tua' ? false : true
+          };
+          showComplaintModal.value = true;
+        };
+
+        const openEditComplaint = (c) => {
+          isEditingComplaint.value = true;
+          editingComplaintId.value = c.id;
+          newComplaint.value = {
+            category: c.category,
+            title: c.title,
+            description: c.description,
+            isAnonymous: c.isAnonymous
           };
           showComplaintModal.value = true;
         };
 
         const saveComplaint = () => {
-          const ticketId = 'WB-202611-' + Math.floor(100 + Math.random() * 900);
-          const created = {
-            id: Date.now(),
-            ticketNumber: ticketId,
-            date: '23/11/2026',
-            category: newComplaint.value.category,
-            title: newComplaint.value.title,
-            description: newComplaint.value.description,
-            isAnonymous: newComplaint.value.isAnonymous,
-            reporter: newComplaint.value.isAnonymous ? 'Whistleblower' : currentUser.value.name,
-            status: 'Menunggu Verifikasi',
-            assignedTo: 'Tim Satgas Anti-Kekerasan',
-            messages: []
-          };
+          if (isEditingComplaint.value && editingComplaintId.value) {
+            const idx = complaints.value.findIndex(item => item.id === editingComplaintId.value);
+            if (idx !== -1) {
+              complaints.value[idx].category = newComplaint.value.category;
+              complaints.value[idx].title = newComplaint.value.title;
+              complaints.value[idx].description = newComplaint.value.description;
+              complaints.value[idx].isAnonymous = newComplaint.value.isAnonymous;
+              if (newComplaint.value.isAnonymous) {
+                complaints.value[idx].reporter = 'Whistleblower Anonim';
+              } else {
+                complaints.value[idx].reporter = currentUser.value.role === 'orang_tua' ? 'Bpk. Hendra Gunawan (Wali Murid)' : currentUser.value.name;
+              }
+              showToast('Pengaduan Anda berhasil diperbarui.');
+              logAudit('UPDATE_COMPLAINT', `Memperbarui aduan tiket #${complaints.value[idx].ticketNumber}`);
+            }
+          } else {
+            const ticketId = 'WB-202611-' + Math.floor(100 + Math.random() * 900);
+            const isOrtu = currentUser.value.role === 'orang_tua';
+            const created = {
+              id: Date.now(),
+              ticketNumber: ticketId,
+              date: '23/11/2026',
+              studentId: isOrtu ? 1 : null,
+              studentName: isOrtu ? 'Ahmad Rifai' : null,
+              classroom: isOrtu ? 'X-RPL-1' : null,
+              parentId: isOrtu ? 1 : null,
+              parentName: isOrtu ? 'Bpk. Hendra Gunawan' : null,
+              category: newComplaint.value.category,
+              title: newComplaint.value.title,
+              description: newComplaint.value.description,
+              isAnonymous: newComplaint.value.isAnonymous,
+              reporter: newComplaint.value.isAnonymous ? 'Whistleblower Anonim' : (isOrtu ? 'Bpk. Hendra Gunawan (Wali Murid)' : currentUser.value.name),
+              status: 'Menunggu Verifikasi',
+              assignedTo: 'Tim Satgas Anti-Kekerasan & Guru BK',
+              messages: []
+            };
 
-          complaints.value.unshift(created);
+            complaints.value.unshift(created);
+            showToast(`Tiket aduan #${ticketId} berhasil dikirimkan secara aman & terenkripsi AES-256.`);
+            logAudit('CREATE_COMPLAINT', `Mengajukan tiket aduan baru #${ticketId}`);
+          }
           showComplaintModal.value = false;
-          showToast(`Tiket aduan #${ticketId} berhasil dikirim secara aman & terenkripsi AES-256.`);
+        };
+
+        const deleteComplaint = (c) => {
+          if (confirm(`Apakah Anda yakin ingin membatalkan/menghapus tiket aduan #${c.ticketNumber} ('${c.title}')?`)) {
+            complaints.value = complaints.value.filter(item => item.id !== c.id);
+            showToast(`Tiket aduan #${c.ticketNumber} berhasil dibatalkan / dihapus.`);
+            logAudit('DELETE_COMPLAINT', `Menghapus aduan #${c.ticketNumber}`);
+          }
         };
 
         // Chat in Ticket
@@ -5087,6 +5214,11 @@
           editingAttendance,
           openEditAttendanceNote,
           saveAttendanceNote,
+
+          // Aduan CRUD Ortu & Admin
+          isEditingComplaint,
+          openEditComplaint,
+          deleteComplaint,
 
           // Pelanggaran & Prestasi CRUD
           isEditingViolation,

@@ -114,3 +114,10 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
     - **Kedisiplinan & Tatib**: Mendukung Tambah Pelanggaran, Edit Kasus, dan Batalkan/Hapus Pelanggaran (poin tatib otomatis dipulihkan).
     - **Bank Prestasi**: Mendukung Tambah Prestasi, Edit Prestasi, dan Hapus Prestasi (poin merit otomatis disesuaikan).
     - **Kehadiran Siswa**: Mendukung Tombol Cepat (H/S/I/A/T) serta tombol **"✏️ Catatan"** untuk koreksi status dan keterangan khusus per siswa.
+19. **Aturan Hak Akses Menu Cetak Kartu Pelajar & Pengaduan (RBAC Least Privilege)**:
+    - **Cetak Kartu Pelajar**: Hanya tersedia bagi **Super Admin** dan **Guru BK**. Menu ini otomatis dihilangkan dari peran Orang Tua, Wali Kelas, dan Siswa.
+    - **Kanal Pengaduan & Whistleblowing**:
+      - **Siswa**: Menu pengaduan dihilangkan secara penuh demi perlindungan privasi.
+      - **Orang Tua**: Menu **"Pengaduan Saya"** dengan akses **CRUD Aduan Mandiri** (Tulis Aduan Baru, Edit Aduan, Hapus/Batalkan Aduan, serta Obrolan Investigasi dua arah). Orang tua hanya dapat melihat dan mengelola aduannya sendiri.
+      - **Wali Kelas**: Menu **"Aduan Siswa Kelas"** yang secara otomatis hanya menampilkan aduan dari orang tua/siswa di kelas binaannya (X-RPL-1).
+      - **Guru BK & Super Admin**: Menu **"Pusat Aduan / Whistle"** yang menampilkan seluruh aduan dari seluruh kelas sekolah secara terpusat untuk investigasi dan eskalasi kasus.
