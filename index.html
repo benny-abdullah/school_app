@@ -2107,14 +2107,27 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div class="flex items-center gap-2">
-                  <h1 class="text-lg font-bold text-slate-900">Manajemen Data Siswa (Master Siswa)</h1>
+                  <h1 class="text-lg font-bold text-slate-900">
+                    <span v-if="currentUser.role === 'siswa'">Profil & Data Diri Siswa</span>
+                    <span v-else-if="currentUser.role === 'orang_tua'">Data Siswa Ananda (Ahmad Rifai)</span>
+                    <span v-else-if="currentUser.role === 'wali_kelas'">Data Siswa Binaan (Kelas X-RPL-1)</span>
+                    <span v-else>Manajemen Data Siswa (Master Siswa)</span>
+                  </h1>
                   <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                    Master Data Pokok Pendidikan
+                    <span v-if="currentUser.role === 'siswa'">Data Induk Pribadi</span>
+                    <span v-else-if="currentUser.role === 'orang_tua'">Data Anak Terhubung</span>
+                    <span v-else-if="currentUser.role === 'wali_kelas'">Rombel X-RPL-1</span>
+                    <span v-else>Master Data Pokok Pendidikan</span>
                   </span>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">Kelola biodata siswa, integrasi barcode kartu pelajar, nomor WhatsApp orang tua, dan rombel</p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  <span v-if="currentUser.role === 'siswa'">Informasi identitas resmi kesiswaan, NISN, status kelas, dan kontak darurat wali murid terdaftar.</span>
+                  <span v-else-if="currentUser.role === 'orang_tua'">Biodata lengkap ananda, rombel kelas, kontak terdaftar, dan status keaktifan akademik.</span>
+                  <span v-else-if="currentUser.role === 'wali_kelas'">Daftar siswa dalam rombel kelas binaan X-RPL-1 dan pemantauan profil kesiswaan.</span>
+                  <span v-else>Kelola biodata siswa, integrasi barcode kartu pelajar, nomor WhatsApp orang tua, dan rombel.</span>
+                </p>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2" v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'">
                 <button 
                   @click="exportMockData('Data_Siswa')" 
                   class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
@@ -2224,15 +2237,19 @@
                           @click="openStudentModal(st)"
                           class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors"
                         >
-                          ✏️ Edit
+                          <span v-if="currentUser.role === 'siswa'">✏️ Edit Kontak / Alamat</span>
+                          <span v-else-if="currentUser.role === 'orang_tua'">✏️ Edit Kontak</span>
+                          <span v-else>✏️ Edit</span>
                         </button>
                         <button 
+                          v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'"
                           @click="deleteStudent(st)"
                           class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors"
                         >
                           🗑️ Hapus
                         </button>
                         <button 
+                          v-if="currentUser.role === 'admin' || currentUser.role === 'bk'"
                           @click="selectedStudentCardId = st.id; activePage = 'kartu_pelajar'"
                           class="px-2 py-1 rounded-lg border border-blue-200 hover:bg-blue-50 text-blue-700 text-[10px] font-semibold bg-white transition-colors"
                           title="Cetak Kartu Pelajar ISO CR-80"
@@ -2286,14 +2303,24 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
                 <div class="flex items-center gap-2">
-                  <h1 class="text-lg font-bold text-slate-900">Manajemen Orang Tua & Wali Murid</h1>
+                  <h1 class="text-lg font-bold text-slate-900">
+                    <span v-if="currentUser.role === 'orang_tua'">Data Profil Orang Tua / Wali Murid</span>
+                    <span v-else-if="currentUser.role === 'wali_kelas'">Data Wali Murid (Kelas X-RPL-1)</span>
+                    <span v-else>Manajemen Orang Tua & Wali Murid</span>
+                  </h1>
                   <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Aktivasi WhatsApp & Portal Ortu
+                    <span v-if="currentUser.role === 'orang_tua'">Profil Wali Terdaftar</span>
+                    <span v-else-if="currentUser.role === 'wali_kelas'">Wali Kelas X-RPL-1</span>
+                    <span v-else>Aktivasi WhatsApp & Portal Ortu</span>
                   </span>
                 </div>
-                <p class="text-xs text-slate-500 mt-0.5">Direktori kontak orang tua, relasi siswa binaan, dan kontrol akses portal pemantauan</p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  <span v-if="currentUser.role === 'orang_tua'">Informasi kontak WhatsApp terdaftar, relasi anak terhubung, dan status aktif portal pemantauan.</span>
+                  <span v-else-if="currentUser.role === 'wali_kelas'">Direktori kontak orang tua dan status aktivasi portal untuk siswa kelas binaan X-RPL-1.</span>
+                  <span v-else>Direktori kontak orang tua, relasi siswa binaan, dan kontrol akses portal pemantauan.</span>
+                </p>
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2" v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'">
                 <button 
                   @click="exportMockData('Data_Orang_Tua')" 
                   class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
@@ -2385,6 +2412,7 @@
                       </td>
                       <td class="py-3 px-4 text-right space-x-1 whitespace-nowrap">
                         <button 
+                          v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'"
                           @click="sendPortalInvite(p)"
                           class="px-2 py-1 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[10px] font-semibold transition-colors"
                           title="Kirim link aktivasi portal via WhatsApp"
@@ -2395,9 +2423,11 @@
                           @click="openParentModal(p)"
                           class="px-2 py-1 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-[10px] font-semibold bg-white transition-colors"
                         >
-                          ✏️ Edit
+                          <span v-if="currentUser.role === 'orang_tua'">✏️ Edit Kontak / Profil</span>
+                          <span v-else>✏️ Edit</span>
                         </button>
                         <button 
+                          v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'"
                           @click="deleteParent(p)"
                           class="px-2 py-1 rounded-lg border border-rose-200 hover:bg-rose-50 text-rose-700 text-[10px] font-semibold bg-white transition-colors"
                         >
@@ -3138,7 +3168,7 @@
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
-            <h3 class="font-bold text-sm text-slate-900">{{ isEditingStudent ? 'Edit Data Siswa' : 'Tambah Siswa Baru' }}</h3>
+            <h3 class="font-bold text-sm text-slate-900"><span v-if="currentUser.role === 'siswa'">Edit Data Pribadi Siswa</span><span v-else-if="currentUser.role === 'orang_tua'">Edit Kontak Siswa Ananda</span><span v-else>{{ isEditingStudent ? 'Edit Data Siswa' : 'Tambah Siswa Baru' }}</span></h3>
             <p class="text-[11px] text-slate-400">Data induk siswa terintegrasi dengan kartu barcode & presensi</p>
           </div>
           <button @click="showStudentModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
@@ -3148,11 +3178,11 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-700 mb-1">Nomor Induk Siswa Nasional (NISN)</label>
-              <input v-model="currentStudentForm.nisn" required placeholder="10 Digit NISN..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono">
+              <input v-model="currentStudentForm.nisn" :disabled="currentUser.role === 'siswa' || currentUser.role === 'orang_tua'" required placeholder="10 Digit NISN..." class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none font-mono disabled:bg-slate-100 disabled:text-slate-500">
             </div>
             <div>
               <label class="block font-semibold text-slate-700 mb-1">Jenis Kelamin</label>
-              <select v-model="currentStudentForm.gender" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <select v-model="currentStudentForm.gender" :disabled="currentUser.role === 'siswa' || currentUser.role === 'orang_tua'" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium disabled:bg-slate-100 disabled:text-slate-500">
                 <option value="Laki-laki">Laki-laki</option>
                 <option value="Perempuan">Perempuan</option>
               </select>
@@ -3167,7 +3197,7 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-700 mb-1">Rombongan Belajar (Kelas)</label>
-              <select v-model="currentStudentForm.classroom" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+              <select v-model="currentStudentForm.classroom" :disabled="currentUser.role === 'siswa' || currentUser.role === 'orang_tua'" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium disabled:bg-slate-100 disabled:text-slate-500">
                 <option value="X-RPL-1">X-RPL-1</option>
                 <option value="X-RPL-2">X-RPL-2</option>
                 <option value="XI-TKJ-1">XI-TKJ-1</option>
@@ -3234,7 +3264,7 @@
       <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4 max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
-            <h3 class="font-bold text-sm text-slate-900">{{ isEditingParent ? 'Edit Data Orang Tua / Wali' : 'Tambah Orang Tua / Wali Baru' }}</h3>
+            <h3 class="font-bold text-sm text-slate-900"><span v-if="currentUser.role === 'orang_tua'">Edit Data Profil Orang Tua / Wali</span><span v-else>{{ isEditingParent ? 'Edit Data Orang Tua / Wali' : 'Tambah Orang Tua / Wali Baru' }}</span></h3>
             <p class="text-[11px] text-slate-400">Pemberian akses akun portal pemantauan dan nomor WhatsApp darurat</p>
           </div>
           <button @click="showParentModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
@@ -3263,7 +3293,7 @@
 
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Hubungkan ke Siswa Binaan</label>
-            <select v-model="currentParentForm.studentId" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
+            <select v-model="currentParentForm.studentId" :disabled="currentUser.role === 'orang_tua'" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium disabled:bg-slate-100 disabled:text-slate-500">
               <option v-for="s in students" :key="s.id" :value="s.id">
                 {{ s.name }} (NISN: {{ s.nisn }} • Kelas: {{ s.classroom }})
               </option>
@@ -3590,7 +3620,7 @@
         const canEditAttendance = computed(() => ['admin', 'wali_kelas', 'bk'].includes(currentUser.value.role));
         const canRecordViolation = computed(() => ['admin', 'bk', 'wali_kelas'].includes(currentUser.value.role));
         const canRecordAchievement = computed(() => ['admin', 'bk', 'wali_kelas', 'siswa'].includes(currentUser.value.role));
-        const canSubmitComplaint = computed(() => ['orang_tua', 'siswa', 'admin'].includes(currentUser.value.role));
+        const canSubmitComplaint = computed(() => ['orang_tua', 'admin'].includes(currentUser.value.role));
         const canManageComplaints = computed(() => ['admin', 'bk'].includes(currentUser.value.role));
 
         // Navigation Items based on active Role
@@ -3634,9 +3664,17 @@
             items.push({ id: 'aduan', title: 'Aduan Siswa Kelas', icon: '📢' });
           }
 
-          if (role === 'admin' || role === 'bk' || role === 'wali_kelas') {
+          if (role === 'admin' || role === 'bk') {
             items.push({ id: 'siswa_mgmt', title: 'Manajemen Siswa', icon: '🎓' });
             items.push({ id: 'ortu_mgmt', title: 'Manajemen Orang Tua', icon: '👨‍👩‍👦' });
+          } else if (role === 'wali_kelas') {
+            items.push({ id: 'siswa_mgmt', title: 'Data Siswa Kelas', icon: '🎓' });
+            items.push({ id: 'ortu_mgmt', title: 'Data Wali Murid Kelas', icon: '👨‍👩‍👦' });
+          } else if (role === 'orang_tua') {
+            items.push({ id: 'siswa_mgmt', title: 'Data Siswa (Anak)', icon: '🎓' });
+            items.push({ id: 'ortu_mgmt', title: 'Data Orang Tua / Wali', icon: '👨‍👩‍👦' });
+          } else if (role === 'siswa') {
+            items.push({ id: 'siswa_mgmt', title: 'Data Diri Siswa', icon: '🎓' });
           }
 
           if (role === 'admin') {

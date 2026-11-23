@@ -121,3 +121,14 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
       - **Orang Tua**: Menu **"Pengaduan Saya"** dengan akses **CRUD Aduan Mandiri** (Tulis Aduan Baru, Edit Aduan, Hapus/Batalkan Aduan, serta Obrolan Investigasi dua arah). Orang tua hanya dapat melihat dan mengelola aduannya sendiri.
       - **Wali Kelas**: Menu **"Aduan Siswa Kelas"** yang secara otomatis hanya menampilkan aduan dari orang tua/siswa di kelas binaannya (X-RPL-1).
       - **Guru BK & Super Admin**: Menu **"Pusat Aduan / Whistle"** yang menampilkan seluruh aduan dari seluruh kelas sekolah secara terpusat untuk investigasi dan eskalasi kasus.
+20. **Tampilan Menu Mandiri untuk Role Siswa, Orang Tua (Wali Murid), dan Wali Kelas**:
+    - **Role Siswa**:
+      - Menu **"Data Diri Siswa"** menampilkan profil kesiswaan resmi milik siswa itu sendiri (Ahmad Rifai), NISN, rombel kelas, catatan poin disiplin & prestasi, serta kontak orang tua terdaftar.
+      - Siswa dapat mengklik **"✏️ Edit Kontak / Alamat"** untuk memperbarui nomor domisili.
+    - **Role Orang Tua (Wali Murid)**:
+      - Menu **"Data Siswa (Anak)"** menampilkan profil lengkap ananda yang diasuh (Ahmad Rifai).
+      - Menu **"Data Orang Tua / Wali"** menampilkan profil diri wali murid (Bpk. Hendra Gunawan) dengan opsi **"✏️ Edit Kontak / Profil"** untuk memperbarui nomor WhatsApp, email, dan pekerjaan.
+    - **Role Wali Kelas**:
+      - Menu **"Data Siswa Kelas"** dan **"Data Wali Murid Kelas"** terisolasi hanya untuk murid dan orang tua di rombel kelas binaannya (X-RPL-1).
+    - **Role Admin & Guru BK**:
+      - Menu **"Manajemen Siswa"** dan **"Manajemen Orang Tua"** mencakup seluruh data siswa dan wali murid se-sekolah dengan kewenangan penuh (CRUD Master).
