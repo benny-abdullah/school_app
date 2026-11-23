@@ -60,7 +60,7 @@
     }
   </style>
 </head>
-<body class="bg-[#FAFAFA] text-slate-800 antialiased selection:bg-slate-900 selection:text-white min-h-screen">
+<body class="bg-white text-slate-800 antialiased selection:bg-slate-900 selection:text-white min-h-screen">
 
   <div id="app" v-cloak>
 
@@ -70,11 +70,19 @@
     <div v-if="!isLoggedIn" class="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-white">
       <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <!-- Logo -->
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-950 text-white shadow-md mb-4">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#1f2328] text-white shadow-md mb-4 border border-[#d0d7de]">
+          <svg class="w-10 h-10" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Academic Shield / Cap -->
+            <path d="M16 5L5 10.5L16 16L27 10.5L16 5Z" fill="#388bfd"/>
+            <path d="M8 13.5V19.5C8 22 11.5 24 16 24C20.5 24 24 22 24 19.5V13.5L16 17.5L8 13.5Z" fill="#ffffff" fill-opacity="0.95"/>
+            <!-- Barcode Scan Lines inside shield -->
+            <line x1="11.5" y1="18" x2="11.5" y2="21.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="14.2" y1="18" x2="14.2" y2="22.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="17.8" y1="18" x2="17.8" y2="22.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="20.5" y1="18" x2="20.5" y2="21.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+            <!-- Academic Tassel with verified green pulse dot -->
+            <circle cx="27" cy="14" r="2.2" fill="#2da44e"/>
+            <path d="M27 10.5V14" stroke="#2da44e" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </div>
         <h2 class="text-2xl font-bold tracking-tight text-slate-900">EduTrack Pro</h2>
@@ -193,76 +201,123 @@
     <!-- ========================================== -->
     <div v-else class="min-h-screen flex flex-col bg-[#FAFAFA]">
       
-      <!-- TOP NAVIGATION BAR (CLEAN WHITE) -->
-      <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between h-16">
+      <!-- TOP NAVIGATION BAR (GITHUB STYLE) -->
+      <header class="bg-[#f6f8fa] border-b border-[#d0d7de] sticky top-0 z-30 text-[#1f2328]">
+        <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-14">
             
-            <!-- Brand & Mobile Menu Button -->
+            <!-- Left: Mobile Toggle + Logo + Breadcrumbs -->
             <div class="flex items-center gap-3">
-              <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 lg:hidden">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+              <button @click="sidebarOpen = !sidebarOpen" class="p-1.5 rounded-md text-[#656d76] hover:bg-[#eaeef2] lg:hidden border border-[#d0d7de]">
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75Zm0 5a.75.75 0 0 1 .75-.75h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1-.75-.75Z"></path>
                 </svg>
               </button>
+
+              <!-- Custom App Logo -->
               <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                  EP
+                <div class="w-8 h-8 rounded-lg bg-[#1f2328] flex items-center justify-center shadow-xs flex-shrink-0 border border-[#d0d7de]">
+                  <svg class="w-5 h-5" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 5L5 10.5L16 16L27 10.5L16 5Z" fill="#388bfd"/>
+                    <path d="M8 13.5V19.5C8 22 11.5 24 16 24C20.5 24 24 22 24 19.5V13.5L16 17.5L8 13.5Z" fill="#ffffff" fill-opacity="0.95"/>
+                    <line x1="11.5" y1="18" x2="11.5" y2="21.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+                    <line x1="14.2" y1="18" x2="14.2" y2="22.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+                    <line x1="17.8" y1="18" x2="17.8" y2="22.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+                    <line x1="20.5" y1="18" x2="20.5" y2="21.5" stroke="#1f2328" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="27" cy="14" r="2.2" fill="#2da44e"/>
+                    <path d="M27 10.5V14" stroke="#2da44e" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
                 </div>
-                <div>
-                  <div class="text-sm font-bold text-slate-900 leading-none">EduTrack Pro</div>
-                  <div class="text-[10px] text-slate-400 mt-0.5 font-medium">SMK Negeri Unggulan 1</div>
+                
+                <!-- GitHub Breadcrumbs -->
+                <div class="flex items-center text-sm">
+                  <span class="text-[#0969da] hover:underline cursor-pointer font-normal">smk-negeri-unggulan-1</span>
+                  <span class="text-[#656d76] mx-1">/</span>
+                  <span class="font-bold text-[#1f2328] hover:underline cursor-pointer">school_app</span>
+                  <svg class="w-3.5 h-3.5 text-[#656d76] ml-1" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path>
+                  </svg>
+                </div>
+
+                <!-- Public Badge -->
+                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium border border-[#d0d7de] text-[#656d76] bg-white">
+                  Public
+                </span>
+              </div>
+            </div>
+
+            <!-- Center: Search Input Bar (GitHub Style) -->
+            <div class="hidden md:flex items-center flex-1 max-w-xs mx-6">
+              <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-[#656d76]">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path>
+                  </svg>
+                </div>
+                <input 
+                  type="text" 
+                  placeholder="Type / to search" 
+                  class="w-full bg-[#f6f8fa] hover:bg-white focus:bg-white text-xs pl-8 pr-7 py-1.5 rounded-md border border-[#d0d7de] focus:border-[#0969da] focus:outline-none transition-colors text-[#1f2328]"
+                >
+                <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
+                  <span class="border border-[#d0d7de] rounded px-1 text-[10px] text-[#656d76] bg-white leading-none py-0.5">/</span>
                 </div>
               </div>
-
-              <!-- ISO Status Indicator Pill -->
-              <span class="hidden sm:inline-flex items-center gap-1.5 ml-4 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                ISO 27001 Certified
-              </span>
             </div>
 
             <!-- Right Controls: Role Switcher, WhatsApp Preview, Profile -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
               
               <!-- Quick Switch Role Dropdown in Header -->
-              <div class="relative">
+              <div class="relative flex items-center">
+                <span class="text-[11px] text-[#656d76] mr-1 hidden xl:inline font-medium">Peran:</span>
                 <select 
                   v-model="selectedRoleKey" 
                   @change="changeRole(selectedRoleKey)"
-                  class="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl px-3 py-1.5 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer"
+                  class="bg-white border border-[#d0d7de] text-[#24292f] text-xs rounded-md px-2.5 py-1.5 font-medium hover:bg-[#f6f8fa] focus:outline-none focus:ring-1 focus:ring-[#0969da] cursor-pointer shadow-2xs"
                 >
                   <option v-for="(r, key) in roles" :key="key" :value="key">
-                    {{ r.icon }} Role: {{ r.label }}
+                    {{ r.icon }} {{ r.label }}
                   </option>
                 </select>
               </div>
 
-              <!-- Simulation Button: WhatsApp Alert -->
+              <!-- WhatsApp Alert Button -->
               <button 
                 @click="openWhatsAppModal"
-                class="hidden md:inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-xl border border-emerald-200 transition-colors"
+                class="hidden sm:inline-flex items-center gap-1.5 bg-white hover:bg-[#f6f8fa] text-[#1a7f37] text-xs font-medium px-2.5 py-1.5 rounded-md border border-[#d0d7de] transition-colors shadow-2xs"
                 title="Simulasikan Notifikasi WhatsApp yang terkirim ke Orang Tua"
               >
-                <span>📱</span>
-                <span>Tes Notif WA</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#1a7f37]"></span>
+                <span>WA Alert</span>
+              </button>
+
+              <!-- Notifications Bell Icon -->
+              <button class="p-1.5 rounded-md text-[#656d76] hover:bg-[#eaeef2] hover:text-[#1f2328] border border-transparent hover:border-[#d0d7de] relative">
+                <svg class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 16a2 2 0 0 0 1.985-1.75c.001-.014.001-.027.002-.041.002-.07.013-.139.03-.209h-4.034c.017.07.028.139.03.209.001.014.001.027.002.041A2 2 0 0 0 8 16ZM3.5 6.5A4.5 4.5 0 0 1 8 2a4.5 4.5 0 0 1 4.5 4.5V9.08l1.433 2.15A.75.75 0 0 1 13.308 12.5H2.692a.75.75 0 0 1-.625-1.27l1.433-2.15V6.5Z"></path>
+                </svg>
+                <span class="w-2 h-2 rounded-full bg-[#0969da] absolute top-1 right-1 border-2 border-white"></span>
               </button>
 
               <!-- User Profile & Logout -->
-              <div class="flex items-center pl-3 border-l border-slate-200 gap-2">
+              <div class="flex items-center pl-2 border-l border-[#d0d7de] gap-2">
                 <div class="text-right hidden sm:block">
-                  <div class="text-xs font-bold text-slate-900">{{ currentUser.name }}</div>
-                  <div class="text-[10px] text-slate-500">{{ roles[currentUser.role].label }}</div>
+                  <div class="text-xs font-semibold text-[#1f2328] leading-tight">{{ currentUser.name }}</div>
+                  <div class="text-[10px] text-[#656d76]">{{ roles[currentUser.role].label }}</div>
                 </div>
-                <div class="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-xs text-slate-700">
+                
+                <!-- Identicon avatar box -->
+                <div class="w-7 h-7 rounded-md bg-[#f6f8fa] border border-[#d0d7de] flex items-center justify-center font-bold text-[11px] text-[#24292f] shadow-2xs">
                   {{ currentUser.avatarInitials }}
                 </div>
+
                 <button 
                   @click="logout" 
-                  class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                  class="p-1 text-[#656d76] hover:text-[#cf222e] hover:bg-[#ffebe9] rounded-md transition-colors"
                   title="Keluar (Logout)"
                 >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                   </svg>
                 </button>
@@ -272,80 +327,142 @@
 
           </div>
         </div>
+
+        <!-- HORIZONTAL SUB-NAVIGATION TABS (GITHUB STYLE TABS) -->
+        <div class="bg-[#f6f8fa] px-4 sm:px-6 lg:px-8 border-t border-[#d0d7de]/60">
+          <div class="max-w-[1400px] mx-auto flex items-center gap-1 overflow-x-auto scrollbar-none text-xs">
+            <button 
+              v-for="item in visibleNavItems" 
+              :key="item.id"
+              @click="activePage = item.id; sidebarOpen = false"
+              :class="[
+                activePage === item.id 
+                  ? 'border-[#fd8c73] font-semibold text-[#1f2328]' 
+                  : 'border-transparent text-[#656d76] hover:text-[#1f2328] hover:border-[#d0d7de] font-normal',
+                'px-3 py-2.5 border-b-2 flex items-center gap-2 transition-all whitespace-nowrap cursor-pointer'
+              ]"
+            >
+              <!-- Octicon SVG based on item.id -->
+              <span class="inline-flex items-center text-[#656d76]" :class="{ 'text-[#1f2328]': activePage === item.id }">
+                <svg v-if="item.id === 'dashboard'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"></path></svg>
+                <svg v-else-if="item.id === 'presensi'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0Zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05Z"></path></svg>
+                <svg v-else-if="item.id === 'scanner'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm6.25-4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Zm0 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+                <svg v-else-if="item.id === 'kartu_pelajar'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M0 3.75C0 2.784.784 2 1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25Zm1.75-.25a.25.25 0 0 0-.25.25v1.5h13V3.75a.25.25 0 0 0-.25-.25ZM14.5 6.75h-13v5.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25ZM3 9.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 0 1.5h-3.5A.75.75 0 0 1 3 9.25Z"></path></svg>
+                <svg v-else-if="item.id === 'pelanggaran'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>
+                <svg v-else-if="item.id === 'prestasi'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                <svg v-else-if="item.id === 'aduan'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>
+                <svg v-else-if="item.id === 'siswa_mgmt'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8.75 8a2.25 2.25 0 1 0-1.5 0c-1.392.278-2.678.932-3.69 1.879A.75.75 0 0 0 4.5 11h7a.75.75 0 0 0 .94-1.121c-1.012-.947-2.298-1.601-3.69-1.879ZM8 4.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5ZM2 8.75A2.75 2.75 0 0 1 4.75 6h6.5A2.75 2.75 0 0 1 14 8.75v5.5A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25Z"></path></svg>
+                <svg v-else-if="item.id === 'ortu_mgmt'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.002 4.002 0 0 0-6.898-1.92A.75.75 0 0 1 1.75 10.5 5.5 5.5 0 0 1 2 5.5Zm3.5-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6.25 1.75a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5Zm0 1.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"></path></svg>
+                <svg v-else-if="item.id === 'users'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M6.5 1a2.5 2.5 0 0 0-2.45 2H1.75a.75.75 0 0 0 0 1.5h2.3a2.5 2.5 0 0 0 4.9 0h5.3a.75.75 0 0 0 0-1.5H8.95A2.5 2.5 0 0 0 6.5 1Zm0 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"></path></svg>
+                <svg v-else-if="item.id === 'backup'" class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 0 0-7 7v1a7 7 0 0 0 14 0V8a7 7 0 0 0-7-7Zm0 1.5c3.038 0 5.5 1.12 5.5 2.5S11.038 7.5 8 7.5 2.5 6.38 2.5 5 4.962 2.5 8 2.5ZM2.5 8c0 .245.14.636.564 1.026C3.896 9.774 5.672 10.5 8 10.5s4.104-.726 4.936-1.474c.424-.39.564-.781.564-1.026v1c0 1.38-2.462 2.5-5.5 2.5S2.5 10.38 2.5 9V8Z"></path></svg>
+                <svg v-else class="w-4 h-4" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25ZM1.5 14.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"></path></svg>
+              </span>
+
+              <span>{{ item.title }}</span>
+              
+              <!-- Counter badge -->
+              <span 
+                v-if="item.badge" 
+                class="bg-[#afb8c1]/20 text-[#24292f] text-[11px] font-semibold px-1.5 py-0.2 rounded-full leading-none"
+              >
+                {{ item.badge }}
+              </span>
+            </button>
+          </div>
+        </div>
       </header>
 
-      <!-- BODY WRAPPER: SIDEBAR + MAIN CONTENT -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex py-6 gap-6">
+      <!-- BODY WRAPPER (GITHUB LAYOUT: MAIN CONTENT + RIGHT SIDEBAR) -->
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 w-full py-4 space-y-4">
 
-        <!-- SIDEBAR NAVIGATION (DYNAMIC ACCORDING TO ROLE) -->
-        <aside 
-          :class="[
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-            'fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-slate-200 p-4 transition-transform lg:static lg:w-56 lg:bg-transparent lg:border-none lg:p-0 flex flex-col justify-between'
-          ]"
-        >
-          <div>
-            <!-- Mobile Close Button -->
-            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 lg:hidden">
-              <span class="font-bold text-sm text-slate-900">Menu Navigasi</span>
-              <button @click="sidebarOpen = false" class="text-slate-400 hover:text-slate-600">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-              </button>
+        <!-- SUB-HEADER BAR (BRANCH SELECTOR & QUICK ACTIONS - EXACTLY LIKE GITHUB SCREENSHOT) -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-2">
+          <!-- Left: Branch Selector & Branch/Tag counts -->
+          <div class="flex items-center gap-2">
+            <div class="inline-flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#f3f4f6] border border-[#d0d7de] px-3 py-1.5 rounded-md text-xs font-semibold text-[#24292f] cursor-pointer shadow-2xs">
+              <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z"></path></svg>
+              <span>main</span>
+              <svg class="w-3 h-3 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path></svg>
             </div>
 
-            <!-- Role Scope Indicator Card -->
-            <div class="mb-4 p-3 bg-white border border-slate-200 rounded-xl shadow-xs">
-              <div class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Akses Anda:</div>
-              <div class="text-xs font-bold text-slate-900 mt-0.5 flex items-center gap-1.5">
-                <span>{{ roles[currentUser.role].icon }}</span>
-                <span>{{ roles[currentUser.role].label }}</span>
-              </div>
-              <div class="text-[11px] text-slate-500 mt-1 line-clamp-2">
-                {{ roles[currentUser.role].description }}
-              </div>
+            <div class="hidden sm:flex items-center gap-3 text-xs text-[#656d76] pl-2 font-medium">
+              <span class="hover:text-[#0969da] cursor-pointer inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor"><path d="M9.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 10 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.493 2.493 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 9.5 3.25Z"></path></svg>
+                <strong>1</strong> Branch
+              </span>
+              <span class="hover:text-[#0969da] cursor-pointer inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+                <strong>0</strong> Tags
+              </span>
+              <span class="inline-flex items-center gap-1 text-[#1a7f37] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[11px]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#1a7f37]"></span>
+                ISO 27001 ISMS
+              </span>
             </div>
+          </div>
 
-            <!-- Navigation Links -->
-            <nav class="space-y-1">
-              <button 
-                v-for="item in visibleNavItems" 
-                :key="item.id"
-                @click="activePage = item.id; sidebarOpen = false"
-                :class="[
-                  activePage === item.id 
-                    ? 'bg-slate-900 text-white font-semibold shadow-xs' 
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium',
-                  'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-colors'
-                ]"
-              >
-                <div class="flex items-center gap-2.5">
-                  <span class="text-sm">{{ item.icon }}</span>
-                  <span>{{ item.title }}</span>
+          <!-- Right: Quick Action Controls -->
+          <div class="flex items-center gap-2">
+            <button 
+              v-if="canRecordViolation"
+              @click="openViolationModal()"
+              class="bg-[#f6f8fa] hover:bg-[#f3f4f6] text-[#cf222e] border border-[#d0d7de] text-xs font-medium px-3 py-1.5 rounded-md shadow-2xs inline-flex items-center gap-1.5"
+            >
+              <span>⚠️</span>
+              <span>+ Pelanggaran</span>
+            </button>
+
+            <button 
+              v-if="currentUser.role === 'admin' || currentUser.role === 'bk' || currentUser.role === 'wali_kelas'"
+              @click="openStudentModal()"
+              class="bg-[#f6f8fa] hover:bg-[#f3f4f6] text-[#24292f] border border-[#d0d7de] text-xs font-medium px-3 py-1.5 rounded-md shadow-2xs inline-flex items-center gap-1"
+            >
+              <span>Add file</span>
+              <svg class="w-3 h-3 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path></svg>
+            </button>
+
+            <!-- GitHub Green Button -->
+            <button 
+              @click="activePage = 'presensi'"
+              class="bg-[#1f883d] hover:bg-[#1a7f37] text-white text-xs font-semibold px-3 py-1.5 rounded-md shadow-2xs border border-[rgba(27,31,36,0.15)] inline-flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="currentColor"><path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.04 1.06L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06l4.25-4.25Z"></path></svg>
+              <span>&lt;&gt; Code</span>
+              <svg class="w-3 h-3 text-white" viewBox="0 0 16 16" fill="currentColor"><path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- TWO-COLUMN GRID: MAIN CONTENT (LEFT ~75%) + ABOUT & STATS SIDEBAR (RIGHT ~25%) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- LEFT COLUMN: MAIN CONTENT (lg:col-span-8 xl:col-span-9) -->
+          <main class="lg:col-span-8 xl:col-span-9 space-y-4 min-w-0">
+            
+            <!-- GITHUB COMMIT BAR HEADER -->
+            <div class="bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3.5 py-2.5 flex flex-wrap items-center justify-between text-xs text-[#656d76] gap-2 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <!-- Identicon avatar -->
+                <div class="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[9px]">
+                  {{ currentUser.avatarInitials }}
                 </div>
-                <!-- Badge Count if any -->
-                <span 
-                  v-if="item.badge" 
-                  :class="[
-                    activePage === item.id ? 'bg-white text-slate-900' : 'bg-slate-200 text-slate-700',
-                    'px-1.5 py-0.5 rounded-full text-[10px] font-bold'
-                  ]"
-                >
-                  {{ item.badge }}
+                <span class="font-semibold text-[#1f2328] hover:underline cursor-pointer">{{ currentUser.name }}</span>
+                <span class="text-[#1f2328] truncate max-w-xs sm:max-w-md font-mono text-[11px]">
+                  feat: implementasi sistem monitoring terpadu kesiswaan ISO 27001
                 </span>
-              </button>
-            </nav>
-          </div>
-
-          <!-- Quick System Specs footer -->
-          <div class="mt-8 pt-4 border-t border-slate-200 text-[11px] text-slate-400 hidden lg:block">
-            <div class="font-medium text-slate-500">EduTrack v2.5.0</div>
-            <div>Laravel 11.x Core</div>
-            <div>ISO/IEC 27001 ISMS</div>
-          </div>
-        </aside>
-
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 min-w-0">
+                <span class="bg-[#afb8c1]/20 hover:bg-[#afb8c1]/40 text-[#656d76] px-1 rounded text-[10px] cursor-pointer">...</span>
+                <span class="text-[#1a7f37] font-mono text-[11px] inline-flex items-center gap-0.5">
+                  ✓ 34acc33
+                </span>
+              </div>
+              <div class="flex items-center gap-3 text-[11px]">
+                <span>7 minutes ago</span>
+                <span class="font-semibold text-[#1f2328] inline-flex items-center gap-1 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
+                  <strong>8</strong> Commits
+                </span>
+              </div>
+            </div>
           
           <!-- ============================================== -->
           <!-- PAGE: DASHBOARD                                -->
@@ -2741,6 +2858,118 @@
           </div>
 
         </main>
+
+          <!-- RIGHT COLUMN: ABOUT & STATS SIDEBAR (lg:col-span-4 xl:col-span-3 - MATCHING GITHUB SCREENSHOT) -->
+          <aside class="lg:col-span-4 xl:col-span-3 space-y-5 text-xs text-[#656d76]">
+            
+            <!-- Card 1: About Section (Matching Screenshot) -->
+            <div class="space-y-3 pb-5 border-b border-[#d0d7de]">
+              <div class="flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-[#1f2328]">About</h2>
+                <svg class="w-4 h-4 text-[#656d76] hover:text-[#1f2328] cursor-pointer" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.44 1.157 10.428 2 11.5 2c.49 0 .973-.176 1.402-.497.683.479 1.288 1.084 1.767 1.767-.321.429-.497.912-.497 1.402 0 1.072.843 2.06 1.969 2.799A8.2 8.2 0 0 1 16 8c0 .235-.01.469-.031.701-1.126.739-1.969 1.727-1.969 2.799 0 .49.176.973.497 1.402-.479.683-1.084 1.288-1.767 1.767-.429-.321-.912-.497-1.402-.497-1.072 0-2.06.843-2.799 1.969A8.2 8.2 0 0 1 8 16c-.235 0-.469-.01-.701-.031-.739-1.126-1.727-1.969-2.799-1.969-.49 0-.973.176-1.402.497-.683-.479-1.288-1.084-1.767-1.767.321-.429.497-.912.497-1.402 0-1.072-.843-2.06-1.969-2.799A8.2 8.2 0 0 1 0 8c0-.235.01-.469.031-.701 1.126-.739 1.969-1.727 1.969-2.799 0-.49-.176-.973-.497-1.402.479-.683 1.084-1.288 1.767-1.767.429.321.912.497 1.402.497 1.072 0 2.06-.843 2.799-1.969A8.2 8.2 0 0 1 8 0zm0 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"></path>
+                </svg>
+              </div>
+              <p class="text-[#24292f] leading-relaxed">
+                aplikasi sekolah — Sistem Terpadu Presensi Barcode Gerbang 0.3s, Kedisiplinan & Penerbitan SP Otomatis, Bank Prestasi, Kartu Pelajar ISO CR-80, dan Portal Monitoring Wali Murid.
+              </p>
+
+              <!-- Octicon List (Readme, Activity, Stars, Watching, Forks) -->
+              <div class="space-y-2 pt-1 font-medium">
+                <a href="review.md" target="_blank" class="flex items-center gap-2 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.002 1H15.25a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.248a2.25 2.25 0 0 0-1.502.58l-1.002.857a.75.75 0 0 1-.996 0l-1.002-.857A2.25 2.25 0 0 0 4.998 13H.75a.75.75 0 0 1-.75-.75ZM4.998 11.5a3.75 3.75 0 0 1 2.253.752V3.125a2.25 2.25 0 0 0-2.253-.875H1.5v9.25Zm6.004.752a3.75 3.75 0 0 1 2.248-.752V2.25h-2.25c-.888 0-1.688.358-2.248.875Z"></path></svg>
+                  <span>Readme (Dokumentasi Produksi)</span>
+                </a>
+                <div class="flex items-center gap-2 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+                  <span>Activity: ISO/IEC 27001 Compliant</span>
+                </div>
+                <div class="flex items-center gap-2 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+                  <span><strong>385</strong> Poin Prestasi Sekolah</span>
+                </div>
+                <div class="flex items-center gap-2 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M1.679 7.932c.412-.621 1.242-1.75 2.366-2.717C5.175 4.242 6.527 3.5 8 3.5c1.473 0 2.824.742 3.955 1.715 1.124.967 1.954 2.096 2.366 2.717a.119.119 0 0 1 0 .136c-.412.621-1.242 1.75-2.366 2.717C10.825 11.758 9.473 12.5 8 12.5c-1.473 0-2.824-.742-3.955-1.715C2.92 9.818 2.09 8.69 1.679 8.068a.119.119 0 0 1 0-.136zM8 2c-1.981 0-3.67.992-4.933 2.078C1.797 5.169.88 6.423.43 7.1a1.619 1.619 0 0 0 0 1.798c.45.678 1.367 1.932 2.637 3.024C4.329 13.008 6.019 14 8 14c1.981 0 3.67-.992 4.933-2.078 1.27-1.091 2.187-2.345 2.637-3.023a1.619 1.619 0 0 0 0-1.798c-.45-.678-1.367-1.932-2.637-3.023C11.671 2.992 9.981 2 8 2zm0 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path></svg>
+                  <span><strong>10</strong> Siswa Terdata (Aktif)</span>
+                </div>
+                <div class="flex items-center gap-2 hover:text-[#0969da] cursor-pointer">
+                  <svg class="w-4 h-4 text-[#656d76]" viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h4.5A2.25 2.25 0 0 0 12.5 6.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-.878zm7.5-2.122a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM8 12.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0V9.25a.75.75 0 0 1 1.5 0v5.622z"></path></svg>
+                  <span><strong>5</strong> Peran Terisolasi (RBAC)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Releases Section (Matching Screenshot) -->
+            <div class="space-y-2 pb-5 border-b border-[#d0d7de]">
+              <h2 class="text-sm font-semibold text-[#1f2328] hover:text-[#0969da] cursor-pointer flex items-center gap-1.5">
+                <span>Releases</span>
+                <span class="bg-[#afb8c1]/20 text-[#24292f] text-[10px] font-semibold px-1.5 py-0.2 rounded-full">1</span>
+              </h2>
+              <div class="flex items-center gap-2 text-xs">
+                <svg class="w-4 h-4 text-[#1a7f37]" viewBox="0 0 16 16" fill="currentColor"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+                <span class="font-semibold text-[#1f2328] hover:text-[#0969da] cursor-pointer">v2.4-Production-Ready</span>
+                <span class="bg-[#2da44e]/15 text-[#1a7f37] border border-[#2da44e]/30 px-1.5 py-0.2 rounded-full text-[10px] font-semibold">Latest</span>
+              </div>
+              <div class="text-[11px] text-[#656d76]">Rilis stabil sistem monitoring kesiswaan berstandar ISO/IEC 27001.</div>
+            </div>
+
+            <!-- Card 3: Deployments Section (Matching Screenshot) -->
+            <div class="space-y-2 pb-5 border-b border-[#d0d7de]">
+              <h2 class="text-sm font-semibold text-[#1f2328] hover:text-[#0969da] cursor-pointer flex items-center gap-1.5">
+                <span>Deployments</span>
+                <span class="bg-[#afb8c1]/20 text-[#24292f] text-[10px] font-semibold px-1.5 py-0.2 rounded-full">3</span>
+              </h2>
+              <div class="space-y-2 pt-1 text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#1a7f37]"></span>
+                  <span class="font-medium text-[#1f2328]">localhost:8000</span>
+                  <span class="text-[11px] text-[#656d76]">Live Daemon</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#0969da]"></span>
+                  <span class="font-medium text-[#1f2328]">AWS S3 Vault</span>
+                  <span class="text-[11px] text-[#656d76]">AES-256</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-[#1a7f37]"></span>
+                  <span class="font-medium text-[#1f2328]">WhatsApp Gateway</span>
+                  <span class="text-[11px] text-[#656d76]">Connected</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Sesi & Hak Akses Pengguna (Data Scope Card) -->
+            <div class="space-y-2">
+              <h2 class="text-sm font-semibold text-[#1f2328]">Hak Akses Pengguna</h2>
+              <div class="p-3 bg-[#f6f8fa] border border-[#d0d7de] rounded-md space-y-2 shadow-2xs">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-md bg-[#1f2328] text-white flex items-center justify-center font-bold text-[10px]">
+                    {{ currentUser.avatarInitials }}
+                  </div>
+                  <div>
+                    <div class="font-bold text-[#1f2328] text-xs leading-none">{{ currentUser.name }}</div>
+                    <div class="text-[10px] text-[#656d76] mt-0.5">{{ roles[currentUser.role].label }}</div>
+                  </div>
+                </div>
+                
+                <div class="pt-2 border-t border-[#d0d7de] text-[11px]">
+                  <div class="text-[#656d76]">Isolasi Data (Scope):</div>
+                  <div class="font-semibold text-[#0969da] mt-0.5 font-mono">
+                    {{ roleDataScope.type === 'student' ? 'Data Pribadi (' + roleDataScope.name + ')' : (roleDataScope.type === 'classroom' ? 'Kelas ' + roleDataScope.classroom : 'Seluruh Sekolah & Sistem') }}
+                  </div>
+                </div>
+
+                <div class="text-[10px] text-[#656d76] flex items-center gap-1.5 pt-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#1a7f37]"></span>
+                  <span>2FA TOTP Verified • ISO 27001</span>
+                </div>
+              </div>
+            </div>
+
+          </aside>
+
+        </div>
+
       </div>
 
     </div>

@@ -132,3 +132,11 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
       - Menu **"Data Siswa Kelas"** dan **"Data Wali Murid Kelas"** terisolasi hanya untuk murid dan orang tua di rombel kelas binaannya (X-RPL-1).
     - **Role Admin & Guru BK**:
       - Menu **"Manajemen Siswa"** dan **"Manajemen Orang Tua"** mencakup seluruh data siswa dan wali murid se-sekolah dengan kewenangan penuh (CRUD Master).
+21. **Desain Tampilan GitHub Repository Theme & Logo Resmi EduTrack Pro**:
+    - **Logo Resmi Aplikasi**: Simbol vektor modern yang memadukan perisai toga kesiswaan, gelombang pemindai barcode gerbang, dan titik verifikasi presensi (*emerald pulse*).
+    - **Header Global GitHub**: Breadcrumb repositori (`smk-negeri-unggulan-1 / school_app`), badge status `Public`, kolom pencarian repositori (`Type / to search`), dan pemilih peran akun (*Role Switcher*).
+    - **Tab Navigasi Horizontal Berikon Octicons**: Tab atas dengan ikon SVG GitHub Octicons lengkap (`Dashboard`, `Presensi`, `Scanner`, `Kartu Pelajar`, `Kedisiplinan`, `Bank Prestasi`, `Aduan`, dsb.) dengan garis bawah oranye khas GitHub pada tab aktif.
+    - **Sub-Header Kontrol Git**: Pemilih branch (`main ▾`), counter branch & tag, serta tombol hijau khas GitHub (`<> Code ▾`).
+    - **Tata Letak 2 Kolom (Main Content + Right Sidebar 'About')**:
+      - **Kolom Utama (Kiri)**: Banner komit GitHub (*Commit Bar* memuat author, pesan komit, hash terverifikasi `34acc33`, dan counter komit) di atas modul kesiswaan aktif.
+      - **Sidebar Kanan ('About')**: Persis seperti bilah samping repositori GitHub asli: bagian *About* (deskripsi, Readme, Activity, Stars/Prestasi, Watching/Siswa Aktif, Forks/Peran), bagian *Releases* (`v2.4-Production-Ready`), bagian *Deployments* (Server Daemon, AWS S3 Vault, WA Gateway), dan bagian *Hak Akses Pengguna* (Cakupan Data / Data Scope).
