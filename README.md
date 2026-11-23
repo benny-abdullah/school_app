@@ -74,3 +74,14 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
    - Klik tombol **"📱 Tes Notif WA"** di header atas untuk melihat jendela simulasi pesan WhatsApp resmi yang diterima di ponsel orang tua secara *real-time*.
 9. **Uji Coba Kepatuhan ISO 27001 (Admin)**:
    - Masuk ke menu **Log Audit ISO 27001** (Role Admin) untuk memeriksa pencatatan audit trail *immutable* (*Who, What, When, IP Address, Compliance Status*).
+10. **Uji Coba Isolasi Data Antar Peran (Data Scoping)**:
+    - Beralih ke **Role Orang Tua / Siswa**: Periksa menu Kehadiran, Pelanggaran, dan Prestasi — **hanya menampilkan data ananda Ahmad Rifai**.
+    - Beralih ke **Role Wali Kelas**: Data terfilter secara otomatis **hanya untuk siswa kelas binaan (X-RPL-1)**.
+    - Beralih ke **Role Guru BK / Admin**: Dapat melihat **seluruh siswa di seluruh kelas sekolah**.
+11. **Uji Coba Manajemen Pengguna (Admin)**:
+    - Buka menu **Manajemen Pengguna** (Role Admin) untuk melihat daftar akun, hak akses role, dan batasan cakupan data (*Data Scope*).
+    - Coba tombol **"+ Tambah Pengguna Baru"**, tombol toggle **Aktif/Nonaktif**, dan fitur **Reset Sandi**.
+12. **Uji Coba Backup Data Terenkripsi ISO 27001 (Admin)**:
+    - Buka menu **Backup Data ISO 27001** (Role Admin).
+    - Periksa ringkasan strategi redundansi **Aturan 3-2-1** (Lokal + Offsite AWS S3 Vault, enkripsi AES-256-GCM, SHA-256 Checksum).
+    - Klik tombol **"⚡ Buat Cadangan Baru Sekarang"** untuk mensimulasikan pencadangan instan, atau tombol **"📥 Unduh (.enc)"**.
