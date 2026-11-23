@@ -1288,6 +1288,491 @@
 
           </div>
 
+
+          <!-- ============================================== -->
+          <!-- PAGE: SIMULATOR SCANNER BARCODE GERBANG        -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'scanner'" class="space-y-6">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Pos Gerbang: Pemindai Barcode Presensi</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    ⚡ Respon Cepat 0.3 Detik / Siswa
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Pemindaian kartu pelajar otomatis mengklasifikasikan status hadir/terlambat dan menembakkan notifikasi WhatsApp ke orang tua</p>
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-semibold text-slate-500">Mode Hardware:</span>
+                <span class="px-2.5 py-1 bg-slate-100 rounded-lg font-mono font-bold text-slate-800 border border-slate-200">
+                  USB / Wireless Gun Scanner
+                </span>
+              </div>
+            </div>
+
+            <!-- Two-Column Layout: Scanner Input & Display Monitor -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              
+              <!-- Left Column: Scanner Control & Time Simulator (1 Col) -->
+              <div class="space-y-4">
+                
+                <!-- Time Simulator Setting -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                  <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <span class="text-xs font-bold text-slate-900">Simulasi Jam Scan Gerbang</span>
+                    <span class="text-[10px] text-slate-400 font-mono">Rule Engine Auto-Calculate</span>
+                  </div>
+                  <p class="text-[11px] text-slate-500">Pilih skenario waktu untuk menguji aturan keterlambatan dan pemotongan poin tatib:</p>
+
+                  <div class="space-y-2">
+                    <button 
+                      @click="scannerTime = '06:45'" 
+                      :class="scannerTime === '06:45' ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                      class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                    >
+                      <div>
+                        <div class="font-semibold">06:45 WIB — Tepat Waktu</div>
+                        <div class="text-[10px] opacity-75">Sebelum 07.00 • Poin: 0 • Masuk kelas normal</div>
+                      </div>
+                      <span class="text-emerald-700 text-sm">✅</span>
+                    </button>
+
+                    <button 
+                      @click="scannerTime = '07:10'" 
+                      :class="scannerTime === '07:10' ? 'border-amber-500 bg-amber-50 text-amber-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                      class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                    >
+                      <div>
+                        <div class="font-semibold">07:10 WIB — Terlambat Ringan (T-1)</div>
+                        <div class="text-[10px] opacity-75">Lewat 10 menit • Poin: -2 • Izin piket</div>
+                      </div>
+                      <span class="text-amber-700 text-sm">⚠️</span>
+                    </button>
+
+                    <button 
+                      @click="scannerTime = '07:25'" 
+                      :class="scannerTime === '07:25' ? 'border-orange-500 bg-orange-50 text-orange-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                      class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                    >
+                      <div>
+                        <div class="font-semibold">07:25 WIB — Terlambat Sedang (T-2)</div>
+                        <div class="text-[10px] opacity-75">Lewat 25 menit • Poin: -5 • Gerbang ditutup & pembinaan</div>
+                      </div>
+                      <span class="text-orange-700 text-sm">⛔</span>
+                    </button>
+
+                    <button 
+                      @click="scannerTime = '07:45'" 
+                      :class="scannerTime === '07:45' ? 'border-rose-600 bg-rose-50 text-rose-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                      class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                    >
+                      <div>
+                        <div class="font-semibold">07:45 WIB — Terlambat Berat (T-3)</div>
+                        <div class="text-[10px] opacity-75">Lewat 45 menit • Poin: -10 • Penanganan BK & Panggilan Ortu</div>
+                      </div>
+                      <span class="text-rose-700 text-sm">🚨</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Fast Card Tap Simulation Buttons -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                  <div class="text-xs font-bold text-slate-900">Uji Coba Tap Kartu Siswa (1-Klik):</div>
+                  <div class="space-y-1.5">
+                    <button 
+                      v-for="s in students.slice(0, 4)" 
+                      :key="s.id"
+                      @click="executeBarcodeScan(s.nisn)"
+                      class="w-full p-2 rounded-xl border border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 text-left text-xs transition-all flex items-center justify-between"
+                    >
+                      <div>
+                        <div class="font-bold text-slate-900">{{ s.name }}</div>
+                        <div class="text-[10px] text-slate-400 font-mono">NISN: {{ s.nisn }} • {{ s.classroom }}</div>
+                      </div>
+                      <span class="text-xs bg-slate-100 px-2 py-1 rounded font-mono font-semibold text-slate-700">Tap Scan</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Right Column: Live Monitor Display at Gate (2 Cols) -->
+              <div class="lg:col-span-2 space-y-4">
+                
+                <!-- Terminal Input Box (Emulates Barcode Gun Keystrokes) -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                  <form @submit.prevent="executeBarcodeScan(scannerInput)" class="flex gap-2">
+                    <div class="relative flex-1">
+                      <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-mono text-sm">
+                        ▌
+                      </span>
+                      <input 
+                        v-model="scannerInput"
+                        type="text" 
+                        placeholder="Tempelkan kartu ke Barcode Scanner atau ketik NISN (misal: 0081234567)..." 
+                        class="block w-full pl-8 pr-3 py-3 text-sm font-mono border-2 border-slate-300 focus:border-slate-900 rounded-xl focus:outline-none"
+                      >
+                    </div>
+                    <button 
+                      type="submit" 
+                      class="px-5 py-3 bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-colors shadow-xs"
+                    >
+                      Scan Barcode
+                    </button>
+                  </form>
+                  <div class="flex items-center justify-between text-[11px] text-slate-400">
+                    <span>Scanner siap menerima input Code 128 / QR Code</span>
+                    <span class="text-emerald-600 font-medium">● Scanner Online & Standby</span>
+                  </div>
+                </div>
+
+                <!-- Monitor Display Card (Visual Feedback for Security Guard & Student) -->
+                <div 
+                  v-if="lastScanResult" 
+                  :class="[
+                    lastScanResult.status === 'Hadir Tepat Waktu' ? 'border-emerald-200 bg-emerald-50/40' :
+                    lastScanResult.status.includes('T-1') ? 'border-amber-200 bg-amber-50/40' :
+                    lastScanResult.status.includes('T-2') ? 'border-orange-200 bg-orange-50/40' :
+                    'border-rose-200 bg-rose-50/40',
+                    'p-6 rounded-2xl border-2 transition-all shadow-sm'
+                  ]"
+                >
+                  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+                    <div class="flex items-center gap-4">
+                      <!-- Student Photo Mock -->
+                      <div class="w-16 h-20 rounded-xl bg-slate-900 text-white flex flex-col items-center justify-center font-bold text-xs shadow-md border-2 border-white">
+                        <span class="text-xl mb-1">🎓</span>
+                        <span>FOTO</span>
+                      </div>
+                      <div>
+                        <div class="text-lg font-bold text-slate-900">{{ lastScanResult.student.name }}</div>
+                        <div class="text-xs text-slate-600 font-mono mt-0.5">
+                          NISN: <strong>{{ lastScanResult.student.nisn }}</strong> • Kelas: <strong>{{ lastScanResult.student.classroom }}</strong>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mt-1">
+                          Wali Murid: <strong>Bpk. Hendra</strong> • HP: 0812-3456-7890
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-right">
+                      <div class="text-2xl font-mono font-bold text-slate-900">{{ lastScanResult.scanTime }} WIB</div>
+                      <div class="text-[10px] text-slate-400 font-medium">Timestamp Terverifikasi Gerbang 1</div>
+                    </div>
+                  </div>
+
+                  <!-- Status Evaluation Banner -->
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 text-xs">
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+                      <div class="text-[10px] text-slate-400 font-semibold uppercase">Hasil Evaluasi:</div>
+                      <div 
+                        :class="[
+                          lastScanResult.status === 'Hadir Tepat Waktu' ? 'text-emerald-700' :
+                          lastScanResult.status.includes('T-1') ? 'text-amber-700' :
+                          lastScanResult.status.includes('T-2') ? 'text-orange-700' :
+                          'text-rose-700',
+                          'text-sm font-bold mt-0.5'
+                        ]"
+                      >
+                        {{ lastScanResult.status }}
+                      </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+                      <div class="text-[10px] text-slate-400 font-semibold uppercase">Dampak Poin Kedisiplinan:</div>
+                      <div class="text-sm font-bold text-slate-900 mt-0.5">
+                        <span :class="lastScanResult.pointsDeducted < 0 ? 'text-rose-600' : 'text-emerald-600'">
+                          {{ lastScanResult.pointsDeducted === 0 ? '0 Poin (Aman)' : lastScanResult.pointsDeducted + ' Poin Tatib' }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs">
+                      <div class="text-[10px] text-slate-400 font-semibold uppercase">WhatsApp Gateway:</div>
+                      <div class="text-xs font-bold text-emerald-700 flex items-center gap-1 mt-0.5">
+                        <span>📲</span>
+                        <span>Alert Terkirim ke Ortu</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Instruction for Security / Teacher -->
+                  <div class="mt-4 p-3 bg-white/80 rounded-xl border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm">📌</span>
+                      <span><strong>Instruksi Gerbang:</strong> {{ lastScanResult.instruction }}</span>
+                    </div>
+                    <button @click="openWhatsAppModal" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-colors">
+                      Lihat Notif WA
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Empty State before first scan -->
+                <div v-else class="p-12 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs">
+                  <div class="text-3xl mb-2">📷</div>
+                  <div class="font-bold text-slate-700">Scanner Menunggu Pemindaian Kartu</div>
+                  <div class="text-[11px] mt-1">Tempelkan barcode kartu pelajar atau klik tombol "Tap Scan" di sebelah kiri untuk menguji.</div>
+                </div>
+
+                <!-- Live Gate Scans History Table -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                  <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                    <span class="text-xs font-bold text-slate-900">Riwayat Scan Gerbang Hari Ini</span>
+                    <span class="text-[11px] text-slate-400 font-mono">{{ gateScansHistory.length }} Scan Tercatat</span>
+                  </div>
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                      <thead class="text-slate-400 uppercase tracking-wider text-[10px]">
+                        <tr>
+                          <th class="py-2">Waktu</th>
+                          <th class="py-2">Siswa</th>
+                          <th class="py-2">Kelas</th>
+                          <th class="py-2">Status</th>
+                          <th class="py-2 text-right">Poin</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr v-for="(g, idx) in gateScansHistory.slice(0, 5)" :key="idx">
+                          <td class="py-2.5 font-mono text-[11px] text-slate-500">{{ g.time }}</td>
+                          <td class="py-2.5 font-bold text-slate-900">{{ g.name }}</td>
+                          <td class="py-2.5">{{ g.classroom }}</td>
+                          <td class="py-2.5">
+                            <span 
+                              :class="g.status === 'Hadir Tepat Waktu' ? 'text-emerald-700 font-semibold' : 'text-amber-700 font-semibold'"
+                            >
+                              {{ g.status }}
+                            </span>
+                          </td>
+                          <td class="py-2.5 text-right font-mono font-bold" :class="g.points < 0 ? 'text-rose-600' : 'text-slate-400'">
+                            {{ g.points }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- PAGE: CETAK KARTU PELAJAR DENGAN BARCODE       -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'kartu_pelajar'" class="space-y-6">
+            
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h1 class="text-lg font-bold text-slate-900">Generator & Cetak Kartu Pelajar Siswa</h1>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                    Standar Fisik ISO CR-80 (85.6 x 54 mm)
+                  </span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Penerbitan kartu PVC resmi ber-barcode Code 128 & QR Code bertanda tangan digital anti-pemalsuan</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button 
+                  @click="printCard()"
+                  class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
+                >
+                  <span>🖨️</span>
+                  <span>Cetak Kartu Siswa Ini</span>
+                </button>
+                <button 
+                  @click="showToast('Menyiapkan lembar A4 berisi 10 kartu untuk cetak massal...')"
+                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
+                >
+                  📑 Cetak Massal 1 Kelas (A4)
+                </button>
+              </div>
+            </div>
+
+            <!-- Student Selector Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-3 flex-1">
+                <label class="font-bold text-slate-700 whitespace-nowrap">Pilih Siswa:</label>
+                <select 
+                  v-model="selectedStudentCardId" 
+                  @change="onSelectedStudentCardChange"
+                  class="p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none max-w-sm w-full font-medium"
+                >
+                  <option v-for="s in students" :key="s.id" :value="s.id">
+                    {{ s.name }} ({{ s.classroom }}) - NISN: {{ s.nisn }}
+                  </option>
+                </select>
+              </div>
+              <button 
+                @click="revokeAndRegenerateCard()"
+                class="text-xs text-rose-700 hover:text-rose-900 font-semibold px-3 py-1.5 rounded-xl border border-rose-200 bg-rose-50 transition-colors"
+                title="Nonaktifkan barcode lama dan terbitkan kode baru jika kartu dilaporkan hilang"
+              >
+                🔒 Revoke & Terbitkan Ulang (Jika Hilang)
+              </button>
+            </div>
+
+            <!-- CARD PREVIEW DISPLAY (FRONT & BACK - CLEAN WHITE PVC) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-center max-w-5xl mx-auto py-4">
+              
+              <!-- 1. TAMPILAN SISI DEPAN (FRONT) -->
+              <div class="space-y-2">
+                <div class="text-xs font-bold text-slate-700 uppercase tracking-wider text-center">
+                  Sisi Depan (Front View)
+                </div>
+
+                <!-- CR-80 Aspect Ratio Card Container (85.6mm x 53.98mm) -->
+                <div class="w-full max-w-[420px] mx-auto bg-white rounded-2xl border-2 border-slate-300 shadow-lg p-5 flex flex-col justify-between relative overflow-hidden text-slate-900 select-none">
+                  
+                  <!-- Top Watermark Accents -->
+                  <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-slate-100 -z-0"></div>
+                  
+                  <!-- Card Header -->
+                  <div class="flex items-center justify-between pb-3 border-b-2 border-slate-900 relative z-10">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-9 h-9 rounded-xl bg-slate-950 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        SMK
+                      </div>
+                      <div>
+                        <div class="text-[12px] font-black tracking-tight leading-none uppercase">SMK NEGERI UNGGULAN 1</div>
+                        <div class="text-[8px] text-slate-500 font-medium mt-0.5 leading-none">Jl. Pendidikan No. 45, Kota Teladan • Akreditasi A</div>
+                      </div>
+                    </div>
+                    <span class="text-[9px] font-bold uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                      Pelajar
+                    </span>
+                  </div>
+
+                  <!-- Card Body: Photo & Biodata -->
+                  <div class="py-4 flex gap-4 items-center relative z-10">
+                    <!-- Photo 3x4 Mockup -->
+                    <div class="w-20 h-28 rounded-xl bg-slate-800 text-white flex flex-col items-center justify-center border-2 border-slate-900 shadow-sm shrink-0 relative overflow-hidden">
+                      <span class="text-2xl mb-1">👨‍🎓</span>
+                      <span class="text-[8px] font-bold tracking-wider">FOTO 3X4</span>
+                      <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 text-[7px] text-center py-0.5 text-white font-mono">
+                        {{ activeCardStudent.classroom }}
+                      </div>
+                    </div>
+
+                    <!-- Biodata Fields -->
+                    <div class="text-[11px] space-y-1 leading-snug flex-1">
+                      <div>
+                        <span class="text-[9px] text-slate-400 font-semibold block uppercase">Nama Lengkap</span>
+                        <span class="font-bold text-slate-950 text-xs">{{ activeCardStudent.name }}</span>
+                      </div>
+                      <div class="grid grid-cols-2 gap-2">
+                        <div>
+                          <span class="text-[9px] text-slate-400 font-semibold block uppercase">NISN</span>
+                          <span class="font-mono font-bold">{{ activeCardStudent.nisn }}</span>
+                        </div>
+                        <div>
+                          <span class="text-[9px] text-slate-400 font-semibold block uppercase">Kelas</span>
+                          <span class="font-bold">{{ activeCardStudent.classroom }}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span class="text-[9px] text-slate-400 font-semibold block uppercase">Jurusan</span>
+                        <span class="font-medium text-[10px] text-slate-700">Rekayasa Perangkat Lunak</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Card Footer: Barcode 1D + Signed QR Code -->
+                  <div class="pt-3 border-t border-slate-200 flex items-center justify-between relative z-10">
+                    
+                    <!-- Real CSS-rendered Code 128 Barcode -->
+                    <div class="flex flex-col items-start">
+                      <div class="flex items-end h-8 gap-[2px] bg-white px-1 py-0.5 border border-slate-200 rounded">
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[3px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[4px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[3px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[3px] h-full bg-black"></span>
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[4px] h-full bg-black"></span>
+                        <span class="w-[2px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                        <span class="w-[3px] h-full bg-black"></span>
+                        <span class="w-[1px] h-full bg-black"></span>
+                      </div>
+                      <span class="text-[9px] font-mono tracking-widest text-slate-600 mt-0.5">*{{ activeCardStudent.nisn }}*</span>
+                    </div>
+
+                    <!-- QR Code with Digital Signature Token -->
+                    <div class="flex items-center gap-2">
+                      <div class="w-12 h-12 bg-slate-900 rounded-lg p-1 flex items-center justify-center text-white shrink-0">
+                        <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14 0h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 2h2v4h-2v-4zm2 2h2v2h-2v-2zm-6-4h2v2h-2v-2z"></path>
+                        </svg>
+                      </div>
+                      <div class="text-[8px] text-slate-400 font-mono leading-tight">
+                        <span class="text-emerald-700 font-bold block">HMAC-SHA256</span>
+                        <span>UID: {{ activeCardUid }}</span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+
+              <!-- 2. TAMPILAN SISI BELAKANG (BACK) -->
+              <div class="space-y-2">
+                <div class="text-xs font-bold text-slate-700 uppercase tracking-wider text-center">
+                  Sisi Belakang (Back View)
+                </div>
+
+                <div class="w-full max-w-[420px] mx-auto bg-white rounded-2xl border-2 border-slate-300 shadow-lg p-5 flex flex-col justify-between text-slate-900 select-none">
+                  
+                  <!-- Rules and Terms -->
+                  <div class="space-y-2">
+                    <div class="text-[11px] font-bold uppercase tracking-wider text-slate-900 pb-1 border-b border-slate-200">
+                      Ketentuan Kartu Pelajar
+                    </div>
+                    <ol class="text-[9px] text-slate-600 list-decimal pl-3 space-y-1 leading-relaxed">
+                      <li>Kartu ini adalah bukti identitas sah siswa SMK Negeri Unggulan 1.</li>
+                      <li>Wajib dibawa setiap hari dan di-tap pada scanner gerbang untuk pencatatan presensi.</li>
+                      <li>Dilarang meminjamkan kartu atau melakukan titip presensi (pelanggaran poin tatib).</li>
+                      <li>Jika kartu hilang/rusak, segera lapor ke bagian Tata Usaha untuk diterbitkan kartu pengganti.</li>
+                    </ol>
+                  </div>
+
+                  <!-- Headmaster Signature & Seal -->
+                  <div class="pt-4 flex items-center justify-between">
+                    <div>
+                      <div class="text-[8px] text-slate-400 font-mono">Masa Berlaku: s.d. 30 Juni 2029</div>
+                      <div class="text-[8px] text-slate-400 font-mono">Emergency: (021) 7890123</div>
+                    </div>
+                    <div class="text-center text-[9px]">
+                      <div>Kepala Sekolah,</div>
+                      <div class="font-bold text-emerald-800 text-[10px] my-1 font-mono">[TANDA TANGAN QR]</div>
+                      <div class="font-bold underline text-[9px]">Drs. H. Mulyadi M.Pd</div>
+                      <div class="text-[8px] text-slate-400 font-mono">NIP. 19680815 199303 1 004</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
         </main>
       </div>
 
@@ -1810,6 +2295,14 @@
             items.push({ id: 'presensi', title: 'Kehadiran Siswa', icon: '✅' });
           }
 
+          if (['admin', 'wali_kelas', 'bk'].includes(role)) {
+            items.push({ id: 'scanner', title: 'Scanner Barcode Gerbang', icon: '📷', badge: 'Live' });
+          }
+
+          if (['admin', 'wali_kelas', 'bk', 'orang_tua', 'siswa'].includes(role)) {
+            items.push({ id: 'kartu_pelajar', title: 'Cetak Kartu Pelajar', icon: '🪪' });
+          }
+
           if (['admin', 'bk', 'wali_kelas', 'orang_tua', 'siswa'].includes(role)) {
             items.push({ id: 'pelanggaran', title: 'Kedisiplinan & Tatib', icon: '⚠️', badge: '2 SP' });
           }
@@ -2282,6 +2775,104 @@
           showToast(`File ${type}_SMK1_2026.xlsx berhasil digenerate.`);
         };
 
+        // ==========================================
+        // SCANNER & BARCODE STATE
+        // ==========================================
+        const scannerTime = ref('06:45');
+        const scannerInput = ref('');
+        const lastScanResult = ref(null);
+        const gateScansHistory = ref([
+          { time: '06:40', name: 'Annisa Putri', classroom: 'XII-MM-1', status: 'Hadir Tepat Waktu', points: 0 },
+          { time: '06:45', name: 'Siti Nurhaliza', classroom: 'X-RPL-1', status: 'Hadir Tepat Waktu', points: 0 },
+          { time: '06:50', name: 'Rina Kartika', classroom: 'X-RPL-1', status: 'Hadir Tepat Waktu', points: 0 }
+        ]);
+
+        const executeBarcodeScan = (nisnInput) => {
+          if (!nisnInput) return;
+          const cleanNisn = nisnInput.trim().replace(/\*/g, '');
+          const student = students.value.find(s => s.nisn === cleanNisn || s.name.toLowerCase().includes(cleanNisn.toLowerCase()));
+
+          if (!student) {
+            showToast(`Error: Barcode ${cleanNisn} tidak terdaftar di database siswa!`);
+            return;
+          }
+
+          const time = scannerTime.value;
+          let statusText = 'Hadir Tepat Waktu';
+          let points = 0;
+          let instructionText = 'Siswa dipersilakan masuk ke kelas untuk mengikuti literasi pagi.';
+
+          if (time === '07:10') {
+            statusText = 'Terlambat Ringan (T-1)';
+            points = -2;
+            instructionText = 'Siswa diberikan dispensasi masuk kelas dan tercatat -2 poin tatib.';
+          } else if (time === '07:25') {
+            statusText = 'Terlambat Sedang (T-2)';
+            points = -5;
+            instructionText = 'Pintu gerbang ditutup. Siswa diarahkan ke pos piket untuk pembinaan karakter.';
+          } else if (time === '07:45') {
+            statusText = 'Terlambat Berat (T-3)';
+            points = -10;
+            instructionText = 'Siswa langsung diserahkan ke Guru BK untuk pemanggilan orang tua.';
+          }
+
+          // Update student demerit points if late
+          if (points < 0) {
+            student.demeritPoints += Math.abs(points);
+          }
+
+          // Update or add in attendance list
+          const attRecord = attendanceList.value.find(a => a.nisn === student.nisn);
+          if (attRecord) {
+            attRecord.checkInTime = time;
+            attRecord.status = points < 0 ? 'Terlambat' : 'Hadir';
+            attRecord.notes = `Scan Gerbang: ${statusText}`;
+          }
+
+          lastScanResult.value = {
+            student: student,
+            scanTime: time,
+            status: statusText,
+            pointsDeducted: points,
+            instruction: instructionText
+          };
+
+          gateScansHistory.value.unshift({
+            time: time,
+            name: student.name,
+            classroom: student.classroom,
+            status: statusText,
+            points: points
+          });
+
+          scannerInput.value = '';
+          showToast(`Tap Berhasil! ${student.name} [${statusText}]. Notifikasi WA terkirim.`);
+        };
+
+        // ==========================================
+        // KARTU PELAJAR GENERATOR STATE
+        // ==========================================
+        const selectedStudentCardId = ref(1);
+        const activeCardStudent = computed(() => {
+          return students.value.find(s => s.id === parseInt(selectedStudentCardId.value)) || students.value[0];
+        });
+
+        const activeCardUid = ref('CRD-88912-X');
+
+        const onSelectedStudentCardChange = () => {
+          activeCardUid.value = 'CRD-' + Math.floor(10000 + Math.random() * 90000) + '-X';
+        };
+
+        const printCard = () => {
+          showToast(`Mengirim data kartu ${activeCardStudent.value.name} ke printer ID Card PVC...`);
+          window.print();
+        };
+
+        const revokeAndRegenerateCard = () => {
+          activeCardUid.value = 'CRD-' + Math.floor(10000 + Math.random() * 90000) + '-NEW';
+          showToast(`Barcode lama di-revoke. Barcode digital baru berhasil di-generate untuk ${activeCardStudent.value.name}!`);
+        };
+
         return {
           isLoggedIn,
           sidebarOpen,
@@ -2379,7 +2970,22 @@
           openWhatsAppModal,
 
           paginationRangeText,
-          exportMockData
+          exportMockData,
+
+          // Scanner & Gate Barcode
+          scannerTime,
+          scannerInput,
+          lastScanResult,
+          gateScansHistory,
+          executeBarcodeScan,
+
+          // Student Card Generator
+          selectedStudentCardId,
+          activeCardStudent,
+          activeCardUid,
+          onSelectedStudentCardChange,
+          printCard,
+          revokeAndRegenerateCard
         };
       }
     }).mount('#app');

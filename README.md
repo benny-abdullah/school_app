@@ -49,15 +49,28 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
 3. **Uji Coba Presensi Cepat (Bulk Mode)**:
    - Sebagai Wali Kelas, klik tombol **"✓ Set Semua Hadir"** atau klik tombol cepat `H`, `S`, `I`, `A`, `T` pada baris siswa.
    - Jika diset `A` (Alpa), sistem akan memicu simulasi peringatan WhatsApp ke orang tua.
-4. **Uji Coba Pencatatan Pelanggaran & Cetak SP**:
+4. **Uji Coba Simulator Barcode Scanner Gerbang (0.3s/Siswa)**:
+   - Buka menu **Scanner Barcode Gerbang** (Role Admin / Wali Kelas / BK).
+   - Pilih skenario waktu simulasi:
+     - `06:45 WIB`: Hadir Tepat Waktu (0 poin tatib).
+     - `07:10 WIB`: Terlambat Ringan T-1 (-2 poin tatib).
+     - `07:25 WIB`: Terlambat Sedang T-2 (-5 poin tatib & pembinaan gerbang).
+     - `07:45 WIB`: Terlambat Berat T-3 (-10 poin tatib & panggilan BK).
+   - Klik tombol **"Tap Scan"** pada siswa atau ketik NISN `0081234567`. Monitor gerbang langsung bereaksi menampilkan foto siswa, status kehadiran, kalkulasi poin, dan notifikasi WhatsApp ke orang tua.
+5. **Uji Coba Generator & Cetak Kartu Pelajar PVC**:
+   - Buka menu **Cetak Kartu Pelajar**.
+   - Pilih nama siswa untuk melihat preview bolak-balik (*front & back view*) kartu fisik standar ISO CR-80 (85.6 x 54 mm).
+   - Kartu memuat Barcode 1D (Code 128) dan QR Code 2D bertanda tangan digital (HMAC-SHA256).
+   - Klik tombol **"🖨️ Cetak Kartu Siswa Ini"** untuk simulasi print atau tombol **"Revoke"** jika kartu hilang.
+6. **Uji Coba Pencatatan Pelanggaran & Cetak SP**:
    - Masuk ke menu **Kedisiplinan & Tatib**, klik **"+ Catat Pelanggaran Siswa"**.
    - Pilih siswa dan jenis pelanggaran (misal: *Merokok di area kantin*). Poin (-50) dan tingkat keparahan otomatis terisi.
    - Klik simpan, lalu klik tombol **"📄 Lihat SP"** pada tabel untuk melihat pratinjau dokumen resmi Surat Peringatan (SP) ber-QR Code verifikasi.
-5. **Uji Coba Kanal Aduan & Whistleblowing (Anti-Bullying)**:
+7. **Uji Coba Kanal Aduan & Whistleblowing (Anti-Bullying)**:
    - Masuk ke menu **Pusat Aduan / Whistle**, klik **"+ Tulis Aduan Baru"**.
    - Centang opsi *"Kirim sebagai Anonim (Whistleblower)"* untuk menguji fitur perlindungan identitas siswa/orang tua.
    - Klik tombol **"💬 Buka Obrolan Investigasi"** untuk menguji komunikasi dua arah terenkripsi antara pelapor dan pihak sekolah.
-6. **Uji Coba Notifikasi WhatsApp**:
+8. **Uji Coba Notifikasi WhatsApp**:
    - Klik tombol **"📱 Tes Notif WA"** di header atas untuk melihat jendela simulasi pesan WhatsApp resmi yang diterima di ponsel orang tua secara *real-time*.
-7. **Uji Coba Kepatuhan ISO 27001 (Admin)**:
+9. **Uji Coba Kepatuhan ISO 27001 (Admin)**:
    - Masuk ke menu **Log Audit ISO 27001** (Role Admin) untuk memeriksa pencatatan audit trail *immutable* (*Who, What, When, IP Address, Compliance Status*).
