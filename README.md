@@ -80,8 +80,21 @@ Pada halaman login dan header aplikasi, tersedia **Quick Role Switcher** untuk m
     - Beralih ke **Role Guru BK / Admin**: Dapat melihat **seluruh siswa di seluruh kelas sekolah**.
 11. **Uji Coba Manajemen Pengguna (Admin)**:
     - Buka menu **Manajemen Pengguna** (Role Admin) untuk melihat daftar akun, hak akses role, dan batasan cakupan data (*Data Scope*).
-    - Coba tombol **"+ Tambah Pengguna Baru"**, tombol toggle **Aktif/Nonaktif**, dan fitur **Reset Sandi**.
+    - Coba tombol **"+ Tambah Pengguna Baru"** — kolom **Cakupan Data (Scope)** kini berupa **Dropdown List Dinamis** yang otomatis terisolasi sesuai pilihan peran pengguna (Admin = Seluruh Sekolah, Wali Kelas = Pilihan Kelas, Ortu/Siswa = Pilihan Siswa).
+    - Coba tombol toggle **Aktif/Nonaktif**, dan fitur **Reset Sandi**.
 12. **Uji Coba Backup Data Terenkripsi ISO 27001 (Admin)**:
     - Buka menu **Backup Data ISO 27001** (Role Admin).
     - Periksa ringkasan strategi redundansi **Aturan 3-2-1** (Lokal + Offsite AWS S3 Vault, enkripsi AES-256-GCM, SHA-256 Checksum).
     - Klik tombol **"⚡ Buat Cadangan Baru Sekarang"** untuk mensimulasikan pencadangan instan, atau tombol **"📥 Unduh (.enc)"**.
+13. **Uji Coba Pengajuan Izin / Sakit Mandiri oleh Orang Tua**:
+    - Beralih ke **Role Orang Tua Siswa** (atau Admin/Wali Kelas), klik tombol **"📝 Ajukan Izin / Sakit"** di Dashboard atau menu Kehadiran.
+    - Isi formulir permohonan izin (Sakit dengan surat dokter terlampir atau urusan keluarga mendesak) lalu klik kirim.
+    - Beralih ke **Role Wali Kelas**: Banner peringatan otomatis muncul memberitahukan adanya pengajuan izin baru. Klik **"✓ Setujui Izin"** untuk mengupdate presensi menjadi Sakit/Izin dan membebaskan dari penalti Auto-Alpa.
+14. **Uji Coba Digital Gate Pass (Izin Keluar Gerbang Satpam)**:
+    - Buka menu **Scanner Barcode Gerbang**, klik tab **"🎫 Verifikasi Tiket Izin Keluar (Digital Gate Pass)"** atau klik tombol **"+ Terbitkan Gate Pass"**.
+    - Terbitkan izin keluar siswa (misal: sakit demam di UKS dan dijemput orang tua).
+    - Satpam memeriksa kecocokan identitas penjemput dan mengklik tombol **"✓ Izinkan Keluar & Buka Palang"**. Waktu keluar tercatat otomatis dengan token verifikasi QR.
+15. **Uji Coba Presensi KBM Per Jam Mapel (Deteksi Siswa Membolos)**:
+    - Buka menu **Kehadiran Siswa**, lalu klik tab **"📚 Presensi KBM Jam Mapel (Guru Kelas)"**.
+    - Pilih mata pelajaran (misal: *Pemrograman Web & Mobile* atau *Matematika Terapan*).
+    - Guru memantau kehadiran siswa di jam pelajaran. Jika siswa hadir di gerbang pagi namun tidak berada di kelas saat KBM (status: *Membolos*), klik tombol **"🚨 Lapor Membolos ke BK"** untuk langsung mendokumentasikan pelanggaran disiplin KBM (+10 Poin Tatib) dan notifikasi ke Guru BK & Wali Kelas.
