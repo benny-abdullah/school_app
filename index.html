@@ -251,6 +251,314 @@
       background-color: transparent;
       border-top: 1px solid var(--bs-border-color);
     }
+
+    /* =================================================== */
+    /* METIS AUTHENTICATION / LOGIN STYLES                 */
+    /* =================================================== */
+    .auth-layout {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr;
+      background-color: #ffffff;
+    }
+
+    @media (min-width: 992px) {
+      .auth-layout {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .auth-layout {
+        grid-template-columns: 1fr 1.1fr;
+      }
+    }
+
+    .auth-main {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    @media (min-width: 576px) {
+      .auth-main {
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .auth-main {
+        padding: 2.5rem 3.5rem;
+      }
+    }
+
+    .auth-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .auth-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #09090b;
+      text-decoration: none;
+    }
+
+    .auth-brand:hover {
+      color: #09090b;
+    }
+
+    .auth-brand-logo {
+      width: 32px;
+      height: 32px;
+      background-color: var(--bs-primary);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      border-radius: 8px;
+    }
+
+    .auth-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      max-width: 25rem; /* 400px */
+      margin-inline: auto;
+      padding-block: 1rem;
+    }
+
+    .auth-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-heading h1 {
+      font-size: 1.625rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.375rem;
+      color: #09090b;
+    }
+
+    .auth-heading p {
+      font-size: 0.875rem;
+      color: #71717a;
+      margin-bottom: 0;
+    }
+
+    .auth-form .form-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #3f3f46;
+      margin-bottom: 0.375rem;
+    }
+
+    .auth-form .form-control,
+    .auth-form .form-select {
+      padding-block: 0.5625rem;
+      border-color: #e4e4e7;
+      border-radius: 6px;
+      font-size: 0.875rem;
+    }
+
+    .auth-form .form-control:focus,
+    .auth-form .form-select:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .auth-form .form-label-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .auth-form .form-label-row a {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--bs-primary);
+      text-decoration: none;
+    }
+
+    .auth-form .form-label-row a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-password {
+      position: relative;
+    }
+
+    .auth-password .form-control {
+      padding-right: 2.75rem;
+    }
+
+    .auth-password-toggle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 2.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: none;
+      padding: 0;
+      color: #71717a;
+      cursor: pointer;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .auth-password-toggle:hover {
+      color: #09090b;
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-block: 1.25rem;
+      color: #71717a;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: #e4e4e7;
+    }
+
+    .auth-social {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.625rem;
+    }
+
+    .auth-social .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      padding-block: 0.5rem;
+      border-radius: 6px;
+      border-color: #e4e4e7;
+      color: #18181b;
+    }
+
+    .auth-social .btn:hover {
+      background-color: #f4f4f5;
+      border-color: #d4d4d8;
+      color: #09090b;
+    }
+
+    .auth-footnote {
+      margin-top: 1.5rem;
+      font-size: 0.8125rem;
+      color: #71717a;
+      text-align: center;
+    }
+
+    .auth-legal {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #a1a1aa;
+      text-align: center;
+    }
+
+    /* Right column - the aside */
+    .auth-aside {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3.5rem;
+      background-color: #f4f4f5;
+      border-left: 1px solid #e4e4e7;
+    }
+
+    @media (min-width: 992px) {
+      .auth-aside {
+        display: flex;
+      }
+    }
+
+    .auth-aside-inner {
+      max-width: 28rem;
+      margin-inline: auto;
+    }
+
+    .auth-quote {
+      font-size: 1.25rem;
+      line-height: 1.5;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #09090b;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-points {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+    }
+
+    .auth-points li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      padding-block: 0.5rem;
+      font-size: 0.875rem;
+      color: #52525b;
+    }
+
+    .auth-points li i {
+      color: var(--bs-primary);
+      font-size: 1.1rem;
+      line-height: 1.3;
+      flex-shrink: 0;
+    }
+
+    .auth-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e4e4e7;
+    }
+
+    .auth-stats dt {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      color: #09090b;
+    }
+
+    .auth-stats dd {
+      margin: 0;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #71717a;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-800 antialiased selection:bg-slate-900 selection:text-white min-h-screen">
@@ -258,257 +566,159 @@
   <div id="app" v-cloak>
 
     <!-- ========================================== -->
-    <!-- 1. WELCOME PAGE (EDUCATION LANDING PAGE)   -->
+    <!-- 1. METIS AUTHENTICATION / SIGN IN PAGE      -->
     <!-- ========================================== -->
-    <div v-if="!isLoggedIn" class="min-h-screen bg-[#EDE9FE] py-6 sm:py-10 px-4 sm:px-6 lg:px-8 flex items-center justify-center font-sans antialiased selection:bg-[#7C3AED] selection:text-white">
-      
-      <!-- Main White Card Container (Matching Dribbble Reference) -->
-      <div class="max-w-6xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden border border-purple-100 flex flex-col justify-between p-6 sm:p-10 lg:p-12 relative">
-        
-        <!-- Top Navigation Bar -->
-        <header class="flex items-center justify-between pb-8 border-b border-purple-50">
-          <!-- Logo & Brand Name -->
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-[#7C3AED] text-white flex items-center justify-center shadow-md shadow-purple-200 flex-shrink-0">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="text-base font-extrabold text-slate-900 tracking-tight leading-none">SDN Kebonagung</div>
-              <div class="text-[11px] font-semibold text-[#7C3AED] mt-0.5">Kota Pasuruan</div>
-            </div>
-          </div>
-
-          <!-- Nav Links (Desktop) -->
-          <nav class="hidden md:flex items-center gap-8 text-xs font-semibold text-slate-600">
-            <a href="#beranda" class="text-[#7C3AED] font-bold">Home</a>
-            <a href="#fitur" @click.prevent="showLoginModal = true" class="hover:text-[#7C3AED] transition-colors">Products</a>
-            <a href="#integrasi" @click.prevent="showLoginModal = true" class="hover:text-[#7C3AED] transition-colors">Integration</a>
-            <a href="#tatib" @click.prevent="showLoginModal = true" class="hover:text-[#7C3AED] transition-colors">Blog</a>
-          </nav>
-
-          <!-- Top Right Action Button: GET A DEMO / LOGIN -->
-          <div>
-            <button 
-              @click="showLoginModal = true"
-              class="border-2 border-[#7C3AED] text-[#7C3AED] hover:bg-[#7C3AED] hover:text-white px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs cursor-pointer active:scale-95"
-            >
-              GET A DEMO / LOGIN
+    <div v-if="!isLoggedIn" class="auth-layout">
+      <!-- Left Column: The Form -->
+      <main class="auth-main">
+        <div class="auth-topbar">
+          <a class="auth-brand" href="#" @click.prevent>
+            <span class="auth-brand-logo">M</span>
+            <span>Metis</span>
+          </a>
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-light text-secondary border px-2 py-1 small">v2.4 Production</span>
+            <button type="button" class="btn btn-sm btn-outline-secondary" aria-label="Toggle theme">
+              <i class="bi bi-sun-fill"></i>
             </button>
           </div>
-        </header>
+        </div>
 
-        <!-- Hero Section -->
-        <div class="py-8 sm:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          <!-- Left Column: Hero Text Content -->
-          <div class="lg:col-span-7 flex flex-col justify-center space-y-6">
-            
-            <!-- Hand-drawn Coral Decorative Strokes (Matching Dribbble Image) -->
-            <div class="flex items-center gap-1.5 pl-1">
-              <svg class="w-8 h-6 text-[#F43F5E]" viewBox="0 0 32 20" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round">
-                <path d="M4 16L11 4M16 18L16 2M28 16L21 4"></path>
-              </svg>
-              <span class="text-[11px] font-bold uppercase tracking-wider text-[#F43F5E]">Portal Kesiswaan Digital Terpadu</span>
-            </div>
-
-            <!-- Big Headline with Purple Dot -->
-            <h1 class="text-3xl sm:text-4xl lg:text-[46px] font-black text-slate-900 leading-[1.18] tracking-tight">
-              Take student <span class="relative inline-block">experience<span class="absolute -top-1 right-0 text-[#F43F5E]"></span></span> to the next level<span class="inline-block w-3 h-3 rounded-full bg-[#7C3AED] ml-1.5 align-baseline"></span>
-            </h1>
-
-            <!-- Subtitle in Indonesian -->
-            <p class="text-sm text-slate-500 leading-relaxed max-w-lg">
-              SDN Kebonagung Kota Pasuruan menghadirkan sistem monitoring digital terpadu: presensi barcode gerbang 0.3s, buku saku kedisiplinan & SP otomatis, bank prestasi, serta koneksi informasi langsung ke orang tua siswa.
-            </p>
-
-            <!-- CTA Action Buttons -->
-            <div class="flex flex-wrap items-center gap-3 pt-2">
-              <button 
-                @click="showLoginModal = true"
-                class="bg-[#7C3AED] hover:bg-[#6D28D9] text-white px-7 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-200 transition-all inline-flex items-center gap-2 cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
-              >
-                <span>LEARN NOW</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-              </button>
-
-              <button 
-                @click="showLoginModal = true"
-                class="bg-purple-50 hover:bg-purple-100 text-[#7C3AED] px-5 py-3.5 rounded-xl font-bold text-xs border border-purple-200 transition-all cursor-pointer"
-              >
-                <span>⚡ Demo Multi-Role Login</span>
-              </button>
-            </div>
-
+        <div class="auth-body">
+          <div class="auth-heading">
+            <h1>Sign in</h1>
+            <p>Gunakan akun dinas atau pilih akun demo di bawah untuk masuk ke dashboard.</p>
           </div>
 
-          <!-- Right Column: Arch Container & PNS Teacher Character -->
-          <div class="lg:col-span-5 flex items-center justify-center relative mt-4 lg:mt-0">
-            
-            <!-- Arch / Dome Container (Matching Dribbble violet dome) -->
-            <div class="w-72 h-80 sm:w-80 sm:h-96 rounded-t-full bg-gradient-to-b from-[#8B5CF6] to-[#7C3AED] relative flex items-end justify-center shadow-xl border-4 border-white overflow-hidden">
-              <!-- PNS Teacher Character Image holding books -->
-              <img 
-                src="pns_teacher.png" 
-                alt="Guru PNS SDN Kebonagung Kota Pasuruan" 
-                class="w-full h-full object-cover object-top scale-105 transform hover:scale-110 transition-transform duration-500"
-              />
+          <!-- Quick Demo Role Switcher Pills -->
+          <div class="mb-3">
+            <label class="form-label d-block text-muted small fw-semibold mb-2">PILIH ROLE DEMO (1-KLIK):</label>
+            <div class="d-flex flex-wrap gap-1">
+              <button 
+                v-for="(r, key) in roles" 
+                :key="key" 
+                type="button" 
+                class="btn btn-sm"
+                :class="selectedRoleKey === key ? 'btn-primary' : 'btn-outline-secondary'"
+                @click="selectDemoRole(key)"
+                style="font-size: 0.75rem; padding: 4px 10px; border-radius: 6px;"
+              >
+                <span>{{ r.icon }} {{ r.label }}</span>
+              </button>
+            </div>
+          </div>
+
+          <form class="auth-form" @submit.prevent="login" novalidate>
+            <div class="mb-3">
+              <label class="form-label" for="login-email">Email address</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="login-email" 
+                autocomplete="username"
+                v-model="loginForm.email" 
+                placeholder="you@school.sch.id" 
+                required
+              >
             </div>
 
-            <!-- Floating Badge 1: Google Drive / Cloud Badge (Top Right) -->
-            <div class="absolute -top-3 -right-2 sm:-right-4 bg-white p-2.5 rounded-2xl shadow-lg border border-purple-100 flex items-center justify-center animate-bounce duration-1000">
-              <svg class="w-6 h-6" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M12 2L4 16h4.5l5.5-9.5z"/>
-                <path fill="#0F9D58" d="M20 16H4l2.5 4.5h16z"/>
-                <path fill="#FFBB00" d="M12 2l8 14h-4.5L10 6.5z"/>
-              </svg>
-            </div>
-
-            <!-- Floating Badge 2: Video / YouTube Badge (Middle Right) -->
-            <div class="absolute top-1/2 -right-4 sm:-right-6 bg-white p-2.5 rounded-2xl shadow-lg border border-purple-100 flex items-center justify-center">
-              <svg class="w-6 h-6 text-[#EA4335]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            </div>
-
-            <!-- Floating Badge 3: School Identity Badge (Bottom Left) -->
-            <div class="absolute bottom-6 -left-4 sm:-left-6 bg-white p-2.5 rounded-2xl shadow-lg border border-purple-100 flex items-center gap-2">
-              <span class="text-xl">🏫</span>
-              <div class="text-[10px] font-bold text-slate-800 leading-tight">
-                SDN Kebonagung<br><span class="text-[#7C3AED] font-medium">Kota Pasuruan</span>
+            <div class="mb-3">
+              <div class="form-label-row">
+                <label class="form-label" for="login-password">Password</label>
+                <a href="#" @click.prevent="showToast('Fitur reset sandi: silakan hubungi Admin IT Sekolah')">Forgot?</a>
+              </div>
+              <div class="auth-password">
+                <input 
+                  :type="showPassword ? 'text' : 'password'" 
+                  class="form-control" 
+                  id="login-password"
+                  autocomplete="current-password" 
+                  v-model="loginForm.password" 
+                  placeholder="Enter your password" 
+                  required
+                >
+                <button 
+                  type="button" 
+                  class="auth-password-toggle" 
+                  @click="showPassword = !showPassword"
+                  :aria-label="showPassword ? 'Hide password' : 'Show password'"
+                >
+                  <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
               </div>
             </div>
 
-            <!-- Decorative Dot Grid (Bottom Right) -->
-            <div class="absolute -bottom-4 -right-4 grid grid-cols-4 gap-1.5 opacity-30 pointer-events-none">
-              <div v-for="i in 16" :key="i" class="w-1.5 h-1.5 rounded-full bg-[#7C3AED]"></div>
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="login-remember" checked>
+              <label class="form-check-label small text-muted" for="login-remember">Ingat sesi ini (30 hari)</label>
             </div>
 
-          </div>
-
-        </div>
-
-        <!-- Bottom Integration / Partner Bar (Matching Dribbble Pill Cards) -->
-        <div class="mt-8 pt-6 border-t border-purple-50 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div class="bg-[#F5F3FF] border border-purple-100 rounded-2xl py-3 px-4 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 shadow-2xs hover:bg-purple-100/60 transition-colors">
-            <span class="text-base">🏛️</span>
-            <span>Kemendikbudristek</span>
-          </div>
-          <div class="bg-[#F5F3FF] border border-purple-100 rounded-2xl py-3 px-4 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 shadow-2xs hover:bg-purple-100/60 transition-colors">
-            <span class="text-base">📍</span>
-            <span>Disdikbud Pasuruan</span>
-          </div>
-          <div class="bg-[#F5F3FF] border border-purple-100 rounded-2xl py-3 px-4 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 shadow-2xs hover:bg-purple-100/60 transition-colors">
-            <span class="text-base">✨</span>
-            <span>Kurikulum Merdeka</span>
-          </div>
-          <div class="bg-[#F5F3FF] border border-purple-100 rounded-2xl py-3 px-4 flex items-center justify-center gap-2 text-xs font-bold text-slate-800 shadow-2xs hover:bg-purple-100/60 transition-colors">
-            <span class="text-base">🔒</span>
-            <span>ISO 27001 ISMS</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ========================================== -->
-      <!-- MODAL: LOGIN POPUP                        -->
-      <!-- ========================================== -->
-      <div v-if="showLoginModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-purple-100 relative max-h-[92vh] overflow-y-auto">
-          
-          <!-- Close Button -->
-          <button @click="showLoginModal = false" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-          </button>
-
-          <!-- Header inside modal -->
-          <div class="text-center mb-6">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-[#7C3AED] text-white shadow-md mb-2">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-slate-900">Masuk Portal Kesiswaan</h3>
-            <p class="text-xs text-[#7C3AED] font-semibold mt-0.5">SDN Kebonagung Kota Pasuruan</p>
-            <span class="inline-flex items-center gap-1 mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              ISO 27001 Certified System
-            </span>
-          </div>
-
-          <!-- Role Demo Selector -->
-          <div class="mb-5">
-            <label class="block text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-2">
-              Pilih Peran untuk Uji Coba Cepat (Mockup Demo):
-            </label>
-            <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-              <button 
-                v-for="(r, key) in roles" 
-                :key="key"
-                @click="selectDemoRole(key)"
-                type="button"
-                :class="[
-                  selectedRoleKey === key 
-                    ? 'border-[#7C3AED] bg-[#7C3AED] text-white font-medium shadow-sm' 
-                    : 'border-slate-200 bg-white text-slate-700 hover:border-purple-300 hover:bg-purple-50/50',
-                  'p-2 text-xs rounded-xl border text-left transition-all flex flex-col justify-between cursor-pointer'
-                ]"
-              >
-                <div class="font-bold flex items-center gap-1.5">
-                  <span>{{ r.icon }}</span>
-                  <span class="truncate">{{ r.label }}</span>
-                </div>
-                <div class="text-[9px] opacity-80 mt-1 truncate">{{ r.email }}</div>
-              </button>
-            </div>
-          </div>
-
-          <!-- Regular Login Form -->
-          <form @submit.prevent="login" class="space-y-3.5 text-xs">
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">Email Pengguna</label>
-              <input 
-                v-model="loginForm.email" 
-                type="email" 
-                required 
-                class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-[#7C3AED] focus:outline-none"
-              >
-            </div>
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">Kata Sandi</label>
-              <input 
-                v-model="loginForm.password" 
-                type="password" 
-                required 
-                class="w-full p-2.5 border border-slate-200 rounded-xl focus:border-[#7C3AED] focus:outline-none"
-              >
-            </div>
-
-            <div class="flex items-center justify-between text-[11px]">
-              <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer">
-                <input type="checkbox" checked class="rounded border-slate-300 text-[#7C3AED]">
-                <span>Ingat sesi ini (30 hari)</span>
-              </label>
-              <span class="text-[#7C3AED] hover:underline cursor-pointer">Lupa kata sandi?</span>
-            </div>
-
-            <div class="pt-2">
-              <button 
-                type="submit" 
-                class="w-full py-3 bg-[#7C3AED] hover:bg-[#6D28D9] text-white rounded-xl font-bold text-xs uppercase tracking-wider shadow-md shadow-purple-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Masuk ke Sistem</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-              </button>
-            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <span>Sign in to Dashboard</span>
+            </button>
           </form>
 
-        </div>
-      </div>
+          <div class="auth-divider">atau login dengan</div>
 
+          <div class="auth-social">
+            <button type="button" class="btn btn-outline-secondary" @click="selectDemoRole('admin'); login();">
+              <i class="bi bi-google text-danger"></i>
+              <span>Google SSO</span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" @click="selectDemoRole('wali_kelas'); login();">
+              <i class="bi bi-shield-check text-primary"></i>
+              <span>SSO Kemdikbud</span>
+            </button>
+          </div>
+
+          <p class="auth-footnote">
+            Perlu akun baru? 
+            <a href="#" @click.prevent="showToast('Pendaftaran akun dikelola langsung oleh Tim Dapodik / BK Sekolah.')" class="text-primary text-decoration-none fw-medium">Hubungi Admin Sekolah</a>
+          </p>
+        </div>
+
+        <p class="auth-legal">Demo Prototype &mdash; SDN Kebonagung Pasuruan &middot; ISO/IEC 27001 ISMS Compliant.</p>
+      </main>
+
+      <!-- Right Column: The Sunken Aside With Features & Stats -->
+      <aside class="auth-aside">
+        <div class="auth-aside-inner">
+          <p class="auth-quote">Sistem Manajemen Kesiswaan, Presensi Gerbang 0.3s, Kedisiplinan & Merit Bank Terpadu.</p>
+          <ul class="auth-points">
+            <li>
+              <i class="bi bi-check-circle-fill"></i>
+              <span><strong>3 Mode Waktu Scanner Gerbang:</strong> Pagi Masuk, Siang Gate Pass, dan Sore Kepulangan dengan auto-switch.</span>
+            </li>
+            <li>
+              <i class="bi bi-check-circle-fill"></i>
+              <span><strong>Prinsip Keadilan:</strong> Siswa yang lupa tap kartu kepulangan tidak dihukum Alpa jika presensi KBM kelasnya hadir.</span>
+            </li>
+            <li>
+              <i class="bi bi-check-circle-fill"></i>
+              <span><strong>Notifikasi Realtime WhatsApp:</strong> Kabar instan ke wali murid saat anak tiba dan melintasi gerbang pulang.</span>
+            </li>
+            <li>
+              <i class="bi bi-check-circle-fill"></i>
+              <span><strong>Poin Prestasi & Tatib Bertingkat:</strong> Penanganan pelanggaran adil berbasis poin dan auto-generate Surat Panggilan.</span>
+            </li>
+          </ul>
+          <dl class="auth-stats">
+            <div>
+              <dt>432</dt>
+              <dd>Siswa Aktif</dd>
+            </div>
+            <div>
+              <dt>0.3s</dt>
+              <dd>RFID / Barcode</dd>
+            </div>
+            <div>
+              <dt>ISO 27001</dt>
+              <dd>Keamanan Data</dd>
+            </div>
+          </dl>
+        </div>
+      </aside>
     </div>
 
     <!-- ========================================== -->
@@ -556,15 +766,15 @@
 
               <!-- Right Controls: Theme Toggle, Fullscreen, Notifications, User Menu -->
               <div class="d-flex align-items-center gap-2 ms-auto">
-                <!-- Landing Page Switcher -->
+                <!-- Logout Button -->
                 <button 
-                  @click="isLoggedIn = false" 
-                  class="btn btn-sm btn-outline-secondary d-none d-xl-inline-flex align-items-center gap-1.5 py-1 px-2.5" 
+                  @click="logout" 
+                  class="btn btn-sm btn-outline-danger d-none d-xl-inline-flex align-items-center gap-1.5 py-1 px-2.5" 
                   style="font-size: 0.75rem; border-radius: 6px;"
-                  title="Kembali ke Landing Page"
+                  title="Keluar dari Dashboard"
                 >
-                  <i class="bi bi-globe"></i>
-                  <span>Landing Page</span>
+                  <i class="bi bi-box-arrow-right"></i>
+                  <span>Keluar</span>
                 </button>
 
                 <!-- Role Selector -->
@@ -4673,6 +4883,8 @@
           password: '••••••••'
         });
 
+        const showPassword = ref(false);
+
         // Toast State
         const toast = ref({
           show: false,
@@ -6619,6 +6831,7 @@
 
         return {
           isLoggedIn,
+          showPassword,
           showLoginModal,
           sidebarOpen,
           activePage,
