@@ -18,11 +18,11 @@ Anda berperan sebagai **Lead Orchestrator Agent**.
 Tugas Anda adalah mengoordinasikan pembangunan sistem produksi **EduTrack Pro (SDN Kebonagung Kota Pasuruan)** menggunakan ekosistem **Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + Drizzle ORM + PostgreSQL 16 + Redis BullMQ)** berdasarkan dokumentasi Single Source of Truth di folder `plan/docs/` dan konsep acuan antarmuka di `C:\scholl_app\index.html`.
 
 Daftar Acuan SSOT:
-- `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang)
-- `plan/docs/02_DESIGN_SYSTEM.md` (Dominan Putih Minimalis, Bootstrap 5 Modern, Charts, Audio Feedback)
-- `plan/docs/03_ARSITEKTUR.md` (JavaScript/TypeScript Monorepo, DDL 21 Tabel PostgreSQL 16, BullMQ & Dual Deployment)
+- `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang, Studio Bahan Ajar AI & Copilot)
+- `plan/docs/02_DESIGN_SYSTEM.md` (Metis Bootstrap 5 Admin Dashboard, Colorlib Login Form 11, Charts, Audio Feedback, AI Tokens)
+- `plan/docs/03_ARSITEKTUR.md` (JavaScript/TypeScript Monorepo, DDL 21 Tabel PostgreSQL 16, BullMQ, AI Service & Dual Deployment)
 - `plan/docs/04_DESIGN_PATTERN.md` (3-Mode Scanner Pattern, Checkout Justice, HMAC Token & AES-256)
-- `plan/docs/05_DESIGN_UI.md` (Wireframe 15 Halaman Sistem, Meja Scanner 3-Mode & Kartu CR-80)
+- `plan/docs/05_DESIGN_UI.md` (Wireframe 16 Halaman Metis Admin, Meja Scanner 3-Mode, Studio Bahan Ajar AI & Kartu CR-80)
 - `plan/docs/06_PROJECT_MANAGEMENT.md` (WBS JavaScript, Roadmap 5 Fase, Risk Register & DoD)
 - `plan/docs/07_ORCHESTRASI.md` (Topologi Swarm JavaScript, Batas Wilayah Worker & Gerbang Eksekusi)
 

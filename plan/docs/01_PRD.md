@@ -1,9 +1,10 @@
 # Product Requirements Document (PRD): EduTrack Pro
 **Aplikasi**: Sistem Monitoring Terpadu Sekolah (EduTrack Pro)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Versi**: 2.5 (SSOT Canonical - Production Blueprint)  
+**Versi**: 2.6 (SSOT Canonical - Production Blueprint & AI Integration)  
 **Teknologi Acuan**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + PostgreSQL 16 + Redis)  
-**Estetika UI**: Dominan Putih Minimalis Modern Profesional (Bootstrap 5 Effects + Tailwind Utility)  
+**Estetika UI & Tema**: Metis Bootstrap 5 Admin Dashboard Template + Colorlib Login Form 11 + Responsive Mini-Collapsible Sidebar  
+**Fitur Unggulan**: Presensi Gerbang 3-Mode, Tatib & SP, Bank Prestasi, Aduan AES-256, Studio Bahan Ajar AI & Floating Copilot (Kurikulum Merdeka 2026)  
 **Standar Regulasi**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi (UU PDP No. 27/2022)
 
 ---
@@ -112,14 +113,41 @@ Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi 
 - CRUD lengkap biodata GTK: NIP, NUPTK, Nama Lengkap & Gelar, Gender, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Kontak WhatsApp, dan Status Keaktifan.
 - Seluruh mutasi GTK tercatat dalam Log Audit ISO 27001.
 
-### Modul 9: Komponen Tampilan Wajib (Putih Minimalis Modern Profesional)
+### Modul 9: Komponen Tampilan Wajib (Metis Bootstrap 5 & Colorlib Form 11)
 Setiap tabel dan tampilan fitur wajib dilengkapi:
-1. **Dynamic Pagination**: Navigasi halaman cepat dengan indikator jumlah baris dan pemilih *per-page* (10, 25, 50).
-2. **Debounced Instant Search**: Kolom cari teks reaktif yang memfilter data secara instan saat mengetik.
-3. **Multi-Criteria Dynamic Filters**: Dropdown filter kombinasi (Rombel, Status Kehadiran, Tingkat Kasus, dll.) dengan tombol *Reset Filter*.
-4. **Data Visualization Charts**: Grafik batang kehadiran mingguan/bulanan (Chart.js / ApexCharts), donut chart disiplin vs prestasi, dan sparkline mini.
-5. **Info Cards & KPI Widgets**: Kartu putih dengan bayangan halus (`shadow-sm`), border tipis, angka statistik besar, dan lencana tren persentase.
-6. **Info Icons & Semantic Badges**: Ikon vektor SVG (Bootstrap Icons / Octicons) dan lencana status berpewarna semantik tegas (Emerald, Blue, Amber, Rose, Sky).
+1. **Tema Baku Metis Admin**: Layout sidebar vertikal responsif (260px expanded, 68px collapsed mini-sidebar, drawer overlay mobile), top header dengan logo Metis, toggle button, search input Ctrl+K, role switcher badge, quick logout, notification bell, dan profile menu.
+2. **Halaman Autentikasi Colorlib Form 11**: Desain 2-kolom split modern. Kolom kiri form sign-in dengan 5 quick-switch role chips (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa), kolom kanan hero value proposition sekolah dengan visual point & trust metrics (432 Siswa, 0.3s RFID, ISO 27001).
+3. **Dynamic Pagination & Filtering**: Navigasi halaman cepat dengan indikator jumlah baris, pemilih *per-page* (10, 25, 50), debounced search reaktif, multi-filter dropdown, dan tombol reset filter instan.
+4. **Data Visualization Charts**: Grafik batang presensi mingguan/bulanan, kurva revenue/aktivitas, donut chart disiplin vs prestasi, dan sparkline mini.
+
+### Modul 10: AI Executive Decision Support & Smart Insight
+- **Executive Morning Briefing**: Widget khusus di bagian atas Dashboard Admin & Kepala Sekolah yang menyajikan analisis analitis kehadiran pagi secara real-time (contoh: 94.8% hadir, anomali kesiswaan terdeteksi).
+- **Proactive Anomaly Detection**: Mendeteksi pola kritis kesiswaan, seperti siswa yang Alpa 3 hari berturut-turut atau akumulasi poin pelanggaran mencapai ambang batas SP.
+- **Instant Action Trigger**: Tombol aksi langsung dari card briefing untuk mendrafkan Surat Panggilan (SP), menjadwalkan Home Visit Guru BK, atau membuka dialog interaktif bersama AI Copilot.
+
+### Modul 11: Studio Bahan Ajar & Asisten Mengajar AI (Kurikulum Merdeka 2026)
+Khusus role **Guru (Wali Kelas)** dan **Admin/Kepsek**:
+1. **Generator Modul Ajar (RPP Lengkap)**:
+   - Menghasilkan draf Modul Ajar terstruktur: Identitas Umum, Capaian Pembelajaran (CP), Alur Tujuan Pembelajaran (ATP), Model Pembelajaran (PBL, PjBL, Discovery, Inquiry, Cooperative), Dimensi Profil Pelajar Pancasila, Kegiatan Pembelajaran (Pendahuluan, Inti, Penutup), dan Asesmen Terdiferensiasi.
+2. **Generator Bank Soal HOTS & Asesmen AKM**:
+   - Menghasilkan soal pilihan ganda kompleks dan uraian berbasis stimulus kontekstual nyata, indikator asesmen, serta rubrik kunci jawaban.
+3. **Lembar Kerja Peserta Didik (LKPD)**:
+   - Menghasilkan lembar aktivitas belajar kolaboratif siap cetak yang memandu investigasi siswa.
+4. **Rubrik Penilaian Ketercapaian Tujuan Pembelajaran (KKTP)**:
+   - Menghasilkan matriks interval nilai standar BSKAP Kemendikbudristek (Perlu Bimbingan, Cukup, Baik, Sangat Baik).
+5. **Ice Breaking & Pembelajaran Bermakna**:
+   - Menghasilkan ide kuis energik, games interaktif 5-10 menit, dan pantun pembuka KBM yang relevan dengan topik mapel.
+6. **Program Remedial & Pengayaan**:
+   - Menghasilkan strategi bimbingan ulang untuk siswa di bawah KKTP dan materi tantangan eksploratif bagi siswa yang telah tuntas.
+7. **Action Toolbar Siap Pakai**: Salin teks 1-klik (`copyAiOutput`), Cetak dokumen instan (`printAiOutput`), dan Unduh berkas format Rich Text / Word (`downloadAiOutput`).
+
+### Modul 12: Floating AI Copilot & Slide-Out Chat Assistant
+- **Floating Launcher Pill**: Tombol mengambang di pojok kanan bawah bergradasi modern (`linear-gradient(135deg, #2563eb, #7c3aed)`) dengan lencana status online hijau.
+- **Slide-Out Chat Drawer**: Panel interaktif setinggi 570px dilengkapi:
+  - Header AI EduAssistant dengan tombol tutup cepat.
+  - Chips Promp Cepat: *"📊 Ringkas presensi hari ini"*, *"⚠️ Cek alpa berulang"*, *"📄 Draf SP / surat ortu"*, *"📱 Draf WA ortu"*, *"❓ 3 Soal HOTS kilat"*.
+  - Riwayat percakapan reaktif dengan gelembung chat kontras dan timestamp.
+  - Formulir input terintegrasi data riil kesiswaan untuk drafting cepat.
 
 ---
 

@@ -48,11 +48,11 @@ graph LR
 
 | Pihak Sekolah | Manfaat Nyata Sistem Produksi Target |
 | :--- | :--- |
-| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* berbasis **desain dominan putih minimalis modern** dengan grafik Chart.js mingguan; modul Master GTK (Guru & Pegawai) terlindung penuh; backup otomatis redundansi 3-2-1 aman dari kehilangan data. |
+| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* berbasis **Metis Bootstrap 5 Admin Dashboard** dengan kartu AI Executive Briefing pagi hari dan grafik Chart.js mingguan; modul Master GTK (Guru & Pegawai) terlindung penuh; backup otomatis redundansi 3-2-1 aman dari kehilangan data. |
 | **🛡️ Guru BK / Kesiswaan** | Otomatisasi SP 1-3 ber-QR resmi tanpa ketik manual; deteksi dini siswa alpa 3 hari berturut-turut untuk rekomendasi kunjungan rumah (*Home Visit*); kanal aduan perundungan terenkripsi AES-256 yang aman secara hukum UU PDP. |
-| **📋 Wali Kelas & Guru Mapel** | Absensi harian selesai dalam 10 detik (tombol *Set Semua Hadir*); presensi KBM jam pelajaran mendeteksi siswa membolos KBM (+10 Poin Tatib); verifikasi pengajuan izin sakit ortu yang fleksibel. |
+| **📋 Wali Kelas & Guru Mapel** | **Studio Bahan Ajar AI (Kurikulum Merdeka 2026)**: Susun Modul Ajar RPP, Bank Soal HOTS/AKM, LKPD, dan Rubrik KKTP dalam hitungan detik; didampingi Floating AI Copilot untuk draf surat, soal kilat, dan pesan WA ortu; absensi harian selesai dalam 10 detik (tombol *Set Semua Hadir*); presensi KBM jam pelajaran mendeteksi siswa membolos KBM (+10 Poin Tatib); verifikasi pengajuan izin sakit ortu yang fleksibel. |
 | **👮 Petugas Keamanan (Satpam)**| Pemindai gerbang otomatis beralih fungsi 3 mode (Pagi Masuk, Siang Gate Pass, Sore Pulang); nada suara Web Audio API (*Beep* masuk, *Buzz* terlambat, *Chime* pulang); verifikasi tiket izin keluar (*Digital Gate Pass*) sekali klik. |
-| **👨‍👩‍👦 Orang Tua / Wali Murid** | Menerima **2 kepastian notifikasi WhatsApp setiap hari**: saat anak tiba di sekolah pagi hari dan saat anak melangkah keluar gerbang sore hari; kemudahan mengajukan izin sakit ringan 1 hari dari rumah tanpa harus mencari surat dokter. |
+| **👨‍👩‍👦 Orang Tua / Wali Murid** | Form login elegan **Colorlib Form 11**; menerima **2 kepastian notifikasi WhatsApp setiap hari**: saat anak tiba di sekolah pagi hari dan saat anak melangkah keluar gerbang sore hari; kemudahan mengajukan izin sakit ringan 1 hari dari rumah tanpa harus mencari surat dokter. |
 
 ---
 

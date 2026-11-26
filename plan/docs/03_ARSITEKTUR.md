@@ -40,6 +40,7 @@ graph TD
         CARD["🪪 PVC ISO CR-80 Generator & One-Card One-Active Manager"]
         NOTIF["📲 WhatsApp Notification Dispatcher (Check-in & Check-out)"]
         AUDIT["📝 Immutable Audit Logger (ISO 27001 A.12.4)"]
+        AI_ENGINE["✨ AI EduAssistant & Teaching Studio Engine (Kurikulum Merdeka 2026)"]
         end
     end
 
@@ -105,7 +106,9 @@ edutrack-app/
 │   │   ├── CheckoutJusticeService.ts        # Keadilan lupa tap pulang vs KBM
 │   │   ├── BarcodeCryptoService.ts          # HMAC-SHA256 & Code 128
 │   │   ├── FieldEncryptionService.ts        # AES-256-GCM cipher
-│   │   └── WhatsAppQueueService.ts          # BullMQ queue dispatcher
+│   │   ├── WhatsAppQueueService.ts          # BullMQ queue dispatcher
+│   │   ├── AiTeachingStudioService.ts       # Generator Modul Ajar, Soal HOTS, LKPD & KKTP
+│   │   └── AiCopilotEngineService.ts        # Chat context kesiswaan, draf SP, WA & briefing
 │   ├── jobs/
 │   │   ├── AutoAlpaCronJob.ts               # Cron cutoff jam 08:00 WIB
 │   │   ├── SendWhatsAppNotificationJob.ts   # Worker pengiriman WA masuk & pulang
@@ -125,13 +128,17 @@ edutrack-app/
 │   ├── migrations/                          # Berkas migrasi SQL
 │   └── seeders/                             # Data seeder SDN Kebonagung
 ├── app/ (atau client/)                       # Frontend Vue 3 (Migrasi 1:1 index.html)
+│   ├── layouts/
+│   │   ├── MetisAdminLayout.vue             # Shell Metis (Sidebar 260px/68px, Navbar, Floating Copilot)
+│   │   └── AuthLayout.vue                   # Split layout Colorlib Form 11
 │   ├── components/
 │   │   ├── ui/                              # Pagination, SearchBar, MultiFilter, InfoCards
-│   │   ├── charts/                          # TrendBarChart, DisciplineDonutChart
+│   │   ├── charts/                          # TrendBarChart, DisciplineDonutChart, RevenueChart
 │   │   ├── scanner/                         # GateScannerStation, WebAudioFeedback
-│   │   └── cards/                           # StudentCardCR80Preview
-│   ├── pages/                               # Rute Halaman (Dashboard, Presensi, Scanner, dll.)
-│   └── composables/                         # useAttendance, useRoleScope, useAudioScanner
+│   │   ├── cards/                           # StudentCardCR80Preview
+│   │   └── ai/                              # AiTeachingStudio, AiCopilotDrawer, AiBriefingCard
+│   ├── pages/                               # Rute Halaman (Dashboard, Presensi, Bahan Ajar, Scanner, dll.)
+│   └── composables/                         # useAttendance, useRoleScope, useAudioScanner, useAiTeachingStudio
 ├── package.json
 ├── tsconfig.json
 └── ecosystem.config.js                      # PM2 Cluster Mode Configuration

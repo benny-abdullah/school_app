@@ -938,6 +938,49 @@
           <!-- ============================================== -->
           <div v-if="activePage === 'dashboard'" class="space-y-4">
 
+            <!-- 0. METIS AI EXECUTIVE BRIEFING & SMART INSIGHT CARD -->
+            <div class="card border-0 mb-4 overflow-hidden shadow-xs" style="background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%); border: 1px solid #dbeafe !important; border-radius: 12px;">
+              <div class="card-body p-3 p-md-4">
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-3 flex-shrink-0" style="width: 44px; height: 44px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+                      <i class="bi bi-stars fs-4"></i>
+                    </div>
+                    <div>
+                      <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="badge bg-primary text-white" style="font-size: 0.65rem;">AI Executive Briefing</span>
+                        <span class="text-muted small">&middot; Analisis Real-Time Pagi Hari</span>
+                      </div>
+                      <h6 class="mb-1 fw-bold text-dark" style="font-size: 0.95rem;">
+                        Tingkat Kehadiran 94.8% &middot; Ditemukan 1 Kasus Kesiswaan Perlu Tindak Lanjut Segera
+                      </h6>
+                      <p class="mb-0 text-muted small">
+                        Budi Santoso (XI-TKJ-2) tercatat Alpa 3 hari berturut-turut. Disarankan menerbitkan Surat Panggilan Orang Tua fisik dan jadwalkan Home Visit BK.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-md-auto w-100 w-md-auto justify-content-end">
+                    <button 
+                      class="btn btn-sm btn-white border bg-white shadow-2xs d-inline-flex align-items-center gap-1.5 py-1.5 px-3 fw-medium text-dark" 
+                      style="border-radius: 8px; font-size: 0.78rem;"
+                      @click="sendAiChatMessage('Drafkan surat panggilan ortu untuk Budi Santoso'); showAiChat = true;"
+                    >
+                      <i class="bi bi-file-earmark-text text-primary"></i>
+                      <span>Drafkan SP & Surat</span>
+                    </button>
+                    <button 
+                      class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1.5 py-1.5 px-3 fw-medium" 
+                      style="border-radius: 8px; font-size: 0.78rem;"
+                      @click="showAiChat = true"
+                    >
+                      <i class="bi bi-chat-dots-fill"></i>
+                      <span>Buka AI Copilot</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- 1. ROW OF 4 METIS STATS CARDS (EXACT METIS LAYOUT & TOKENS) -->
             <div class="row g-3 g-lg-4 mb-4">
               <!-- Card 1: TOTAL USERS -->
@@ -3835,6 +3878,339 @@
 
           </div>
 
+          <!-- ============================================== -->
+          <!-- STUDIO BAHAN AJAR & ASISTEN GURU AI (KURIKULUM MERDEKA) -->
+          <!-- ============================================== -->
+          <div v-if="activePage === 'bahan_ajar'" class="space-y-4">
+            
+            <!-- 1. HEADER BANNER CARD -->
+            <div class="card border-0 shadow-xs rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white;">
+              <div class="card-body p-4 position-relative">
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary rounded-3 text-white flex-shrink-0" style="width: 52px; height: 52px; box-shadow: 0 4px 14px rgba(37,99,235,0.4);">
+                      <i class="bi bi-stars fs-3"></i>
+                    </div>
+                    <div>
+                      <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="badge bg-primary text-white" style="font-size: 0.7rem;">Kurikulum Merdeka 2026</span>
+                        <span class="badge bg-white text-dark" style="font-size: 0.7rem;">AI Teaching Studio</span>
+                        <span class="badge bg-emerald-500 text-white" style="font-size: 0.7rem;">Fase A - F</span>
+                      </div>
+                      <h4 class="fw-bold mb-1 text-white">Studio Bahan Ajar & Asisten Guru AI</h4>
+                      <p class="mb-0 text-white-50 small">
+                        Penyusunan instan Modul Ajar RPP, Bank Soal HOTS / Asesmen AKM, Lembar Kerja (LKPD), Rubrik KKTP, Ice Breaking KBM, serta Program Remedial & Pengayaan.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <button class="btn btn-sm btn-outline-light d-inline-flex align-items-center gap-2 px-3 py-2 rounded-2" @click="showAiChat = true">
+                      <i class="bi bi-chat-dots-fill text-info"></i>
+                      <span>Chat AI Copilot</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. TOOL SELECTOR TABS -->
+            <div class="card border-0 shadow-xs rounded-3">
+              <div class="card-body p-2 p-md-3">
+                <div class="row g-2">
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'modul_ajar' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'modul_ajar'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-book fs-5" :class="aiToolActive === 'modul_ajar' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Modul Ajar</div>
+                        <small :class="aiToolActive === 'modul_ajar' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">RPP Lengkap</small>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'bank_soal' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'bank_soal'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-card-checklist fs-5" :class="aiToolActive === 'bank_soal' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Bank Soal</div>
+                        <small :class="aiToolActive === 'bank_soal' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">HOTS & AKM</small>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'lkpd' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'lkpd'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-file-earmark-spreadsheet fs-5" :class="aiToolActive === 'lkpd' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Lembar LKPD</div>
+                        <small :class="aiToolActive === 'lkpd' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">Aktivitas Siswa</small>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'rubrik_kktp' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'rubrik_kktp'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-ui-checks-grid fs-5" :class="aiToolActive === 'rubrik_kktp' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Rubrik KKTP</div>
+                        <small :class="aiToolActive === 'rubrik_kktp' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">Kriteria Nilai</small>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'ice_breaking' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'ice_breaking'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-controller fs-5" :class="aiToolActive === 'ice_breaking' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Ice Breaking</div>
+                        <small :class="aiToolActive === 'ice_breaking' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">Kuis & Fun Game</small>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="col-6 col-md-4 col-lg-2">
+                    <button 
+                      class="btn w-100 py-2 px-2 text-start d-flex align-items-center gap-2 border rounded-2"
+                      :class="aiToolActive === 'remedial' ? 'btn-primary text-white border-primary shadow-xs' : 'btn-light text-dark bg-white border-slate-200'"
+                      @click="aiToolActive = 'remedial'"
+                      style="font-size: 0.8rem;"
+                    >
+                      <i class="bi bi-arrow-repeat fs-5" :class="aiToolActive === 'remedial' ? 'text-white' : 'text-primary'"></i>
+                      <div>
+                        <div class="fw-semibold lh-1">Remedial</div>
+                        <small :class="aiToolActive === 'remedial' ? 'text-white-50' : 'text-muted'" style="font-size: 0.65rem;">& Pengayaan</small>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. MAIN WORKSPACE: CONFIG PANEL + OUTPUT PREVIEW -->
+            <div class="row g-4">
+              <!-- CONFIG PANEL (LEFT) -->
+              <div class="col-lg-5">
+                <div class="card border-0 shadow-xs rounded-3 h-100">
+                  <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+                    <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-2">
+                      <i class="bi bi-sliders2 text-primary"></i>
+                      <span>Parameter & Konfigurasi Materi</span>
+                    </h6>
+                    <span class="badge bg-light text-secondary border">Step 1</span>
+                  </div>
+                  <div class="card-body p-4 space-y-3">
+                    <!-- Quick Presets -->
+                    <div>
+                      <label class="form-label text-muted small fw-semibold mb-1">Preset Topik Cepat:</label>
+                      <div class="d-flex flex-wrap gap-1">
+                        <button type="button" class="badge bg-slate-100 text-slate-700 border hover:bg-slate-200 cursor-pointer" @click="setAiPreset('Pecahan Senilai dan Operasi Hitung', 'Matematika', 'Kelas 4 (Fase B)')">
+                          ➗ Pecahan (Matematika)
+                        </button>
+                        <button type="button" class="badge bg-slate-100 text-slate-700 border hover:bg-slate-200 cursor-pointer" @click="setAiPreset('Siklus Air dan Pengaruhnya Terhadap Cuaca', 'IPAS (Sains)', 'Kelas 5 (Fase C)')">
+                          💧 Siklus Air (IPAS)
+                        </button>
+                        <button type="button" class="badge bg-slate-100 text-slate-700 border hover:bg-slate-200 cursor-pointer" @click="setAiPreset('Teks Cerita Fantasi dan Tokoh Cerita', 'Bahasa Indonesia', 'Kelas 4 (Fase B)')">
+                          📖 Teks Fantasi (B.Indo)
+                        </button>
+                        <button type="button" class="badge bg-slate-100 text-slate-700 border hover:bg-slate-200 cursor-pointer" @click="setAiPreset('Keragaman Suku Bangsa dan Budaya Indonesia', 'Pendidikan Pancasila', 'Kelas 5 (Fase C)')">
+                          🇮🇩 Bhinneka Tunggal Ika
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Mata Pelajaran -->
+                    <div>
+                      <label class="form-label text-dark fw-semibold small mb-1">Mata Pelajaran</label>
+                      <select class="form-select form-select-sm rounded-2" v-model="aiSubject">
+                        <option value="Matematika">Matematika</option>
+                        <option value="IPAS (Sains)">IPAS (Ilmu Pengetahuan Alam & Sosial)</option>
+                        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                        <option value="Bahasa Inggris">Bahasa Inggris</option>
+                        <option value="Pendidikan Pancasila">Pendidikan Pancasila (PPKn)</option>
+                        <option value="Informatika">Informatika / Literasi Digital</option>
+                        <option value="Seni Budaya">Seni Budaya & Prakarya</option>
+                      </select>
+                    </div>
+
+                    <!-- Fase & Kelas -->
+                    <div>
+                      <label class="form-label text-dark fw-semibold small mb-1">Jenjang / Fase & Kelas</label>
+                      <select class="form-select form-select-sm rounded-2" v-model="aiGrade">
+                        <option value="Kelas 1 (Fase A)">Fase A - Kelas 1 SD</option>
+                        <option value="Kelas 2 (Fase A)">Fase A - Kelas 2 SD</option>
+                        <option value="Kelas 3 (Fase B)">Fase B - Kelas 3 SD</option>
+                        <option value="Kelas 4 (Fase B)">Fase B - Kelas 4 SD</option>
+                        <option value="Kelas 5 (Fase C)">Fase C - Kelas 5 SD</option>
+                        <option value="Kelas 6 (Fase C)">Fase C - Kelas 6 SD</option>
+                        <option value="Kelas 7-9 (Fase D)">Fase D - Jenjang SMP</option>
+                        <option value="Kelas 10-12 (Fase E/F)">Fase E/F - Jenjang SMA/SMK</option>
+                      </select>
+                    </div>
+
+                    <!-- Topik / Materi -->
+                    <div>
+                      <label class="form-label text-dark fw-semibold small mb-1">Topik / Materi Pembelajaran</label>
+                      <input 
+                        type="text" 
+                        class="form-control form-control-sm rounded-2" 
+                        placeholder="Contoh: Pecahan Senilai dan Operasi Hitung Campuran" 
+                        v-model="aiTopic"
+                      />
+                    </div>
+
+                    <!-- Model Pembelajaran -->
+                    <div>
+                      <label class="form-label text-dark fw-semibold small mb-1">Model Pembelajaran Kurikulum Merdeka</label>
+                      <select class="form-select form-select-sm rounded-2" v-model="aiModel">
+                        <option value="Problem Based Learning (PBL)">Problem Based Learning (PBL)</option>
+                        <option value="Project Based Learning (PjBL)">Project Based Learning (PjBL)</option>
+                        <option value="Discovery Learning">Discovery Learning (Penyingkapan)</option>
+                        <option value="Inquiry Based Learning">Inquiry Based Learning (Penyelidikan)</option>
+                        <option value="Cooperative Learning">Cooperative Learning</option>
+                        <option value="Game-Based Learning">Game-Based Learning / Pembelajaran Menyenangkan</option>
+                      </select>
+                    </div>
+
+                    <!-- Alokasi Waktu & Jumlah Soal -->
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <label class="form-label text-dark fw-semibold small mb-1">Alokasi Waktu</label>
+                        <select class="form-select form-select-sm rounded-2" v-model="aiDuration">
+                          <option value="1 x 35 Menit (1 JP)">1 x 35 Menit (1 JP)</option>
+                          <option value="2 x 35 Menit (2 JP)">2 x 35 Menit (2 JP)</option>
+                          <option value="3 x 35 Menit (3 JP)">3 x 35 Menit (3 JP)</option>
+                          <option value="2 Pertemuan (4 JP)">2 Pertemuan (4 JP)</option>
+                        </select>
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label text-dark fw-semibold small mb-1">Jumlah Butir / Variasi</label>
+                        <select class="form-select form-select-sm rounded-2" v-model="aiCount">
+                          <option :value="3">3 Butir Soal / Sesi</option>
+                          <option :value="5">5 Butir Soal / Sesi</option>
+                          <option :value="10">10 Butir Soal / Sesi</option>
+                          <option :value="15">15 Butir Soal / Sesi</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Action Generate Button -->
+                    <div class="pt-2">
+                      <button 
+                        class="btn btn-primary w-100 py-2.5 rounded-2 fw-semibold d-flex align-items-center justify-content-center gap-2 shadow-xs"
+                        :disabled="isAiGenerating || !aiTopic.trim()"
+                        @click="generateAiMaterial"
+                      >
+                        <span v-if="isAiGenerating" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <i v-else class="bi bi-cpu-fill"></i>
+                        <span>{{ isAiGenerating ? 'AI Sedang Menyusun Dokumen...' : 'Generate Bahan Ajar dengan AI' }}</span>
+                      </button>
+                    </div>
+
+                    <div class="text-muted small text-center" style="font-size: 0.72rem;">
+                      <i class="bi bi-shield-check text-emerald-600"></i> Standar BSKAP Kemendikbudristek & Profil Pelajar Pancasila.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OUTPUT & PREVIEW (RIGHT) -->
+              <div class="col-lg-7">
+                <div class="card border-0 shadow-xs rounded-3 h-100 d-flex flex-column">
+                  <div class="card-header bg-white border-bottom py-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                      <h6 class="mb-0 fw-bold text-dark d-flex align-items-center gap-1.5">
+                        <i class="bi bi-file-earmark-text text-primary"></i>
+                        <span>Hasil Dokumen Terbitan AI</span>
+                      </h6>
+                      <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.68rem;" v-if="aiOutput">Siap Digunakan</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-1.5">
+                      <button 
+                        class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 px-2 py-1" 
+                        style="font-size: 0.75rem;" 
+                        :disabled="!aiOutput"
+                        @click="copyAiOutput"
+                        title="Salin ke Clipboard"
+                      >
+                        <i class="bi bi-clipboard"></i>
+                        <span class="d-none d-sm-inline">Salin</span>
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1 px-2 py-1" 
+                        style="font-size: 0.75rem;" 
+                        :disabled="!aiOutput"
+                        @click="printAiOutput"
+                        title="Cetak Dokumen"
+                      >
+                        <i class="bi bi-printer"></i>
+                        <span class="d-none d-sm-inline">Cetak</span>
+                      </button>
+                      <button 
+                        class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1 px-2.5 py-1" 
+                        style="font-size: 0.75rem;" 
+                        :disabled="!aiOutput"
+                        @click="downloadAiOutput"
+                        title="Unduh File Dokumen"
+                      >
+                        <i class="bi bi-download"></i>
+                        <span>Unduh File</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="card-body p-3 p-md-4 flex-grow-1 bg-slate-50 overflow-auto" style="max-height: 600px;">
+                    <!-- Loading state -->
+                    <div v-if="isAiGenerating" class="text-center py-5">
+                      <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                      <h6 class="fw-bold text-dark">AI Sedang Merumuskan Dokumen Kurikulum Merdeka...</h6>
+                      <p class="text-muted small mb-0">Menyusun Capaian Pembelajaran, Alur Tujuan (ATP), Rubrik KKTP, dan asesmen terdiferensiasi.</p>
+                    </div>
+
+                    <!-- Output display -->
+                    <div v-else-if="aiOutput" class="bg-white p-4 rounded-3 border border-slate-200 shadow-2xs font-sans text-dark" style="white-space: pre-wrap; font-size: 0.88rem; line-height: 1.65;">
+{{ aiOutput }}
+                    </div>
+
+                    <!-- Empty state -->
+                    <div v-else class="text-center py-5 text-muted">
+                      <i class="bi bi-journal-richtext display-4 text-slate-300 mb-3 d-block"></i>
+                      <h6 class="fw-semibold text-secondary">Belum Ada Dokumen Yang Dibuat</h6>
+                      <p class="small mb-3" style="max-width: 380px; margin: 0 auto;">Pilih jenis bahan ajar, atur parameter mata pelajaran di sebelah kiri, lalu klik tombol "Generate Bahan Ajar dengan AI".</p>
+                      <button class="btn btn-sm btn-outline-primary" @click="generateAiMaterial">
+                        <i class="bi bi-play-circle me-1"></i> Buat Sampel Modul Ajar
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="card-footer bg-white border-top py-2 px-3 d-flex justify-content-between align-items-center text-muted" style="font-size: 0.75rem;">
+                    <span>Format: Markdown / Rich Text &middot; Kompatibel Microsoft Word & Google Docs</span>
+                    <span class="text-emerald-600 fw-medium"><i class="bi bi-check2-all me-1"></i>Terverifikasi Kurikulum Merdeka</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
           <!-- METIS ADMIN FOOTER -->
           <footer class="admin-footer py-3 mt-4 border-top bg-white rounded-2 px-3 shadow-none">
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-muted" style="font-size: 0.78rem;">
@@ -4835,6 +5211,148 @@
       </div>
     </transition>
 
+    <!-- ========================================== -->
+    <!-- FLOATING AI COPILOT LAUNCHER & CHAT DRAWER -->
+    <!-- ========================================== -->
+    <div v-if="isLoggedIn">
+      <!-- 1. FLOATING LAUNCHER BUTTON -->
+      <button 
+        type="button"
+        class="btn position-fixed d-flex align-items-center gap-2 text-white shadow-lg fw-semibold"
+        style="bottom: 24px; right: 24px; z-index: 1045; border-radius: 50px; padding: 10px 18px; background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); border: 1.5px solid rgba(255,255,255,0.35); box-shadow: 0 10px 25px -3px rgba(37,99,235,0.45), 0 4px 6px -4px rgba(37,99,235,0.2) !important; transition: all 0.25s ease;"
+        @click="showAiChat = !showAiChat"
+        title="Buka AI EduAssistant"
+      >
+        <div class="d-flex align-items-center justify-content-center bg-white text-primary rounded-circle" style="width: 26px; height: 26px;">
+          <i :class="showAiChat ? 'bi bi-x-lg text-dark' : 'bi bi-stars text-primary'" style="font-size: 0.85rem;"></i>
+        </div>
+        <span style="font-size: 0.85rem;" class="d-none d-sm-inline">{{ showAiChat ? 'Tutup Copilot' : '✨ AI Copilot' }}</span>
+        <span class="position-absolute top-0 start-100 translate-middle p-1.5 bg-emerald-500 border border-white rounded-circle">
+          <span class="visually-hidden">AI Online</span>
+        </span>
+      </button>
+
+      <!-- 2. SLIDE-OUT / POPUP CHAT DRAWER -->
+      <transition
+        enter-active-class="transform transition ease-out duration-300"
+        enter-from-class="translate-y-4 opacity-0 scale-95"
+        enter-to-class="translate-y-0 opacity-100 scale-100"
+        leave-active-class="transform transition ease-in duration-200"
+        leave-from-class="translate-y-0 opacity-100 scale-100"
+        leave-to-class="translate-y-4 opacity-0 scale-95"
+      >
+        <div 
+          v-if="showAiChat"
+          class="card position-fixed border shadow-2xl rounded-4 overflow-hidden d-flex flex-column"
+          style="bottom: 82px; right: 24px; width: 395px; max-width: calc(100vw - 32px); height: 570px; max-height: calc(100vh - 105px); z-index: 1050; border-color: #cbd5e1 !important;"
+        >
+          <!-- Chat Header -->
+          <div class="card-header border-bottom py-3 px-3 text-white d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+            <div class="d-flex align-items-center gap-2.5">
+              <div class="d-inline-flex align-items-center justify-content-center bg-primary text-white rounded-circle shadow-xs" style="width: 36px; height: 36px;">
+                <i class="bi bi-stars fs-5"></i>
+              </div>
+              <div>
+                <div class="d-flex align-items-center gap-1.5">
+                  <h6 class="mb-0 fw-bold text-white" style="font-size: 0.9rem;">EduAssistant AI</h6>
+                  <span class="badge bg-emerald-500 text-white rounded-pill px-1.5 py-0.5" style="font-size: 0.6rem;">Online</span>
+                </div>
+                <small class="text-slate-300" style="font-size: 0.72rem;">Kesiswaan, SOP & Kurikulum Merdeka</small>
+              </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" @click="showAiChat = false" aria-label="Close"></button>
+          </div>
+
+          <!-- Quick Action Prompt Chips -->
+          <div class="bg-slate-50 border-bottom px-3 py-2 overflow-x-auto text-nowrap d-flex gap-1.5 scrollbar-thin">
+            <button 
+              type="button" 
+              class="btn btn-xs bg-white border border-slate-200 text-dark rounded-pill py-1 px-2.5 shadow-2xs fw-medium text-nowrap" 
+              style="font-size: 0.7rem;"
+              @click="sendAiChatMessage('Ringkas presensi hari ini')"
+            >
+              📊 Ringkasan Kehadiran
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-xs bg-white border border-slate-200 text-dark rounded-pill py-1 px-2.5 shadow-2xs fw-medium text-nowrap" 
+              style="font-size: 0.7rem;"
+              @click="sendAiChatMessage('Cek siswa yang alpa berulang dan butuh SP')"
+            >
+              ⚠️ Cek Alpa Berulang
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-xs bg-white border border-slate-200 text-dark rounded-pill py-1 px-2.5 shadow-2xs fw-medium text-nowrap" 
+              style="font-size: 0.7rem;"
+              @click="sendAiChatMessage('Drafkan surat panggilan ortu untuk Budi Santoso')"
+            >
+              📄 Draf SP / Surat
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-xs bg-white border border-slate-200 text-dark rounded-pill py-1 px-2.5 shadow-2xs fw-medium text-nowrap" 
+              style="font-size: 0.7rem;"
+              @click="sendAiChatMessage('Draf pesan WhatsApp resmi ke wali murid')"
+            >
+              📱 Draf WA Ortu
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-xs bg-white border border-slate-200 text-dark rounded-pill py-1 px-2.5 shadow-2xs fw-medium text-nowrap" 
+              style="font-size: 0.7rem;"
+              @click="sendAiChatMessage('Buatkan 3 soal HOTS kilat matematika')"
+            >
+              ❓ 3 Soal HOTS
+            </button>
+          </div>
+
+          <!-- Chat Body: Messages History -->
+          <div class="card-body p-3 overflow-y-auto flex-grow-1 bg-white space-y-3" style="font-size: 0.82rem;">
+            <div 
+              v-for="(msg, idx) in aiChatMessages" 
+              :key="idx"
+              class="d-flex flex-column"
+              :class="msg.sender === 'user' ? 'align-items-end' : 'align-items-start'"
+            >
+              <div class="d-flex align-items-center gap-1.5 mb-1 text-muted" style="font-size: 0.68rem;">
+                <span class="fw-semibold">{{ msg.sender === 'user' ? 'Anda' : 'EduAssistant AI' }}</span>
+                <span>&middot; {{ msg.time }}</span>
+              </div>
+              <div 
+                class="p-2.5 rounded-3 shadow-2xs"
+                :class="msg.sender === 'user' ? 'bg-primary text-white' : 'bg-slate-100 text-dark border border-slate-200'"
+                style="max-width: 90%; white-space: pre-wrap; line-height: 1.5; font-size: 0.8rem;"
+              >
+                {{ msg.text }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Footer: Input Box -->
+          <div class="card-footer bg-light border-top p-2.5">
+            <form @submit.prevent="sendAiChatMessage()" class="d-flex align-items-center gap-2">
+              <input 
+                type="text" 
+                class="form-control form-control-sm rounded-pill px-3 py-2 bg-white border-slate-300"
+                placeholder="Tanya kesiswaan, surat, atau materi..."
+                v-model="aiChatInput"
+                style="font-size: 0.8rem;"
+              />
+              <button 
+                type="submit" 
+                class="btn btn-sm btn-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 shadow-xs"
+                style="width: 36px; height: 36px;"
+                :disabled="!aiChatInput.trim()"
+              >
+                <i class="bi bi-send-fill" style="font-size: 0.85rem;"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </transition>
+    </div>
+
   </div>
 
   <!-- VUE APPLICATION LOGIC -->
@@ -4961,7 +5479,8 @@
             'guru_mgmt': 'bi bi-person-workspace',
             'users': 'bi bi-person-gear',
             'backup': 'bi bi-database-check',
-            'audit_log': 'bi bi-shield-lock'
+            'audit_log': 'bi bi-shield-lock',
+            'bahan_ajar': 'bi bi-stars'
           };
           return map[id] || 'bi bi-circle';
         };
@@ -4975,6 +5494,7 @@
             'pelanggaran': 'Kedisiplinan & Tata Tertib Siswa',
             'prestasi': 'Bank Prestasi & Merit Siswa',
             'aduan': 'Pusat Aduan & Anti-Bullying',
+            'bahan_ajar': 'Studio Bahan Ajar & Asisten Mengajar AI (Kurikulum Merdeka)',
             'siswa_mgmt': 'Manajemen Data Siswa',
             'ortu_mgmt': 'Manajemen Data Orang Tua / Wali',
             'guru_mgmt': 'Manajemen Guru & Pegawai (GTK)',
@@ -5065,6 +5585,11 @@
 
           if (['admin', 'bk', 'wali_kelas', 'orang_tua', 'siswa'].includes(role)) {
             items.push({ id: 'prestasi', title: 'Bank Prestasi', icon: '🏆' });
+          }
+
+          // Asisten & Studio Bahan Ajar AI (Khusus Guru & Admin)
+          if (['admin', 'wali_kelas', 'bk'].includes(role)) {
+            items.push({ id: 'bahan_ajar', title: 'Studio Bahan Ajar AI', icon: '✨', badge: 'AI' });
           }
 
           // Hak Akses Aduan:
@@ -6902,7 +7427,323 @@
           showToast(`Barcode lama di-revoke. Barcode digital baru berhasil di-generate untuk ${activeCardStudent.value.name}!`);
         };
 
+        // ==========================================
+        // FITUR AI: ASISTEN BAHAN AJAR & COPILOT
+        // ==========================================
+        const aiToolActive = ref('modul_ajar');
+        const aiSubject = ref('Matematika');
+        const aiGrade = ref('Kelas X (Fase E)');
+        const aiTopic = ref('Barisan dan Deret Geometri');
+        const aiModel = ref('Problem Based Learning (PBL)');
+        const aiCount = ref(5);
+        const aiDuration = ref('2 JP (2 x 45 Menit)');
+        const isAiGenerating = ref(false);
+        const aiOutput = ref('');
+
+        const setAiPreset = (subject, grade, topic) => {
+          aiSubject.value = subject;
+          aiGrade.value = grade;
+          aiTopic.value = topic;
+        };
+
+        const generateAiMaterial = () => {
+          isAiGenerating.value = true;
+          setTimeout(() => {
+            if (aiToolActive.value === 'modul_ajar') {
+              aiOutput.value = `MODUL AJAR KURIKULUM MERDEKA
+Mata Pelajaran: ${aiSubject.value} | Fase/Kelas: ${aiGrade.value}
+Topik/Materi: ${aiTopic.value} | Alokasi Waktu: ${aiDuration.value}
+Model Pembelajaran: ${aiModel.value}
+Penyusun: ${currentUser.value.name}
+
+============================================================
+I. INFORMASI UMUM
+A. Identitas Modul
+   - Satuan Pendidikan: SDN Kebonagung Pasuruan / SMA Terpadu
+   - Fase / Kelas     : ${aiGrade.value}
+   - Alokasi Waktu    : ${aiDuration.value}
+B. Kompetensi Awal:
+   Peserta didik telah memahami operasi hitung dasar dan pola bilangan sederhana.
+C. Profil Pelajar Pancasila (P3):
+   - Bernalar Kritis: Mengidentifikasi pola dan keteraturan fenomena nyata.
+   - Gotong Royong  : Bekerja sama merumuskan solusi dalam kelompok kerja.
+   - Mandiri        : Menyelesaikan asesmen formatif secara bertanggung jawab.
+D. Sarana & Prasarana:
+   Laptop/LCD Proyektor, Papan Tulis, LKPD Terstruktur, Video Studi Kasus Nyata.
+E. Target Peserta Didik: Reguler (32 Siswa).
+
+============================================================
+II. KOMPONEN INTI
+A. Tujuan Pembelajaran (TP):
+   1. Melalui model ${aiModel.value}, peserta didik mampu mendefinisikan konsep ${aiTopic.value} secara akurat.
+   2. Peserta didik dapat menyelesaikan permasalahan kontekstual kehidupan sehari-hari menggunakan prinsip ${aiTopic.value}.
+B. Pemahaman Bermakna:
+   Konsep ${aiTopic.value} digunakan dalam memodelkan pertumbuhan populasi, perhitungan bunga majemuk perbankan, dan prediksi sains.
+C. Pertanyaan Pemantik:
+   "Pernahkah kalian melihat pembelahan bakteri atau tren pertumbuhan followers di media sosial? Mengapa kenaikannya bisa sangat eksponensial?"
+
+D. Urutan Kegiatan Pembelajaran:
+   1. Pendahuluan (15 Menit):
+      - Guru memberi salam, berdoa, dan mengecek kehadiran via sistem presensi barcode.
+      - Apersepsi: Menampilkan infografis fenomena nyata terkait ${aiTopic.value}.
+      - Menyampaikan tujuan pembelajaran dan kesepakatan kelas.
+   2. Kegiatan Inti (60 Menit - Sintaks ${aiModel.value}):
+      - Fase 1 (Orientasi Masalah): Siswa mengamati video kasus simulasi data.
+      - Fase 2 (Organisasi Siswa) : Siswa dibagi menjadi kelompok heterogen (4-5 anak).
+      - Fase 3 (Penyelidikan)    : Guru membagikan LKPD; siswa berdiskusi dan mengolah data.
+      - Fase 4 (Pengembangan)    : Perwakilan kelompok mempresentasikan temuan formula.
+      - Fase 5 (Evaluasi)        : Guru memberikan penguatan konsep dan klarifikasi miskonsepsi.
+   3. Penutup (15 Menit):
+      - Refleksi bersama siswa mengenai poin pembelajaran hari ini.
+      - Asesmen formatif singkat (Exit Ticket 3 soal).
+      - Doa penutup dan salam.
+
+============================================================
+III. ASESMEN & EVALUASI
+- Asesmen Diagnostik: Kuis awal apersepsi (3 pertanyaan pemantik).
+- Asesmen Formatif  : Observasi keaktifan diskusi kelompok & lembar LKPD.
+- Asesmen Sumatif   : Tes tertulis pemecahan masalah akhir topik (KKTP Nilai >= 75).`;
+            } else if (aiToolActive.value === 'bank_soal') {
+              aiOutput.value = `BANK SOAL LATIHAN & ASESMEN FORMATIF (STANDAR HOTS / AKM)
+Mata Pelajaran: ${aiSubject.value} | Kelas: ${aiGrade.value}
+Topik: ${aiTopic.value} | Jumlah: ${aiCount.value} Soal
+Penyusun: ${currentUser.value.name}
+
+------------------------------------------------------------
+SOAL 1 (Pilihan Ganda - Level Kognitif: C4 / Analisis)
+Stimulus:
+Sebuah perusahaan rintisan teknologi mencatat pertumbuhan pengguna aplikasi pada bulan pertama sebanyak 500 pengguna aktif. Karena adanya promosi viral, penambahan pengguna pada setiap bulan berikutnya mengikuti rasio geometri konstan sebesar 2 kali lipat dari bulan sebelumnya.
+
+Pertanyaan:
+Berapakah perkiraan total akumulasi pengguna aktif aplikasi tersebut pada akhir bulan ke-5?
+A. 8.000 pengguna
+B. 15.500 pengguna
+C. 16.000 pengguna
+D. 31.000 pengguna
+E. 32.500 pengguna
+
+Kunci Jawaban: B (15.500 pengguna)
+Pembahasan:
+Diketahui a = 500, r = 2, n = 5.
+Rumus Deret Geometri: Sn = a(r^n - 1) / (r - 1)
+S5 = 500 * (2^5 - 1) / (2 - 1) = 500 * (32 - 1) / 1 = 500 * 31 = 15.500 pengguna.
+
+------------------------------------------------------------
+SOAL 2 (Pilihan Ganda Kompleks - Level Kognitif: C5 / Evaluasi)
+Diberikan pernyataan mengenai penerapan ${aiTopic.value} pada peluruhan zat radioaktif.
+Manakah pernyataan di bawah ini yang bernilai BENAR? (Pilih satu yang paling tepat):
+A. Nilai rasio peluruhan selalu bernilai lebih besar dari 1.
+B. Setelah n waktu paruh, sisa massa zat dirumuskan dengan fungsi geometri rasio 1/2.
+C. Waktu paruh berbanding lurus dengan deret aritmetika bertingkat.
+D. Jumlah total massa zat akan selalu bertambah mendekati tak hingga.
+
+Kunci Jawaban: B
+Pembahasan:
+Peluruhan eksponensial zat radioaktif mengalami penurunan separuh (r = 1/2) setiap periode waktu paruh (T), memenuhi kaidah deret geometri konvergen.
+
+------------------------------------------------------------
+SOAL 3 (Uraian Kontekstual - Level Kognitif: C6 / Kreasi Pemecahan Masalah)
+Seorang siswa menabung di koperasi sekolah dengan pola: minggu ke-1 menabung Rp 20.000, minggu ke-2 Rp 40.000, minggu ke-3 Rp 80.000, dan seterusnya.
+a. Tuliskan rumus suku ke-n (Un) simpanan siswa tersebut!
+b. Jika siswa membutuhkan dana sebesar Rp 600.000 untuk membeli perlengkapan lomba sains, pada minggu keberapakah jumlah tabungannya pertama kali mencukupi target tersebut?
+
+Kunci Jawaban & Rubrik:
+a. Un = 20.000 * 2^(n-1) (Skor: 40)
+b. Sn = 20.000 * (2^n - 1) >= 600.000 -> 2^n - 1 >= 30 -> 2^n >= 31 -> n minimal = 5 (karena 2^5 = 32).
+Jadi tabungan mencukupi pada minggu ke-5 (Total = Rp 620.000). (Skor: 60)`;
+            } else if (aiToolActive.value === 'lkpd') {
+              aiOutput.value = `LEMBAR KERJA PESERTA DIDIK (LKPD) DIGITAL
+Mata Pelajaran: ${aiSubject.value} | Kelas: ${aiGrade.value}
+Topik Aktivitas: Eksplorasi Konsep ${aiTopic.value}
+Kelompok: __________________   Anggota: 1. ____________ 2. ____________ 3. ____________ 4. ____________
+
+A. TUJUAN AKTIVITAS:
+   1. Menemukan pola keteraturan deret bilangan dalam fenomena nyata.
+   2. Merumuskan formula matematis dan mempresentasikan hasil olah data.
+
+B. ALAT DAN BAHAN:
+   - Kertas grafik / milimeter blok
+   - Penggaris dan kalkulator sains / ponsel cerdas
+   - Lembar tabel observasi data
+
+C. LANGKAH KERJA:
+   1. Bacalah studi kasus pertumbuhan koloni organisme yang disajikan pada layar proyektor.
+   2. Catat jumlah data pada interval waktu t = 1, t = 2, t = 3, t = 4 ke dalam tabel berikut:
+      +-------------+----------------------+--------------------+
+      | Langkah (n) | Hasil Pengamatan (Un)| Rasio (Un / Un-1)  |
+      +-------------+----------------------+--------------------+
+      | 1           |                      | -                  |
+      | 2           |                      |                    |
+      | 3           |                      |                    |
+      | 4           |                      |                    |
+      +-------------+----------------------+--------------------+
+   3. Diskusikan bersama teman sekelompok: Apakah nilai rasio yang diperoleh konstan?
+   4. Susunlah kesimpulan kelompok dan siapkan 1 juru bicara untuk presentasi 3 menit di depan kelas!`;
+            } else if (aiToolActive.value === 'rubrik_kktp') {
+              aiOutput.value = `RUBRIK PENILAIAN AUTENTIK & KKTP (KRITERIA KETERCAPAIAN TUJUAN PEMBELAJARAN)
+Mata Pelajaran: ${aiSubject.value} | Kelas: ${aiGrade.value}
+Materi Pokok: ${aiTopic.value}
+
+Tabel Kriteria Ketercapaian:
++-------------------+--------------------+--------------------+--------------------+--------------------+
+| Indikator Capaian | Perlu Bimbingan    | Cukup              | Baik               | Sangat Mahir       |
+|                   | (0 - 60)           | (61 - 74)          | (75 - 89)          | (90 - 100)         |
++-------------------+--------------------+--------------------+--------------------+--------------------+
+| 1. Pemahaman      | Belum mampu        | Mampu menentukan   | Menentukan rumus   | Menguasai formula  |
+|    Konsep Formula | membedakan pola    | rumus namun masih  | Un dan Sn dengan   | dan mampu menurunk-|
+|                   | aritmetika & geo.  | keliru perhitungan | benar dan teliti.  | an pembuktiannya.  |
+| 2. Pemecahan      | Belum mampu        | Mampu membuat      | Mampu menyelesaikan| Mampu merumuskan   |
+|    Masalah Kasus  | menerjemahkan soal | model matematis    | masalah kontekstual| solusi alternatif  |
+|                   | cerita ke rumus.   | tetapi tidak tuntas| hingga tuntas.     | yang efisien/kreatif|
+| 3. Kolaborasi     | Pasif dalam        | Terlibat diskusi   | Aktif berdiskusi & | Menjadi inisiator  |
+|    Kelompok       | kerja kelompok.    | hanya jika diminta.| menghargai pendapat| & pembimbing teman |
++-------------------+--------------------+--------------------+--------------------+--------------------+
+
+Tindak Lanjut KKTP:
+- Skor < 75 : Mengikuti bimbingan remedial dan tugas latihan bertahap.
+- Skor >= 75: Dinyatakan Tuntas (Mencapai TP) dan berhak mengikuti program pengayaan.`;
+            } else if (aiToolActive.value === 'ice_breaking') {
+              aiOutput.value = `REKOMENDASI APERSEPSI & ICE BREAKING KREATIF (5-10 MENIT)
+Mata Pelajaran: ${aiSubject.value} | Topik: ${aiTopic.value}
+
+IDE 1: Permainan "Lipat Kertas Misterius" (Kinestetik & Pemantik Logika)
+- Instruksi Guru:
+  Minta setiap siswa mengambil selembar kertas bekas. Instruksikan: "Lipat kertas menjadi 2, potong/amati ketebalannya. Lipat lagi menjadi 2, dan seterusnya!"
+- Pertanyaan Pemantik:
+  "Berapa kali lipatan maksimal yang bisa kalian lakukan? Jika kita bisa melipat kertas ini sebanyak 42 kali, tahukah kalian bahwa ketebalannya bisa mencapai jarak Bumi ke Bulan?"
+- Jembatan Konsep: Inilah kedahsyatan pertumbuhan eksponensial deret geometri!
+
+IDE 2: Tebak Cepat "Pilih Hadiah Sultan" (Literasi Finansial)
+- Guru mengajukan pilihan:
+  "Opsi A: Guru berikan uang tunai Rp 1 Miliar hari ini secara instan."
+  "Opsi B: Guru berikan Rp 1 rupiah hari ini, tetapi nilainya berlipat ganda setiap hari selama 30 hari berturut-turut."
+- Siswa memilih secara voting cepat. Guru menunjukkan kalkulasi bahwa Opsi B menghasilkan lebih dari Rp 1 Miliar di hari ke-30!`;
+            } else {
+              aiOutput.value = `PROGRAM REMEDIAL & PENGAYAAN BERDIFERENSIASI
+Mata Pelajaran: ${aiSubject.value} | Topik: ${aiTopic.value}
+
+PAKET A: REMEDIAL (SCAFFOLDING BERTAHAP)
+Target Siswa: Siswa yang belum mencapai KKTP (Nilai < 75)
+Strategi: Penyederhanaan angka dan panduan langkah demi langkah (Step-by-Step Worksheet).
+Soal Bimbingan:
+1. Diketahui barisan: 2, 6, 18, 54, ...
+   a. Berapakah suku pertama (a)?
+   b. Berapakah pengalinya / rasionya (r)?
+   c. Isilah titik-titik untuk mencari suku ke-5: U5 = a * r^(5-1) = 2 * (...) = ....
+
+PAKET B: PENGAYAAN (CHALLENGE / DEEP THINKING)
+Target Siswa: Siswa yang telah mencapai nilai sempurna (>= 90)
+Strategi: Proyek mini analisis pemodelan data nyata.
+Tantangan:
+Carilah data suku bunga tabungan atau peluruhan dosis obat antibiotik dalam tubuh dari artikel sains. Buatlah laporan visual 1 halaman yang menunjukkan fungsi grafik deret geometrinya!`;
+            }
+            isAiGenerating.value = false;
+            showToast('Bahan Ajar berhasil di-generate secara otomatis oleh AI!');
+          }, 600);
+        };
+
+        const copyAiOutput = () => {
+          if (!aiOutput.value) return;
+          navigator.clipboard.writeText(aiOutput.value);
+          showToast('Dokumen berhasil disalin ke clipboard!');
+        };
+
+        const printAiOutput = () => {
+          if (!aiOutput.value) return;
+          window.print();
+        };
+
+        const downloadAiOutput = () => {
+          if (!aiOutput.value) return;
+          const blob = new Blob([aiOutput.value], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Bahan_Ajar_${aiSubject.value}_${aiTopic.value.replace(/\s+/g, '_')}.txt`;
+          a.click();
+          URL.revokeObjectURL(url);
+          showToast('Dokumen bahan ajar berhasil diunduh!');
+        };
+
+        // Floating AI Chat Assistant
+        const showAiChat = ref(false);
+        const aiChatMessages = ref([
+          {
+            sender: 'ai',
+            text: 'Halo! Saya AI EduAssistant sekolah. Saya siap membantu Anda menganalisis data kesiswaan, mendrafkan surat resmi, atau menyusun materi ajar Kurikulum Merdeka hari ini.',
+            time: '07:00'
+          }
+        ]);
+        const aiChatInput = ref('');
+
+        const sendAiChatMessage = (customText) => {
+          const query = customText || aiChatInput.value;
+          if (!query || !query.trim()) return;
+
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+          aiChatMessages.value.push({
+            sender: 'user',
+            text: query,
+            time: timeStr
+          });
+
+          if (!customText) aiChatInput.value = '';
+
+          // Smart context-aware AI response based on real state
+          setTimeout(() => {
+            let reply = '';
+            const qLower = query.toLowerCase();
+
+            if (qLower.includes('ringkas') || qLower.includes('kehadiran') || qLower.includes('absensi') || qLower.includes('rekap')) {
+              const total = attendanceList.value.length;
+              const hadir = attendanceList.value.filter(a => a.status === 'Hadir').length;
+              const lambat = attendanceList.value.filter(a => a.status === 'Terlambat').length;
+              const alpa = attendanceList.value.filter(a => a.status === 'Alpa').length;
+              const pct = Math.round((hadir / total) * 100);
+              reply = `📊 **Ringkasan Kehadiran Hari Ini:**\n- Total Siswa Terdata: ${total} siswa\n- Hadir Tepat Waktu: ${hadir} (${pct}%)\n- Terlambat: ${lambat} siswa\n- Alpa/Tanpa Keterangan: ${alpa} siswa\n\n📌 **Rekomendasi:** Perlu perhatian khusus untuk siswa yang terdata alpa berulang agar segera dikoordinasikan dengan wali kelas.`;
+            } else if (qLower.includes('alpa') || qLower.includes('perhatian') || qLower.includes('sp') || qLower.includes('budi')) {
+              reply = `⚠️ **Deteksi Siswa Perlu Penanganan:**\n- **Budi Santoso (XI-TKJ-2)** terdeteksi Alpa 3 hari berturut-turut.\n- Poin Pelanggaran: 50 poin (Status SP-1).\n- **Saran Tindakan:**\n  1. Terbitkan Surat Panggilan Orang Tua Resmi ke sekolah.\n  2. Jadwalkan Home Visit (Kunjungan Rumah) oleh Guru BK.\n  3. Kirimkan pesan pengingat resmi ke WhatsApp orang tua.`;
+            } else if (qLower.includes('wa') || qLower.includes('whatsapp') || qLower.includes('pesan')) {
+              reply = `📱 **Draf Pesan WhatsApp Resmi untuk Orang Tua Siswa:**\n\n"Yth. Bapak/Ibu Wali Murid dari Budi Santoso (Kelas XI-TKJ-2),\n\nKami menginformasikan dari pihak sekolah SDN Kebonagung Pasuruan bahwa ananda hari ini tercatat tidak hadir (Alpa) di kelas. Mengingat pentingnya KBM, mohon konfirmasi kondisi ananda dan kami mengundang Bapak/Ibu untuk berdiskusi dengan Guru BK di sekolah pada hari kerja.\n\nTerima kasih atas perhatian dan kerja samanya.\n*Wali Kelas / Kesiswaan*"`;
+            } else if (qLower.includes('surat') || qLower.includes('panggilan') || qLower.includes('draf')) {
+              reply = `📄 **Draf Surat Panggilan Resmi (Kop Dinas):**\n\n**SURAT PANGGILAN ORANG TUA SISWA**\nNomor: 421.2/108/DISDIK/2026\n\nKepada Yth: Orang Tua / Wali Murid dari Budi Santoso (XI-TKJ-2)\nDi Tempat.\n\nSehubungan dengan evaluasi ketertiban dan presensi kesiswaan ananda yang terakumulasi mencapai batas Surat Peringatan (SP-1), kami mengharap kehadiran Bapak/Ibu pada:\n- Hari/Tanggal: Jumat, 27 November 2026\n- Pukul: 08:30 WIB\n- Tempat: Ruang Bimbingan Konseling (BK)\n\nDemikian surat ini kami sampaikan. Atas kehadirannya kami ucapkan terima kasih.\n\nKepala Sekolah,\n**Drs. H. Mulyadi M.Pd**\nNIP. 197103151998021004`;
+            } else if (qLower.includes('soal') || qLower.includes('kuis') || qLower.includes('hots')) {
+              reply = `❓ **3 Rekomendasi Soal HOTS Kilat:**\n1. Analisislah mengapa pelestarian energi terbarukan di daerah tropis lebih efektif memanfaatkan panel fotovoltaik dibanding turbin angin!\n2. Jika debit air sungai berkurang 30% pada musim kemarau, hitung penurunan daya output PLTA berkapasitas 2 MW!\n3. Evaluasilah dampak alih fungsi lahan resapan air terhadap siklus hidrologi lokal!`;
+            } else {
+              reply = `Baik, saya memahami kebutuhan Anda mengenai "${query}". Saya telah memadukan data kesiswaan sistem dan panduan kurikulum untuk membantu Anda. Anda juga dapat menggunakan menu **Studio Bahan Ajar AI** pada bilah samping untuk membuat Modul RPP lengkap, Bank Soal, dan LKPD siap cetak.`;
+            }
+
+            aiChatMessages.value.push({
+              sender: 'ai',
+              text: reply,
+              time: timeStr
+            });
+          }, 400);
+        };
+
         return {
+          // AI Studio Bahan Ajar & Copilot
+          aiToolActive,
+          aiSubject,
+          aiGrade,
+          aiTopic,
+          aiModel,
+          aiCount,
+          aiDuration,
+          isAiGenerating,
+          aiOutput,
+          setAiPreset,
+          generateAiMaterial,
+          copyAiOutput,
+          printAiOutput,
+          downloadAiOutput,
+          showAiChat,
+          aiChatMessages,
+          aiChatInput,
+          sendAiChatMessage,
+
           isLoggedIn,
           showPassword,
           showLoginModal,

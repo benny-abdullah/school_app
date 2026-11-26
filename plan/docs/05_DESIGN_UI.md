@@ -1,11 +1,11 @@
 # Desain Antarmuka Pengguna & Spesifikasi Halaman (Design UI) - SSOT
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Gaya Desain**: Dominan Putih Minimalis Modern Profesional (White Minimalist)  
-**Komponen Inti**: Bootstrap 5 Modern Effects + Tailwind CSS + Interactive Charts + Pagination + Multi-Filter + Info Cards  
-**Total Tampilan**: 15 Modul Halaman & 12 Modal Interaktif
+**Gaya Desain**: Metis Bootstrap 5 Admin Dashboard Template + Colorlib Login Form 11  
+**Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Interactive Charts, Pagination, Multi-Filter, Studio Bahan Ajar AI, Floating Copilot  
+**Total Tampilan**: 16 Modul Halaman & 12 Modal Interaktif
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), komponen kartu statistik putih, grafik analitik data interaktif, bilah pencarian & filter dinamis, paginasi, dan alur antarmuka pemindai gerbang 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Metis Admin, formulir login split-screen Colorlib Form 11, kartu statistik, grafik analitik data, bilah pencarian & filter dinamis, paginasi, studio bahan ajar AI, dan alur antarmuka pemindai gerbang 3 mode.
 
 ---
 
@@ -13,11 +13,10 @@ Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak
 
 ```mermaid
 graph TD
-    WELCOME["🌐 Welcome Page SDN Kebonagung (Landing Page Edukasi Soft Lavender)"]
-    LOGIN["🔐 Modal Autentikasi / Quick Role Switcher"]
+    LOGIN["🔐 Split Sign-In Colorlib Form 11 (5 Role Quick Switcher & Trust Metrics)"]
 
-    subgraph Internal_Portal ["EduTrack Pro - Layout Putih Minimalis 2 Kolom"]
-        DASH["📊 Dashboard Eksekutif & Ringkasan Siswa (/dashboard)"]
+    subgraph Internal_Portal ["Metis Admin Portal - Responsive Shell (Desktop 260px/68px & Mobile Drawer)"]
+        DASH["📊 Dashboard Utama & AI Executive Briefing (/dashboard)"]
         
         subgraph Modul_Presensi ["Operasional Kehadiran & Gerbang 3 Mode"]
             ATT_DAY["✅ Kehadiran Siswa Harian Bulk H/S/I/A/T (/presensi)"]
@@ -33,6 +32,11 @@ graph TD
             WHISTLE["📢 Pusat Aduan & Whistleblower Terenkripsi AES-256 (/aduan)"]
         end
 
+        subgraph Modul_AI ["Kecerdasan Buatan & Kurikulum Merdeka 2026"]
+            AI_STUDIO["✨ Studio Bahan Ajar AI: Modul Ajar, Soal HOTS, LKPD, Rubrik KKTP (/bahan_ajar)"]
+            AI_COPILOT["💬 Floating AI Copilot Assistant & Slide-Out Chat Drawer"]
+        end
+
         subgraph Modul_Master ["Master Data & Pengguna"]
             GTK["👔 Manajemen Guru & Pegawai - GTK Admin (/guru-pegawai)"]
             SISWA["🎓 Manajemen Siswa & Rombel (/siswa-mgmt)"]
@@ -46,59 +50,86 @@ graph TD
         end
     end
 
-    WELCOME --> LOGIN
     LOGIN --> DASH
-    DASH --> Modul_Presensi & Modul_Kesiswaan & Modul_Master & Modul_Keamanan
+    DASH --> Modul_Presensi & Modul_Kesiswaan & Modul_AI & Modul_Master & Modul_Keamanan
 ```
 
 ---
 
-## 2. Struktur Tata Letak Halaman Standar (Dominan Putih Minimalis)
+## 2. Struktur Tata Letak Halaman Standar (Metis Admin Shell)
 
-Setiap halaman modul menerapkan struktur seragam yang bersih, modern, dan sangat informatif:
+Setiap halaman modul menerapkan shell standar Metis Bootstrap 5 yang bersih, modern, dan sangat responsif:
 
 ```
-+--------------------------------------------------------------------------------------------------+
-| [LOGO] sdn-kebonagung-pasuruan / school_app  [Public]   [🔍 Cari Cepat / ]   [👑 Role Switcher]  |
-+--------------------------------------------------------------------------------------------------+
-| [Dashboard] [Presensi] [Scanner 3-Mode] [Kartu CR-80] [Tatib & SP] [Prestasi] [Aduan] [Master]   |
-+--------------------------------------------------------------------------------------------------+
-|                                                                                                  |
-| [ BARIS KARTU STATISTIK KPI & INFO CARDS (4 Kolom Grid Putih) ]                                  |
-| +--------------------+ +--------------------+ +--------------------+ +-------------------------+ |
-| | [📈] Total Hadir   | | [⏰] Terlambat     | | [🚨] Alpa Hari Ini | | [📢] Aduan Baru         | |
-| | 94.8% (474 Siswa)  | | 12 Siswa (T1-T3)   | | 4 Siswa (WA Alert) | | 2 Tiket Investigasi     | |
-| | ~~~/\_ (Sparkline) | | ~~\___ (Sparkline) | | ---\__ (Sparkline) | | [Lihat Tiket ->]        | |
-| +--------------------+ +--------------------+ +--------------------+ +-------------------------+ |
-|                                                                                                  |
-| [ SEKSI GRAFIK VISUALISASI DATA INTERAKTIF (Chart.js / ApexCharts) ]                             |
-| +---------------------------------------------------+ +----------------------------------------+ |
-| | GRAFIK BATANG: Tren Kehadiran Mingguan (Sen - Jum)| | DONUT CHART: Rasio Disiplin vs Prestasi| |
-| | [Bar Chart: Tepat Waktu | Terlambat | Alpa]       | | [Donut: 78% Bersih, 15% Prestasi, 7% SP]| |
-| +---------------------------------------------------+ +----------------------------------------+ |
-|                                                                                                  |
-| [ BILAH PENCARIAN & FILTER MULTI-KRITERIA (Multi-Criteria Filter Bar) ]                          |
-| +----------------------------------------------------------------------------------------------+ |
-| | [🔍 Cari Nama/NISN...]  [Semua Kelas v]  [Semua Status v]  [Tingkat Tatib v]  [↺ Reset Filter]| |
-| +----------------------------------------------------------------------------------------------+ |
-|                                                                                                  |
-| [ TABEL DATA INTERAKTIF DENGAN SORTABLE HEADERS & ACTION BUTTONS ]                               |
-| +----------------------------------------------------------------------------------------------+ |
-| | NISN       | Nama Siswa    | Kelas   | Status Masuk  | Status Pulang | Poin | Aksi           | |
-| | 0081234567 | Ahmad Rifai   | X-RPL-1 | [Hadir 06:45] | [Pulang 14:15]| 0    | [Edit][Detail] | |
-| | 0081234568 | Siti Nurhaliza| X-RPL-1 | [T-1 07:08]   | [Pulang 14:10]| -2   | [Edit][Detail] | |
-| +----------------------------------------------------------------------------------------------+ |
-|                                                                                                  |
-| [ KOMPONEN PAGINASI DINAMIS (Dynamic Pagination) ]                                               |
-| +----------------------------------------------------------------------------------------------+ |
-| | Menampilkan 1 - 10 dari 480 data          [Baris: 10 v]          [ < ] [1] [2] [3] ... [48] [> | |
-| +----------------------------------------------------------------------------------------------+ |
-+--------------------------------------------------------------------------------------------------+
++--------------------------------------------------------------------------------------------------------------------------------+
+| [M] Metis  [≡ Toggle]  [🔍 Search... (Ctrl+K)    ]         [🚪 Keluar]  [Role: 👑 Super Admin v]  [☀] [⛶] [🔔 3]  [👤 John Doe v] |
++---------------+----------------------------------------------------------------------------------------------------------------+
+| SIDEBAR       | CONTENT AREA (admin-main container-fluid p-3 p-lg-4)                                                           |
+| (260px/68px)  |                                                                                                                |
+|               | [ AI EXECUTIVE BRIEFING & SMART INSIGHT CARD ]                                                                 |
+| [📊 Dashboard]| +------------------------------------------------------------------------------------------------------------+ |
+| [✅ Kehadiran]| | [✨] AI Executive Briefing · Analisis Real-Time Pagi Hari             [📄 Drafkan SP]  [💬 Buka AI Copilot] | |
+| [📷 Scanner]  | | Kehadiran 94.8% · Ditemukan 1 Kasus Kesiswaan Perlu Tindak Lanjut: Budi Santoso (XI-TKJ-2) Alpa 3 hari.   | |
+| [🪪 Kartu]    | +------------------------------------------------------------------------------------------------------------+ |
+| [⚠️ Tatib]    |                                                                                                                |
+| [🏆 Prestasi] | [ 4 METIS STATS CARDS (TOTAL USERS, REVENUE, ORDERS, AVG. RESPONSE / KEHADIRAN) ]                              |
+| [✨ Bahan Ajar| +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
+|     (AI)]     | | TOTAL USERS        | | REVENUE            | | ORDERS             | | AVG. RESPONSE / PRESENSI                | |
+| [📢 Aduan]    | | 12,426   ↑ 12.5%   | | $54,320   ↑ 8.2%   | | 1,852    ↓ 2.1%    | | 2.3s / 94.8% Hadir            ↑ 5.4%   | |
+| [👔 GTK]      | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
+| [🎓 Siswa]    |                                                                                                                |
+| [👨‍👩‍👦 Ortu]     | [ SEKSI GRAFIK & AKTIVITAS DUA KOLOM ]                                                                         |
+| [👥 User]     | +------------------------------------------------------------+ +-----------------------------------------------+ |
+| [💾 Backup]   | | REVENUE / PRESENSI OVERVIEW (Chart.js Kurva 7D/30D/90D/1Y) | | RECENT ACTIVITY / LOG KESISWAAN               | |
+| [🔒 Audit]    | | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                         | | • Siswa baru terdaftar                        | |
+|               | | ----------------------------------                         | | • Presensi gerbang selesai                    | |
+|               | +------------------------------------------------------------+ +-----------------------------------------------+ |
+|               |                                                                                                                |
+|               | [ TABEL DATA INTERAKTIF DENGAN ACTION DROPDOWN & STATUS PILLS ]                                                |
+|               | +------------------------------------------------------------------------------------------------------------+ |
+|               | | NISN/SISWA         | KELAS   | JAM MASUK | JAM PULANG & STATUS | STATUS    | REKONSILIASI   | AKSI CEPAT   | |
+|               | | Ahmad Rifai        | X-RPL-1 | 07:15 WIB | ✔ Pulang: 14:15 WIB | Terlambat | Ban bocor      | [Catatan][H] | |
+|               | | Siti Nurhaliza     | X-RPL-1 | 06:45 WIB | ✔ Pulang: 14:15 WIB | Hadir     | Tepat waktu    | [Catatan][H] | |
+|               | | Budi Santoso       | XI-TKJ-2| -         | -                   | Alpa (3x) | Butuh HomeVisit| [Catatan][A] | |
+|               | +------------------------------------------------------------------------------------------------------------+ |
+|               |                                                                                                                |
+|               | [ METIS ADMIN FOOTER: Metis Admin © 2026. SDN Kebonagung Pasuruan · Sistem Informasi Kesiswaan ]              |
++---------------+----------------------------------------------------------------------------------------------------------------+
+                                                                                       [ ✨ AI Copilot Launcher Pill (Fixed) ]
 ```
 
 ---
 
-## 3. Rincian Wireframe Modul Kunci
+## 3. Wireframe Studio Bahan Ajar AI (`/bahan_ajar`)
+
+```
++--------------------------------------------------------------------------------------------------------------------------------+
+| STUDIO BAHAN AJAR & ASISTEN GURU AI (KURIKULUM MERDEKA 2026)                                                                   |
+| [Kurikulum Merdeka 2026] [AI Teaching Studio] [Fase A - F]                             [💬 Chat AI Copilot]                    |
++--------------------------------------------------------------------------------------------------------------------------------+
+| [📘 Modul Ajar (RPP)] [📝 Bank Soal HOTS] [📋 Lembar LKPD] [🎯 Rubrik KKTP] [🎲 Ice Breaking] [💡 Remedial & Pengayaan]       |
++--------------------------------------------------------------------------------------------------------------------------------+
+| PARAMETER & KONFIGURASI (KOLOM KIRI - 40%)                   | HASIL DOKUMEN TERBITAN AI (KOLOM KANAN - 60%)                  |
+|                                                              |                                                                |
+| Preset Cepat: [➗ Pecahan] [💧 Siklus Air] [📖 Fantasi]       | [Siap Digunakan]          [📋 Salin] [🖨️ Cetak] [💾 Unduh File] |
+|                                                              | +------------------------------------------------------------+ |
+| Mata Pelajaran: [Matematika                           v]     | | # MODUL AJAR KURIKULUM MERDEKA (RPP PLUS)                  | |
+| Jenjang/Fase:   [Fase B - Kelas 4 SD                  v]     | | INFORMASI UMUM: SDN Kebonagung Kota Pasuruan               | |
+| Topik/Materi:   [Pecahan Senilai dan Operasi Hitung   ]     | | Fase B / Kelas 4 / Matematika / 2 x 35 Menit (PBL)         | |
+| Model Belajar:  [Problem Based Learning (PBL)         v]     | |                                                            | |
+| Alokasi Waktu:  [2 x 35 Menit (2 JP)                  v]     | | I. TUJUAN PEMBELAJARAN (TP & KKTP):                        | |
+| Jumlah Soal:    [5 Butir Soal                         v]     | | Peserta didik dapat menganalisis representasi pecahan...   | |
+|                                                              | | II. KEGIATAN PEMBELAJARAN (LENGKAP):                       | |
+| [ 🚀 Generate Bahan Ajar dengan AI ]                         | | - Pendahuluan (10 Menit): Ice breaking & apersepsi         | |
+|                                                              | | - Inti (50 Menit): Orientasi masalah & diskusi kelompok    | |
+| 🛡️ Terverifikasi BSKAP Kemendikbudristek & Profil Pancasila | | - Penutup (10 Menit): Refleksi & asesmen formatif          | |
+|                                                              | +------------------------------------------------------------+ |
++--------------------------------------------------------------+----------------------------------------------------------------+
+```
+
+---
+
+## 4. Rincian Wireframe Modul Kunci Lainnya
 
 ### 3.1 Scanner Barcode Gerbang 3 Mode Otomatis (`/scanner`)
 - **Indikator Mode Aktif Otomatis**:
