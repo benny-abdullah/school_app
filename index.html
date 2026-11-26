@@ -14,6 +14,10 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Bootstrap 5.3.3 CSS & Bootstrap Icons CDN (Metis Admin Theme) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -59,6 +63,175 @@
     }
     ::-webkit-scrollbar-thumb:hover {
       background: #94A3B8;
+    }
+
+    /* =================================================== */
+    /* METIS BOOTSTRAP 5 ADMIN DASHBOARD STYLES            */
+    /* =================================================== */
+    :root {
+      --header-height: 58px;
+      --sidebar-width: 240px;
+      --bs-primary: #2563eb;
+      --bs-primary-rgb: 37, 99, 235;
+      --bs-border-color: #e4e4e7;
+    }
+    .admin-app {
+      min-height: 100vh;
+      background-color: #fafafa;
+      color: #18181b;
+      font-family: 'Inter', sans-serif;
+    }
+    .admin-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1030;
+      background: #ffffff;
+      border-bottom: 1px solid var(--bs-border-color);
+    }
+    .admin-sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      width: var(--sidebar-width);
+      height: calc(100vh - var(--header-height));
+      background: #ffffff;
+      border-right: 1px solid var(--bs-border-color);
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 1025;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .admin-main {
+      margin-top: var(--header-height);
+      margin-left: var(--sidebar-width);
+      min-height: calc(100vh - var(--header-height));
+      background-color: #fafafa;
+      transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (max-width: 991.98px) {
+      .admin-sidebar {
+        transform: translateX(-100%);
+      }
+      .admin-sidebar.show {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+      }
+      .admin-main {
+        margin-left: 0 !important;
+      }
+    }
+    /* Metis Sidebar Nav Links */
+    .sidebar-nav {
+      padding: 0 0.5rem;
+    }
+    .sidebar-nav .nav-link {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0.85rem;
+      border-radius: 0.5rem;
+      color: #52525b;
+      font-size: 0.84rem;
+      font-weight: 500;
+      margin-bottom: 2px;
+      text-decoration: none;
+      transition: background-color 0.12s ease, color 0.12s ease;
+    }
+    .sidebar-nav .nav-link i {
+      font-size: 1.05rem;
+      margin-right: 0.75rem;
+      color: #71717a;
+      width: 1.25rem;
+      text-align: center;
+      transition: color 0.15s ease;
+    }
+    .sidebar-nav .nav-link:hover {
+      background-color: #f4f4f5;
+      color: #18181b;
+    }
+    .sidebar-nav .nav-link:hover i {
+      color: #18181b;
+    }
+    .sidebar-nav .nav-link.active {
+      background-color: #f4f4f5;
+      color: #18181b;
+      font-weight: 600;
+    }
+    .sidebar-nav .nav-link.active i {
+      color: #2563eb;
+    }
+    .sidebar-nav .nav-link.active::before {
+      content: "";
+      position: absolute;
+      left: -0.5rem;
+      top: 0.35rem;
+      bottom: 0.35rem;
+      width: 3px;
+      border-radius: 0 3px 3px 0;
+      background-color: #2563eb;
+    }
+    /* Metis Stats Cards */
+    .stats-card {
+      background: #ffffff;
+      border: 1px solid var(--bs-border-color);
+      border-radius: 0.75rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stats-card:hover {
+      border-color: #cbd5e1;
+    }
+    .stats-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    /* Metis Activity Feed */
+    .activity-feed .activity-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f4f4f5;
+    }
+    .activity-feed .activity-item:last-child {
+      border-bottom: none;
+    }
+    .activity-feed .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      margin-right: 0.75rem;
+      flex-shrink: 0;
+      background-color: #f4f4f5;
+      color: #52525b;
+    }
+    /* Metis Flat Cards */
+    .card {
+      background-color: #ffffff;
+      border: 1px solid var(--bs-border-color);
+      border-radius: 0.75rem;
+      box-shadow: none;
+    }
+    .card-header {
+      background-color: transparent;
+      border-bottom: 1px solid var(--bs-border-color);
+      padding: 0.875rem 1.25rem;
+      font-weight: 600;
+    }
+    .card-footer {
+      background-color: transparent;
+      border-top: 1px solid var(--bs-border-color);
     }
   </style>
 </head>
@@ -4874,6 +5047,48 @@
           }, 3500);
         };
 
+        // Metis Search & Navigation Helpers
+        const searchQuery = ref('');
+
+        const getNavIcon = (id) => {
+          const map = {
+            'dashboard': 'bi bi-speedometer2',
+            'presensi': 'bi bi-calendar-check',
+            'scanner': 'bi bi-upc-scan',
+            'kartu_pelajar': 'bi bi-person-badge',
+            'pelanggaran': 'bi bi-shield-exclamation',
+            'prestasi': 'bi bi-trophy',
+            'aduan': 'bi bi-megaphone',
+            'siswa_mgmt': 'bi bi-mortarboard',
+            'ortu_mgmt': 'bi bi-people',
+            'guru_mgmt': 'bi bi-person-workspace',
+            'users': 'bi bi-person-gear',
+            'backup': 'bi bi-database-check',
+            'audit_log': 'bi bi-shield-lock'
+          };
+          return map[id] || 'bi bi-circle';
+        };
+
+        const activePageTitle = computed(() => {
+          const titles = {
+            'dashboard': 'Dashboard Utama',
+            'presensi': 'Monitoring Kehadiran Siswa',
+            'scanner': 'Scanner Barcode Gerbang (3 Mode Waktu)',
+            'kartu_pelajar': 'Cetak Kartu Pelajar ISO CR-80',
+            'pelanggaran': 'Kedisiplinan & Tata Tertib Siswa',
+            'prestasi': 'Bank Prestasi & Merit Siswa',
+            'aduan': 'Pusat Aduan & Anti-Bullying',
+            'siswa_mgmt': 'Manajemen Data Siswa',
+            'ortu_mgmt': 'Manajemen Data Orang Tua / Wali',
+            'guru_mgmt': 'Manajemen Guru & Pegawai (GTK)',
+            'users': 'Manajemen Hak Akses Pengguna',
+            'backup': 'Cadangan Data & ISO 27001',
+            'audit_log': 'Log Audit & Forensik Digital',
+            'profil': 'Profil Pengguna & Keamanan Akun'
+          };
+          return titles[activePage.value] || 'Portal Kesiswaan';
+        });
+
         // Switch role helper
         const changeRole = (roleKey) => {
           selectedRoleKey.value = roleKey;
@@ -6767,6 +6982,9 @@
           showLoginModal,
           sidebarOpen,
           activePage,
+          activePageTitle,
+          searchQuery,
+          getNavIcon,
           currentDateFormatted,
           roles,
           selectedRoleKey,
