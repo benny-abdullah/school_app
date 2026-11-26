@@ -1130,7 +1130,7 @@
                       </div>
                       <div>
                         <p class="small mb-0 text-muted">Total Siswa Terdata</p>
-                        <div class="h4 mb-0 fw-bold">{{ attendanceData.length }}</div>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceList.length }}</div>
                         <small class="text-success"><i class="bi bi-arrow-up"></i> 100% Terdaftar</small>
                       </div>
                     </div>
@@ -1146,7 +1146,7 @@
                       </div>
                       <div>
                         <p class="small mb-0 text-muted">Hadir Pagi Ini</p>
-                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Hadir').length }}</div>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceList.filter(a => a.status === 'Hadir').length }}</div>
                         <small class="text-success"><i class="bi bi-check2"></i> 70% Presensi Normal</small>
                       </div>
                     </div>
@@ -1162,7 +1162,7 @@
                       </div>
                       <div>
                         <p class="small mb-0 text-muted">Terlambat</p>
-                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Terlambat').length }}</div>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceList.filter(a => a.status === 'Terlambat').length }}</div>
                         <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> Masuk > 07:00</small>
                       </div>
                     </div>
@@ -1178,7 +1178,7 @@
                       </div>
                       <div>
                         <p class="small mb-0 text-muted">Alpa / Tanpa Keterangan</p>
-                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Alpa').length }}</div>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceList.filter(a => a.status === 'Alpa').length }}</div>
                         <small class="text-danger"><i class="bi bi-bell"></i> Perlu Tindak Lanjut</small>
                       </div>
                     </div>
@@ -5196,6 +5196,7 @@
           { id: 9, nisn: '0081234575', studentName: 'Nadia Safitri', classroom: 'XI-TKJ-2', checkInTime: '06:58', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Hadir', consecutiveAlpa: 0, notes: 'Hadir pagi, KBM aktif (Siap uji Keadilan Pulang)' },
           { id: 10, nisn: '0081234576', studentName: 'Reza Rahardian', classroom: 'XII-MM-1', checkInTime: '', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Izin', consecutiveAlpa: 0, notes: 'Izin urusan keluarga mendesak' }
         ]);
+        const attendanceData = attendanceList;
 
         const violations = ref([
           { id: 1, date: '23/11/2026', nisn: '0081234567', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', title: 'Terlambat Hadir (3x berturut-turut)', severity: 'Ringan', points: 5, status: 'Diproses', notes: 'Peringatan lisan oleh wali kelas' },
@@ -5953,7 +5954,7 @@
           }
         };
         const bulkAttendanceAction = (newStatus) => {
-          attendanceData.value.forEach(a => {
+          attendanceList.value.forEach(a => {
             if (selectedAttendance.value.includes(a.id)) {
               a.status = newStatus;
             }
@@ -6783,6 +6784,7 @@
           visibleNavItems,
           students,
           attendanceList,
+          attendanceData,
           violations,
           achievements,
           complaints,
