@@ -1,124 +1,135 @@
 # Product Requirements Document (PRD): EduTrack Pro
 **Aplikasi**: Sistem Monitoring Terpadu Sekolah (EduTrack Pro)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Versi**: 2.4 (SSOT Canonical - Production Blueprint)  
-**Status**: Disetujui (Approved for Production Implementation)  
+**Versi**: 2.5 (SSOT Canonical - Production Blueprint)  
+**Teknologi Acuan**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + PostgreSQL 16 + Redis)  
+**Estetika UI**: Dominan Putih Minimalis Modern Profesional (Bootstrap 5 Effects + Tailwind Utility)  
 **Standar Regulasi**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi (UU PDP No. 27/2022)
 
 ---
 
 ## 1. Ikhtisar Produk & Visi Bisnis (Executive Summary)
 
-**EduTrack Pro** adalah sistem informasi dan pemantauan terpadu kesiswaan modern yang dirancang untuk menyatukan pencatatan presensi kehadiran (gerbang barcode & kelas KBM), pembinaan kedisiplinan dan tata tertib (poin demerit & otomatisasi SP ber-QR Code), apresiasi prestasi (poin merit & portofolio digital), kanal aduan rahasia (whistleblowing anti-perundungan/pungli terenkripsi AES-256), serta portal mandiri wali murid dengan integrasi notifikasi instan WhatsApp.
+**EduTrack Pro** adalah sistem informasi dan pemantauan terpadu kesiswaan modern yang dibangun di atas ekosistem **Full-stack JavaScript / TypeScript** (Nuxt 3 / Node.js Fastify) untuk menghadirkan performa reaktif berlatensi rendah, kemudahan migrasi komponen Vue 3 dari [index.html](file:///c:/scholl_app/index.html), dan keandalan operasional sekolah nyata.
 
-Sistem ini memecahkan 6 tantangan operasional fundamental di sekolah:
-1. **Antrean Presensi & Keterlambatan Siswa**: Menggantikan presensi tanda tangan manual dengan pemindaian barcode kartu pelajar ultra-cepat ($\le 300\text{ ms}$ per siswa) yang terhubung langsung ke mesin kalkulasi penalti keterlambatan berjenjang dan alert darurat ke WhatsApp orang tua.
-2. **Kecurangan Siswa Membolos KBM**: Mengatasi celah siswa yang hadir di gerbang pagi namun membolos di jam pelajaran siang melalui modul sinkronisasi Presensi KBM Jam Mapel.
-3. **Pencatatan Pelanggaran yang Tidak Transparan**: Mengotomatiskan buku saku pelanggaran menjadi sistem poin akumulatif transparan dengan penerbitan Surat Peringatan (SP 1, SP 2, SP 3) berkop surat resmi dan QR Code verifikasi keabsahan.
-4. **Keamanan Korban Perundungan (Anti-Bullying Whistleblower)**: Menyediakan kanal aduan tertutup dengan enkripsi end-to-end dan opsi anonim agar siswa/orang tua tidak takut melapor intimidasi atau pungutan liar.
-5. **Keterlibatan Orang Tua Siswa secara Real-Time**: Memberikan portal mandiri bagi orang tua untuk memantau rekap absensi anak, mengajukan surat izin sakit mandiri berlampiran foto surat dokter, dan menerima notifikasi kehadiran tanpa jeda.
-6. **Kepatuhan Tata Kelola Data Nasional (ISO 27001 & UU PDP)**: Menerapkan pemisahan hak akses ketat (*Least Privilege*), jejak audit kekal (*Immutable Audit Trail*), serta pencadangan data terenkripsi otomatis dengan aturan redundansi 3-2-1.
+Sistem ini dirancang untuk menyatukan:
+1. **Presensi Otomatis 3 Jendela Waktu**:
+   - **Mode 1 Pagi (06:00 - 08:00 WIB)**: Presensi Masuk (Check-in) dengan aturan toleransi keterlambatan berjenjang (Hadir, T-1, T-2, T-3) dan Auto-Alpa pukul 08:00 WIB.
+   - **Mode 2 Siang (08:01 - 13:00 WIB)**: Siaga Digital Gate Pass untuk verifikasi izin keluar/pulang cepat satpam pos gerbang.
+   - **Mode 3 Sore (13:01 - 17:00 WIB)**: Presensi Pulang (Check-out) dengan nada Chime ramah dan notifikasi WhatsApp kepulangan ke orang tua.
+2. **Keadilan Siswa Lupa Tap Pulang**: Siswa yang telah hadir di pagi hari dan mengikuti KBM sampai jam pelajaran terakhir **TIDAK DIHUKUM ALPA** saat pulang, melainkan berstatus tetap `Hadir` dengan catatan `Check-out Default (Selesai KBM)`.
+3. **Fleksibilitas Pengajuan Izin / Sakit**:
+   - *Sakit 1 Hari*: Cukup surat izin tertulis bertanda tangan orang tua (tanpa surat dokter klinik, kuota maks 2x/semester).
+   - *Sakit > 1 Hari*: Wajib melampirkan foto surat dokter / Puskesmas / RS.
+   - *Izin Keperluan Keluarga*: Rentang tanggal izin terencana.
+   - *Dispensasi Tugas / Lomba*: Hadir resmi yang diajukan oleh guru pembina.
+   - *Eskalasi Alpa $\ge 3$ Hari*: Pemicu otomatis surat pemanggilan fisik orang tua & rekomendasi Home Visit oleh Guru BK.
+4. **Presensi KBM Jam Mapel**: Sinkronisasi presensi gerbang dengan presensi ruang kelas per jam pelajaran untuk mendeteksi siswa membolos KBM (+10 Poin Tatib).
+5. **Buku Tatib Digital & Otomatisasi SP**: Katalog pelanggaran, demerit points akumulatif, dan penerbitan Surat Peringatan (SP 1, SP 2, SP 3) ber-QR Code verifikasi.
+6. **Bank Prestasi & Merit System**: Pencatatan penghargaan siswa (Sekolah s/d Internasional) sebagai penyeimbang skor kedisiplinan.
+7. **Kanal Aduan & Whistleblower Terenkripsi AES-256**: Pelaporan rahasia anti-bullying dengan opsi anonim dan ruang obrolan investigasi dua arah.
+8. **Master GTK (Guru & Tenaga Kependidikan)**: CRUD lengkap biodata pendidik dan tenaga kependidikan eksklusif hak akses Super Admin.
+9. **Desain Putih Minimalis Modern Profesional**: Antarmuka serba putih elegan dilengkapi komponen interaktif wajib: *Pagination*, *Instant Searching*, *Multi-Criteria Filter*, *KPI Info Cards*, *Semantic Badges*, *Info Icons*, dan *Interactive Data Charts*.
 
 ---
 
 ## 2. Persona Pengguna & Matriks Hak Akses (RBAC & Data Scoping)
 
-Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi cakupan data (*Data Scoping*) di level server:
+Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi server (*Server-Side Scoping*) untuk mencegah celah IDOR:
 
 | Persona / Role | Fungsi Utama | Cakupan Data (*Data Scope*) | Kebutuhan Antarmuka |
 | :--- | :--- | :--- | :--- |
-| **👑 Super Admin / Kepala Sekolah** (`admin`) | Pengawas tertinggi sistem; kontrol konfigurasi, master GTK, manajemen pengguna, backup data 3-2-1, dan audit trail ISO 27001. | **Seluruh Sekolah** (Akses Global) | Dashboard Eksekutif, Manajemen GTK, Manajemen User, Log Audit, Snapshot Backup, Cetak Kartu Pelajar, Pusat Aduan. |
-| **🛡️ Guru BK / Kesiswaan** (`bk`) | Penanganan kasus disiplin, bimbingan konseling, investigasi aduan whistleblower, verifikasi prestasi, dan pencetakan kartu pelajar fisik. | **Seluruh Siswa** (Fokus Kasus & Konseling) | Modul Tatib & SP, Bank Prestasi, Pusat Aduan (Ruang Investigasi Chat), Scanner Gerbang, Cetak Kartu Pelajar PVC. |
-| **📋 Wali Kelas** (`wali_kelas`) | Presensi harian bulk rombel binaan, presensi KBM, persetujuan izin sakit dari orang tua, dan pembinaan siswa binaan. | **Terisolasi pada Rombel Binaan** (contoh: Kelas X-RPL-1 / Kelas 4-A) | Presensi Cepat H/S/I/A/T, Presensi KBM Mapel, Verifikasi Pengajuan Izin Ortu, Digital Gate Pass, Aduan Siswa Kelas. |
-| **👨‍👩‍👦 Orang Tua / Wali Murid** (`orang_tua`) | Memantau rekap kehadiran anak, riwayat poin pelanggaran/prestasi anak, mengajukan izin sakit mandiri, dan membuat aduan. | **Terisolasi hanya untuk Ananda Asuh** (contoh: Ahmad Rifai) | Dashboard Ringkasan Anak, Pengajuan Izin/Sakit Mandiri, Pengaduan Saya (Chat Rahasia), Simulasi Notifikasi WhatsApp. |
-| **🎓 Siswa** (`siswa`) | Memantau kehadiran mandiri, buku saku poin tata tertib, portofolio prestasi digital, dan tiket digital gate pass. | **Terisolasi hanya untuk Data Diri Siswa Sendiri** | Data Diri Siswa, Rekap Presensi, Buku Saku Pelanggaran, Portofolio Prestasi, Tiket Gate Pass (Menu aduan & cetak kartu disembunyikan). |
-| **👮 Petugas Keamanan / Satpam** (`satpam`) | Mengoperasikan scanner barcode kartu pelajar di pos gerbang dan memverifikasi tiket keluar izin siswa. | **Pos Gerbang Sekolah** | Layanan Pemindai Barcode Gerbang (Live Stream/Wedge) & Tab Verifikasi Digital Gate Pass. |
+| **👑 Super Admin / Kepala Sekolah** (`admin`) | Pengawas tertinggi sistem; kontrol konfigurasi, master GTK, manajemen pengguna, backup data 3-2-1, dan audit trail ISO 27001. | **Seluruh Sekolah** (Akses Global) | Dashboard Eksekutif, Grafik Tren KPI, Manajemen GTK, Manajemen User, Log Audit, Snapshot Backup, Cetak Kartu Pelajar, Pusat Aduan. |
+| **🛡️ Guru BK / Kesiswaan** (`bk`) | Penanganan kasus disiplin, bimbingan konseling, investigasi aduan whistleblower, verifikasi prestasi, eskalasi alpa 3 hari, dan pencetakan kartu fisik. | **Seluruh Siswa** (Fokus Kasus & Konseling) | Modul Tatib & SP, Bank Prestasi, Pusat Aduan (Ruang Investigasi Chat), Scanner Gerbang, Cetak Kartu Pelajar PVC, Home Visit. |
+| **📋 Wali Kelas** (`wali_kelas`) | Presensi harian bulk rombel binaan, presensi KBM, persetujuan izin sakit/keluarga orang tua, dan penerbitan Digital Gate Pass. | **Terisolasi pada Rombel Binaan** (contoh: Kelas X-RPL-1 / Kelas 4-A) | Presensi Cepat H/S/I/A/T, Presensi KBM Mapel, Verifikasi Pengajuan Izin Ortu, Digital Gate Pass, Aduan Siswa Kelas. |
+| **👨‍👩‍👦 Orang Tua / Wali Murid** (`orang_tua`) | Memantau kehadiran masuk/pulang anak, riwayat poin tatib/prestasi, mengajukan izin sakit mandiri, dan menerima notifikasi WhatsApp. | **Terisolasi hanya untuk Ananda Asuh** (contoh: Ahmad Rifai) | Dashboard Ringkasan Anak, Pengajuan Izin/Sakit Mandiri, Pengaduan Saya (Chat Rahasia), Riwayat Notifikasi WhatsApp. |
+| **🎓 Siswa** (`siswa`) | Memantau kehadiran mandiri, buku saku poin tata tertib, portofolio prestasi digital, dan tiket digital gate pass. | **Terisolasi hanya untuk Data Diri Siswa Sendiri** | Data Diri Siswa, Rekap Presensi Masuk/Pulang, Buku Saku Pelanggaran, Portofolio Prestasi, Tiket Gate Pass. |
+| **👮 Petugas Keamanan / Satpam** (`satpam`) | Mengoperasikan mesin scanner 3 mode di pos gerbang dan memverifikasi tiket keluar izin siswa. | **Pos Gerbang Sekolah** | Layanan Pemindai Barcode Gerbang 3 Mode (Masuk / Gate Pass / Pulang) dengan umpan balik audio. |
 
 ---
 
 ## 3. Fitur Utama & Kebutuhan Fungsional (Functional Requirements)
 
-### Modul 1: Presensi Gerbang Barcode & Rule Engine Keterlambatan Multi-Tier
-- **Kecepatan Tinggi**: Waktu pemindaian $\le 300\text{ ms}$ menggunakan *USB Barcode Gun Scanner* (Keyboard Wedge) maupun kamera WebRTC/PWA.
-- **Rule Engine Keterlambatan Berjenjang**:
-  - `06:00 - 07:00 WIB`: **Hadir Tepat Waktu** (0 Poin, masuk kelas normal).
-  - `07:01 - 07:15 WIB`: **Terlambat Ringan (T-1)** (-2 Poin Tatib, dispensasi lisan, notif WA info).
-  - `07:16 - 07:30 WIB`: **Terlambat Sedang (T-2)** (-5 Poin Tatib, pembinaan karakter di pos piket/literasi).
+### Modul 1: Presensi Gerbang 3 Jendela Waktu Otomatis (*3-Mode Auto-Switch Scanner*)
+- **Mode 1: Presensi Masuk (Check-in) [06:00 - 08:00 WIB]**:
+  - `06:00 - 07:00 WIB`: **Hadir Tepat Waktu** (0 Poin, masuk kelas normal, audio Beep 880Hz).
+  - `07:01 - 07:15 WIB`: **Terlambat Ringan (T-1)** (-2 Poin Tatib, dispensasi masuk kelas, audio Buzz 180Hz, notif WA info).
+  - `07:16 - 07:30 WIB`: **Terlambat Sedang (T-2)** (-5 Poin Tatib, pembinaan di pos piket/literasi).
   - `> 07:30 WIB`: **Terlambat Berat (T-3)** (-10 Poin Tatib, penanganan Guru BK, panggilan orang tua).
-- **Auto-Alpa Cron Scheduler (Pukul 08:00 WIB)**: Cron Job otomatis memeriksa siswa yang belum tap dan tidak memiliki izin sah, otomatis menetapkan status **Alpa** (-15 Poin Tatib) dan menembakkan alert darurat WhatsApp ke orang tua.
-- **Anti-Double Tap & Cooldown**: Kartu yang dipindai ulang dalam rentang $< 5\text{ menit}$ akan ditolak dengan notifikasi *"Siswa sudah tercatat hadir pada [jam]"*.
+  - `08:00 WIB Cutoff`: Cron Job otomatis menandai siswa yang belum tap sebagai **Alpa** (-15 Poin Tatib) dan menembakkan alert darurat WhatsApp ke orang tua.
+- **Mode 2: Siaga Digital Gate Pass / Izin Keluar [08:01 - 13:00 WIB]**:
+  - Pintu gerbang utama terkunci. Scanner hanya menerima pemindaian tiket QR Digital Gate Pass.
+  - Satpam memverifikasi kesesuaian penjemput. Saat tombol *"✓ Izinkan Keluar & Buka Palang"* ditekan:
+    - Jam keluar siswa (`early_leave_time`) tercatat resmi di database.
+    - Status presensi hari itu bermutasi menjadi `Hadir (Izin Pulang Cepat: [Jam] WIB)`.
+    - Sistem seketika menembakkan notifikasi WhatsApp keberangkatan ke orang tua siswa.
+- **Mode 3: Presensi Pulang (Check-out) [13:01 - 17:00 WIB]**:
+  - Siswa men-tap kartu pelajar pada scanner pos gerbang saat jam pulang sekolah.
+  - Suara audio bersuara ramah Chime 3 nada (*"Selamat Pulang"*).
+  - Kolom `check_out_time` terisi otomatis di basis data.
+  - Sistem mengirim notifikasi WhatsApp kepulangan ke ponsel orang tua:
+    > *"Bapak/Ibu, ananda [Nama] telah men-tap kepulangan di gerbang sekolah pada pukul [Jam] WIB. Mohon dipantau kepulangan ananda ke rumah."*
+- **Kaidah Keadilan Lupa Tap Pulang**:
+  - Jika siswa hadir di gerbang pagi dan hadir di KBM jam pelajaran terakhir, namun lupa men-tap kartu saat berebut keluar gerbang sore, siswa **TIDAK DIHUKUM ALPA**. Status tetap `Hadir` dengan catatan `Check-out Default (Selesai KBM)`.
 
-### Modul 2: Presensi KBM Jam Mata Pelajaran (Deteksi Siswa Membolos)
-- Guru mata pelajaran melakukan verifikasi cepat kehadiran di setiap jam KBM.
-- **Fitur Deteksi Silang Otomatis**: Jika siswa tercatat hadir di gerbang pagi namun ditandai tidak ada di jam pelajaran, guru dapat mengklik tombol **"🚨 Lapor Membolos ke BK"**.
-- Sistem otomatis mencatat pelanggaran *"Membolos Jam Pelajaran"* (+10 Poin Tatib), mengubah status presensi, dan memicu notifikasi instan ke Guru BK dan Wali Kelas.
+### Modul 2: Skema Pengajuan Izin / Sakit Fleksibel oleh Orang Tua
+1. **Sakit 1 Hari (Tanpa Surat Dokter)**:
+   - Formulir digital mengizinkan orang tua mengunggah foto surat izin tertulis bertanda tangan sendiri.
+   - Dibatasi kuota maksimal 2 kali per semester per siswa agar tidak disalahgunakan.
+2. **Sakit > 1 Hari (Wajib Surat Dokter)**:
+   - Mewajibkan unggah foto/PDF surat keterangan istirahat resmi dari klinik, Puskesmas, atau dokter.
+3. **Izin Keperluan Keluarga Mendesak**:
+   - Memilih rentang tanggal izin (1 s/d 3 hari) dan mengisi alasan kepentingan keluarga.
+4. **Dispensasi Tugas Sekolah / Lomba Eksternal**:
+   - Diajukan langsung oleh Guru Pendamping / Wali Kelas. Status: **Dispensasi** (Hadir 100% dan bebas Auto-Alpa).
+5. **Eskalasi Alpa Berturut-turut $\ge$ 3 Hari**:
+   - Jika siswa Alpa 3 hari berturut-turut tanpa kabar, sistem otomatis menerbitkan rekomendasi **Surat Tugas Home Visit (Kunjungan Rumah)** dan panggilan fisik orang tua ke sekolah pada dashboard Guru BK.
 
-### Modul 3: Pengajuan Izin / Sakit Mandiri oleh Orang Tua
-- Orang tua dapat mengajukan izin anak dari rumah melalui portal mandiri sebelum pukul 08:00 WIB.
-- Formulir mewajibkan upload foto bukti (surat keterangan dokter klinik/rumah sakit untuk sakit, atau surat izin bermaterai/bertandatangan).
-- Pengajuan masuk ke antrean Wali Kelas. Begitu disetujui (*1-click approve*), status presensi anak otomatis terkunci menjadi **Sakit / Izin**, membebaskan anak dari penalti Auto-Alpa.
+### Modul 3: Presensi KBM Jam Mapel (Deteksi Siswa Membolos)
+- Guru mata pelajaran melakukan verifikasi kehadiran siswa di setiap pergantian jam KBM.
+- Fitur pembanding otomatis: Jika siswa berstatus hadir di gerbang pagi namun tidak ada di kelas, guru mengklik tombol merah **"🚨 Lapor Membolos ke BK"**.
+- Sistem otomatis mencatat pelanggaran *"Membolos Jam Pelajaran"* (+10 Poin Tatib) dan menembakkan alert darurat WhatsApp ke orang tua saat jam pelajaran tersebut berlangsung.
 
-### Modul 4: Digital Gate Pass (Surat Izin Keluar Gerbang Satpam)
-- Diterbitkan oleh Wali Kelas atau Guru BK jika siswa harus pulang cepat (sakit demam di UKS atau keperluan keluarga mendesak).
-- Memuat kode unik (misal: `GP-20261123-001`), alasan keluar, nama penjemput, dan verifikasi QR.
-- Satpam di pos gerbang memindai kode tiket, mencocokkan identitas penjemput, dan menekan tombol **"✓ Izinkan Keluar & Buka Palang"**. Jam keluar tercatat resmi di database.
+### Modul 4: Buku Tatib Digital, Poin Pelanggaran & Penerbitan SP
+- Katalog pelanggaran berjenjang: Ringan (5-15 Poin), Sedang (20-45 Poin), Berat (50-100 Poin).
+- Otomatisasi penerbitan Surat Peringatan: SP-1 ($\ge 50$ Poin), SP-2 ($\ge 75$ Poin), SP-3 ($\ge 100$ Poin).
+- Dokumen SP berformat resmi berkop kedinasan SDN Kebonagung Kota Pasuruan lengkap dengan **QR Code Verifikasi Keabsahan**.
 
-### Modul 5: Buku Tata Tertib Digital, Poin Pelanggaran & Penerbitan Surat Peringatan (SP)
-- **Katalog Pelanggaran Berjenjang**:
-  - Ringan (5 - 15 Poin): Terlambat hadir, atribut seragam tidak lengkap, dsb.
-  - Sedang (20 - 45 Poin): Membolos pelajaran, membawa rokok/vape, bullying verbal.
-  - Berat (50 - 100 Poin): Berkelahi/tawuran, asusila, narkoba/miras.
-- **Otomatisasi Penerbitan SP**:
-  - Akumulasi Poin $\ge 50$: Penerbitan **SP-1**.
-  - Akumulasi Poin $\ge 75$: Penerbitan **SP-2** & Panggilan Orang Tua.
-  - Akumulasi Poin $\ge 100$: Penerbitan **SP-3** / Sidang Dewan Guru.
-- Dokumen SP dilengkapi kop resmi SDN Kebonagung Kota Pasuruan dan **QR Code Verifikasi Keabsahan**.
-
-### Modul 6: Bank Prestasi & Merit Points
+### Modul 5: Bank Prestasi & Merit Points
 - Pencatatan prestasi berjenjang: Sekolah (+25), Kota/Kabupaten (+50), Provinsi (+75), Nasional (+100), Internasional (+150).
-- Verifikasi berkas sertifikat/piagam oleh Guru BK.
-- Poin merit menjadi penyeimbang kalkulasi skor karakter siswa pada rapor kedisiplinan semesteran.
+- Poin merit menjadi penyeimbang skor kedisiplinan siswa pada rapor karakter akhir semester.
 
-### Modul 7: Pusat Aduan & Whistleblower Terenkripsi (Anti-Bullying)
+### Modul 6: Pusat Aduan & Whistleblower Terenkripsi (Anti-Bullying)
 - Opsi pelaporan **Anonim (Whistleblower)** atau **Terbuka**.
-- Kategori laporan: Perundungan / Bullying, Pungutan Liar / Keuangan, Fasilitas / Sarpras, Kekerasan Verbal / Fisik.
-- **Enkripsi AES-256-GCM** pada isi laporan dan riwayat pesan chat investigasi dua arah antara pelapor dan Tim Penanganan Satgas Sekolah.
+- Enkripsi tingkat kolom **AES-256-GCM** pada isi laporan dan riwayat pesan chat investigasi dua arah antara pelapor dan Tim Satgas Anti-Kekerasan Sekolah.
 
-### Modul 8: Generator & Cetak Kartu Pelajar PVC (ISO CR-80)
+### Modul 7: Generator & Cetak Kartu Pelajar PVC (ISO CR-80)
 - Dimensi fisik perbankan internasional: $85.60\text{ mm} \times 53.98\text{ mm}$ (Tebal $0.76\text{ mm}$).
-- **Barcode 1D (Code 128)**: Kompatibel dengan semua jenis laser scanner optik.
-- **QR Code 2D (HMAC-SHA256)**: Berisi string terverifikasi kriptografis: `EDUTRACK:<NISN>:<CARD_UUID>:<SIGNATURE_HASH>`.
-- Kebijakan **One-Card One-Active**: Jika kartu hilang, kartu lama di-*revoke* seketika dan kartu baru diterbitkan dengan barcode baru.
+- Simbologi ganda: Barcode 1D (Code 128) dan QR Code 2D bertanda tangan digital **HMAC-SHA256**.
+- Kebijakan **One-Card One-Active**: Tombol *Revoke & Regenerate* seketika menonaktifkan kartu lama yang hilang.
 
-### Modul 9: Master Data Guru & Tenaga Kependidikan (GTK) — Eksklusif Super Admin
-- Full CRUD biodata guru dan staf: NIP, NUPTK, Nama Lengkap & Gelar, Jenis Kelamin, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Pegawai Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Nomor WhatsApp, Email Kedinasan, Status Keaktifan.
-- Seluruh mutasi data GTK tercatat dalam Log Audit ISO 27001 (`CREATE_TEACHER`, `UPDATE_TEACHER`, `DELETE_TEACHER`).
+### Modul 8: Master Data Guru & Tenaga Kependidikan (GTK) — Eksklusif Admin
+- CRUD lengkap biodata GTK: NIP, NUPTK, Nama Lengkap & Gelar, Gender, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Kontak WhatsApp, dan Status Keaktifan.
+- Seluruh mutasi GTK tercatat dalam Log Audit ISO 27001.
 
-### Modul 10: Master Data Siswa, Orang Tua & Manajemen Pengguna
-- Sinkronisasi relasional antara data siswa dan akun wali murid.
-- Tombol **"📲 Kirim Akses"** untuk mengirim tautan aktivasi portal monitoring ke nomor WhatsApp orang tua.
-- Dynamic Scope Assignment pada pendaftaran pengguna baru (Admin = Seluruh Sekolah, Wali Kelas = Dropdown Pilihan Rombel, Ortu/Siswa = Pilihan Siswa).
-
-### Modul 11: Kepatuhan Keamanan ISO/IEC 27001 & UU PDP
-- **Log Audit Kekal (Immutable Audit Trail - A.12.4)**: Mencatat timestamp, user email, role, aksi mutasi, IP address, dan user agent.
-- **Strategi Backup Redundansi 3-2-1 (A.12.3)**:
-  - 3 salinan data (1 produksi live, 2 cadangan).
-  - 2 media penyimpanan berbeda (SSD server lokal + cloud object storage).
-  - 1 salinan offsite terenkripsi di AWS S3 Vault dengan verifikasi SHA-256 checksum harian.
+### Modul 9: Komponen Tampilan Wajib (Putih Minimalis Modern Profesional)
+Setiap tabel dan tampilan fitur wajib dilengkapi:
+1. **Dynamic Pagination**: Navigasi halaman cepat dengan indikator jumlah baris dan pemilih *per-page* (10, 25, 50).
+2. **Debounced Instant Search**: Kolom cari teks reaktif yang memfilter data secara instan saat mengetik.
+3. **Multi-Criteria Dynamic Filters**: Dropdown filter kombinasi (Rombel, Status Kehadiran, Tingkat Kasus, dll.) dengan tombol *Reset Filter*.
+4. **Data Visualization Charts**: Grafik batang kehadiran mingguan/bulanan (Chart.js / ApexCharts), donut chart disiplin vs prestasi, dan sparkline mini.
+5. **Info Cards & KPI Widgets**: Kartu putih dengan bayangan halus (`shadow-sm`), border tipis, angka statistik besar, dan lencana tren persentase.
+6. **Info Icons & Semantic Badges**: Ikon vektor SVG (Bootstrap Icons / Octicons) dan lencana status berpewarna semantik tegas (Emerald, Blue, Amber, Rose, Sky).
 
 ---
 
 ## 4. Kebutuhan Non-Fungsional (Non-Functional Requirements)
 
-1. **Performa & Throughput**:
-   - Respon endpoint presensi gerbang $\le 200\text{ ms}$ pada beban puncak (500 siswa memindai dalam 20 menit).
-   - Render antarmuka meja scanner dan pembaruan tabel $\le 100\text{ ms}$.
-2. **Ketersediaan (*Availability*)**:
-   - Target Service Level Agreement (SLA) $\ge 99.8\%$ jam operasional sekolah (06:00 - 18:00 WIB).
+1. **Throughput Scanner Gerbang**: Waktu respon endpoint scan $\le 100\text{ ms}$ pada Node.js Fastify/Nitro Engine untuk menangani 500 siswa dalam 20 menit.
+2. **Ketersediaan (*Availability*)**: Target SLA $\ge 99.8\%$ jam operasional sekolah (06:00 - 18:00 WIB).
 3. **Keamanan Informasi (*Information Security*)**:
-   - Enkripsi data bergerak (*data in transit*) wajib TLS 1.3 / HTTPS.
-   - Enkripsi data diam (*data at rest*) menggunakan cipher AES-256 untuk kolom-kolom sensitif.
-   - Hashing password menggunakan algoritma **Argon2id**.
-4. **Kompatibilitas Perangkat**:
-   - Responsif pada layar monitor desktop pos satpam ($1920\times1080$), tablet kiosk ($1024\times768$), dan smartphone orang tua/guru ($360\text{px}$ viewport width).
-   - Cetak dokumen SP dan Kartu Pelajar kompatibel dengan printer laser A4 standar dan printer ID Card thermal PVC (Zebra / Fargo / Evolis).
+   - Enkripsi transit wajib HTTPS / TLS 1.3.
+   - Enkripsi database at-rest AES-256 untuk data sensitif.
+   - Hashing password menggunakan **Argon2id**.
+4. **Infrastruktur Cadangan (*Backup*)**:
+   - Redundansi 3-2-1 otomatis dengan replikasi offsite terenkripsi ke AWS S3 Vault Singapore.

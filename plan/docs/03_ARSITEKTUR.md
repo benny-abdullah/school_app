@@ -1,11 +1,13 @@
 # Arsitektur Sistem & Spesifikasi Database Produksi (SSOT)
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Arsitektur Inti**: Laravel 11/12 (PHP 8.3+) + PostgreSQL 16 + Redis 7 + Livewire 3 / Alpine.js  
+**Arsitektur Inti**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + PostgreSQL 16 + Redis 7)  
+**ORM & Database Layer**: Drizzle ORM / Prisma + Native PostgreSQL DDL (21 Tabel Relasional)  
+**Antrean Asinkron**: BullMQ + Redis 7 Daemon  
 **Kepatuhan Standar**: ISO/IEC 27001:2022 & OWASP Top 10 (2021/2026)  
-**Target Server**: aaPanel Linux (Nginx + PHP-FPM) & Bare VPS / Docker Compose
+**Target Server**: aaPanel Linux (PM2 Cluster + Nginx) & Bare VPS / Docker Compose
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur backend, skema basis data relasional (DDL 21 tabel), struktur modular Laravel, endpoint API, dan konfigurasi deployment ganda.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur teknis berbasis JavaScript, struktur monorepo/modular, skema DDL 21 tabel basis data relasional lengkap dengan atribut jam pulang dan izin fleksibel, serta konfigurasi server produksi.
 
 ---
 
@@ -14,54 +16,55 @@ Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur
 ```mermaid
 graph TD
     subgraph Clients ["Lapisan Perangkat Klien (Client Layer)"]
-        POS["📷 Pos Gerbang Sekolah (USB Barcode Laser Scanner + Laptop Satpam)"]
+        POS["📷 Pos Gerbang Sekolah (USB Laser Scanner + Laptop Satpam - 3 Mode Auto-Switch)"]
         TEACH["💻 Laptop Guru & Wali Kelas (Browser KBM & Presensi Harian)"]
-        BK["🛡️ Meja Bimbingan Konseling (Desktop BK - Cetak SP & Kartu PVC)"]
-        ORTU["📱 Ponsel Orang Tua / Siswa (PWA Mobile Portal & WhatsApp)"]
+        BK["🛡️ Meja Bimbingan Konseling (Desktop BK - Cetak SP & Kartu PVC CR-80)"]
+        ORTU["📱 Ponsel Orang Tua / Siswa (PWA Mobile Portal & Notifikasi WhatsApp)"]
     end
 
     subgraph Security_Gateway ["Pintu Masuk Keamanan & Reverse Proxy"]
         WAF["Cloudflare WAF / ModSecurity (Anti-DDoS, Rate Limit, SSL TLS 1.3)"]
-        NGX["Nginx Web Server (Reverse Proxy, HSTS, Secure Headers)"]
+        NGX["Nginx Web Server (Reverse Proxy, HSTS, HTTP/2, Let's Encrypt)"]
     end
 
-    subgraph Application_Core ["Laravel Application Core (PHP 8.3 FPM)"]
-        AUTH["Auth & Spatie RBAC (2FA TOTP, Least Privilege, UUIDv7)"]
-        POL["Server-Side Data Scoping Policy Engine"]
-        LIVE["Laravel Livewire 3 + Alpine.js Reactive Engine"]
-        API["REST API Controller (Scanner Gerbang & Webhook)"]
+    subgraph Application_Core ["Full-Stack JavaScript / TypeScript Core (Nuxt 3 / Fastify)"]
+        AUTH["Auth Module & RBAC Engine (2FA TOTP, UUIDv7, Argon2id)"]
+        SCOPE["Server-Side Data Scoping Middleware (Anti-IDOR)"]
+        VUE["Vue 3 Composition API Reactive Frontend Engine (1:1 index.html)"]
+        API["Fastify / Nitro High-Throughput REST Endpoints (Scanner < 50ms)"]
         
         subgraph Business_Services ["Layanan Bisnis Terisolasi (Services)"]
-        RULE["⚙️ Attendance Rule Engine (Toleransi & Poin Tatib)"]
-        CRYPTO["🔒 AES-256 & HMAC-SHA256 Token Signer"]
-        CARD["🪪 PVC ISO CR-80 Generator & Revocation"]
-        NOTIF["📲 WhatsApp Notification Dispatcher"]
+        RULE["⚙️ 3-Mode Auto-Switch Gate Scanner Engine (Masuk/GatePass/Pulang)"]
+        JUSTICE["⚖️ Checkout Fallback Engine (Keadilan Lupa Tap Pulang)"]
+        CRYPTO["🔒 AES-256-GCM & HMAC-SHA256 Token Signer"]
+        CARD["🪪 PVC ISO CR-80 Generator & One-Card One-Active Manager"]
+        NOTIF["📲 WhatsApp Notification Dispatcher (Check-in & Check-out)"]
         AUDIT["📝 Immutable Audit Logger (ISO 27001 A.12.4)"]
         end
     end
 
-    subgraph Async_Queue ["Message Queue & In-Memory Cache"]
-        REDIS[("Redis 7: Queue Worker WA, Cache Sesi & Rate Limiter")]
+    subgraph Async_Queue ["Message Queue & In-Memory Cache (Redis 7)"]
+        BULLMQ[("BullMQ Worker: WhatsApp Queue, Cron Auto-Alpa 08:00, S3 Backup")]
     end
 
     subgraph Data_Persistence ["Penyimpanan Data & Backup ISO 27001"]
-        PG[("PostgreSQL 16 Enterprise (ACID, Row-Level Locks, Encrypted at Rest)")]
+        PG[("PostgreSQL 16 Enterprise (21 Tabel Relasional, ACID, Row-Level Locks)")]
         S3[("AWS S3 Vault SG (Offsite Daily Encrypted Backup Redundansi 3-2-1)")]
     end
 
-    POS -->|HTTP POST Latensi Rendah| WAF
+    POS -->|HTTP POST Latensi Ultra-Rendah| WAF
     TEACH -->|HTTPS| WAF
     BK -->|HTTPS| WAF
     ORTU -->|HTTPS| WAF
 
     WAF --> NGX
     NGX --> AUTH
-    AUTH --> POL
-    POL --> LIVE & API
-    LIVE & API --> Business_Services
+    AUTH --> SCOPE
+    SCOPE --> VUE & API
+    API --> Business_Services
     
-    NOTIF -->|Async Push Job| REDIS
-    REDIS -->|Worker Daemon| WABOT["WhatsApp Gateway API (Wablas/Fonnte/Twilio)"]
+    NOTIF -->|Async Push Job| BULLMQ
+    BULLMQ -->|Worker Daemon| WABOT["WhatsApp Gateway API (Wablas/Fonnte/Twilio)"]
     
     Business_Services --> PG
     PG -.->|Daily Snapshot Cron| S3
@@ -69,88 +72,82 @@ graph TD
 
 ---
 
-## 2. Struktur Modul & Skema Repositori Laravel
+## 2. Struktur Proyek Full-stack JavaScript / TypeScript
 
-Aplikasi dibangun menggunakan struktur modular modern Laravel 11/12 yang memisahkan ranah bisnis kesiswaan secara tegas:
+Mengadopsi struktur monorepo / modular modern yang menyatukan backend API berkecepatan tinggi dengan antarmuka Vue 3 dari `index.html`:
 
 ```
-app/
-├── Http/
-│   ├── Controllers/
-│   │   ├── Api/
-│   │   │   ├── AttendanceBarcodeScanController.php   # Endpoint gerbang (< 200ms)
-│   │   │   ├── DigitalGatePassVerifyController.php   # Endpoint verifikasi satpam
-│   │   │   └── WhatsAppWebhookController.php         # Webhook interaktif ortu
-│   │   └── Auth/
-│   │       ├── TwoFactorAuthenticationController.php
-│   │       └── AuthenticatedSessionController.php
-│   ├── Livewire/
-│   │   ├── Attendance/
-│   │   │   ├── GateAttendanceScanner.php             # Scanner live & audio hook
-│   │   │   ├── ClassroomAttendanceBulk.php           # Tombol H/S/I/A/T cepat
-│   │   │   └── SubjectAttendanceTable.php            # Presensi jam mapel & bolos
-│   │   ├── Discipline/
-│   │   │   ├── ViolationRecordManager.php            # Catat tatib & penalti
-│   │   │   └── WarningLetterPreviewModal.php         # Cetak SP ber-QR verifikasi
-│   │   ├── StudentCard/
-│   │   │   └── CardGeneratorAndRevocation.php        # Preview bolak-balik CR-80
-│   │   ├── Complaints/
-│   │   │   ├── WhistleblowerTicketCenter.php         # Investigasi aduan rahasia
-│   │   │   └── ComplaintChatThread.php               # Ruang chat terenkripsi
-│   │   ├── Master/
-│   │   │   ├── TeacherStaffCrud.php                  # Master GTK (Admin Only)
-│   │   │   ├── StudentCrud.php                       # Master Siswa & Kartu
-│   │   │   └── ParentCrud.php                        # Master Ortu & Undangan WA
-│   │   └── Security/
-│   │       ├── AuditTrailViewer.php                  # Viewer log ISO 27001
-│   │       └── EncryptedBackupManager.php            # Snapshot & S3 replication
-│   └── Middleware/
-│       ├── EnforceServerDataScope.php                # Isolasi baris database per role
-│       ├── RequireTwoFactorAuthentication.php
-│       └── AuditActivityLogger.php
-├── Models/
-│   ├── User.php
-│   ├── Teacher.php
-│   ├── Classroom.php
-│   ├── Student.php
-│   ├── StudentCard.php
-│   ├── ParentGuardian.php
-│   ├── DailyAttendance.php
-│   ├── SubjectAttendance.php
-│   ├── DigitalGatePass.php
-│   ├── LeaveRequest.php
-│   ├── ViolationPreset.php
-│   ├── StudentViolation.php
-│   ├── WarningLetter.php
-│   ├── Achievement.php
-│   ├── Complaint.php
-│   ├── ComplaintMessage.php
-│   ├── AuditTrailLog.php
-│   ├── BackupArchive.php
-│   └── WhatsAppDispatchLog.php
-├── Policies/
-│   ├── StudentPolicy.php                             # Cegah IDOR antar ortu/siswa
-│   ├── ComplaintPolicy.php                           # Anonimitas & hak investigasi
-│   ├── AttendancePolicy.php                          # Batas wali kelas per rombel
-│   └── TeacherPolicy.php                             # Pembatasan GTK eksklusif admin
-└── Services/
-    ├── AttendanceRuleEngineService.php               # Jendela jam, T1-T3, auto-alpa
-    ├── BarcodeSecurityCryptoService.php              # HMAC-SHA256 & Code 128
-    ├── WhatsAppNotificationDispatcher.php            # Format template & Redis push
-    └── BackupRedundancyS3Service.php                 # AES-256 snapshot & checksum
+edutrack-app/
+├── server/                                   # Backend & API Engine (Nitro / Fastify)
+│   ├── api/
+│   │   ├── attendance/
+│   │   │   ├── gate-scan.post.ts            # Endpoint scanner 3-mode (< 50ms)
+│   │   │   ├── classroom-bulk.post.ts       # Presensi cepat H/S/I/A/T
+│   │   │   └── subject-sync.post.ts         # Deteksi siswa membolos KBM
+│   │   ├── gate-pass/
+│   │   │   ├── issue.post.ts                # Terbitkan tiket izin keluar
+│   │   │   └── verify.post.ts               # Verifikasi satpam pos gerbang
+│   │   ├── leave-requests/
+│   │   │   ├── submit.post.ts               # Pengajuan izin sakit fleksibel ortu
+│   │   │   └── approve.put.ts               # Persetujuan wali kelas
+│   │   ├── violations/                      # CRUD tatib, SP 1-3 & QR verifikasi
+│   │   ├── achievements/                    # CRUD bank prestasi & poin merit
+│   │   ├── complaints/                      # Aduan whistleblower AES-256
+│   │   ├── master/
+│   │   │   ├── teachers.ts                  # Master GTK (Khusus Super Admin)
+│   │   │   ├── students.ts                  # Master Siswa & Rombel
+│   │   │   └── parents.ts                   # Master Wali Murid & Aktivasi WA
+│   │   └── system/
+│   │       ├── audit-logs.get.ts            # Log audit kekal ISO 27001
+│   │       └── backup.post.ts               # Snapshot terenkripsi 3-2-1
+│   ├── services/
+│   │   ├── AttendanceRuleEngineService.ts   # 3 Jendela waktu & rule keterlambatan
+│   │   ├── CheckoutJusticeService.ts        # Keadilan lupa tap pulang vs KBM
+│   │   ├── BarcodeCryptoService.ts          # HMAC-SHA256 & Code 128
+│   │   ├── FieldEncryptionService.ts        # AES-256-GCM cipher
+│   │   └── WhatsAppQueueService.ts          # BullMQ queue dispatcher
+│   ├── jobs/
+│   │   ├── AutoAlpaCronJob.ts               # Cron cutoff jam 08:00 WIB
+│   │   ├── SendWhatsAppNotificationJob.ts   # Worker pengiriman WA masuk & pulang
+│   │   └── DailyEncryptedBackupJob.ts       # Cron snapshot jam 02:00 WIB ke S3
+│   └── middleware/
+│       ├── auth.ts                          # Verifikasi JWT / Sesi & 2FA
+│       └── dataScope.ts                     # Isolasi query data sisi server
+├── database/                                # Skema Database & Migrasi (Drizzle ORM)
+│   ├── schema/
+│   │   ├── users.ts
+│   │   ├── teachers.ts                      # Master GTK
+│   │   ├── students.ts
+│   │   ├── attendances.ts                   # Harian, KBM, Gate Pass, Izin
+│   │   ├── discipline.ts                    # Pelanggaran, Presets, SP
+│   │   ├── complaints.ts                    # Aduan terenkripsi AES-256
+│   │   └── audit.ts                         # Immutable audit logs
+│   ├── migrations/                          # Berkas migrasi SQL
+│   └── seeders/                             # Data seeder SDN Kebonagung
+├── app/ (atau client/)                       # Frontend Vue 3 (Migrasi 1:1 index.html)
+│   ├── components/
+│   │   ├── ui/                              # Pagination, SearchBar, MultiFilter, InfoCards
+│   │   ├── charts/                          # TrendBarChart, DisciplineDonutChart
+│   │   ├── scanner/                         # GateScannerStation, WebAudioFeedback
+│   │   └── cards/                           # StudentCardCR80Preview
+│   ├── pages/                               # Rute Halaman (Dashboard, Presensi, Scanner, dll.)
+│   └── composables/                         # useAttendance, useRoleScope, useAudioScanner
+├── package.json
+├── tsconfig.json
+└── ecosystem.config.js                      # PM2 Cluster Mode Configuration
 ```
 
 ---
 
 ## 3. Skema Basis Data Relasional (DDL 21 Tabel PostgreSQL 16)
 
-Seluruh tabel menggunakan **UUIDv7** untuk mitigasi IDOR (*Insecure Direct Object Reference*), indeks teroptimasi untuk pencarian instan, dan *CHECK constraints* ketat untuk integritas data kesiswaan:
+Skema basis data relasional dirancang dengan **UUIDv7**, indeks komposit teroptimasi, serta kolom operasional terbaru untuk **presensi pulang, izin sakit fleksibel, dan digital gate pass**:
 
 ```sql
--- 1. EXTENSIONS & UUID
+-- 1. EXTENSIONS
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- 2. TABEL USERS (Autentikasi & RBAC)
+-- 2. TABEL PENGGUNA (Users & RBAC)
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
@@ -159,7 +156,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL CHECK (role IN ('admin', 'bk', 'wali_kelas', 'orang_tua', 'siswa', 'satpam')),
     data_scope_type VARCHAR(50) NOT NULL DEFAULT 'all', -- 'all', 'classroom', 'student'
-    data_scope_target VARCHAR(100) NULL,               -- e.g., 'X-RPL-1' or NISN '0081234567'
+    data_scope_target VARCHAR(100) NULL,
     phone VARCHAR(30) NULL,
     two_factor_secret TEXT NULL,
     two_factor_enabled BOOLEAN DEFAULT FALSE,
@@ -168,7 +165,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. TABEL GURU & TENAGA KEPENDIDIKAN (GTK - Master Staff)
+-- 3. TABEL GURU & TENAGA KEPENDIDIKAN (GTK - Master Staff Eksklusif Admin)
 CREATE TABLE teachers (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
@@ -177,7 +174,7 @@ CREATE TABLE teachers (
     nuptk VARCHAR(30) DEFAULT '-' NOT NULL,
     name VARCHAR(150) NOT NULL,
     gender VARCHAR(20) NOT NULL CHECK (gender IN ('Laki-laki', 'Perempuan')),
-    role_position VARCHAR(100) NOT NULL, -- e.g., 'Kepala Sekolah', 'Guru BK', 'Wali Kelas', 'Guru Mapel', 'TU', 'Satpam'
+    role_position VARCHAR(100) NOT NULL, -- 'Kepala Sekolah', 'Guru BK', 'Wali Kelas', 'Guru Mapel', 'TU', 'Satpam'
     employment_status VARCHAR(50) NOT NULL CHECK (employment_status IN ('PNS / ASN', 'PPPK', 'Honorer Daerah (PTT)', 'Pegawai Kontrak')),
     subject_or_class VARCHAR(150) NOT NULL,
     phone VARCHAR(30) NOT NULL,
@@ -190,9 +187,9 @@ CREATE TABLE teachers (
 -- 4. TABEL KELAS / ROMBEL (Classrooms)
 CREATE TABLE classrooms (
     id BIGSERIAL PRIMARY KEY,
-    code VARCHAR(50) UNIQUE NOT NULL, -- 'X-RPL-1', '4-A'
+    code VARCHAR(50) UNIQUE NOT NULL, -- 'X-RPL-1', 'Kelas 4-A'
     name VARCHAR(100) NOT NULL,
-    grade_level INT NOT NULL,         -- 1 s/d 12
+    grade_level INT NOT NULL,
     academic_year VARCHAR(20) NOT NULL,
     homeroom_teacher_id BIGINT REFERENCES teachers(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -260,22 +257,33 @@ CREATE TABLE student_cards (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 9. TABEL PRESENSI HARIAN GERBANG (Daily Attendances)
+-- 9. TABEL PRESENSI HARIAN SISWA (Daily Attendances - Masuk & Pulang)
 CREATE TABLE attendances_daily (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE RESTRICT,
     date DATE NOT NULL,
+    
+    -- Jendela Masuk Pagi
     check_in_time TIME NULL,
-    check_out_time TIME NULL,
-    status VARCHAR(30) NOT NULL CHECK (status IN ('Hadir', 'Terlambat', 'Sakit', 'Izin', 'Alpa')),
+    status VARCHAR(50) NOT NULL CHECK (status IN ('Hadir', 'Terlambat', 'Sakit', 'Izin', 'Alpa', 'Dispensasi')),
     late_category VARCHAR(30) NULL CHECK (late_category IN ('T-1', 'T-2', 'T-3', NULL)),
     late_minutes INT DEFAULT 0,
     points_deducted INT DEFAULT 0,
-    scan_method VARCHAR(30) DEFAULT 'Barcode Scanner' CHECK (scan_method IN ('Barcode Scanner', 'Manual Guru', 'PWA Kiosk')),
+    scan_method_in VARCHAR(30) DEFAULT 'Barcode Scanner',
+    
+    -- Jendela Kepulangan Sore & Izin Pulang Cepat
+    check_out_time TIME NULL,
+    checkout_status VARCHAR(50) DEFAULT 'Belum Pulang' CHECK (checkout_status IN ('Belum Pulang', 'Check-out Normal', 'Izin Pulang Cepat', 'Check-out Default (Selesai KBM)')),
+    early_leave_time TIME NULL,
+    early_leave_reason TEXT NULL,
+    early_leave_pickup_by VARCHAR(150) NULL,
+    is_checkout_missed BOOLEAN DEFAULT FALSE,     -- Flag jika lupa tap pulang
+    
     notes TEXT NULL,
     verified_by_user_id BIGINT REFERENCES users(id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(student_id, date)
 );
 CREATE INDEX idx_attendance_date ON attendances_daily(date);
@@ -289,7 +297,7 @@ CREATE TABLE subjects (
     grade_level INT NOT NULL
 );
 
--- 11. TABEL PRESENSI KBM JAM MATA PELAJARAN (Subject-Based Attendances)
+-- 11. TABEL PRESENSI KBM JAM MAPEL (Subject-Based Classroom Attendance)
 CREATE TABLE attendances_subject (
     id BIGSERIAL PRIMARY KEY,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
@@ -304,29 +312,36 @@ CREATE TABLE attendances_subject (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 12. TABEL PENGAJUAN IZIN / SAKIT ORANG TUA (Leave Requests)
+-- 12. TABEL PENGAJUAN IZIN / SAKIT FLEKSIBEL (Leave Requests)
 CREATE TABLE leave_requests (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID DEFAULT gen_random_uuid() UNIQUE NOT NULL,
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     parent_id BIGINT NOT NULL REFERENCES parents(id) ON DELETE CASCADE,
-    type VARCHAR(100) NOT NULL, -- 'Sakit (Surat Dokter Terlampir)', 'Izin Keperluan Keluarga'
+    type VARCHAR(100) NOT NULL CHECK (type IN (
+        'Sakit 1 Hari (Surat Izin Ortu)', 
+        'Sakit >1 Hari (Surat Dokter Terlampir)', 
+        'Izin Keperluan Keluarga', 
+        'Dispensasi Tugas Sekolah'
+    )),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     reason TEXT NOT NULL,
     attachment_path VARCHAR(255) NULL,
+    semester_quota_used INT DEFAULT 1,
     status VARCHAR(50) DEFAULT 'Menunggu Persetujuan Wali Kelas' CHECK (status IN ('Menunggu Persetujuan Wali Kelas', 'Disetujui', 'Ditolak')),
     approved_by_teacher_id BIGINT REFERENCES teachers(id),
     submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 13. TABEL DIGITAL GATE PASS (Izin Keluar Gerbang Satpam)
+-- 13. TABEL DIGITAL GATE PASS (Izin Pulang Cepat Satpam)
 CREATE TABLE gate_passes (
     id BIGSERIAL PRIMARY KEY,
     pass_code VARCHAR(50) UNIQUE NOT NULL, -- 'GP-20261123-001'
     student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
     reason TEXT NOT NULL,
     pickup_person VARCHAR(150) NOT NULL,
+    pickup_relation VARCHAR(50) NOT NULL,
     approved_by_teacher_id BIGINT NOT NULL REFERENCES teachers(id),
     status VARCHAR(50) DEFAULT 'Siap Diverifikasi Satpam' CHECK (status IN ('Siap Diverifikasi Satpam', 'Telah Melintasi Gerbang', 'Dibatalkan')),
     issued_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -334,7 +349,7 @@ CREATE TABLE gate_passes (
     verified_by_satpam_id BIGINT REFERENCES users(id)
 );
 
--- 14. TABEL PRESET KATALOG PELANGGARAN (Violation Catalog)
+-- 14. TABEL PRESET KATALOG PELANGGARAN (Violation Presets)
 CREATE TABLE violation_presets (
     id BIGSERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
@@ -389,7 +404,7 @@ CREATE TABLE achievements (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 18. TABEL ADUAN & WHISTLEBLOWER (Complaints)
+-- 18. TABEL ADUAN & WHISTLEBLOWER (Complaints - Enkripsi AES-256)
 CREATE TABLE complaints (
     id BIGSERIAL PRIMARY KEY,
     ticket_number VARCHAR(50) UNIQUE NOT NULL, -- 'WB-202611-001'
@@ -406,7 +421,7 @@ CREATE TABLE complaints (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 19. TABEL PESAN CHAT INVESTIGASI ADUAN (Complaint Messages)
+-- 19. TABEL PESAN INVESTIGASI ADUAN (Complaint Messages - Enkripsi AES-256)
 CREATE TABLE complaint_messages (
     id BIGSERIAL PRIMARY KEY,
     complaint_id BIGINT NOT NULL REFERENCES complaints(id) ON DELETE CASCADE,
@@ -423,7 +438,7 @@ CREATE TABLE audit_logs (
     user_id BIGINT NULL REFERENCES users(id) ON DELETE SET NULL,
     user_email VARCHAR(150) NOT NULL,
     role VARCHAR(50) NOT NULL,
-    action VARCHAR(100) NOT NULL,             -- e.g., 'CREATE_STUDENT', 'UPDATE_ATTENDANCE'
+    action VARCHAR(100) NOT NULL,
     details TEXT NOT NULL,
     ip_address VARCHAR(45) NOT NULL,
     user_agent TEXT NULL,
@@ -432,7 +447,7 @@ CREATE TABLE audit_logs (
 CREATE INDEX idx_audit_logs_timestamp ON audit_logs(timestamp);
 CREATE INDEX idx_audit_logs_user ON audit_logs(user_email);
 
--- 21. TABEL CADANGAN TERENKRIPSI ISO 27001 (Backup Registry)
+-- 21. TABEL CADANGAN TERENKRIPSI ISO 27001 (Backup Registry 3-2-1)
 CREATE TABLE backup_archives (
     id BIGSERIAL PRIMARY KEY,
     filename VARCHAR(255) NOT NULL,
@@ -447,60 +462,41 @@ CREATE TABLE backup_archives (
 
 ---
 
-## 4. Spesifikasi Kontrak API Utama (REST Endpoints)
+## 4. Konfigurasi Deployment Ganda JavaScript (aaPanel & Bare VPS / Docker)
 
-### A. Endpoint Pemindaian Barcode Gerbang (Meja Scanner)
-- **Method & Rute**: `POST /api/attendance/gate-scan`
-- **Tingkat Akses**: Token API Terotentikasi (Role `admin`, `bk`, `satpam`).
-- **Target Waktu Respon**: $\le 200\text{ ms}$
-- **Payload Request**:
-  ```json
-  {
-    "barcode_raw": "0081234567",
-    "scan_timestamp": "2026-11-23T07:15:22+07:00",
-    "scanner_station_id": "POS-GERBANG-01"
-  }
-  ```
-- **Respon Sukses (200 OK)**:
-  ```json
-  {
-    "status": "success",
-    "code": "SCAN_PROCESSED",
-    "data": {
-      "student": {
-        "nisn": "0081234567",
-        "name": "Ahmad Rifai",
-        "classroom": "X-RPL-1",
-        "photo_url": "/storage/photos/0081234567.jpg"
-      },
-      "attendance": {
-        "status": "Terlambat",
-        "category": "T-1",
-        "check_in_time": "07:15:22",
-        "points_deducted": 2,
-        "instruction": "Siswa diberikan dispensasi masuk kelas dan tercatat -2 poin tatib."
-      },
-      "audio_cue": "warning_t1",
-      "wa_notification_queued": true
-    }
-  }
-  ```
-
----
-
-## 5. Konfigurasi Deployment Ganda (aaPanel & Bare VPS / Docker)
-
-### Target 1: aaPanel Linux Hosting (Web GUI Deployment)
-- **Nginx Reverse Proxy**: Mengarahkan domain sekolah (`edutrack.sdnkebonagung.sch.id`) ke socket PHP-FPM 8.3 dengan FastCGI Caching untuk static assets.
-- **Process Manager (Supervisor / Cron)**:
-  - Supervisor: Menjalankan worker `php artisan queue:work redis --tries=3 --timeout=90`.
-  - Cron Job aaPanel: Menjalankan `php artisan schedule:run` setiap menit (untuk Auto-Alpa pukul 08:00 WIB dan Daily Encrypted Backup pukul 02:00 WIB).
+### Target 1: aaPanel Linux Hosting (Node.js Version Manager & PM2)
+1. **Node.js Project Manager (aaPanel GUI)**:
+   - Menjalankan aplikasi Nuxt 3 / Node.js Fastify via PM2 Cluster Mode (`instances: 'max'`).
+   - Berkas `ecosystem.config.js`:
+     ```javascript
+     module.exports = {
+       apps: [
+         {
+           name: 'edutrack-app',
+           script: './.output/server/index.mjs',
+           instances: 'max',
+           exec_mode: 'cluster',
+           env: {
+             PORT: 3000,
+             NODE_ENV: 'production'
+           }
+         },
+         {
+           name: 'edutrack-bullmq-worker',
+           script: './server/jobs/worker.ts',
+           instances: 1,
+           exec_mode: 'fork'
+         }
+       ]
+     };
+     ```
+2. **Nginx Reverse Proxy GUI**:
+   - Proxy Pass ke port `3000` dengan WebSocket support (`Upgrade $http_upgrade`).
+   - Konfigurasi Cron Tab aaPanel: Menjalankan skrip backup terenkripsi harian pukul 02:00 WIB.
 
 ### Target 2: Bare VPS Linux (Ubuntu 24.04 LTS / Docker Compose)
-Konfigurasi file multi-container mandiri:
-- `docker-compose.yml`:
-  - `edutrack-app`: PHP 8.3 FPM + Laravel Core + Opcache aktif.
-  - `edutrack-web`: Nginx Alpine dengan konfigurasi SSL Let's Encrypt Certbot & Header Keamanan ISO 27001.
-  - `edutrack-db`: PostgreSQL 16 Alpine dengan volume terisolasi pada NVMe SSD.
-  - `edutrack-redis`: Redis 7 Alpine dengan kata sandi kuat (*Requirepass*).
-  - `edutrack-cron`: Daemon container scheduler pencadangan data otomatis.
+- Multi-container mandiri:
+  - `edutrack-web`: Nginx Alpine dengan SSL Let's Encrypt Certbot & Header Keamanan ISO 27001.
+  - `edutrack-node`: Node.js 20/22 LTS Alpine yang menjalankan runtime server.
+  - `edutrack-postgres`: PostgreSQL 16 Alpine pada NVMe SSD.
+  - `edutrack-redis`: Redis 7 Alpine untuk antrean pesan WhatsApp BullMQ.

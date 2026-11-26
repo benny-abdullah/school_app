@@ -1,20 +1,21 @@
 # Ringkasan Eksekutif: Perbedaan Sistem Eksisting vs. Arsitektur Target (Executive Brief)
 **Ditujukan Untuk**: Kepala Sekolah, Dewan Guru, dan Pengurus Komite SDN Kebonagung Kota Pasuruan  
-**Topik**: Transformasi EduTrack Pro dari Prototipe Antarmuka ke Sistem Produksi Terintegrasi Resmi
+**Topik**: Transformasi EduTrack Pro ke Ekosistem Full-Stack JavaScript Produksi & Skema Absensi Humanis Modern
 
 ---
 
 ## 1. Mengapa Prototipe Saat Ini Harus Ditingkatkan? (The "Why")
 
-Aplikasi yang saat ini berada di [index.html](file:///c:/scholl_app/index.html) adalah sebuah **prototipe mockup interaktif (*client-side prototype*)**. Prototipe ini telah berhasil membuktikan seluruh alur logika bisnis kesiswaan yang sangat baik: alur presensi gerbang dengan aturan keterlambatan, buku saku poin pelanggaran dan pembuatan Surat Peringatan (SP), pengajuan izin sakit oleh orang tua, kanal aduan perundungan, hingga manajemen GTK eksklusif kepala sekolah.
+Aplikasi yang saat ini berada di [index.html](file:///c:/scholl_app/index.html) adalah sebuah **prototipe mockup interaktif berbasis peramban (*client-side prototype*)**. Prototipe ini telah membuktikan logika bisnis kesiswaan yang sangat baik, namun menyimpan seluruh datanya **hanya di dalam memori sementara laptop pengembang (RAM)**:
+1. **Data Hilang Saat Refresh**: Jika halaman di-refresh (*F5*), seluruh data presensi hari ini, data siswa baru, dan aduan yang dimasukkan akan terhapus kembali ke kondisi awal.
+2. **Tidak Saling Terhubung**: Komputer pos satpam di gerbang, laptop guru di ruang kelas, dan ponsel orang tua di rumah belum terhubung ke satu basis data terpusat.
+3. **Pesan WhatsApp Masih Berupa Simulasi**: Notifikasi belum benar-benar terkirim ke ponsel orang tua siswa di dunia nyata.
+4. **Celah Presensi Lapangan yang Belum Tertutup**:
+   - Aturan izin sakit terlalu kaku (harus surat dokter untuk sakit demam 1 hari).
+   - Presensi pulang sore belum otomatis dan orang tua belum menerima notifikasi saat anak keluar gerbang.
+   - Belum ada jaminan keadilan bagi siswa yang lupa men-tap kartu saat berebut pulang sore.
 
-Namun, prototipe tersebut menyimpan seluruh datanya **hanya di dalam memori sementara laptop pengembang**:
-1. **Data Hilang Seketika**: Jika tab browser ditutup atau tombol refresh (*F5*) ditekan, seluruh data siswa baru, presensi hari ini, dan catatan aduan yang baru dimasukkan akan **terhapus seketika kembali ke awal**.
-2. **Tidak Bisa Digunakan Bersamaan Antar Ruangan**: Komputer petugas keamanan di pos gerbang, laptop guru di ruang kelas, dan ponsel orang tua di rumah **belum saling terhubung**. Jika satpam mencatat anak hadir di gerbang, data tersebut tidak muncul di laptop wali kelas.
-3. **Pesan WhatsApp Masih Berupa Simulasi**: Pesan WhatsApp belum benar-benar terkirim ke ponsel orang tua siswa di dunia nyata, melainkan hanya tampil sebagai jendela simulasi di layar komputer.
-4. **Keamanan Data Belum Memenuhi Standar Hukum**: Isi laporan aduan siswa belum dienkripsi secara fisik di server, dan pembatasan hak akses belum dilindungi di sisi basis data (*database*), sehingga belum memenuhi ketentuan **UU Pelindungan Data Pribadi (UU PDP No. 27/2022)** dan **ISO/IEC 27001**.
-
-**Arsitektur Target Produksi** hadir untuk mengubah prototipe visual ini menjadi **Sistem Informasi Sekolah Resmi Skala Penuh** yang aman, andal, terhubung ke server cloud/VPS sekolah, dan siap digunakan dalam kegiatan belajar mengajar harian SDN Kebonagung Kota Pasuruan.
+**Arsitektur Target Produksi (Full-Stack JavaScript)** hadir untuk mengubah prototipe ini menjadi **Sistem Informasi Sekolah Resmi Skala Penuh** yang aman, cepat, berkeadilan, dan terhubung ke server cloud/VPS SDN Kebonagung Kota Pasuruan.
 
 ---
 
@@ -23,19 +24,19 @@ Namun, prototipe tersebut menyimpan seluruh datanya **hanya di dalam memori seme
 ```mermaid
 graph LR
     subgraph EKSISTING ["PROTOTIPE SAAT INI (MOCKUP BROWSER)"]
-        E1["Penyimpanan Sementara di Memori Laptop (RAM)"]
-        E2["Simulasi Jam & Scan Tombol Manual"]
-        E3["Hanya 1 Komputer (Tidak Saling Terhubung)"]
-        E4["Notifikasi WA Hanya Simulasi Layar"]
-        E5["Aduan & Dokumen Belum Terenkripsi Fisik"]
+        E1["Penyimpanan Sementara di RAM Laptop"]
+        E2["Simulasi Jam Masuk Manual"]
+        E3["Presensi Pulang Belum Berfungsi Nyata"]
+        E4["Wajib Surat Dokter (Terlalu Kaku)"]
+        E5["Notifikasi WA Hanya Simulasi Layar"]
     end
 
-    subgraph TARGET ["SISTEM PRODUKSI TARGET (EDUTRACK PRO RESMI)"]
-        T1["Database Relasional PostgreSQL 16 Terpusat di Server"]
-        T2["Laser Scanner Gerbang Cepat 0.3 Detik + Audio Beep/Buzz"]
-        T3["Terhubung Multi-Perangkat (Pos Gerbang, Guru, BK, Ortu)"]
-        T4["Pesan WA Otomatis Nyata ke Ponsel Orang Tua via Gateway"]
-        T5["Enkripsi AES-256 Kepatuhan ISO 27001 & UU PDP"]
+    subgraph TARGET ["SISTEM PRODUKSI TARGET (JAVASCRIPT / NUXT 3)"]
+        T1["Database Relasional PostgreSQL 16 Terpusat via Drizzle"]
+        T2["Scanner 3 Mode Otomatis (Masuk, Gate Pass, Pulang)"]
+        T3["Presensi Pulang + Chime Nada Ramah + Notif WA Pulang"]
+        T4["Izin Fleksibel: Sakit 1 Hari Surat Ortu (Maks 2x/Smt)"]
+        T5["Keadilan Pulang: Lupa Tap Pulang Tetap Hadir"]
     end
 
     EKSISTING ==>|Transformasi Produksi| TARGET
@@ -47,16 +48,16 @@ graph LR
 
 | Pihak Sekolah | Manfaat Nyata Sistem Produksi Target |
 | :--- | :--- |
-| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* untuk memantau kedisiplinan sekolah secara objektif; manajemen GTK (Guru & Pegawai) terlindung penuh; pencadangan data otomatis 3-2-1 aman dari resiko kehilangan data. |
-| **🛡️ Guru BK / Kesiswaan** | Otomatisasi kalkulasi poin tatib dan penerbitan Surat Peringatan (SP 1, SP 2, SP 3) ber-QR Code resmi tanpa perlu mengetik manual di Word; kanal rahasia investigasi perundungan (*anti-bullying*) yang aman secara hukum. |
-| **📋 Wali Kelas & Guru Mapel** | Absensi kelas harian selesai dalam 10 detik (tombol *Set Semua Hadir*); langsung mengetahui jika ada siswa yang hadir di gerbang pagi namun membolos di jam pelajaran siang. |
-| **👮 Petugas Keamanan (Satpam)**| Pemindaian barcode kartu pelajar ultra-cepat ($0.3\text{ detik/siswa}$) dengan umpan balik suara (*Beep* jika tepat waktu, *Buzz* jika terlambat); verifikasi tiket keluar siswa (*Digital Gate Pass*) langsung dari layar gerbang. |
-| **👨‍👩‍👦 Orang Tua / Wali Murid** | Menerima laporan otomatis di WhatsApp saat anak tiba di sekolah; dapat mengajukan surat izin sakit anak secara mandiri dari rumah lengkap dengan foto surat dokter; transparansi poin prestasi & tatib anak. |
+| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* berbasis **desain dominan putih minimalis modern** dengan grafik Chart.js mingguan; modul Master GTK (Guru & Pegawai) terlindung penuh; backup otomatis redundansi 3-2-1 aman dari kehilangan data. |
+| **🛡️ Guru BK / Kesiswaan** | Otomatisasi SP 1-3 ber-QR resmi tanpa ketik manual; deteksi dini siswa alpa 3 hari berturut-turut untuk rekomendasi kunjungan rumah (*Home Visit*); kanal aduan perundungan terenkripsi AES-256 yang aman secara hukum UU PDP. |
+| **📋 Wali Kelas & Guru Mapel** | Absensi harian selesai dalam 10 detik (tombol *Set Semua Hadir*); presensi KBM jam pelajaran mendeteksi siswa membolos KBM (+10 Poin Tatib); verifikasi pengajuan izin sakit ortu yang fleksibel. |
+| **👮 Petugas Keamanan (Satpam)**| Pemindai gerbang otomatis beralih fungsi 3 mode (Pagi Masuk, Siang Gate Pass, Sore Pulang); nada suara Web Audio API (*Beep* masuk, *Buzz* terlambat, *Chime* pulang); verifikasi tiket izin keluar (*Digital Gate Pass*) sekali klik. |
+| **👨‍👩‍👦 Orang Tua / Wali Murid** | Menerima **2 kepastian notifikasi WhatsApp setiap hari**: saat anak tiba di sekolah pagi hari dan saat anak melangkah keluar gerbang sore hari; kemudahan mengajukan izin sakit ringan 1 hari dari rumah tanpa harus mencari surat dokter. |
 
 ---
 
-## 4. Kesiapan Menuju Penerapan Produksi (Next Steps)
+## 4. Keunggulan Memilih Framework JavaScript (Nuxt 3 / Node.js)
 
-Seluruh perencanaan teknis, skema 21 tabel basis data, spesifikasi antarmuka, hingga panduan orkestrasi tim pengembang telah didokumentasikan secara lengkap dan tervalidasi pada folder `plan/docs/`. 
-
-Sistem siap dibangun ke tahap pengkodean produksi (*Production Implementation*) secara bertahap tanpa mengganggu operasional sekolah yang sedang berjalan.
+1. **Migrasi Kode Alami dari [index.html](file:///c:/scholl_app/index.html)**: Karena file prototipe Anda sudah menggunakan Vue 3, migrasi komponen tampilan, modal, dan variabel reaktif dapat dilakukan hampir 1:1 tanpa membuang pekerjaan desain yang sudah ada.
+2. **Kecepatan Tinggi Meja Gerbang**: Backend Node.js Fastify memproses pemindaian kartu dalam $\le 50\text{ milidetik}$, menjamin 500 siswa selesai masuk dalam 15-20 menit.
+3. **Komponen Tampilan Kaya & Informatif**: Menggabungkan estetika putih minimalis dengan efek Bootstrap 5 modern, paginasi dinamis, pencarian reaktif, penyaring multi-kriteria, dan diagram visual interaktif.

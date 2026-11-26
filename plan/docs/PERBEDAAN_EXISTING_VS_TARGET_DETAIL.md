@@ -1,84 +1,66 @@
 # Perbandingan Mendalam: Sistem Eksisting vs. Arsitektur Target (Technical Detail)
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Status**: Analisis Komparatif Mendalam (Baseline Mockup vs. Target Production)
+**Status**: Analisis Komparatif Mendalam (Baseline Mockup vs. Target Production JavaScript)
 
-Dokumen ini memuat perbandingan teknis, arsitektural, operasional, dan keamanan secara komprehensif baris-demi-baris antara sistem prototipe saat ini (*existing in-memory SPA*) pada [index.html](file:///c:/scholl_app/index.html) dan arsitektur target yang direncanakan (*target production Laravel + PostgreSQL*).
+Dokumen ini memuat perbandingan teknis, arsitektural, operasional, dan keamanan secara komprehensif baris-demi-baris antara sistem prototipe saat ini (*existing in-memory SPA*) pada [index.html](file:///c:/scholl_app/index.html) dan arsitektur target yang direncanakan (*target production Nuxt 3 / Fastify + PostgreSQL 16*).
 
 ---
 
 ## 1. Matriks Komparasi Parameter Teknis
 
-| Dimensi Arsitektur | Sistem Eksisting (Mockup `index.html`) | Arsitektur Target (Planned Production) | Dampak & Alasan Transformasi |
+| Dimensi Arsitektur | Sistem Eksisting (Mockup `index.html`) | Arsitektur Target (Planned Production JavaScript) | Dampak & Alasan Transformasi |
 | :--- | :--- | :--- | :--- |
-| **Penyimpanan Data (Persistence)** | Browser RAM Memory (`ref([])` di JavaScript Vue). Data hilang seketika saat halaman di-refresh (*F5*). | Basis Data Relasional **PostgreSQL 16 Enterprise** dengan garansi ACID, UUIDv7, dan enkripsi *at-rest*. | Memberikan persistensi data permanen, kapasitas rekaman kesiswaan tak terbatas, dan keandalan integritas data antar semester. |
-| **Konkurensi & Multi-Device** | **Zero Concurrency**: Hanya berjalan di 1 tab browser pada 1 komputer pengembang lokal. | **Multi-Device Concurrent Engine**: Pos Satpam, Ruang Guru, Meja BK, dan Ponsel Ortu terhubung serentak via Jaringan/Internet. | Memungkinkan satpam memindai kartu di gerbang sementara wali kelas memantau absensi kelas dan orang tua menerima pesan WA serentak. |
-| **Presensi Gerbang & Latensi** | Simulasi dropdown jam (`06:45`, `07:10`, dsb.) dan pencarian array JS lokal. | **High-Throughput Endpoint (`POST /api/attendance/gate-scan`)** dengan latensi $\le 200\text{ ms}$ & koneksi scanner laser USB. | Menjamin pemindaian 500 siswa di pos gerbang tuntas dalam 20 menit tanpa hambatan teknis atau antrean mengular. |
-| **Anti-Double Tap Cooldown** | Tidak ada validasi jeda waktu fisik antar pemindaian kartu yang sama. | **Atomic Database Cooldown Check (< 5 Menit)** pada baris kartu aktif di tabel `attendances_daily`. | Mencegah kartu yang tidak sengaja tertempel dua kali mencatat duplikasi kehadiran atau penalti ganda. |
-| **Deteksi Siswa Membolos KBM** | Tombol simulasi JS yang menambahkan item ke array pelanggaran lokal. | **Relational Cross-Checking Engine**: Membandingkan log gerbang pagi dengan log presensi KBM per jam pelajaran. | Otomatis mendeteksi siswa yang hadir di gerbang tetapi membolos di jam pelajaran siang (+10 Poin & notifikasi darurat BK). |
-| **Keamanan Kartu Pelajar** | Teks alfanumerik biasa tanpa tanda tangan digital. Rentan difotokopi/titip absen. | **Dual-Symbology ISO CR-80**: Barcode 1D Code 128 + QR Code 2D bertanda tangan digital **HMAC-SHA256**. | Mengeliminasi kecurangan titip absen; sistem dapat memverifikasi keabsahan kartu fisik secara kriptografis. |
-| **Kebijakan Kartu Pelajar** | Array statis siswa; tidak ada mekanisme pencabutan kartu fisik yang hilang. | **One-Card One-Active Policy**: Fitur *Revoke & Regenerate* seketika menonaktifkan kartu lama di seluruh scanner. | Mencegah penyalahgunaan kartu siswa yang tercecer atau dicuri oleh pihak lain. |
-| **Dokumen Surat Peringatan (SP)**| Modal popup HTML statis dengan pratinjau teks biasa. | **Engine Dokumen Resmi PDF (DomPDF/Snappy)** berkop resmi SDN Kebonagung, stempel kedinasan & QR Code verifikasi keabsahan. | Menghasilkan dokumen resmi yang sah secara hukum pendidikan untuk diserahkan kepada orang tua siswa. |
-| **Kanal Aduan & Whistleblower** | Data teks aduan disimpan dalam array JavaScript biasa (*plain text*). | **Enkripsi End-to-End Kolom Sensitif (AES-256-GCM)** via Eloquent Casts; identitas anonim terisolasi penuh. | Menjamin kerahasiaan identitas pelapor kasus perundungan (*bullying*) sesuai amanat UU Perlindungan Data Pribadi (UU PDP). |
-| **Pengiriman Notifikasi WhatsApp**| Jendela modal sembulan simulasi teks pesan di layar pengembang. | **Asynchronous Redis Queue Worker** yang menembakkan pesan resmi via WhatsApp Business API Gateway. | Orang tua langsung menerima notifikasi status kehadiran anak secara *real-time* di ponsel masing-masing. |
-| **Master Guru & GTK (Admin)** | Array statis 7 orang guru/staf di memori JavaScript. | **Tabel Relasional `teachers`**: Validasi NIP/NUPTK resmi Kemendikbudristek, hak akses eksklusif Admin, dan audit trail ISO 27001. | Memfasilitasi tata kelola kepegawaian sekolah secara profesional, tertib administrasi Dapodik, dan aman dari modifikasi liar. |
-| **Isolasi Data (Anti-IDOR)** | Filter computed property `roleDataScope` di JavaScript (dapat dibypass via F12 console). | **Server-Side Global Scopes & Laravel Policies**: Isolasi query dipaksakan di level basis data. | Mencegah kebocoran data privasi siswa atau orang tua lain (*Zero IDOR Vulnerability*). |
-| **Jejak Audit Sistem** | Array `auditLogs` lokal yang terhapus saat refresh. | **Tabel Kekal `audit_logs` (ISO 27001 A.12.4)** dilindungi *PostgreSQL Database Trigger* dilarang UPDATE & DELETE. | Menjamin jejak mutasi data (*Who, What, When, IP Address*) tidak dapat dimanipulasi bahkan oleh administrator sistem. |
-| **Pencadangan Data (Backup)** | Simulasi timeout JS (1.2 detik) yang menambahkan item palsu ke tabel. | **Automated 3-2-1 Encrypted Backup**: Dump database terenkripsi AES-256-GCM otomatis direplikasi ke AWS S3 Vault SG. | Menjamin sekolah memiliki pemulihan bencana (*disaster recovery*) jika server lokal mengalami kerusakan perangkat keras. |
-| **Lingkungan Deployment** | Berkas statis tunggal dibuka via `file:///` atau `php -S 127.0.0.1:8000`. | **Dual-Target Production**: aaPanel Nginx + PHP-FPM 8.3 & Bare VPS Ubuntu / Docker Compose. | Siap di-deploy pada server produksi hosting sekolah dengan SSL HTTPS Let's Encrypt dan auto-restart daemon. |
+| **Ekosistem & Runtime** | File HTML statis dibuka di browser (`Vue.createApp`). | **Full-Stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify)**. | Memungkinkan migrasi komponen Vue 3 dari `index.html` secara 1:1, bersatu dengan backend API berkecepatan tinggi. |
+| **Penyimpanan Data (Persistence)** | Browser RAM Memory (`ref([])` di JavaScript). Data hilang seketika saat halaman di-refresh (*F5*). | Basis Data Relasional **PostgreSQL 16 Enterprise** via **Drizzle ORM** (ACID, UUIDv7, CHECK constraints). | Menjamin persistensi data permanen, kapasitas ribuan siswa, dan integritas data antar semester tanpa risiko data hilang. |
+| **Konkurensi & Multi-Device** | **Zero Concurrency**: Hanya berjalan di 1 tab browser pada 1 komputer pengembang lokal. | **Multi-Device Concurrent Engine**: Pos Satpam, Ruang Guru, Meja BK, dan Ponsel Ortu terhubung serentak secara real-time. | Memungkinkan satpam memindai kartu di gerbang sementara wali kelas mengabsen di kelas dan orang tua menerima WA serentak. |
+| **Modus Pemindai Gerbang** | Simulasi dropdown jam manual (`06:45`, `07:10`, dsb.) hanya fokus pada jam masuk pagi. | **3-Mode Auto-Switch Scanner**: Mode 1 Masuk (06:00-08:00), Mode 2 Siaga Gate Pass (08:01-13:00), Mode 3 Pulang (13:01-17:00). | Satpam tidak perlu memencet tombol ganti mode; scanner otomatis menyesuaikan fungsi sesuai jam server nyata. |
+| **Kecepatan Presensi Gerbang** | Pencarian array JS lokal di browser. | **High-Throughput Endpoint (`POST /api/attendance/gate-scan`)** dengan latensi $\le 50\text{ ms}$ pada Node.js Fastify. | 500 siswa di gerbang dapat dipindai tuntas dalam waktu 15-20 menit tanpa antrean mengular. |
+| **Presensi Pulang & Notifikasi** | Belum ada alur kepulangan otomatis; hanya ada kolom kosong. | **Sore Check-out + WhatsApp Kepulangan**: Nada Chime 3 nada C-E-G dan notifikasi WA otomatis ke orang tua bahwa anak telah keluar gerbang. | Memberikan ketenangan batin (*peace of mind*) kepada orang tua untuk memantau kepulangan anak ke rumah secara tepat waktu. |
+| **Keadilan Lupa Tap Pulang** | Tidak ada penanganan khusus (berpotensi tercatat tidak hadir). | **Pola Keadilan Checkout Fallback**: Siswa yang hadir di KBM sesi terakhir tetap berstatus `Hadir (Check-out Default)`. | Menjaga keadilan: Siswa SD yang berebut keluar gerbang dan lupa tap kartu tidak dihukum Alpa. |
+| **Pengajuan Izin Sakit Ortu** | Wajib surat dokter klinik/RS (terlalu kaku untuk demam 1 hari). | **Izin Fleksibel**: Sakit 1 Hari cukup surat izin tertulis bertanda tangan orang tua (maks 2x/semester); Sakit >1 Hari wajib surat dokter. | Menghilangkan beban orang tua mencari surat dokter untuk sakit ringan dan mencegah sanksi Auto-Alpa keliru. |
+| **Status Pulang Cepat (Gate Pass)**| Tercatat sebagai Gate Pass biasa tanpa penegasan status presensi harian. | **Status Mutasi Presensi**: Menjadi `Hadir (Izin Pulang Cepat: 10:15 WIB)` + Alert WA otomatis saat palang gerbang dibuka satpam. | Jam keluar tercatat presisi di database, terbebas dari tuduhan membolos, dan mencegah risiko penculikan anak. |
+| **Deteksi Siswa Membolos KBM** | Tombol simulasi JS lokal. | **Relational Cross-Checking Engine**: Membandingkan log gerbang pagi dengan presensi KBM per jam pelajaran (+10 Poin & notif darurat BK). | Menutup celah siswa yang hadir di gerbang pagi namun membolos atau nongkrong di kantin saat pelajaran siang. |
+| **Keamanan Kartu Pelajar** | Teks barcode alfanumerik biasa tanpa proteksi anti-pemalsuan. | **Dual-Symbology ISO CR-80**: Barcode 1D Code 128 + QR Code 2D bertanda tangan digital **HMAC-SHA256**. | Mengeliminasi kecurangan titip absen atau pemalsuan kartu via fotokopi/foto smartphone. |
+| **Kanal Aduan & Whistleblower** | Teks biasa di memori browser (*plain text*). | **Enkripsi End-to-End Kolom Sensitif (AES-256-GCM)** via Node.js Crypto; identitas pelapor anonim terisolasi penuh. | Menjamin kerahasiaan identitas korban perundungan (*bullying*) sesuai mandat UU Perlindungan Data Pribadi (UU PDP). |
+| **Pengiriman Notifikasi WhatsApp**| Jendela modal sembulan simulasi di layar pengembang. | **Asynchronous BullMQ + Redis Queue Worker** yang menembakkan pesan resmi via WhatsApp Business API Gateway. | Orang tua langsung menerima pesan resmi di ponsel masing-masing (notif masuk, notif pulang, alert alpa/bolos). |
+| **Master Guru & GTK (Admin)** | Array statis 7 guru/staf di memori JavaScript. | **Tabel Relasional `teachers`**: Validasi NIP/NUPTK resmi, hak akses eksklusif Admin, dan audit trail ISO 27001. | Memfasilitasi tata kelola kepegawaian sekolah secara tertib administrasi Dapodik dan terlindung dari akses ilegal. |
+| **Gaya Desain & Komponen UI** | Tailwind CDN standar tanpa pagination dinamis atau visualisasi chart. | **Dominan Putih Minimalis Modern Profesional**: Bootstrap 5 modern effects, kartu KPI putih shadow-sm, pagination dinamis, searching reaktif, multi-filter, dan grafik Chart.js. | Menghasilkan antarmuka visual yang sangat bersih, elegan, profesional, dan mudah dipahami oleh guru maupun orang tua. |
+| **Jejak Audit Sistem** | Array `auditLogs` lokal yang terhapus saat refresh. | **Tabel Kekal `audit_logs` (ISO 27001 A.12.4)** dilindungi *PostgreSQL Database Trigger* dilarang UPDATE & DELETE. | Menjamin jejak mutasi data (*Who, What, When, IP Address*) tidak dapat dimanipulasi bahkan oleh administrator sekolah. |
+| **Pencadangan Data (Backup)** | Simulasi timeout JS (1.2 detik). | **Automated 3-2-1 Encrypted Backup**: Dump database terenkripsi AES-256-GCM otomatis direplikasi ke AWS S3 Vault SG. | Memberikan jaminan pemulihan bencana (*disaster recovery*) jika server lokal mengalami kerusakan perangkat keras. |
 
 ---
 
 ## 2. Perbandingan Alur Bisnis Kritis (Workflow Deep-Dive)
 
-### A. Alur Presensi Gerbang Pagi (Morning Gate Attendance)
+### A. Alur Presensi Kepulangan Sore (Afternoon Check-out Workflow)
 
 ```text
 ALUR MOCKUP EKSISTING:
-1. Operator memilih jam simulasi di dropdown (misal: 07:10).
-2. Operator mengetik NISN '0081234567' atau klik tombol 'Tap Scan'.
-3. Fungsi JavaScript 'executeBarcodeScan()' mencari siswa di array in-memory.
-4. Nilai 'demeritPoints' siswa di memori ditambah 2 poin.
-5. Record baru ditambahkan ke array 'attendanceList' di memori browser.
-6. Notifikasi Toast muncul di layar laptop pengembang.
-MASALAH: Data tidak tersimpan di server; orang tua tidak menerima pesan WA asli; tidak ada proteksi duplikasi tap.
+1. Tidak ada mekanisme tap kepulangan yang berfungsi secara reaktif.
+2. Kolom check_out_time di tabel dibiarkan kosong.
+MASALAH: Orang tua tidak tahu jam berapa anaknya pulang sekolah; sekolah tidak tahu apakah anak masih di lingkungan sekolah atau sudah pulang.
 
 ALUR TARGET PRODUKSI:
-1. Siswa men-tap kartu pelajar PVC pada Laser Gun Scanner di pos gerbang sekolah.
-2. Scanner memuntahkan karakter barcode seketika ke endpoint 'POST /api/attendance/gate-scan' (< 200ms).
-3. AttendanceRuleEngineService memvalidasi cooldown (< 5 menit) dan mengevaluasi jam scan nyata server.
-4. Database PostgreSQL mengunci baris dalam transaksi atomik, mencatat status Terlambat T-1 (-2 Poin Tatib).
-5. Layanan Audio membunyikan nada triangle (warning_t1) pada speaker pos gerbang.
-6. Layanan memicu 'AttendanceRecordedEvent' yang melempar payload notifikasi ke Redis Queue.
-7. Worker Redis memproses pengiriman pesan WhatsApp resmi ke nomor wali murid tanpa membebani pos gerbang.
-8. Mutasi tercatat otomatis di tabel kekal 'audit_logs'.
+1. Pukul 13:01 WIB, scanner gerbang otomatis berganti ke MODE 3: PRESENSI PULANG (CHECK-OUT).
+2. Siswa men-tap kartu pelajar pada laser scanner saat berjalan keluar gerbang.
+3. Mesin Fastify memproses scan (< 50ms) dan mengisi 'check_out_time = NOW()'.
+4. Speaker pos gerbang membunyikan nada melodi Chime 3 nada C-E-G ("Selamat Pulang").
+5. BullMQ mendorong notifikasi WhatsApp ke ponsel orang tua:
+   "Bapak/Ibu, ananda [Nama] telah selesai KBM dan keluar gerbang sekolah pukul 14:15 WIB. Mohon dipantau kepulangan ananda ke rumah."
+6. Rekonsiliasi Jam 17:00 WIB: Jika siswa hadir KBM jam terakhir tapi lupa tap kartu pulang,
+   CheckoutJusticeService secara otomatis menandai status 'Hadir (Check-out Default: Selesai KBM)' tanpa menjatuhkan penalti Alpa.
 ```
 
-### B. Alur Presensi KBM Mapel & Deteksi Membolos (Classroom Attendance & Skipping Detection)
+### B. Alur Pengajuan Izin Sakit Fleksibel (Flexible Leave Workflow)
 
 ```text
 ALUR TARGET PRODUKSI:
-1. Guru mata pelajaran membuka antarmuka 'Presensi KBM Jam Mapel' di ruang kelas.
-2. Sistem secara otomatis menampilkan status kehadiran gerbang pagi sebagai acuan dasar.
-3. Guru melakukan pengecekan fisik di kelas. Jika siswa hadir di gerbang pagi namun kursi kosong di jam KBM:
-   -> Guru menandai status 'Membolos' dan menekan tombol '🚨 Lapor Membolos ke BK'.
-4. Sistem memproses transaksi ganda:
-   - Status presensi sesi mapel tercatat 'Membolos' (is_skipping = true).
-   - Record pelanggaran baru otomatis dibuat di tabel 'student_violations' (+10 Poin Tatib).
-5. Layanan WhatsApp mengirimkan peringatan darurat ke orang tua:
-   "Ananda tercatat hadir di gerbang pagi, namun tidak mengikuti jam pelajaran [Nama Mapel]. Mohon konfirmasi."
-6. Dashboard Guru BK dan Wali Kelas memunculkan indikator waspada merah untuk pembinaan seketika.
-```
-
-### C. Alur Pengaduan Whistleblower Anti-Perundungan (Bullying Whistleblower)
-
-```text
-ALUR TARGET PRODUKSI:
-1. Siswa/Orang Tua membuka modul aduan dan mencentang opsi 'Kirim sebagai Anonim (Whistleblower)'.
-2. Pengguna mengisi judul dan rincian intimidasi perundungan di lorong sekolah.
-3. FieldEncryptionService mengenkripsi seluruh teks deskripsi menggunakan cipher AES-256-GCM sebelum masuk ke PostgreSQL.
-4. Kolom pelapor diisi 'Whistleblower Anonim' tanpa menautkan 'user_id' atau 'student_id' (Zero Identity Trace).
-5. Tim Satgas Sekolah dan Guru BK menerima tiket baru dan membuka 'Ruang Obrolan Investigasi Terenkripsi'.
-6. Komunikasi dua arah berlangsung aman melalui pesan terenkripsi baris-demi-baris di tabel 'complaint_messages'.
-7. Korban perundungan terlindungi sepenuhnya dari intimidasi pelaku atau kebocoran data identitas.
+1. Anak demam di rumah pukul 06:30 WIB.
+2. Orang tua membuka portal di ponsel, memilih menu 'Ajukan Izin / Sakit Anak'.
+3. Orang tua memilih 'Sakit 1 Hari (Surat Izin Ortu)' dan mengunggah foto surat izin tulisan tangan bertanda tangan.
+4. Sistem memverifikasi sisa kuota izin mandiri semester ini (maks 2x per semester).
+5. Pengajuan masuk ke antrean dashboard Wali Kelas dengan banner notifikasi kuning.
+6. Wali Kelas menekan tombol '✓ Setujui Izin'.
+7. Status presensi anak hari itu otomatis terkunci menjadi 'Sakit', membebaskan anak dari vonis Auto-Alpa jam 08:00 WIB.
 ```

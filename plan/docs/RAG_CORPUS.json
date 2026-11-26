@@ -2,9 +2,11 @@
   "project": {
     "name": "school_app",
     "product_name": "EduTrack Pro",
-    "version": "2.4.0",
+    "version": "2.5.0",
     "institution": "SDN Kebonagung Kota Pasuruan",
-    "description": "Sistem Monitoring Terpadu Sekolah (Kehadiran Gerbang Barcode, Presensi KBM Mapel, Kedisiplinan Poin Tatib, Otomatisasi SP QR, Bank Prestasi, Kanal Aduan Whistleblower Terenkripsi AES-256, Master GTK, dan Portal Mandiri Wali Murid) berbasis standar ISO/IEC 27001 dan UU PDP",
+    "stack": "Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + Drizzle ORM + PostgreSQL 16 + Redis BullMQ)",
+    "ui_theme": "Dominan Putih Minimalis Modern Profesional (Bootstrap 5 Modern + Tailwind + Chart.js)",
+    "description": "Sistem Monitoring Terpadu Sekolah: Presensi Gerbang 3-Mode Otomatis (Masuk, Gate Pass, Pulang), Keadilan Lupa Tap Pulang, Izin Sakit Fleksibel, Presensi KBM Mapel, Poin Tatib, SP QR, Bank Prestasi, Whistleblower AES-256, dan Master GTK berstandar ISO 27001 dan UU PDP",
     "ssot_documentation": [
       "plan/docs/01_PRD.md",
       "plan/docs/02_DESIGN_SYSTEM.md",
@@ -29,77 +31,77 @@
       "tags": ["existing", "index.html", "vue3", "in-memory", "mockup"],
       "file_paths": ["C:/scholl_app/index.html"],
       "summary": "Prototipe mandiri interaktif pada file index.html (6.161 baris) dengan reaktivitas Vue 3 dan penyimpanan in-memory.",
-      "content": "Aplikasi saat ini beroperasi penuh di peramban pengguna sebagai Single-Page Application (SPA) mandiri berbasis Vue 3 Composition API dan Tailwind CSS. Seluruh entitas data kesiswaan (guru GTK, siswa, orang tua, presensi, pelanggaran tatib, prestasi, tiket aduan, tiket gate pass, pengajuan izin) disimpan di array JavaScript RAM. Kelebihannya adalah reaktivitas instan tanpa reload, navigasi responsif, dan simulasi alur kerja realistis. Keterbatasannya adalah data terhapus saat refresh browser, zero concurrency antar komputer, dan isolasi roleDataScope hanya berjalan di sisi klien."
+      "content": "Aplikasi saat ini beroperasi penuh di peramban pengguna sebagai Single-Page Application (SPA) mandiri berbasis Vue 3 Composition API dan Tailwind CSS. Seluruh entitas data kesiswaan disimpan di array JavaScript RAM. Kelebihannya adalah reaktivitas instan tanpa reload dan simulasi alur kerja realistis. Keterbatasannya adalah data terhapus saat refresh browser, zero concurrency antar komputer, dan ketiadaan presensi kepulangan sore otomatis."
     },
     {
       "id": "rag-edutrack-002",
       "scope": "prd_business_rules",
       "category": "functional_requirements",
-      "title": "PRD & Logika Bisnis Kesiswaan Terpadu SDN Kebonagung",
-      "tags": ["prd", "business-rules", "rbac", "demerit", "merit", "sp-automation"],
+      "title": "PRD: Presensi 3-Mode Otomatis, Keadilan Pulang & Izin Fleksibel",
+      "tags": ["prd", "3-mode-scanner", "checkout-justice", "flexible-leave", "early-leave", "demerit", "merit"],
       "file_paths": ["plan/docs/01_PRD.md"],
-      "summary": "Kebutuhan fungsional lengkap mencakup presensi gerbang, KBM, demerit points tatib, prestasi, aduan rahasia, dan master GTK.",
-      "content": "Sistem mengakomodasi 5 peran pengguna utama (Super Admin/Kepsek, Guru BK, Wali Kelas, Orang Tua, Siswa) serta akun Petugas Keamanan. Memiliki aturan presensi berjenjang (06:00-07:00 Hadir 0 poin, 07:01-07:15 T-1 -2 poin, 07:16-07:30 T-2 -5 poin, >07:30 T-3 -10 poin, dan Auto-Alpa pukul 08:00 WIB -15 poin). Modul tatib mengotomatiskan penerbitan SP-1 (>=50 poin), SP-2 (>=75 poin), dan SP-3 (>=100 poin) berkop resmi dan ber-QR Code verifikasi. Modul prestasi mengelola poin merit (Sekolah +25 s/d Internasional +150). Seluruh mutasi dilindungi Least Privilege dan UU PDP."
+      "summary": "Kebutuhan fungsional lengkap mencakup presensi 3 mode, keadilan siswa lupa tap pulang, izin sakit fleksibel, dan gate pass.",
+      "content": "Sistem mengakomodasi: (1) Scanner Gerbang 3-Mode Otomatis: Mode 1 Masuk 06:00-08:00 (Hadir, T1-T3, Auto-Alpa 08:00), Mode 2 Siaga Gate Pass 08:01-13:00 (Verifikasi penjemput, catat jam keluar, notif WA), Mode 3 Pulang Sore 13:01-17:00 (Chime 3-nada C-E-G, notif WA kepulangan). (2) Keadilan Checkout Fallback: Siswa hadir di KBM sesi terakhir yang lupa tap pulang tetap Hadir (tidak di-Alpakan). (3) Izin Sakit Fleksibel: Sakit 1 hari cukup surat izin tulisan tangan ortu (maks 2x/semester), sakit >1 hari wajib surat dokter. (4) Presensi KBM Mapel mendeteksi siswa membolos (+10 Poin). (5) Otomatisasi SP 1-3 ber-QR Code resmi. (6) Master GTK eksklusif Super Admin."
     },
     {
       "id": "rag-edutrack-003",
       "scope": "design_system",
       "category": "ui_ux",
-      "title": "Design System: Clean White Minimalist, Layout GitHub & Audio Feedback",
-      "tags": ["design-system", "github-theme", "clean-white", "web-audio", "cr-80"],
+      "title": "Design System: Dominan Putih Minimalis Modern Profesional & Bootstrap 5",
+      "tags": ["design-system", "white-minimalist", "bootstrap-5", "charts", "pagination", "kpi-cards", "web-audio"],
       "file_paths": ["plan/docs/02_DESIGN_SYSTEM.md"],
-      "summary": "Standar visual Clean White dengan layout 2 kolom repositori GitHub, tipografi Inter, Web Audio API, dan kartu ISO CR-80.",
-      "content": "Antarmuka mengadopsi palet Clean White (#FFFFFF, #F8FAFC, #E2E8F0, #0F172A) dipadukan dengan aksen repositori GitHub (Commit Bar hash 34acc33, header gelap, tab Octicons bergaris bawah oranye, dan sidebar kanan About/Releases/Deployments/Data Scope). Halaman depan mengusung tema edukasi Soft Lavender (#F3F0FF) dengan ilustrasi 3D Guru ASN khaki. Scanner gerbang dilengkapi sintesis Web Audio API (Beep 880Hz sukses, Buzz 180Hz terlambat/gagal, Chime gerbang terbuka). Kartu pelajar fisik berstandar ISO CR-80 (85.6x53.98mm) dengan Barcode Code 128 dan QR HMAC-SHA256."
+      "summary": "Standar visual putih modern (#FFFFFF, #F8FAFC) dengan efek Bootstrap 5, kartu KPI shadow-sm, Chart.js, dan audio 3-mode.",
+      "content": "Antarmuka menerapkan estetika White Minimalist modern yang sangat bersih dengan kartu putih berefek Bootstrap 5 (border slate-200, shadow-sm, hover transition). Dilengkapi komponen wajib: Dynamic Pagination dengan rentang data, Debounced Instant Search reaktif, Multi-Criteria Filter Bar (rombel, status, tingkat tatib), Grafik Analitik Interaktif Chart.js (tren mingguan batang dan donut chart disiplin), Info Cards KPI dengan sparkline mini, serta Info Icons SVG semantik. Umpan balik suara Web Audio API: Beep 880Hz (masuk tepat waktu), Buzz 180Hz (terlambat), Chime 3 nada C-E-G 523-659-784Hz (selamat pulang), dan Double Buzz (error)."
     },
     {
       "id": "rag-edutrack-004",
       "scope": "target_architecture",
       "category": "backend_database",
-      "title": "Arsitektur Backend & DDL 21 Tabel Relasional PostgreSQL 16",
-      "tags": ["architecture", "laravel11", "postgresql16", "redis", "ddl", "uuidv7"],
+      "title": "Arsitektur Full-Stack JavaScript: Nuxt 3, Fastify, Drizzle ORM & 21 Tabel PostgreSQL",
+      "tags": ["architecture", "javascript", "typescript", "nuxt3", "fastify", "drizzle-orm", "postgresql16", "bullmq"],
       "file_paths": ["plan/docs/03_ARSITEKTUR.md"],
-      "summary": "Arsitektur produksi Laravel 11/12, PostgreSQL 16 dengan 21 tabel relasional, Redis Queue, dan opsi deployment ganda.",
-      "content": "Arsitektur target mengusung Laravel 11/12 (PHP 8.3+) terintegrasi basis data relasional PostgreSQL 16 Enterprise. Terdiri dari 21 tabel relasional: users, teachers (Master GTK), classrooms, students, parents, student_parent_relations, student_cards, attendances_daily, subjects, attendances_subject, leave_requests, gate_passes, violation_presets, student_violations, warning_letters, achievements, complaints, complaint_messages, audit_logs, backup_archives, whatsapp_notifications. Dilengkapi UUIDv7 untuk mitigasi IDOR, CHECK constraints, Redis Queue untuk asinkronisasi pesan WA, serta konfigurasi deployment ganda untuk aaPanel Hosting GUI dan Bare VPS Linux / Docker Compose."
+      "summary": "Arsitektur produksi JavaScript/TypeScript dengan Drizzle ORM, DDL 21 tabel relasional PostgreSQL 16, BullMQ Redis, dan dual deployment.",
+      "content": "Arsitektur berbasis full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify) terhubung ke PostgreSQL 16 Enterprise menggunakan Drizzle ORM. Memiliki 21 tabel relasional: users, teachers (Master GTK), classrooms, students, parents, student_parent_relations, student_cards, attendances_daily (memuat check_in_time, check_out_time, early_leave_time, checkout_status, is_checkout_missed), subjects, attendances_subject, leave_requests (tipe izin fleksibel), gate_passes, violation_presets, student_violations, warning_letters, achievements, complaints (AES-256), complaint_messages, audit_logs (Immutable), backup_archives, whatsapp_notifications. Menggunakan BullMQ + Redis untuk antrean asinkron pesan WhatsApp masuk dan pulang."
     },
     {
       "id": "rag-edutrack-005",
       "scope": "software_patterns",
       "category": "design_patterns",
-      "title": "Pola Desain Perangkat Lunak: Rule Engine, HMAC Token & Enkripsi AES-256",
-      "tags": ["design-patterns", "rule-engine", "hmac-sha256", "aes-256-gcm", "immutable-audit"],
+      "title": "Pola Desain Perangkat Lunak: 3-Mode Auto-Switch, Checkout Justice & HMAC Token",
+      "tags": ["design-patterns", "3-mode-scanner", "checkout-justice", "flexible-leave", "hmac-sha256", "aes-256-gcm"],
       "file_paths": ["plan/docs/04_DESIGN_PATTERN.md"],
-      "summary": "Pola arsitektural mencakup Attendance Rule Engine, Observer/Queue WhatsApp, HMAC QR token, AES-256, dan log audit kekal.",
-      "content": "Pola utama yang diterapkan: (1) AttendanceRuleEngineService memisahkan evaluasi jam presensi dan anti-double tap cooldown 5 menit. (2) Event-Driven & Queue Pattern mengirim notifikasi WhatsApp via Redis Queue tanpa memblokir meja gerbang (latensi scan <= 200ms). (3) Tanda tangan digital HMAC-SHA256 pada payload QR kartu siswa dan Digital Gate Pass. (4) Field-Level Encryption AES-256-GCM pada isi aduan whistleblower. (5) Server-Side Global Scope isolasi query data per role. (6) Append-Only Immutable Audit Trail dilindungi database trigger PostgreSQL (dilarang UPDATE/DELETE). (7) One-Card One-Active Policy dengan pencabutan (revocation) instan."
+      "summary": "Pola perangkat lunak JavaScript mencakup 3-Mode Auto-Switch Scanner, Keadilan Checkout Fallback, HMAC token, dan enkripsi AES-256.",
+      "content": "Pola arsitektur JavaScript: (1) AttendanceRuleEngineService membagi waktu server menjadi 3 jendela operasional otomatis. (2) CheckoutJusticeService membandingkan presensi KBM terakhir sore hari untuk membebaskan siswa yang lupa tap pulang dari vonis Alpa. (3) FlexibleLeaveWorkflow memvalidasi kuota izin mandiri orang tua tanpa surat dokter. (4) BullMQ Redis Queue memproses pengiriman notifikasi WhatsApp masuk dan pulang secara asinkron (latensi scan <= 50ms). (5) Tanda tangan digital HMAC-SHA256 untuk payload QR kartu pelajar CR-80. (6) Field-Level Encryption AES-256-GCM pada tiket aduan whistleblower. (7) Trigger database PostgreSQL melindungi tabel audit_logs agar bersifat kekal (A.12.4)."
     },
     {
       "id": "rag-edutrack-006",
       "scope": "ui_specifications",
       "category": "ui_wireframes",
       "title": "Spesifikasi 15 Modul Sistem & 12 Modal Interaktif EduTrack Pro",
-      "tags": ["wireframes", "sitemap", "scanner-ui", "gtk-module", "whistleblower-chat"],
+      "tags": ["wireframes", "sitemap", "scanner-3mode", "gtk-module", "leave-modal", "white-minimalist"],
       "file_paths": ["plan/docs/05_DESIGN_UI.md"],
-      "summary": "Spesifikasi detil halaman: Dashboard, Scanner Gerbang, Presensi Mapel, SP, Kartu CR-80, Whistleblower, dan Master GTK.",
-      "content": "Rincian antarmuka mencakup 15 modul: Welcome Page edukasi, Executive Dashboard role-scoped, Kehadiran Siswa (Tab 1: Bulk H/S/I/A/T, Tab 2: Presensi KBM Mapel & Membolos), Scanner Barcode Gerbang (Live scanner & verifikasi Gate Pass satpam), Cetak Kartu Pelajar PVC ISO CR-80, Kedisiplinan & Tatib (Katalog pelanggaran, cetak SP ber-kop resmi dan ber-QR), Bank Prestasi (Poin merit & sertifikat), Pusat Aduan (Formulir anonim & ruang chat investigasi AES-256), Master GTK (Khusus Super Admin: NIP, NUPTK, Jabatan, Status PNS/PPPK/Honorer), Master Siswa & Ortu, Manajemen User Scopes, serta Log Audit & Backup Snapshot ISO 27001."
+      "summary": "Spesifikasi detil antarmuka putih minimalis: Scanner 3-Mode, Presensi KBM, Modal Izin Fleksibel, Kartu CR-80, dan Master GTK.",
+      "content": "Spesifikasi antarmuka 15 modul: Welcome Page edukasi soft lavender, Executive Dashboard dengan kartu KPI putih dan grafik Chart.js, Kehadiran Siswa (Tab 1: Bulk H/S/I/A/T, Tab 2: Presensi KBM Mapel & Membolos), Scanner Barcode Gerbang 3-Mode Otomatis (Live scanner & verifikasi Gate Pass), Modal Pengajuan Izin Sakit Fleksibel Ortu (Sakit 1 hari surat ortu vs Sakit >1 hari surat dokter), Cetak Kartu Pelajar PVC ISO CR-80 (preview bolak-balik & revoke), Kedisiplinan Tatib (Katalog pelanggaran, cetak SP ber-QR), Bank Prestasi, Pusat Aduan Whistleblower AES-256, Master GTK (Khusus Super Admin), Master Siswa & Ortu, Manajemen User Scopes, serta Log Audit & Backup 3-2-1."
     },
     {
       "id": "rag-edutrack-007",
       "scope": "project_management",
       "category": "wbs_roadmap",
-      "title": "Manajemen Proyek: Roadmap 5 Paket Kerja, Risk Register & Definition of Done",
+      "title": "Manajemen Proyek: Roadmap 5 Paket Kerja JavaScript & Definition of Done",
       "tags": ["project-management", "wbs", "roadmap", "risk-register", "definition-of-done"],
       "file_paths": ["plan/docs/06_PROJECT_MANAGEMENT.md"],
-      "summary": "Peta jalan pengembangan 5 fase kerja, analisis risiko operasional sekolah, dan kriteria rilis produksi.",
-      "content": "Pelaksanaan dibagi dalam 5 Paket Kerja (WP): WP-1 Fondasi & Migrasi 21 Tabel PostgreSQL; WP-2 Layanan Bisnis Inti, Rule Engine & Redis Queue WA; WP-3 Modul Antarmuka Livewire, Meja Scanner Gerbang, Kartu CR-80 & Master GTK; WP-4 QA Assault, Uji Beban 50 Scan Gerbang Serentak, Pen-Test IDOR & Audit OWASP; WP-5 Server Hardening & Deployment Dual-Target aaPanel / Docker. Dilengkapi Risk Register (mitigasi penumpukan gerbang pagi, pencegahan titip absen, perlindungan identitas whistleblower) dan Definition of Done berstandar ISO 27001."
+      "summary": "Peta jalan pengembangan 5 fase kerja JavaScript/Nuxt 3, analisis risiko operasional sekolah, dan kriteria rilis produksi.",
+      "content": "Pelaksanaan dibagi dalam 5 Paket Kerja (WP): WP-1 Inisialisasi Nuxt 3 / Fastify Monorepo, Drizzle ORM & Migrasi 21 Tabel PostgreSQL; WP-2 Mesin Presensi 3-Mode, Keadilan Checkout Fallback, Izin Fleksibel & BullMQ WhatsApp Queue; WP-3 Modul Antarmuka Vue 3 Putih Minimalis, Scanner Gerbang, Kartu CR-80 & Master GTK; WP-4 QA Assault, Uji Beban 50 Scan Gerbang Serentak (Latensi <= 50ms), Pen-Test IDOR & Audit OWASP; WP-5 Server Hardening aaPanel PM2 Cluster & Docker Compose. Memuat Risk Register dan Definition of Done berstandar ISO 27001."
     },
     {
       "id": "rag-edutrack-008",
       "scope": "multi_agent_orchestration",
       "category": "orchestration_swarm",
-      "title": "Panduan & Prompt Orkestrasi Multi-Agent AI (Native Swarm Pools)",
+      "title": "Panduan & Prompt Orkestrasi Multi-Agent AI (JavaScript Swarm Pools)",
       "tags": ["orchestration", "multi-agent", "swarm", "prompts", "quality-gates"],
       "file_paths": ["plan/docs/07_ORCHESTRASI.md", "plan/docs/README.md"],
-      "summary": "Protokol koordinasi Lead Orchestrator, batasan wilayah 12 worker sub-agents, prompts siap pakai, dan Gerbang 0-6.",
-      "content": "Menyediakan protokol orkestrasi tim AI mandiri: Lead Orchestrator memobilisasi db-architect-agent, Backend Squad (be-worker-attendance, be-worker-discipline, be-worker-portal, be-worker-whistle), Frontend Squad (fe-worker-scanner, fe-worker-academic, fe-worker-admin), QA Squad (qa-worker-scanner-load, qa-worker-rbac-idor, qa-worker-e2e-flow, security-audit-agent), dan devops-deploy-agent. Menggunakan aturan isolasi git worktree (workspace: 'share'), format handover terstruktur H-01 s/d H-08, serta 7 Gerbang Kualitas (Quality Gates) ketat sebelum penggabungan ke branch produksi."
+      "summary": "Protokol koordinasi Lead Orchestrator, batasan wilayah 12 worker sub-agents JavaScript, prompts siap pakai, dan Gerbang 1-7.",
+      "content": "Menyediakan protokol orkestrasi tim AI mandiri berbasis ekosistem npm/Node.js: Lead Orchestrator memobilisasi db-architect-agent (Drizzle ORM), Backend Squad (be-worker-attendance, be-worker-discipline, be-worker-portal, be-worker-whistle), Frontend Squad Nuxt 3 / Vue 3 (fe-worker-scanner, fe-worker-academic, fe-worker-admin), QA Squad (qa-worker-scanner-load, qa-worker-rbac-idor, qa-worker-e2e-flow, security-audit-agent), dan devops-deploy-agent. Menggunakan aturan isolasi git worktree (workspace: 'share'), format handover terstruktur, serta 7 Gerbang Kualitas (Quality Gates) ketat sebelum penggabungan ke branch produksi."
     },
     {
       "id": "rag-edutrack-009",
@@ -109,17 +111,17 @@
       "tags": ["security", "iso27001", "uu-pdp", "audit-trail", "backup-321", "argon2id"],
       "file_paths": ["plan/docs/03_ARSITEKTUR.md", "plan/docs/04_DESIGN_PATTERN.md"],
       "summary": "Standar kontrol keamanan data kesiswaan: enkripsi transit TLS 1.3, at-rest AES-256, audit log kekal, dan backup 3-2-1.",
-      "content": "Penerapan kontrol ISO 27001: Kontrol A.9.2 Least Privilege via Spatie RBAC & Data Scoping; Kontrol A.9.4 Pencegahan IDOR via UUIDv7; Kontrol A.10.1 Kriptografi AES-256-GCM pada data aduan dan catatan BK; Kontrol A.12.4 Log Audit Kekal (Immutable Audit Trail) dilindungi database trigger; Kontrol A.12.3 Pencadangan Otomatis Redundansi 3-2-1 (Lokal + Offsite AWS S3 Vault SG dengan verifikasi SHA-256 checksum harian); Hashing kata sandi menggunakan Argon2id; Wajib 2FA TOTP untuk Super Admin dan Kepala Sekolah; Kepatuhan UU PDP dalam perlindungan data pribadi anak di bawah umur."
+      "content": "Penerapan kontrol ISO 27001: Kontrol A.9.2 Least Privilege via RBAC & Server Data Scoping Middleware; Kontrol A.9.4 Pencegahan IDOR via UUIDv7; Kontrol A.10.1 Kriptografi AES-256-GCM pada data aduan dan catatan BK; Kontrol A.12.4 Log Audit Kekal dilindungi trigger basis data; Kontrol A.12.3 Pencadangan Otomatis Redundansi 3-2-1 (Lokal SSD + AWS S3 Vault SG dengan verifikasi SHA-256 checksum harian); Hashing password menggunakan Argon2id; Wajib 2FA TOTP untuk Super Admin dan Kepala Sekolah; Kepatuhan UU PDP dalam perlindungan data pribadi anak."
     },
     {
       "id": "rag-edutrack-010",
       "scope": "operational_solutions",
       "category": "field_gap_solutions",
       "title": "Solusi Celah Operasional Nyata Sekolah di Indonesia",
-      "tags": ["gap-solutions", "kbm-skipping", "digital-gate-pass", "parent-leave", "master-gtk"],
+      "tags": ["gap-solutions", "3-mode-scanner", "checkout-justice", "flexible-leave", "early-leave-status", "master-gtk"],
       "file_paths": ["plan/docs/01_PRD.md", "plan/docs/05_DESIGN_UI.md"],
-      "summary": "Penyelesaian masalah nyata di sekolah: Presensi KBM per jam pelajaran, Digital Gate Pass, Izin Sakit Ortu, dan Master GTK.",
-      "content": "Sistem menutup celah operasional kritis: (1) Presensi KBM Jam Mapel mendeteksi siswa yang tap di gerbang pagi namun membolos di jam pelajaran siang (+10 poin tatib & alert WA). (2) Digital Gate Pass memfasilitasi satpam memvalidasi siswa sakit/dijemput pulang cepat menggunakan pemindaian QR tiket sah. (3) Pengajuan Izin/Sakit Mandiri oleh Orang Tua sebelum jam 08:00 WIB disertai upload surat dokter untuk mencegah vonis Auto-Alpa keliru. (4) Modul Master GTK eksklusif Super Admin menata administrasi seluruh pendidik dan tenaga kependidikan (PNS, PPPK, Honorer Daerah, Tenaga Kebersihan/Keamanan) secara tertib dan transparan."
+      "summary": "Penyelesaian masalah nyata di sekolah: Scanner 3-Mode, Keadilan Pulang, Izin Sakit Fleksibel, Pulang Cepat, dan Master GTK.",
+      "content": "Sistem menutup celah operasional kritis: (1) Scanner Gerbang 3-Mode Otomatis membagi fungsi pagi, siang, dan sore tanpa repot ganti tombol manual. (2) Keadilan Checkout Fallback melindungi siswa yang lupa tap pulang agar tidak dihukum Alpa. (3) Pengajuan Izin Sakit Fleksibel membolehkan surat izin tulisan tangan orang tua untuk sakit demam 1 hari (maks 2x/semester). (4) Pulang Lebih Awal Berizin mencatat jam keluar presisi di database ('Hadir - Izin Pulang Cepat') dan mengirim alert WA otomatis saat palang gerbang dibuka satpam. (5) Modul Master GTK eksklusif Super Admin menata administrasi seluruh pendidik dan tenaga kependidikan."
     }
   ]
 }

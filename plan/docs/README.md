@@ -1,10 +1,11 @@
 # Panduan & Prompt Orkestrasi Multi-Agent (docs/README.md)
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Format**: Single Source of Truth (SSOT)  
+**Ekosistem Stack**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + Drizzle ORM + PostgreSQL 16 + Redis BullMQ)  
+**Format Kerja**: Single Source of Truth (SSOT)  
 **Kepatuhan Standar**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi
 
-Dokumen ini memuat kumpulan **Prompt Siap Pakai** untuk memobilisasi **Lead Orchestrator** dan seluruh **Multiple Sub-Agent Worker Pools** (Backend, Frontend, QA Assault, Security, dan DevOps) dalam membangun aplikasi produksi EduTrack Pro berdasarkan konsep acuan [index.html](file:///c:/scholl_app/index.html).
+Dokumen ini memuat kumpulan **Prompt Siap Pakai** untuk memobilisasi **Lead Orchestrator** dan seluruh **Multiple Sub-Agent Worker Pools** (Backend, Frontend, QA Assault, Security, dan DevOps) dalam membangun aplikasi produksi EduTrack Pro berbasis **Framework JavaScript**.
 
 ---
 
@@ -14,25 +15,25 @@ Salin dan jalankan prompt berikut kepada AI Agent utama Anda untuk memulai selur
 
 ```markdown
 Anda berperan sebagai **Lead Orchestrator Agent**.
-Tugas Anda adalah mengoordinasikan pembangunan sistem produksi **EduTrack Pro (SDN Kebonagung Kota Pasuruan)** secara multi-agent monorepo berdasarkan dokumentasi Single Source of Truth di folder `plan/docs/` dan konsep acuan antarmuka di `C:\scholl_app\index.html`.
+Tugas Anda adalah mengoordinasikan pembangunan sistem produksi **EduTrack Pro (SDN Kebonagung Kota Pasuruan)** menggunakan ekosistem **Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + Drizzle ORM + PostgreSQL 16 + Redis BullMQ)** berdasarkan dokumentasi Single Source of Truth di folder `plan/docs/` dan konsep acuan antarmuka di `C:\scholl_app\index.html`.
 
 Daftar Acuan SSOT:
-- `plan/docs/01_PRD.md` (Product & Business Rules Kesiswaan Terpadu)
-- `plan/docs/02_DESIGN_SYSTEM.md` (Clean White Minimalist, GitHub Layout & Audio Feedback)
-- `plan/docs/03_ARSITEKTUR.md` (Laravel 11, DDL 21 Tabel PostgreSQL 16, Redis & Dual Deployment)
-- `plan/docs/04_DESIGN_PATTERN.md` (Attendance Rule Engine, HMAC Token, AES-256 & Immutable Audit)
-- `plan/docs/05_DESIGN_UI.md` (Wireframe 15 Halaman Sistem, Meja Scanner & Kartu CR-80)
-- `plan/docs/06_PROJECT_MANAGEMENT.md` (WBS, Roadmap 5 Fase, Risk Register & DoD)
-- `plan/docs/07_ORCHESTRASI.md` (Topologi Swarm, Batas Wilayah Worker & Gerbang Eksekusi)
+- `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang)
+- `plan/docs/02_DESIGN_SYSTEM.md` (Dominan Putih Minimalis, Bootstrap 5 Modern, Charts, Audio Feedback)
+- `plan/docs/03_ARSITEKTUR.md` (JavaScript/TypeScript Monorepo, DDL 21 Tabel PostgreSQL 16, BullMQ & Dual Deployment)
+- `plan/docs/04_DESIGN_PATTERN.md` (3-Mode Scanner Pattern, Checkout Justice, HMAC Token & AES-256)
+- `plan/docs/05_DESIGN_UI.md` (Wireframe 15 Halaman Sistem, Meja Scanner 3-Mode & Kartu CR-80)
+- `plan/docs/06_PROJECT_MANAGEMENT.md` (WBS JavaScript, Roadmap 5 Fase, Risk Register & DoD)
+- `plan/docs/07_ORCHESTRASI.md` (Topologi Swarm JavaScript, Batas Wilayah Worker & Gerbang Eksekusi)
 
 ATURAN ISOLASI & EKSEKUSI KERJA:
-1. Jalankan pembangunan secara bertahap menggunakan protokol gerbang (Gerbang 0 s/d Gerbang 6).
+1. Jalankan pembangunan secara bertahap menggunakan protokol gerbang (Gerbang 1 s/d Gerbang 7).
 2. Setiap sub-agent wajib dipanggil dengan parameter `workspace: "share"` agar bekerja pada git worktree terisolasi tanpa konflik berkas.
-3. Sub-agent implementasi dilarang mengubah skema database di luar persetujuan Lead Orchestrator.
-4. Jangan menyetujui integrasi ke branch utama jika pengujian konkurensi (50 scan serentak gerbang) atau pengujian penetrasi IDOR menghasilkan kegagalan!
+3. Sub-agent implementasi dilarang mengubah skema basis data di luar persetujuan Lead Orchestrator.
+4. Pastikan komponen Vue 3 dari `index.html` (computed scopes, modal, tabel reaktif) dimigrasikan secara rapi ke struktur komponen Nuxt 3 / Vue 3.
 
 MULAI DENGAN TAHAP 1:
-Panggil `db-architect-agent` untuk men-scaffold proyek Laravel 11/12 dan mengeksekusi migrasi DDL 21 tabel relasional PostgreSQL 16 lengkap dengan data seeder realistis SDN Kebonagung Kota Pasuruan. Laporkan hasil integrasi setelah Gerbang 1 selesai untuk melanjutkan ke Fan-Out implementasi backend!
+Panggil `db-architect-agent` untuk men-scaffold monorepo TypeScript/JavaScript, mengonfigurasi Drizzle ORM, dan mengeksekusi migrasi DDL 21 tabel relasional PostgreSQL 16 lengkap dengan data seeder realistis SDN Kebonagung Kota Pasuruan. Laporkan hasil integrasi setelah Gerbang 1 selesai untuk melanjutkan ke implementasi backend squad!
 ```
 
 ---
@@ -41,50 +42,50 @@ Panggil `db-architect-agent` untuk men-scaffold proyek Laravel 11/12 dan mengeks
 
 Gunakan prompt khusus berikut untuk mengeksekusi tahapan implementasi secara terfokus:
 
-### 🔹 Fase 1: Scaffolding Proyek & Skema Basis Data (Gerbang 1)
+### 🔹 Fase 1: Scaffolding Monorepo JavaScript & Skema Database (Gerbang 1)
 ```markdown
 Panggil sub-agent `db-architect-agent` (workspace: "share"):
-"Scaffold proyek Laravel 11/12 dengan PHP 8.3 sesuai plan/docs/03_ARSITEKTUR.md Bagian 3.
-Buat berkas migrasi database untuk 21 tabel relasional PostgreSQL:
-- users, teachers (Master GTK), classrooms, students, parents, student_parent_relations
-- student_cards (Barcode Code 128 + HMAC QR), attendances_daily, subjects, attendances_subject
-- leave_requests, gate_passes, violation_presets, student_violations, warning_letters
+"Scaffold proyek Full-stack JavaScript / TypeScript (Nuxt 3 / Node.js Fastify) sesuai plan/docs/03_ARSITEKTUR.md.
+Konfigurasikan Drizzle ORM di folder `database/` untuk 21 tabel relasional PostgreSQL 16:
+- users, teachers (Master GTK Admin), classrooms, students, parents, student_parent_relations
+- student_cards (Barcode Code 128 + HMAC QR), attendances_daily (dengan check_in, check_out, early_leave, checkout_status), subjects, attendances_subject
+- leave_requests (tipe izin fleksibel), gate_passes, violation_presets, student_violations, warning_letters
 - achievements, complaints (AES-256 encrypted), complaint_messages, audit_logs (Immutable), backup_archives.
-Pasang constraint CHECK (demerit_points >= 0), CHECK (merit_points >= 0), dan buat skrip seeder lengkap SDN Kebonagung Kota Pasuruan (Master GTK, akun 5 demo roles, preset tatib, siswa, orang tua). Pastikan migrasi berjalan zero-error!"
+Pasang constraint CHECK (demerit_points >= 0), CHECK (merit_points >= 0), dan buat skrip seeder lengkap SDN Kebonagung Kota Pasuruan (Master GTK, akun 5 demo roles, preset tatib, siswa, orang tua). Jalankan perintah `npm run db:migrate` dan pastikan zero-error!"
 ```
 
-### 🔹 Fase 2: Fan-Out Implementasi Backend Squad (4 Workers Paralel)
+### 🔹 Fase 2: Fan-Out Implementasi Backend Squad JavaScript (4 Workers Paralel)
 ```markdown
-Luncurkan 4 sub-agent backend paralel sekaligus (workspace: "share"):
-1. Sub-agent `be-worker-attendance`: Implementasikan `POST /api/attendance/gate-scan` (AttendanceRuleEngineService: evaluasi Hadir, T-1, T-2, T-3, anti-double tap cooldown 5 menit, latensi <= 200ms), scheduler Auto-Alpa pukul 08:00 WIB, dan endpoint verifikasi Digital Gate Pass satpam.
+Luncurkan 4 sub-agent backend paralel sekaligus di runtime Node.js/TypeScript (workspace: "share"):
+1. Sub-agent `be-worker-attendance`: Implementasikan `POST /api/attendance/gate-scan` (AttendanceRuleEngineService: evaluasi otomatis 3 mode sesuai jam server: Mode 1 Masuk 06:00-08:00, Mode 2 Siaga Gate Pass 08:01-13:00, Mode 3 Pulang 13:01-17:00; cooldown 5 menit, latensi <= 50ms), scheduler Auto-Alpa pukul 08:00 WIB, CheckoutJusticeService (siswa lupa tap pulang tetap Hadir jika ada di KBM terakhir), dan verifikasi Digital Gate Pass.
 2. Sub-agent `be-worker-discipline`: Implementasikan pencatatan pelanggaran, penambahan poin tatib, generator dokumen PDF Surat Peringatan (SP 1, SP 2, SP 3) dengan kop resmi SDN Kebonagung dan QR Code tanda tangan digital HMAC-SHA256, serta modul bank prestasi.
-3. Sub-agent `be-worker-portal`: Implementasikan integrasi Redis Queue untuk pengiriman notifikasi WhatsApp otomatis ke wali murid, alur pengajuan izin/sakit mandiri orang tua, dan API Master GTK (eksklusif Super Admin).
+3. Sub-agent `be-worker-portal`: Implementasikan integrasi antrean BullMQ + Redis untuk pengiriman notifikasi WhatsApp otomatis ke wali murid (notif masuk, notif pulang, dan alert alpa/bolos), alur pengajuan izin fleksibel orang tua (sakit 1 hari tanpa surat dokter maks 2x vs sakit >1 hari wajib surat dokter), dan API Master GTK (eksklusif Super Admin).
 4. Sub-agent `be-worker-whistle`: Implementasikan modul aduan anti-bullying terenkripsi AES-256-GCM, fitur whistleblower anonim, ruang obrolan investigasi dua arah, dan append-only logger ISO 27001 A.12.4.
 ```
 
-### 🔹 Fase 3: Fan-Out Implementasi Frontend Squad (3 Workers Paralel)
+### 🔹 Fase 3: Fan-Out Implementasi Frontend Squad (3 Workers Paralel - White Minimalist)
 ```markdown
-Luncurkan 3 sub-agent frontend paralel sekaligus (workspace: "share"):
-1. Sub-agent `fe-worker-scanner`: Bangun antarmuka Livewire Meja Scanner Gerbang (/scanner) dengan penanganan burst input barcode scanner laser USB, simulasi jam (06:45, 07:10, 07:25, 07:45), umpan balik suara Web Audio API (Beep 880Hz / Buzz 180Hz), verifikasi Gate Pass satpam, serta modul generator cetak kartu pelajar PVC ISO CR-80 (preview bolak-balik & tombol revoke).
-2. Sub-agent `fe-worker-academic`: Bangun halaman Presensi Kehadiran (/presensi) dengan tab Presensi Cepat H/S/I/A/T rombel, tab Presensi KBM Jam Mapel (dengan tombol merah 'Lapor Membolos ke BK'), modal pengajuan izin sakit ortu, dan tabel kedisiplinan tatib.
-3. Sub-agent `fe-worker-admin`: Bangun halaman Welcome Page edukasi (karakter Guru PNS khaki, lencana SDN Kebonagung), Dashboard Eksekutif bergaya GitHub (Commit Bar hash 34acc33, KPI metrik, sidebar kanan About/Releases/Deployments/Data Scope), modul Master GTK (CRUD lengkap Admin), Manajemen User Scopes, dan Backup Snapshot ISO 27001.
+Luncurkan 3 sub-agent frontend paralel sekaligus di Nuxt 3 / Vue 3 (workspace: "share"):
+1. Sub-agent `fe-worker-scanner`: Bangun antarmuka Meja Scanner Gerbang 3-Mode (/scanner) dengan penanganan burst input barcode scanner laser USB, banner indikator 3 mode otomatis, umpan balik suara Web Audio API (Beep 880Hz masuk, Buzz 180Hz terlambat, Chime 3 nada C-E-G pulang), verifikasi Gate Pass satpam, serta modul generator cetak kartu pelajar PVC ISO CR-80 (preview bolak-balik & tombol revoke).
+2. Sub-agent `fe-worker-academic`: Bangun halaman Presensi Kehadiran (/presensi) dengan tab Presensi Cepat H/S/I/A/T rombel, tab Presensi KBM Jam Mapel (dengan tombol merah 'Lapor Membolos ke BK'), modal pengajuan izin sakit fleksibel ortu, tabel kedisiplinan tatib, lengkap dengan pagination dinamis, debounced search, dan multi-filter.
+3. Sub-agent `fe-worker-admin`: Bangun halaman Welcome Page edukasi (karakter Guru PNS khaki, lencana SDN Kebonagung), Dashboard Eksekutif bergaya GitHub (Commit Bar hash 34acc33, KPI kartu statistik putih dengan shadow-sm, grafik Chart.js tren kehadiran mingguan dan donut chart disiplin), modul Master GTK (CRUD lengkap Admin), Manajemen User Scopes, dan Backup Snapshot ISO 27001.
 ```
 
 ### 🔹 Fase 4: Fan-Out QA Assault & Security Audit (4 QA Workers)
 ```markdown
 Luncurkan 4 sub-agent pengujian paralel untuk memverifikasi keandalan sistem:
-1. Sub-agent `qa-worker-scanner-load`: Tembakkan 50 request scan barcode gerbang paralel serentak pada beban jam masuk sekolah (06:55 WIB). Pastikan seluruh request diproses tanpa deadlock dan rata-rata latensi <= 200 milidetik.
+1. Sub-agent `qa-worker-scanner-load`: Tembakkan 50 request scan barcode gerbang paralel serentak pada beban jam masuk sekolah (06:55 WIB). Pastikan server Fastify memproses seluruh request dengan rata-rata latensi <= 50 milidetik tanpa deadlock basis data.
 2. Sub-agent `qa-worker-rbac-idor`: Uji penetrasi otorisasi (Pen-Test): Coba akses data siswa kelas lain menggunakan sesi Wali Kelas X-RPL-1, dan coba akses biodata siswa lain menggunakan sesi Orang Tua Ahmad Rifai. Pastikan seluruh query tertolak 403 Forbidden!
-3. Sub-agent `qa-worker-e2e-flow`: Uji siklus operasional utuh: Siswa tap gerbang -> Hadir di gerbang tapi membolos di mapel KBM -> Guru mapel lapor bolos -> Poin bertambah -> Terbit SP-1 -> Alert WA terkirim ke orang tua -> Tercatat di Log Audit ISO 27001.
-4. Sub-agent `security-audit-agent`: Audit kode terhadap standar OWASP Top 10:2026 (Argon2id, SQL Injection prevention, XSS escaping, enkripsi kolom AES-256, dan imutabilitas tabel audit_logs).
+3. Sub-agent `qa-worker-e2e-flow`: Uji siklus operasional utuh: Siswa tap gerbang -> Hadir di gerbang tapi membolos di mapel KBM -> Guru mapel lapor bolos -> Poin bertambah -> Terbit SP-1 -> Siswa pulang lupa tap kartu -> Keadilan checkout berjalan (status tetap Hadir) -> Alert WA terkirim ke orang tua -> Tercatat di Log Audit ISO 27001.
+4. Sub-agent `security-audit-agent`: Audit kode terhadap standar OWASP Top 10:2026 (Argon2id, SQL Injection prevention via Drizzle, XSS escaping, enkripsi kolom AES-256, dan imutabilitas tabel audit_logs).
 ```
 
 ### 🔹 Fase 5: Pengemasan Infrastruktur & Deployment Ganda
 ```markdown
 Panggil sub-agent `devops-deploy-agent`:
 "Siapkan berkas konfigurasi deployment untuk 2 target infrastruktur:
- 1. Opsi 1 (aaPanel Hosting Linux): Berkas konfigurasi Nginx Reverse Proxy (SSL Let's Encrypt, HTTP/2, FastCGI caching), konfigurasi Supervisor Worker untuk Redis Queue, dan skrip Cron tab harian (Auto-Alpa 08:00 WIB & Encrypted Backup S3 02:00 WIB).
- 2. Opsi 2 (Bare VPS Ubuntu / Debian & Docker): Berkas `docker-compose.yml` multi-container (Nginx Alpine, PHP 8.3 FPM, PostgreSQL 16, Redis 7, Cron Backup) dan skrip otomatis `deploy/setup-vps.sh`.
+ 1. Opsi 1 (aaPanel Hosting Linux): Berkas `ecosystem.config.js` untuk PM2 Cluster Mode (Node.js runtime port 3000 dan BullMQ worker daemon), konfigurasi Nginx Reverse Proxy (SSL Let's Encrypt, HTTP/2, WebSocket), dan skrip Cron tab harian (Auto-Alpa 08:00 WIB & Encrypted Backup S3 02:00 WIB).
+ 2. Opsi 2 (Bare VPS Ubuntu / Debian & Docker): Berkas `docker-compose.yml` multi-container (Nginx Alpine, Node.js App container, PostgreSQL 16, Redis 7, Cron Backup) dan skrip otomatis `deploy/setup-vps.sh`.
  Uji seluruh konfigurasi agar siap deploy dalam sekali klik di kedua skenario."
 ```
 
@@ -92,36 +93,10 @@ Panggil sub-agent `devops-deploy-agent`:
 
 ## 🚦 3. Checklist Kriteria Gerbang Eksekusi (Quality Gate Checklist)
 
-Sebelum merilis perubahan ke branch utama (*production*), pastikan seluruh gerbang berikut berstatus **PASS**:
-
-- [ ] **Gate 1 (DDL & Schema)**: Migrasi 21 tabel PostgreSQL 16 dan seeder data SDN Kebonagung berhasil dieksekusi 100% tanpa error.
-- [ ] **Gate 2 (Scanner Latency)**: Latensi endpoint `POST /api/attendance/gate-scan` berada di bawah $\le 200\text{ ms}$ pada pengujian beban.
-- [ ] **Gate 3 (Anti-Double Tap Cooldown)**: Pemindaian kartu yang sama dalam jendela waktu $< 5\text{ menit}$ ditolak secara presisi dengan pesan peringatan yang sesuai.
+- [ ] **Gate 1 (DDL & Schema)**: Migrasi 21 tabel PostgreSQL 16 via Drizzle ORM berhasil dieksekusi 100% tanpa error.
+- [ ] **Gate 2 (Scanner Latency & 3 Mode)**: Latensi endpoint `POST /api/attendance/gate-scan` berada di bawah $\le 50\text{ ms}$ pada Node.js Fastify dan otomatis berganti 3 mode sesuai jam server.
+- [ ] **Gate 3 (Keadilan Absensi Pulang)**: Siswa yang hadir di KBM jam terakhir namun lupa tap kartu pulang terbukti berstatus `Hadir (Check-out Default)`.
 - [ ] **Gate 4 (Isolasi Data Sisi Server)**: Akun Orang Tua dan Siswa terbukti tidak dapat mengakses data di luar cakupannya (*Zero IDOR Leakage*).
-- [ ] **Gate 5 (Kepatuhan Enkripsi ISO 27001)**: Kolom isi aduan dan pesan tersimpan dalam bentuk *cipher text* AES-256 di basis data, dan tabel `audit_logs` terlindungi secara kekal (*immutable*).
-- [ ] **Gate 6 (Otomatisasi SP & Kartu CR-80)**: Generator SP format PDF ber-QR Code verifikasi dan pratinjau kartu PVC ISO CR-80 berfungsi sempurna.
-- [ ] **Gate 7 (Dual Deployment Ready)**: Konfigurasi aaPanel dan Docker Compose terverifikasi siap melayani domain produksi sekolah.
-
----
-
-## 🤝 4. Panduan Estafet & Format Pelaporan Handover
-
-Setiap sub-agent wajib menyerahkan hasil pekerjaannya kepada **Lead Orchestrator** menggunakan format terstruktur:
-
-```markdown
-### 📦 LAPORAN HANDOVER SUB-AGENT
-- **Nama Sub-Agent**: [Nama Worker, misal: be-worker-attendance]
-- **ID Kontrak Handover**: [H-01 s/d H-08]
-- **Status**: [SELESAI / 100% PASS]
-- **Worktree**: [Nama Worktree]
-
-1. Berkas Dikerjakan:
-   - [Daftar file yang dimodifikasi / dibuat]
-2. Kepatuhan SSOT & Guardrails:
-   - [x] Tidak menyentuh file di luar batas wilayah yang diizinkan
-   - [x] Sesuai token 02_DESIGN_SYSTEM.md dan skema 03_ARSITEKTUR.md
-3. Hasil Exit Gate Command:
-   - [Hasil eksekusi test command / build command]
-4. Catatan Integrasi:
-   - [Informasi untuk worker berikutnya atau instruksi penggabungan]
-```
+- [ ] **Gate 5 (Kepatuhan Enkripsi ISO 27001)**: Kolom aduan tersimpan dalam bentuk *cipher text* AES-256, dan tabel `audit_logs` terlindungi secara kekal (*immutable*).
+- [ ] **Gate 6 (UI Putih Minimalis & Komponen Lengkap)**: Seluruh tabel dilengkapi pagination dinamis, debounced search, multi-filter, kartu statistik KPI, dan grafik Chart.js.
+- [ ] **Gate 7 (Dual Deployment Ready)**: Konfigurasi aaPanel PM2 Cluster dan Docker Compose terverifikasi siap melayani domain produksi sekolah.
