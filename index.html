@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -640,16 +642,16 @@
               </div>
             </div>
 
-            <!-- KPI Summary Cards (Minimalist Clean White) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- KPI Summary Cards (Minimalist Clean White Modern) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
               
-              <!-- Card 1: Kehadiran -->
-              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <!-- Card 1: Kehadiran Masuk -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
                 <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
-                  <span>Kehadiran Hari Ini</span>
-                  <span class="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">✅</span>
+                  <span class="truncate">Kehadiran Pagi</span>
+                  <span class="p-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs">🚪</span>
                 </div>
-                <div class="text-2xl font-bold text-slate-900 mt-2">
+                <div class="text-xl font-bold text-slate-900 mt-2">
                   {{ stats.attendanceRate }}%
                 </div>
                 <div class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
@@ -657,47 +659,258 @@
                   <span>•</span>
                   <span class="text-rose-600 font-semibold">{{ stats.absentCount }} Alpa</span>
                 </div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                  <div class="bg-emerald-500 h-full rounded-full" :style="{ width: stats.attendanceRate + '%' }"></div>
+                </div>
               </div>
 
-              <!-- Card 2: Pelanggaran -->
-              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <!-- Card 2: Presensi Kepulangan Sore -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
                 <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
-                  <span>Pelanggaran Bulan Ini</span>
-                  <span class="p-1.5 bg-amber-50 text-amber-700 rounded-lg">⚠️</span>
+                  <span class="truncate">Kepulangan Sore</span>
+                  <span class="p-1 bg-blue-50 text-blue-700 rounded-lg text-xs">🏠</span>
                 </div>
-                <div class="text-2xl font-bold text-slate-900 mt-2">
+                <div class="text-xl font-bold text-slate-900 mt-2">
+                  {{ stats.checkoutRate }}%
+                </div>
+                <div class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                  <span class="text-blue-600 font-semibold">{{ stats.checkedOutCount }} Normal</span>
+                  <span>•</span>
+                  <span class="text-amber-600 font-semibold">{{ stats.earlyLeaveCount }} Gate Pass</span>
+                </div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                  <div class="bg-blue-600 h-full rounded-full" :style="{ width: stats.checkoutRate + '%' }"></div>
+                </div>
+              </div>
+
+              <!-- Card 3: Izin & Sakit Mandiri Ortu -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span class="truncate">Izin & Sakit Ortu</span>
+                  <span class="p-1 bg-amber-50 text-amber-700 rounded-lg text-xs">📩</span>
+                </div>
+                <div class="text-xl font-bold text-slate-900 mt-2">
+                  {{ leaveRequestsList.length }} Pengajuan
+                </div>
+                <div class="text-[11px] text-amber-700 font-semibold mt-1 flex items-center gap-1">
+                  <span>{{ pendingLeaveRequests.length }} Perlu Persetujuan</span>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2">
+                  Fleksibel: Kuota Ortu / Dokter
+                </div>
+              </div>
+
+              <!-- Card 4: Disiplin & Pelanggaran -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
+                <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                  <span class="truncate">Kedisiplinan</span>
+                  <span class="p-1 bg-rose-50 text-rose-700 rounded-lg text-xs">⚠️</span>
+                </div>
+                <div class="text-xl font-bold text-slate-900 mt-2">
                   {{ violations.length }} Kasus
                 </div>
                 <div class="text-[11px] text-slate-500 mt-1">
-                  <span class="text-rose-600 font-semibold">2 SP Aktif</span> butuh tindak lanjut BK
+                  <span class="text-rose-600 font-semibold">2 SP-1 Aktif</span> • BK Alert
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2">
+                  Ambang batas SP: 50 poin
                 </div>
               </div>
 
-              <!-- Card 3: Prestasi -->
-              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <!-- Card 5: Prestasi Siswa -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
                 <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
-                  <span>Total Prestasi Siswa</span>
-                  <span class="p-1.5 bg-blue-50 text-blue-700 rounded-lg">🏆</span>
+                  <span class="truncate">Prestasi & Merit</span>
+                  <span class="p-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs">🏆</span>
                 </div>
-                <div class="text-2xl font-bold text-slate-900 mt-2">
-                  {{ achievements.length }} Piagam
+                <div class="text-xl font-bold text-slate-900 mt-2">
+                  385 Poin
                 </div>
-                <div class="text-[11px] text-slate-500 mt-1">
-                  1 Tingkat Nasional, 3 Kota/Kab
+                <div class="text-[11px] text-indigo-600 font-semibold mt-1">
+                  {{ achievements.length }} Piagam Kejuaraan
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2">
+                  1 Tingkat Nasional, 3 Kota
                 </div>
               </div>
 
-              <!-- Card 4: Aduan / Whistleblower -->
-              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+              <!-- Card 6: Aduan Terenkripsi -->
+              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs hover:border-slate-300 transition-all">
                 <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
-                  <span>Aduan / Whistleblowing</span>
-                  <span class="p-1.5 bg-purple-50 text-purple-700 rounded-lg">🛡️</span>
+                  <span class="truncate">Kanal Aduan</span>
+                  <span class="p-1 bg-purple-50 text-purple-700 rounded-lg text-xs">🛡️</span>
                 </div>
-                <div class="text-2xl font-bold text-slate-900 mt-2">
+                <div class="text-xl font-bold text-slate-900 mt-2">
                   {{ complaints.length }} Tiket
                 </div>
                 <div class="text-[11px] text-purple-700 font-semibold mt-1">
                   {{ pendingComplaintsCount }} Menunggu Investigasi
+                </div>
+                <div class="text-[10px] text-slate-400 mt-2">
+                  Enkripsi AES-256 Anonim
+                </div>
+              </div>
+
+            </div>
+
+            <!-- VISUAL ANALYTICS CHARTS SECTION (Minimalist Modern White) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+              
+              <!-- Chart 1: Bar Chart Kehadiran Mingguan (8 Cols) -->
+              <div class="lg:col-span-8 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <h2 class="text-sm font-bold text-slate-900">Tren Presensi Mingguan (Senin - Jumat)</h2>
+                      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Rata-rata 96.8% Hadir
+                      </span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Perbandingan rekap kehadiran tepat waktu, keterlambatan gerbang, dan ketidakhadiran</p>
+                  </div>
+                  <div class="flex items-center gap-3 text-[11px] font-medium text-slate-600">
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500"></span> Hadir</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-amber-400"></span> Terlambat</span>
+                    <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-rose-400"></span> Alpa</span>
+                  </div>
+                </div>
+
+                <!-- SVG Interactive Weekly Bar Chart -->
+                <div class="pt-2">
+                  <div class="h-52 w-full flex items-end justify-between gap-3 sm:gap-6 px-2">
+                    <!-- Day 1: Senin -->
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono font-semibold">98%</div>
+                      <div class="w-full flex items-end justify-center gap-1 h-36">
+                        <div class="w-1/3 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-all h-[95%]" title="Senin: 95 Siswa Hadir"></div>
+                        <div class="w-1/3 bg-amber-400 hover:bg-amber-500 rounded-t-lg transition-all h-[15%]" title="Senin: 3 Siswa Terlambat"></div>
+                        <div class="w-1/3 bg-rose-400 hover:bg-rose-500 rounded-t-lg transition-all h-[8%]" title="Senin: 2 Siswa Alpa"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-slate-700">Senin</span>
+                    </div>
+
+                    <!-- Day 2: Selasa -->
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono font-semibold">97%</div>
+                      <div class="w-full flex items-end justify-center gap-1 h-36">
+                        <div class="w-1/3 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-all h-[92%]" title="Selasa: 92 Siswa Hadir"></div>
+                        <div class="w-1/3 bg-amber-400 hover:bg-amber-500 rounded-t-lg transition-all h-[20%]" title="Selasa: 5 Siswa Terlambat"></div>
+                        <div class="w-1/3 bg-rose-400 hover:bg-rose-500 rounded-t-lg transition-all h-[5%]" title="Selasa: 1 Siswa Alpa"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-slate-700">Selasa</span>
+                    </div>
+
+                    <!-- Day 3: Rabu -->
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono font-semibold">96%</div>
+                      <div class="w-full flex items-end justify-center gap-1 h-36">
+                        <div class="w-1/3 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-all h-[90%]" title="Rabu: 90 Siswa Hadir"></div>
+                        <div class="w-1/3 bg-amber-400 hover:bg-amber-500 rounded-t-lg transition-all h-[25%]" title="Rabu: 6 Siswa Terlambat"></div>
+                        <div class="w-1/3 bg-rose-400 hover:bg-rose-500 rounded-t-lg transition-all h-[12%]" title="Rabu: 3 Siswa Alpa"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-slate-700">Rabu</span>
+                    </div>
+
+                    <!-- Day 4: Kamis -->
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <div class="text-[10px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity font-mono font-semibold">97%</div>
+                      <div class="w-full flex items-end justify-center gap-1 h-36">
+                        <div class="w-1/3 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-all h-[93%]" title="Kamis: 93 Siswa Hadir"></div>
+                        <div class="w-1/3 bg-amber-400 hover:bg-amber-500 rounded-t-lg transition-all h-[18%]" title="Kamis: 4 Siswa Terlambat"></div>
+                        <div class="w-1/3 bg-rose-400 hover:bg-rose-500 rounded-t-lg transition-all h-[8%]" title="Kamis: 2 Siswa Alpa"></div>
+                      </div>
+                      <span class="text-xs font-semibold text-slate-700">Kamis</span>
+                    </div>
+
+                    <!-- Day 5: Jumat (Hari Ini) -->
+                    <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <div class="text-[10px] text-emerald-600 font-mono font-bold">96% (Kini)</div>
+                      <div class="w-full flex items-end justify-center gap-1 h-36 border-b-2 border-emerald-500 pb-0.5">
+                        <div class="w-1/3 bg-emerald-500 hover:bg-emerald-600 rounded-t-lg transition-all h-[88%]" title="Jumat: Hadir Sesuai Jadwal"></div>
+                        <div class="w-1/3 bg-amber-400 hover:bg-amber-500 rounded-t-lg transition-all h-[22%]" title="Jumat: 2 Siswa T-1"></div>
+                        <div class="w-1/3 bg-rose-400 hover:bg-rose-500 rounded-t-lg transition-all h-[10%]" title="Jumat: 1 Siswa Alpa"></div>
+                      </div>
+                      <span class="text-xs font-bold text-emerald-800">Jumat ★</span>
+                    </div>
+                  </div>
+                  <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-100">
+                    <span>* Data ter-sinkronisasi realtime dengan Scanner RFID Gerbang</span>
+                    <span class="font-mono text-slate-600">Total KBM Terlayani: 40 Sesi</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chart 2: Donut Chart Rasio Karakter Disiplin vs Prestasi (4 Cols) -->
+              <div class="lg:col-span-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between space-y-4">
+                <div class="pb-3 border-b border-slate-100">
+                  <div class="flex items-center justify-between">
+                    <h2 class="text-sm font-bold text-slate-900">Rasio Karakter Siswa</h2>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                      81% Positif
+                    </span>
+                  </div>
+                  <p class="text-[11px] text-slate-500 mt-0.5">Poin Merit Prestasi vs Demerit Tatib</p>
+                </div>
+
+                <!-- Donut Visualization -->
+                <div class="flex flex-col items-center justify-center py-2">
+                  <div class="relative w-36 h-36 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <!-- Background Circle -->
+                      <path
+                        class="text-slate-100"
+                        stroke-width="4.5"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <!-- Merit Prestasi Arc (81%) -->
+                      <path
+                        class="text-indigo-600"
+                        stroke-dasharray="81, 100"
+                        stroke-width="4.5"
+                        stroke-linecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <!-- Demerit Pelanggaran Arc (19%) -->
+                      <path
+                        class="text-rose-500"
+                        stroke-dasharray="19, 100"
+                        stroke-dashoffset="-81"
+                        stroke-width="4.5"
+                        stroke-linecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <div class="absolute flex flex-col items-center justify-center text-center">
+                      <span class="text-xl font-extrabold text-slate-900 leading-none">385</span>
+                      <span class="text-[10px] text-slate-500 font-medium">Merit Poin</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                      <span class="text-slate-700 font-medium">Prestasi & Penghargaan</span>
+                    </div>
+                    <span class="font-bold text-indigo-700">385 Poin (81%)</span>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                      <span class="text-slate-700 font-medium">Pelanggaran Tatib</span>
+                    </div>
+                    <span class="font-bold text-rose-600">90 Poin (19%)</span>
+                  </div>
+                  <div class="p-2 bg-emerald-50 rounded-xl text-[11px] text-emerald-800 border border-emerald-200 text-center font-semibold mt-2">
+                    ✓ Iklim Sekolah Sangat Kondusif
+                  </div>
                 </div>
               </div>
 
@@ -871,7 +1084,7 @@
                   @click="openLeaveRequestModal()" 
                   class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-xs"
                 >
-                  <span>📝 Ajukan Izin / Sakit</span>
+                  <span>📝 Ajukan Izin / Sakit Ortu</span>
                 </button>
                 <button 
                   @click="openGatePassModal()" 
@@ -885,6 +1098,22 @@
                   class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
                 >
                   ✓ Set Semua Hadir
+                </button>
+                <button 
+                  v-if="attendanceMode === 'daily'"
+                  @click="executeCheckoutJustice()" 
+                  class="bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+                  title="Rekonsiliasi 17:00 WIB: Siswa hadir KBM tapi lupa tap pulang TIDAK dihukum Alpa"
+                >
+                  <span>⚖️ Evaluasi Keadilan Pulang (17:00 WIB)</span>
+                </button>
+                <button 
+                  v-if="attendanceMode === 'daily'"
+                  @click="filterConsecutiveAlpa()" 
+                  class="bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+                  title="Deteksi Siswa Alpa 3 Hari Berturut-turut untuk Tindak Lanjut Home Visit BK"
+                >
+                  <span>🚨 Deteksi Alpa ≥ 3 Hari</span>
                 </button>
                 <button 
                   @click="exportMockData('Presensi')"
@@ -1082,6 +1311,22 @@
               </div>
             </div>
 
+            <!-- Alert Banner: Deteksi Alpa Berturut-turut (Jika Filter Alpa aktif atau ada siswa Alpa ≥ 3 hari) -->
+            <div v-if="filteredAttendance.some(a => a.status === 'Alpa' && a.consecutiveAlpa >= 3)" class="bg-rose-50 border border-rose-200 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">🚨</span>
+                <div>
+                  <div class="text-xs font-bold text-rose-950">Peringatan Kesiswaan: Ditemukan Siswa Alpa 3 Hari Berturut-turut!</div>
+                  <div class="text-[11px] text-rose-800">Sesuai SOP Buku Panduan, Guru BK direkomendasikan melakukan Kunjungan Rumah (Home Visit) dan menerbitkan Surat Panggilan Orang Tua fisik.</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button @click="showToast('Rekomendasi Home Visit tercatat. Surat Panggilan Wali Murid otomatis digenerate.')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold whitespace-nowrap transition-colors shadow-xs">
+                  📋 Jadwalkan Home Visit BK
+                </button>
+              </div>
+            </div>
+
             <!-- Clean White Table -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
               <div class="overflow-x-auto">
@@ -1090,9 +1335,10 @@
                     <tr>
                       <th class="py-3 px-4">NISN / Siswa</th>
                       <th class="py-3 px-3">Kelas</th>
-                      <th class="py-3 px-3">Waktu Masuk</th>
-                      <th class="py-3 px-4">Status Kehadiran</th>
-                      <th class="py-3 px-3">Catatan / Geofence</th>
+                      <th class="py-3 px-3">Jam Masuk</th>
+                      <th class="py-3 px-3">Jam Pulang & Status Kepulangan</th>
+                      <th class="py-3 px-3">Status Kehadiran</th>
+                      <th class="py-3 px-3">Catatan / Rekonsiliasi</th>
                       <th class="py-3 px-4 text-right">Aksi Cepat</th>
                     </tr>
                   </thead>
@@ -1104,9 +1350,32 @@
                       </td>
                       <td class="py-3 px-3 font-medium">{{ att.classroom }}</td>
                       <td class="py-3 px-3">
-                        <span class="font-mono text-[11px]">{{ att.checkInTime || '-' }}</span>
+                        <span class="font-mono text-[11px] font-semibold" :class="att.checkInTime ? 'text-slate-800' : 'text-slate-400'">
+                          {{ att.checkInTime ? att.checkInTime + ' WIB' : '-' }}
+                        </span>
                       </td>
-                      <td class="py-3 px-4">
+                      <td class="py-3 px-3">
+                        <!-- Indikator Kepulangan 3-Jendela -->
+                        <div v-if="att.checkoutStatus === 'Check-out Normal'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
+                          <span>✓ Pulang:</span>
+                          <span class="font-mono">{{ att.checkOutTime || '14:15' }} WIB</span>
+                        </div>
+                        <div v-else-if="att.checkoutStatus === 'Izin Pulang Cepat'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold" :title="att.earlyLeaveReason">
+                          <span>🎫 Gate Pass:</span>
+                          <span class="font-mono">{{ att.earlyLeaveTime || '10:15' }} WIB</span>
+                        </div>
+                        <div v-else-if="att.checkoutStatus === 'Check-out Default (Selesai KBM)'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold" title="Keadilan Siswa: Hadir KBM penuh, bebas Alpa">
+                          <span>⚖️ Default KBM</span>
+                        </div>
+                        <div v-else-if="att.status === 'Hadir' || att.status === 'Terlambat'" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold">
+                          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse"></span>
+                          <span>Belum Pulang</span>
+                        </div>
+                        <div v-else class="text-slate-400 text-[10px]">
+                          -
+                        </div>
+                      </td>
+                      <td class="py-3 px-3">
                         <span 
                           :class="[
                             att.status === 'Hadir' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
@@ -1126,6 +1395,9 @@
                           }"></span>
                           {{ att.status }}
                         </span>
+                        <div v-if="att.consecutiveAlpa >= 3" class="text-[9px] font-bold text-rose-700 mt-0.5">
+                          ⚠️ {{ att.consecutiveAlpa }} Hari Alpa
+                        </div>
                       </td>
                       <td class="py-3 px-3 text-slate-500 text-[11px]">
                         {{ att.notes || 'Hadir via Scan Kartu' }}
@@ -1176,7 +1448,7 @@
                       </td>
                     </tr>
                     <tr v-if="filteredAttendance.length === 0">
-                      <td colspan="6" class="py-8 text-center text-slate-400 text-xs">
+                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
                         Tidak ada data siswa yang cocok dengan kriteria filter pencarian.
                       </td>
                     </tr>
@@ -1791,26 +2063,37 @@
               </div>
             </div>
 
-            <!-- Tab Switcher Gerbang: Masuk Pagi vs Izin Keluar Siang -->
-            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-              <div class="flex items-center gap-2">
+            <!-- 3-Mode Tab Switcher Gerbang: Masuk Pagi vs Izin Keluar Siang vs Pulang Sore -->
+            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div class="flex items-center flex-wrap gap-2">
                 <button 
-                  @click="scannerTab = 'gate_in'"
+                  @click="scannerTab = 'gate_in'; scannerTime = '06:45'"
                   :class="scannerTab === 'gate_in' ? 'bg-slate-900 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
-                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5"
+                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5 shadow-xs"
                 >
-                  <span>🚪 Presensi Gerbang Masuk (Pagi 06.00 - 08.00 WIB)</span>
+                  <span>🚪 Mode 1: Masuk Pagi (06.00 - 08.00 WIB)</span>
                 </button>
                 <button 
-                  @click="scannerTab = 'gate_pass'"
+                  @click="scannerTab = 'gate_pass'; scannerTime = '10:15'"
                   :class="scannerTab === 'gate_pass' ? 'bg-slate-900 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
-                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5"
+                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5 shadow-xs"
                 >
-                  <span>🎫 Verifikasi Tiket Izin Keluar (Digital Gate Pass)</span>
+                  <span>🎫 Mode 2: Gate Pass Siang (08.01 - 13.00 WIB)</span>
                   <span v-if="gatePassList.filter(g => g.status === 'Siap Diverifikasi Satpam').length > 0" class="px-1.5 py-0.2 bg-rose-500 text-white rounded-full text-[10px]">
                     {{ gatePassList.filter(g => g.status === 'Siap Diverifikasi Satpam').length }}
                   </span>
                 </button>
+                <button 
+                  @click="scannerTab = 'gate_out'; scannerTime = '14:15'"
+                  :class="scannerTab === 'gate_out' ? 'bg-slate-900 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5 shadow-xs"
+                >
+                  <span>🏠 Mode 3: Pulang Sore (13.01 - 17.00 WIB)</span>
+                </button>
+              </div>
+              <div class="text-[11px] font-mono text-slate-500 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>Jendela Aktif: <strong>{{ scannerTab === 'gate_in' ? 'Check-in Masuk' : (scannerTab === 'gate_pass' ? 'Siaga Tiket Keluar' : 'Check-out Kepulangan') }}</strong></span>
               </div>
             </div>
 
@@ -1946,6 +2229,17 @@
                         <div class="text-[10px] opacity-75">Lewat 45 menit • Poin: -10 • Penanganan BK & Panggilan Ortu</div>
                       </div>
                       <span class="text-rose-700 text-sm">🚨</span>
+                    </button>
+                  </div>
+
+                  <!-- Tombol Aksi Cutoff 08:00 WIB -->
+                  <div class="pt-2 border-t border-slate-100">
+                    <button 
+                      @click="executeAutoAlpaCutoff()" 
+                      class="w-full p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                      title="Mengeksekusi aturan Cutoff 08:00 WIB: Siswa belum tap ditetapkan Alpa (-15 Poin) & Alert WA Darurat"
+                    >
+                      <span>⚡ Cutoff 08:00 WIB (Auto-Alpa & WA Alert)</span>
                     </button>
                   </div>
                 </div>
@@ -2133,6 +2427,241 @@
             </div>
 
             </div> <!-- End of scannerTab === 'gate_in' -->
+
+            <!-- ============================================== -->
+            <!-- TAMPILAN TAB 3: SCANNER GERBANG PULANG SORE    -->
+            <!-- ============================================== -->
+            <div v-if="scannerTab === 'gate_out'" class="space-y-6">
+
+              <!-- Two-Column Layout: Departure Scanner Input & Monitor -->
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left Column: Departure Simulator & Fast Buttons -->
+                <div class="space-y-4">
+                  
+                  <!-- Departure Time Simulator -->
+                  <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                      <span class="text-xs font-bold text-slate-900">Simulasi Jam Pulang Sekolah</span>
+                      <span class="text-[10px] text-slate-400 font-mono">13:01 - 17:00 WIB</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500">Pilih skenario kepulangan untuk menguji pencatatan check-out dan notifikasi WA ortu:</p>
+
+                    <div class="space-y-2">
+                      <button 
+                        @click="scannerTime = '13:30'" 
+                        :class="scannerTime === '13:30' ? 'border-emerald-600 bg-emerald-50 text-emerald-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                        class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                      >
+                        <div>
+                          <div class="font-semibold">13:30 WIB — Pulang Normal Kelas X</div>
+                          <div class="text-[10px] opacity-75">Jadwal resmi usai KBM • Notifikasi WA dikirim</div>
+                        </div>
+                        <span class="text-emerald-700 text-sm">🏠</span>
+                      </button>
+
+                      <button 
+                        @click="scannerTime = '14:15'" 
+                        :class="scannerTime === '14:15' ? 'border-blue-600 bg-blue-50 text-blue-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                        class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                      >
+                        <div>
+                          <div class="font-semibold">14:15 WIB — Pulang Normal Kelas XI & XII</div>
+                          <div class="text-[10px] opacity-75">Selesai KBM Praktik Kejuruan • Chime 3-Tone</div>
+                        </div>
+                        <span class="text-blue-700 text-sm">🔔</span>
+                      </button>
+
+                      <button 
+                        @click="scannerTime = '15:00'" 
+                        :class="scannerTime === '15:00' ? 'border-purple-600 bg-purple-50 text-purple-950 font-bold' : 'border-slate-200 hover:bg-slate-50 text-slate-700'"
+                        class="w-full p-2.5 rounded-xl border text-left text-xs transition-all flex items-center justify-between"
+                      >
+                        <div>
+                          <div class="font-semibold">15:00 WIB — Pulang Ekstrakurikuler</div>
+                          <div class="text-[10px] opacity-75">Kegiatan Pramuka / OSIS / Olahraga sore</div>
+                        </div>
+                        <span class="text-purple-700 text-sm">⚽</span>
+                      </button>
+                    </div>
+
+                    <!-- Shortcut Keadilan Siswa (17:00 WIB) -->
+                    <div class="pt-2 border-t border-slate-100">
+                      <button 
+                        @click="executeCheckoutJustice()" 
+                        class="w-full p-2.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-xs"
+                        title="Rekonsiliasi Otomatis 17:00 WIB: Siswa hadir pagi & KBM tetapi lupa tap pulang TIDAK dihukum Alpa"
+                      >
+                        <span>⚖️ Rekonsiliasi Keadilan Pulang (17:00 WIB)</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Fast Tap Card Siswa Pulang -->
+                  <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                    <div class="text-xs font-bold text-slate-900">Uji Tap Kartu Kepulangan Siswa (1-Klik):</div>
+                    <div class="space-y-1.5">
+                      <button 
+                        v-for="s in students.slice(0, 4)" 
+                        :key="s.id"
+                        @click="executeBarcodeScan(s.nisn)"
+                        class="w-full p-2 rounded-xl border border-slate-200 hover:border-slate-900 bg-white hover:bg-slate-50 text-left text-xs transition-all flex items-center justify-between"
+                      >
+                        <div>
+                          <div class="font-bold text-slate-900">{{ s.name }}</div>
+                          <div class="text-[10px] text-slate-400 font-mono">NISN: {{ s.nisn }} • {{ s.classroom }}</div>
+                        </div>
+                        <span class="text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-1 rounded-lg font-mono font-semibold">Tap Pulang</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Right Column: Live Monitor Display Kepulangan -->
+                <div class="lg:col-span-2 space-y-4">
+                  
+                  <!-- Terminal Input Barcode Pulang -->
+                  <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                    <form @submit.prevent="executeBarcodeScan(scannerInput)" class="flex gap-2">
+                      <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-mono text-sm">
+                          🏠
+                        </span>
+                        <input 
+                          v-model="scannerInput"
+                          type="text" 
+                          placeholder="Tempelkan kartu ke Scanner Gerbang Pulang atau ketik NISN..." 
+                          class="block w-full pl-8 pr-3 py-3 text-sm font-mono border-2 border-slate-300 focus:border-slate-900 rounded-xl focus:outline-none"
+                        >
+                      </div>
+                      <button 
+                        type="submit" 
+                        class="px-5 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl transition-colors shadow-xs"
+                      >
+                        Scan Check-out Pulang
+                      </button>
+                    </form>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400">
+                      <span>Pencatatan kepulangan sore memicu notifikasi WhatsApp otomatis ke orang tua</span>
+                      <span class="text-emerald-600 font-medium">● Scanner Gerbang Pulang Aktif</span>
+                    </div>
+                  </div>
+
+                  <!-- Departure Live Monitor Feedback Card -->
+                  <div 
+                    v-if="lastScanResult && (lastScanResult.isCheckout || lastScanResult.status.includes('Pulang'))" 
+                    class="p-6 rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 transition-all shadow-sm space-y-4"
+                  >
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-emerald-200">
+                      <div class="flex items-center gap-4">
+                        <div class="w-16 h-20 rounded-xl bg-emerald-700 text-white flex flex-col items-center justify-center font-bold text-xs shadow-md border-2 border-white">
+                          <span class="text-xl mb-1">🏠</span>
+                          <span>PULANG</span>
+                        </div>
+                        <div>
+                          <div class="text-lg font-bold text-slate-900">{{ lastScanResult.student.name }}</div>
+                          <div class="text-xs text-slate-600 font-mono mt-0.5">
+                            NISN: <strong>{{ lastScanResult.student.nisn }}</strong> • Kelas: <strong>{{ lastScanResult.student.classroom }}</strong>
+                          </div>
+                          <div class="text-[11px] text-emerald-800 font-medium mt-1">
+                            ✓ Check-out Kepulangan Tercatat • Suara Chime C-E-G Berbunyi
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="text-right">
+                        <div class="text-2xl font-mono font-bold text-emerald-950">{{ lastScanResult.scanTime }} WIB</div>
+                        <div class="text-[10px] text-emerald-700 font-medium">Jam Pulang Terverifikasi</div>
+                      </div>
+                    </div>
+
+                    <!-- Kepulangan Evaluation Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">Status Kepulangan:</div>
+                        <div class="text-sm font-bold text-emerald-800 mt-0.5">
+                          ✓ Check-out Normal
+                        </div>
+                      </div>
+
+                      <div class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">Notifikasi WhatsApp Ortu:</div>
+                        <div class="text-xs font-bold text-emerald-700 flex items-center gap-1 mt-0.5">
+                          <span>📲</span>
+                          <span>Terkirim Instan ke HP Ortu</span>
+                        </div>
+                      </div>
+
+                      <div class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs">
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">Status Keadilan KBM:</div>
+                        <div class="text-xs font-bold text-slate-900 mt-0.5">
+                          ✓ Hadir KBM Penuh
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Security Guard Instruction -->
+                    <div class="p-3 bg-white/90 rounded-xl border border-emerald-200 text-xs text-slate-700 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm">👮‍♂️</span>
+                        <span><strong>Instruksi Satpam Gerbang:</strong> Siswa diizinkan keluar area sekolah. Pastikan penjemput atau transportasi siswa tertib dan aman.</span>
+                      </div>
+                      <button @click="openWhatsAppModal" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold transition-colors">
+                        Lihat WA Pulang
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Empty State when no checkout scan yet -->
+                  <div v-else class="p-12 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs">
+                    <div class="text-3xl mb-2">🏠</div>
+                    <div class="font-bold text-slate-700">Scanner Gerbang Pulang Siap Digunakan</div>
+                    <div class="text-[11px] mt-1">Tempelkan barcode kartu pelajar siswa untuk mencatat kepulangan sore dan mengirim notifikasi WA ke orang tua.</div>
+                  </div>
+
+                  <!-- Live Departure History Table -->
+                  <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+                      <span class="text-xs font-bold text-slate-900">Rekap Kepulangan Sore Terkini</span>
+                      <span class="text-[11px] text-slate-400 font-mono">{{ attendanceList.filter(a => a.checkoutStatus === 'Check-out Normal').length }} Siswa Pulang</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-left text-xs">
+                        <thead class="text-slate-400 uppercase tracking-wider text-[10px]">
+                          <tr>
+                            <th class="py-2">Waktu Pulang</th>
+                            <th class="py-2">Nama Siswa</th>
+                            <th class="py-2">Kelas</th>
+                            <th class="py-2">Status Check-out</th>
+                            <th class="py-2 text-right">Notifikasi WA</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                          <tr v-for="att in attendanceList.filter(a => a.checkoutStatus === 'Check-out Normal').slice(0, 5)" :key="att.id">
+                            <td class="py-2.5 font-mono text-[11px] font-bold text-slate-800">{{ att.checkOutTime || '14:15' }} WIB</td>
+                            <td class="py-2.5 font-bold text-slate-900">{{ att.studentName }}</td>
+                            <td class="py-2.5">{{ att.classroom }}</td>
+                            <td class="py-2.5">
+                              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                Check-out Normal
+                              </span>
+                            </td>
+                            <td class="py-2.5 text-right font-mono text-emerald-600 text-[11px] font-bold">
+                              ✓ Terkirim
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div> <!-- End of scannerTab === 'gate_out' -->
 
           </div>
 
@@ -3598,51 +4127,160 @@
     <!-- MODAL: SIMULASI NOTIFIKASI WHATSAPP ORTU   -->
     <!-- ========================================== -->
     <div v-if="showWhatsAppModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-      <div class="bg-white rounded-3xl max-w-sm w-full p-4 shadow-2xl border border-slate-200 space-y-3">
+      <div class="bg-white rounded-3xl max-w-md w-full p-5 shadow-2xl border border-slate-200 space-y-3.5">
         <!-- Phone Mockup Top Bar -->
-        <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
               WA
             </div>
             <div>
               <div class="text-xs font-bold text-slate-900">EduTrack Official Bot</div>
-              <div class="text-[10px] text-emerald-600 font-medium">Online • Terverifikasi Sekolah</div>
+              <div class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online • WhatsApp Official Gateway
+              </div>
             </div>
           </div>
           <button @click="showWhatsAppModal = false" class="text-slate-400 hover:text-slate-600">✕</button>
         </div>
 
-        <!-- WhatsApp Chat Bubble -->
-        <div class="p-3 bg-[#E7FEDE] rounded-2xl border border-emerald-200 text-xs text-slate-800 space-y-2 leading-relaxed shadow-xs">
-          <div class="font-bold text-emerald-950 flex items-center gap-1">
-            <span>📢</span> PEMBERITAHUAN PRESENSI SISWA
+        <!-- Segmented Tab Switcher Skenario Notifikasi WA -->
+        <div class="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-xl text-[10px] font-semibold">
+          <button 
+            @click="activeWaTab = 'checkin'"
+            :class="activeWaTab === 'checkin' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+            class="py-1.5 px-1 rounded-lg transition-all text-center truncate"
+          >
+            Check-in
+          </button>
+          <button 
+            @click="activeWaTab = 'auto_alpa'"
+            :class="activeWaTab === 'auto_alpa' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+            class="py-1.5 px-1 rounded-lg transition-all text-center truncate"
+          >
+            Auto-Alpa
+          </button>
+          <button 
+            @click="activeWaTab = 'gate_pass'"
+            :class="activeWaTab === 'gate_pass' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+            class="py-1.5 px-1 rounded-lg transition-all text-center truncate"
+          >
+            Gate Pass
+          </button>
+          <button 
+            @click="activeWaTab = 'checkout'"
+            :class="activeWaTab === 'checkout' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+            class="py-1.5 px-1 rounded-lg transition-all text-center truncate"
+          >
+            Pulang Sore
+          </button>
+        </div>
+
+        <!-- WhatsApp Chat Bubble (Dynamic according to Scenario) -->
+        <div class="p-3.5 bg-[#E7FEDE] rounded-2xl border border-emerald-200 text-xs text-slate-800 space-y-2 leading-relaxed shadow-xs">
+          
+          <!-- Template 1: Check-in / Terlambat -->
+          <div v-if="activeWaTab === 'checkin'" class="space-y-2">
+            <div class="font-bold text-emerald-950 flex items-center gap-1.5">
+              <span>🔔</span> PEMBERITAHUAN KEDATANGAN SISWA
+            </div>
+            <p>
+              Yth. <strong>Bapak Hendra (Orang Tua / Wali Murid)</strong>,
+            </p>
+            <p>
+              Kami informasikan bahwa ananda <strong>Ahmad Rifai (Kelas X-RPL-1)</strong> telah melakukan presensi kedatangan di gerbang sekolah:
+            </p>
+            <div class="bg-white/90 p-2.5 rounded-xl text-[11px] font-mono border border-emerald-100 space-y-0.5">
+              <div>• Tanggal : {{ currentDateFormatted }}</div>
+              <div>• Status  : <strong class="text-amber-800">Terlambat Ringan (T-1)</strong></div>
+              <div>• Masuk   : 07:10 WIB (Lewat 10 Menit)</div>
+              <div>• Poin    : -2 Poin Tatib (Izin Masuk Kelas Piket)</div>
+            </div>
+            <p class="text-[11px] text-slate-600">
+              Mohon bantuan Bapak/Ibu untuk memotivasi ananda hadir sebelum pukul 07.00 WIB esok hari. Terima kasih.
+            </p>
+            <div class="text-[9px] text-right text-slate-400">07:11 WIB ✓✓</div>
           </div>
-          <p>
-            Yth. <strong>Bapak Hendra (Orang Tua / Wali)</strong>,
-          </p>
-          <p>
-            Kami informasikan bahwa ananda <strong>Ahmad Rifai (X-RPL-1)</strong> pada hari ini:
-          </p>
-          <div class="bg-white/80 p-2 rounded-xl text-[11px] font-mono border border-emerald-100">
-            • Tanggal : {{ currentDateFormatted }}<br>
-            • Status  : <strong class="text-amber-800">Terlambat (15 Menit)</strong><br>
-            • Masuk   : 07.15 WIB<br>
-            • Poin    : -5 Poin Tatib
+
+          <!-- Template 2: Auto-Alpa Cutoff 08:00 WIB -->
+          <div v-else-if="activeWaTab === 'auto_alpa'" class="space-y-2">
+            <div class="font-bold text-rose-950 flex items-center gap-1.5">
+              <span>🚨</span> PERINGATAN DARURAT: SISWA BELUM HADIR
+            </div>
+            <p>
+              Yth. <strong>Bapak Hendra (Orang Tua / Wali Murid)</strong>,
+            </p>
+            <p class="text-rose-900 font-medium">
+              Hingga batas akhir cutoff pukul 08:00 WIB, ananda <strong>Ahmad Rifai</strong> tercatat <strong>BELUM MELAKUKAN TAP KARTU</strong> di gerbang dan tidak ada surat keterangan perizinan mandiri.
+            </p>
+            <div class="bg-rose-50/90 p-2.5 rounded-xl text-[11px] font-mono border border-rose-200 text-rose-950 space-y-0.5">
+              <div>• Tanggal : {{ currentDateFormatted }}</div>
+              <div>• Status  : <strong>ALPA (Tanpa Keterangan)</strong></div>
+              <div>• Poin    : -15 Poin Pelanggaran Kedisiplinan</div>
+              <div>• Konfirmasi: Segera hubungi Wali Kelas</div>
+            </div>
+            <p class="text-[11px] text-slate-600">
+              Mohon segera konfirmasi keberadaan ananda melalui aplikasi EduTrack atau hubungi Wali Kelas (Bambang S.Pd: 0812-3456-7890).
+            </p>
+            <div class="text-[9px] text-right text-slate-400">08:01 WIB ✓✓</div>
           </div>
-          <p class="text-[11px] text-slate-600">
-            Mohon bantuannya agar ananda dapat hadir tepat waktu esok hari. Terima kasih atas kerja samanya.
-          </p>
-          <div class="text-[9px] text-right text-slate-400">07:16 WIB ✓✓</div>
+
+          <!-- Template 3: Gate Pass Izin Keluar Siang -->
+          <div v-else-if="activeWaTab === 'gate_pass'" class="space-y-2">
+            <div class="font-bold text-amber-950 flex items-center gap-1.5">
+              <span>🎫</span> NOTIFIKASI IZIN KELUAR SEKOLAH (GATE PASS)
+            </div>
+            <p>
+              Yth. <strong>Bapak Hendra (Orang Tua / Wali Murid)</strong>,
+            </p>
+            <p>
+              Kami menginformasikan bahwa ananda <strong>Budi Santoso</strong> telah resmi melintasi gerbang keluar sekolah sebelum jam pulang dengan rincian tiket:
+            </p>
+            <div class="bg-white/90 p-2.5 rounded-xl text-[11px] font-mono border border-amber-200 space-y-0.5 text-slate-800">
+              <div>• No Tiket  : GP-20261123-001</div>
+              <div>• Waktu Keluar: 10:15 WIB</div>
+              <div>• Alasan    : Sakit pusing demam mendadak di UKS</div>
+              <div>• Penjemput : Ibu Siti Khodijah (Ibu Kandung)</div>
+              <div>• Izin Dari : Drs. Bambang Wijaya (Wali Kelas)</div>
+            </div>
+            <p class="text-[11px] text-slate-600">
+              Presensi harian tercatat "Hadir (Izin Pulang Cepat: 10:15 WIB)". Semoga ananda lekas pulih.
+            </p>
+            <div class="text-[9px] text-right text-slate-400">10:16 WIB ✓✓</div>
+          </div>
+
+          <!-- Template 4: Kepulangan Sore Normal -->
+          <div v-else class="space-y-2">
+            <div class="font-bold text-emerald-950 flex items-center gap-1.5">
+              <span>🏠</span> NOTIFIKASI KEPULANGAN SORE SISWA
+            </div>
+            <p>
+              Yth. <strong>Bapak Hendra (Orang Tua / Wali Murid)</strong>,
+            </p>
+            <p>
+              Kabar gembira! Ananda <strong>Ahmad Rifai</strong> telah menyelesaikan seluruh aktivitas KBM hari ini dan melakukan check-out kepulangan di Gerbang SDN Kebonagung:
+            </p>
+            <div class="bg-white/90 p-2.5 rounded-xl text-[11px] font-mono border border-emerald-100 space-y-0.5 text-slate-800">
+              <div>• Tanggal      : {{ currentDateFormatted }}</div>
+              <div>• Waktu Pulang : 14:15 WIB</div>
+              <div>• Status       : <strong>Check-out Normal</strong></div>
+              <div>• Evaluasi KBM : Hadir Penuh di Seluruh Jam Mapel</div>
+            </div>
+            <p class="text-[11px] text-slate-600">
+              Ananda sedang dalam perjalanan pulang. Mohon pastikan ananda tiba di rumah dengan selamat. Terima kasih!
+            </p>
+            <div class="text-[9px] text-right text-slate-400">14:16 WIB ✓✓</div>
+          </div>
+
         </div>
 
         <!-- Simulation Actions -->
-        <div class="pt-2">
+        <div class="pt-1">
           <button 
-            @click="showToast('Notifikasi simulasi WhatsApp terkirim ke 0812-3456-7890'); showWhatsAppModal = false"
+            @click="showToast('Notifikasi simulasi WhatsApp template [' + activeWaTab + '] terkirim ke orang tua'); showWhatsAppModal = false"
             class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors shadow-xs"
           >
-            Kirim Ulang Notifikasi WA
+            Kirim Ulang Notifikasi WA Ini
           </button>
         </div>
       </div>
@@ -4034,12 +4672,36 @@
           </div>
 
           <div>
-            <label class="block font-semibold text-slate-700 mb-1">Jenis Permohonan</label>
+            <label class="block font-semibold text-slate-700 mb-1">Kategori Perizinan</label>
             <select v-model="newLeaveRequest.type" required class="w-full p-2 border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none bg-white font-medium">
-              <option value="Sakit (Surat Dokter Terlampir)">Sakit (Dengan Surat Keterangan Dokter)</option>
-              <option value="Izin (Urusan Keluarga Mendesak)">Izin (Urusan Keluarga Mendesak)</option>
-              <option value="Izin (Kegiatan Lomba / Eksternal)">Izin (Tugas Lomba / Instansi Luar)</option>
+              <option value="Sakit 1 Hari (Surat Izin Ortu)">Sakit 1 Hari (Surat Izin Orang Tua — Kuota 2x/Sem)</option>
+              <option value="Sakit >1 Hari (Surat Dokter)">Sakit >1 Hari (Wajib Melampirkan Surat Dokter / Faskes)</option>
+              <option value="Izin (Keperluan Keluarga)">Izin (Keperluan Keluarga Mendesak)</option>
+              <option value="Dispensasi (Tugas Sekolah)">Dispensasi Resmi (Tugas Sekolah / Delegasi Lomba)</option>
             </select>
+          </div>
+
+          <!-- Dynamic Info Box based on Category -->
+          <div v-if="newLeaveRequest.type === 'Sakit 1 Hari (Surat Izin Ortu)'" class="p-2.5 bg-emerald-50 rounded-xl border border-emerald-200 text-[11px] text-emerald-900 space-y-1">
+            <div class="flex items-center justify-between font-bold">
+              <span>✓ Kebijakan Ramah Siswa</span>
+              <span class="bg-emerald-200 text-emerald-950 px-2 py-0.2 rounded-full text-[10px]">Sisa Kuota: 1 dari 2x</span>
+            </div>
+            <p>Untuk sakit 1 hari, orang tua tidak perlu memaksakan periksa ke dokter klinik. Cukup unggah foto surat izin tulisan tangan bertanda tangan orang tua.</p>
+          </div>
+
+          <div v-else-if="newLeaveRequest.type === 'Sakit >1 Hari (Surat Dokter)'" class="p-2.5 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-900 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⚠️</span> <span>Wajib Surat Keterangan Dokter</span>
+            </div>
+            <p>Sakit berturut-turut lebih dari 1 hari memerlukan verifikasi medis dari fasilitas kesehatan/Puskesmas guna menjamin pemulihan siswa.</p>
+          </div>
+
+          <div v-else-if="newLeaveRequest.type === 'Dispensasi (Tugas Sekolah)'" class="p-2.5 bg-blue-50 rounded-xl border border-blue-200 text-[11px] text-blue-900 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>🏆</span> <span>Dispensasi Hadir Resmi</span>
+            </div>
+            <p>Siswa tetap berstatus <strong>Hadir Resmi</strong> dalam rekapitulasi nilai presensi dan dibebaskan dari penalti demerit kedisiplinan.</p>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
@@ -4557,16 +5219,16 @@
         ]);
 
         const attendanceList = ref([
-          { id: 1, nisn: '0081234567', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', checkInTime: '07:15', status: 'Terlambat', notes: 'Terlambat 15 menit karena ban bocor' },
-          { id: 2, nisn: '0081234568', studentName: 'Siti Nurhaliza', classroom: 'X-RPL-1', checkInTime: '06:45', status: 'Hadir', notes: 'Hadir tepat waktu' },
-          { id: 3, nisn: '0081234569', studentName: 'Budi Santoso', classroom: 'XI-TKJ-2', checkInTime: '', status: 'Alpa', notes: 'Tidak ada konfirmasi wali murid' },
-          { id: 4, nisn: '0081234570', studentName: 'Dimas Anggara', classroom: 'XII-MM-1', checkInTime: '06:55', status: 'Hadir', notes: 'Hadir tepat waktu' },
-          { id: 5, nisn: '0081234571', studentName: 'Rina Kartika', classroom: 'X-RPL-1', checkInTime: '06:50', status: 'Hadir', notes: 'Hadir tepat waktu' },
-          { id: 6, nisn: '0081234572', studentName: 'Fajar Pratama', classroom: 'XI-TKJ-2', checkInTime: '', status: 'Sakit', notes: 'Surat dokter terlampir via WA' },
-          { id: 7, nisn: '0081234573', studentName: 'Annisa Putri', classroom: 'XII-MM-1', checkInTime: '06:40', status: 'Hadir', notes: 'Hadir tepat waktu' },
-          { id: 8, nisn: '0081234574', studentName: 'Bayu Aditya', classroom: 'X-RPL-1', checkInTime: '07:05', status: 'Terlambat', notes: 'Terlambat 5 menit' },
-          { id: 9, nisn: '0081234575', studentName: 'Nadia Safitri', classroom: 'XI-TKJ-2', checkInTime: '06:58', status: 'Hadir', notes: 'Hadir tepat waktu' },
-          { id: 10, nisn: '0081234576', studentName: 'Reza Rahardian', classroom: 'XII-MM-1', checkInTime: '', status: 'Izin', notes: 'Izin urusan keluarga' }
+          { id: 1, nisn: '0081234567', studentName: 'Ahmad Rifai', classroom: 'X-RPL-1', checkInTime: '07:15', checkOutTime: '14:15', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Check-out Normal', status: 'Terlambat', consecutiveAlpa: 0, notes: 'Terlambat 15 menit karena ban bocor' },
+          { id: 2, nisn: '0081234568', studentName: 'Siti Nurhaliza', classroom: 'X-RPL-1', checkInTime: '06:45', checkOutTime: '14:15', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Check-out Normal', status: 'Hadir', consecutiveAlpa: 0, notes: 'Hadir tepat waktu' },
+          { id: 3, nisn: '0081234569', studentName: 'Budi Santoso', classroom: 'XI-TKJ-2', checkInTime: '', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Alpa', consecutiveAlpa: 3, notes: 'Alpa 3 hari berturut-turut (Perlu Home Visit BK)' },
+          { id: 4, nisn: '0081234570', studentName: 'Dimas Anggara', classroom: 'XII-MM-1', checkInTime: '06:55', checkOutTime: '', earlyLeaveTime: '10:15', earlyLeaveReason: 'Sakit pusing demam UKS', checkoutStatus: 'Izin Pulang Cepat', status: 'Hadir', consecutiveAlpa: 0, notes: 'Izin Pulang Cepat: Sakit UKS dijemput orang tua' },
+          { id: 5, nisn: '0081234571', studentName: 'Rina Kartika', classroom: 'X-RPL-1', checkInTime: '06:50', checkOutTime: '14:15', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Check-out Normal', status: 'Hadir', consecutiveAlpa: 0, notes: 'Hadir tepat waktu' },
+          { id: 6, nisn: '0081234572', studentName: 'Fajar Pratama', classroom: 'XI-TKJ-2', checkInTime: '', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Sakit', consecutiveAlpa: 0, notes: 'Surat dokter terlampir via WA' },
+          { id: 7, nisn: '0081234573', studentName: 'Annisa Putri', classroom: 'XII-MM-1', checkInTime: '06:40', checkOutTime: '15:00', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Check-out Normal', status: 'Hadir', consecutiveAlpa: 0, notes: 'Hadir tepat waktu' },
+          { id: 8, nisn: '0081234574', studentName: 'Bayu Aditya', classroom: 'X-RPL-1', checkInTime: '07:05', checkOutTime: '14:15', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Check-out Normal', status: 'Terlambat', consecutiveAlpa: 0, notes: 'Terlambat 5 menit' },
+          { id: 9, nisn: '0081234575', studentName: 'Nadia Safitri', classroom: 'XI-TKJ-2', checkInTime: '06:58', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Hadir', consecutiveAlpa: 0, notes: 'Hadir pagi, KBM aktif (Siap uji Keadilan Pulang)' },
+          { id: 10, nisn: '0081234576', studentName: 'Reza Rahardian', classroom: 'XII-MM-1', checkInTime: '', checkOutTime: '', earlyLeaveTime: '', earlyLeaveReason: '', checkoutStatus: 'Belum Pulang', status: 'Izin', consecutiveAlpa: 0, notes: 'Izin urusan keluarga mendesak' }
         ]);
 
         const violations = ref([
@@ -5135,11 +5797,11 @@
           const firstStu = scopedStudents.value[0] || students.value[0];
           newLeaveRequest.value = {
             studentId: firstStu ? firstStu.id : 1,
-            type: 'Sakit (Surat Dokter Terlampir)',
+            type: 'Sakit 1 Hari (Surat Izin Ortu)',
             startDate: '23/11/2026',
-            endDate: '24/11/2026',
+            endDate: '23/11/2026',
             reason: '',
-            attachmentName: 'surat_keterangan_dokter_klinik_sehat.pdf'
+            attachmentName: 'foto_surat_izin_orang_tua_ahmad.jpg'
           };
           showLeaveRequestModal.value = true;
         };
@@ -5153,7 +5815,7 @@
             parentName: currentUser.value.name,
             type: newLeaveRequest.value.type,
             period: `${newLeaveRequest.value.startDate} s/d ${newLeaveRequest.value.endDate}`,
-            reason: newLeaveRequest.value.reason || 'Izin keperluan keluarga mendesak',
+            reason: newLeaveRequest.value.reason || 'Izin permohonan mandiri orang tua',
             attachment: newLeaveRequest.value.attachmentName,
             status: 'Menunggu Persetujuan Wali Kelas',
             submittedAt: '23/11/2026 07:15 WIB'
@@ -5163,11 +5825,20 @@
         };
         const approveLeaveRequest = (req) => {
           req.status = 'Disetujui';
-          const att = attendanceRecords.value.find(a => a.studentId === req.studentId);
+          const att = attendanceList.value.find(a => a.id === req.studentId || a.studentName.toLowerCase().includes(req.studentName.toLowerCase()));
           if (att) {
-            att.status = req.type.includes('Sakit') ? 'Sakit' : 'Izin';
-            att.notes = `Disetujui Wali Kelas: ${req.reason}`;
+            if (req.type.includes('Dispensasi')) {
+              att.status = 'Hadir';
+              att.notes = `Dispensasi Hadir Resmi: ${req.reason}`;
+            } else if (req.type.includes('Sakit')) {
+              att.status = 'Sakit';
+              att.notes = `Izin Sakit Disetujui: ${req.reason}`;
+            } else {
+              att.status = 'Izin';
+              att.notes = `Izin Disetujui: ${req.reason}`;
+            }
           }
+          playAudioFeedback('beep_880');
           showToast(`Permohonan izin ananda ${req.studentName} telah DISETUJUI. Rekap presensi otomatis diperbarui.`);
         };
 
@@ -5223,8 +5894,20 @@
         };
         const verifyAndOpenGate = (pass) => {
           pass.status = 'Telah Melintasi Gerbang';
-          pass.verifiedAt = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
-          showToast(`Tiket Gate Pass ${pass.id} VALID. Palang gerbang dibuka untuk ${pass.studentName}!`);
+          const exitTime = scannerTime.value ? scannerTime.value + ' WIB' : '10:15 WIB';
+          pass.verifiedAt = exitTime;
+
+          // Mutasi presensi harian siswa langsung
+          const att = attendanceList.value.find(a => a.id === pass.studentId || a.studentName.toLowerCase().includes(pass.studentName.toLowerCase()));
+          if (att) {
+            att.earlyLeaveTime = scannerTime.value || '10:15';
+            att.checkoutStatus = 'Izin Pulang Cepat';
+            att.earlyLeaveReason = pass.reason;
+            att.notes = `Izin Pulang Cepat: ${pass.reason} (Dijemput ${pass.pickupPerson})`;
+          }
+
+          playAudioFeedback('gate_pass');
+          showToast(`Tiket Gate Pass ${pass.id} VALID. Palang gerbang dibuka untuk ${pass.studentName}! Notifikasi WA terkirim ke orang tua.`);
         };
 
         // ==========================================
@@ -5444,17 +6127,26 @@
           return `${start} - ${end}`;
         };
 
-        // Dashboard Stats (Role Scoped)
+        // Dashboard Stats (Role Scoped & 3-Mode Attendance)
         const stats = computed(() => {
           const list = filteredAttendance.value;
           const total = list.length;
           const present = list.filter(a => a.status === 'Hadir' || a.status === 'Terlambat').length;
           const absent = list.filter(a => a.status === 'Alpa').length;
-          const rate = total > 0 ? Math.round((present / total) * 100) : 100;
+          const checkedOut = list.filter(a => a.checkoutStatus === 'Check-out Normal').length;
+          const earlyLeave = list.filter(a => a.checkoutStatus === 'Izin Pulang Cepat').length;
+          const defaultKbm = list.filter(a => a.checkoutStatus === 'Check-out Default (Selesai KBM)').length;
+          const attRate = total > 0 ? Math.round((present / total) * 100) : 100;
+          const totalCompletedDeparture = checkedOut + earlyLeave + defaultKbm;
+          const coRate = present > 0 ? Math.round((totalCompletedDeparture / present) * 100) : 0;
           return {
-            attendanceRate: rate,
+            attendanceRate: attRate,
             presentCount: present,
-            absentCount: absent
+            absentCount: absent,
+            checkoutRate: coRate,
+            checkedOutCount: checkedOut,
+            earlyLeaveCount: earlyLeave,
+            defaultKbmCount: defaultKbm
           };
         });
 
@@ -5829,7 +6521,73 @@
         };
 
         // ==========================================
-        // SCANNER & BARCODE STATE
+        // WEB AUDIO API FEEDBACK SYNTHESIZER
+        // ==========================================
+        const playAudioFeedback = (type) => {
+          try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!AudioCtx) return;
+            const ctx = new AudioCtx();
+
+            if (type === 'beep_880') {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(880, ctx.currentTime);
+              gain.gain.setValueAtTime(0.12, ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start();
+              osc.stop(ctx.currentTime + 0.22);
+            } else if (type === 'buzz_180') {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(180, ctx.currentTime);
+              gain.gain.setValueAtTime(0.18, ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.start();
+              osc.stop(ctx.currentTime + 0.35);
+            } else if (type === 'chime_pulang') {
+              const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+              notes.forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.12);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime + idx * 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.12 + 0.28);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + idx * 0.12);
+                osc.stop(ctx.currentTime + idx * 0.12 + 0.28);
+              });
+            } else if (type === 'gate_pass') {
+              [587.33, 880].forEach((freq, idx) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
+                gain.gain.setValueAtTime(0.14, ctx.currentTime + idx * 0.09);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.09 + 0.24);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime + idx * 0.09);
+                osc.stop(ctx.currentTime + idx * 0.09 + 0.24);
+              });
+            }
+          } catch (e) {
+            console.warn('AudioContext prevented by browser policy:', e);
+          }
+        };
+
+        const activeWaTab = ref('checkin');
+
+        // ==========================================
+        // SCANNER & BARCODE STATE (3 MODES)
         // ==========================================
         const scannerTime = ref('06:45');
         const scannerInput = ref('');
@@ -5839,6 +6597,46 @@
           { time: '06:45', name: 'Siti Nurhaliza', classroom: 'X-RPL-1', status: 'Hadir Tepat Waktu', points: 0 },
           { time: '06:50', name: 'Rina Kartika', classroom: 'X-RPL-1', status: 'Hadir Tepat Waktu', points: 0 }
         ]);
+
+        // Rule Engine: Eksekusi Cutoff 08:00 WIB
+        const executeAutoAlpaCutoff = () => {
+          let count = 0;
+          attendanceList.value.forEach(record => {
+            if (!record.checkInTime && record.status !== 'Sakit' && record.status !== 'Izin') {
+              record.status = 'Alpa';
+              record.notes = 'Auto-Alpa Cutoff 08:00 WIB (-15 Poin Tatib)';
+              record.consecutiveAlpa = (record.consecutiveAlpa || 0) + 1;
+              const stu = students.value.find(s => s.nisn === record.nisn);
+              if (stu) {
+                stu.demeritPoints += 15;
+              }
+              count++;
+            }
+          });
+          playAudioFeedback('buzz_180');
+          showToast(`⚡ Cutoff 08:00 WIB Berhasil: ${count} siswa belum hadir ditetapkan ALPA (-15 Poin Tatib) & Notifikasi WA Darurat terkirim ke Orang Tua.`);
+        };
+
+        // Rule Engine: Keadilan Siswa Lupa Tap Pulang (17:00 WIB)
+        const executeCheckoutJustice = () => {
+          let count = 0;
+          attendanceList.value.forEach(record => {
+            if ((record.status === 'Hadir' || record.status === 'Terlambat') && !record.checkOutTime && record.checkoutStatus !== 'Izin Pulang Cepat') {
+              record.checkoutStatus = 'Check-out Default (Selesai KBM)';
+              record.checkOutTime = '15:00';
+              record.notes = (record.notes ? record.notes + ' • ' : '') + 'Keadilan Pulang: KBM Terkonfirmasi (Bebas Alpa)';
+              count++;
+            }
+          });
+          playAudioFeedback('beep_880');
+          showToast(`⚖️ Evaluasi Keadilan Pulang 17:00 WIB Selesai: ${count} siswa yang lupa tap pulang sore tetap berstatus Hadir (Bebas Alpa) berdasarkan kehadiran jam KBM terakhir.`);
+        };
+
+        // Filter deteksi kasus Alpa 3 hari berturut-turut
+        const filterConsecutiveAlpa = () => {
+          attendanceFilters.value.status = 'Alpa';
+          showToast(`🚨 Memfilter Siswa Alpa: Ditemukan siswa dengan indikasi Alpa berturut-turut. Rekomendasi Home Visit BK & Panggilan Fisik disiapkan.`);
+        };
 
         const executeBarcodeScan = (nisnInput) => {
           if (!nisnInput) return;
@@ -5850,6 +6648,37 @@
             return;
           }
 
+          // SCANNER MODE 3: PULANG SORE (13:01 - 17:00 WIB)
+          if (scannerTab.value === 'gate_out') {
+            const time = scannerTime.value || '14:15';
+            const attRecord = attendanceList.value.find(a => a.nisn === student.nisn);
+            if (attRecord) {
+              attRecord.checkOutTime = time;
+              attRecord.checkoutStatus = 'Check-out Normal';
+              attRecord.notes = (attRecord.notes ? attRecord.notes + ' • ' : '') + `Check-out Sore: ${time} WIB`;
+            }
+            playAudioFeedback('chime_pulang');
+            lastScanResult.value = {
+              student: student,
+              scanTime: time,
+              status: 'Check-out Normal (Pulang Sekolah)',
+              pointsDeducted: 0,
+              instruction: 'Siswa telah menyelesaikan KBM dan diizinkan meninggalkan sekolah.',
+              isCheckout: true
+            };
+            gateScansHistory.value.unshift({
+              time: time,
+              name: student.name,
+              classroom: student.classroom,
+              status: 'Check-out Normal',
+              points: 0
+            });
+            scannerInput.value = '';
+            showToast(`Tap Pulang Berhasil! ${student.name} [Check-out Normal ${time} WIB]. Notifikasi WA terkirim ke Orang Tua.`);
+            return;
+          }
+
+          // SCANNER MODE 1: MASUK PAGI (06:00 - 08:00 WIB)
           const time = scannerTime.value;
           let statusText = 'Hadir Tepat Waktu';
           let points = 0;
@@ -5859,14 +6688,19 @@
             statusText = 'Terlambat Ringan (T-1)';
             points = -2;
             instructionText = 'Siswa diberikan dispensasi masuk kelas dan tercatat -2 poin tatib.';
+            playAudioFeedback('buzz_180');
           } else if (time === '07:25') {
             statusText = 'Terlambat Sedang (T-2)';
             points = -5;
             instructionText = 'Pintu gerbang ditutup. Siswa diarahkan ke pos piket untuk pembinaan karakter.';
+            playAudioFeedback('buzz_180');
           } else if (time === '07:45') {
             statusText = 'Terlambat Berat (T-3)';
             points = -10;
             instructionText = 'Siswa langsung diserahkan ke Guru BK untuk pemanggilan orang tua.';
+            playAudioFeedback('buzz_180');
+          } else {
+            playAudioFeedback('beep_880');
           }
 
           // Update student demerit points if late
@@ -5879,7 +6713,8 @@
           if (attRecord) {
             attRecord.checkInTime = time;
             attRecord.status = points < 0 ? 'Terlambat' : 'Hadir';
-            attRecord.notes = `Scan Gerbang: ${statusText}`;
+            attRecord.checkoutStatus = 'Belum Pulang';
+            attRecord.notes = `Scan Gerbang Masuk: ${statusText}`;
           }
 
           lastScanResult.value = {
@@ -5887,7 +6722,8 @@
             scanTime: time,
             status: statusText,
             pointsDeducted: points,
-            instruction: instructionText
+            instruction: instructionText,
+            isCheckout: false
           };
 
           gateScansHistory.value.unshift({
@@ -6152,7 +6988,14 @@
           selectedSubject,
           subjectAttendanceList,
           reportClassSkipping,
-          scannerTab
+          scannerTab,
+
+          // Fitur Celah Presensi & Sound Synthesizer
+          activeWaTab,
+          playAudioFeedback,
+          executeAutoAlpaCutoff,
+          executeCheckoutJustice,
+          filterConsecutiveAlpa
         };
       }
     }).mount('#app');
