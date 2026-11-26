@@ -417,6 +417,126 @@
       letter-spacing: 0.05em;
       margin-bottom: 0.625rem;
     }
+
+    /* =================================================== */
+    /* METIS ADVANCED TABLES, BADGES & COMPONENTS          */
+    /* =================================================== */
+    .table {
+      --bs-table-hover-bg: rgba(37, 99, 235, 0.035);
+      margin-bottom: 0;
+      width: 100%;
+    }
+    .table th {
+      border-top: none;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #71717a;
+      background-color: #fafafa;
+      border-bottom: 1px solid var(--bs-border-color);
+      padding: 0.85rem 1rem;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .table td {
+      vertical-align: middle;
+      border-bottom: 1px solid var(--bs-border-color);
+      padding: 0.85rem 1rem;
+      font-size: 0.84rem;
+      color: #27272a;
+    }
+    .table-hover tbody tr:hover {
+      background-color: rgba(37, 99, 235, 0.025);
+    }
+    .table tr.selected {
+      background-color: rgba(37, 99, 235, 0.06) !important;
+    }
+    .customer-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Metis soft status badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+    .status-badge.status-delivered,
+    .status-badge.status-hadir,
+    .status-badge.status-active,
+    .status-badge.status-aktif {
+      background-color: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+    .status-badge.status-pending,
+    .status-badge.status-terlambat,
+    .status-badge.status-diproses {
+      background-color: #fffbeb;
+      color: #d97706;
+      border: 1px solid #fde68a;
+    }
+    .status-badge.status-processing,
+    .status-badge.status-sakit {
+      background-color: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+    .status-badge.status-shipped,
+    .status-badge.status-izin {
+      background-color: #f5f3ff;
+      color: #7c3aed;
+      border: 1px solid #ddd6fe;
+    }
+    .status-badge.status-cancelled,
+    .status-badge.status-alpa,
+    .status-badge.status-inactive,
+    .status-badge.status-sp1 {
+      background-color: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+    .status-badge.status-gatepass {
+      background-color: #fff7ed;
+      color: #ea580c;
+      border: 1px solid #fed7aa;
+    }
+    .bulk-actions-bar {
+      background-color: #eff6ff;
+      border-bottom: 1px solid #bfdbfe;
+      animation: slideDown 0.2s ease-out;
+    }
+    .pagination .page-link {
+      font-size: 0.8rem;
+      color: #52525b;
+      border-color: var(--bs-border-color);
+      padding: 0.35rem 0.65rem;
+    }
+    .pagination .page-item.active .page-link {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+      color: #ffffff;
+    }
+    .card-table-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #09090b;
+      letter-spacing: -0.01em;
+    }
+
   </style>
 </head>
 <body class="bg-white text-slate-800 antialiased selection:bg-slate-900 selection:text-white min-h-screen">
@@ -974,382 +1094,342 @@
           </div>
           <div v-if="activePage === 'presensi'" class="space-y-4">
             
-            <!-- Page Header -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <!-- Page Header matching Metis orders.html (lines 380-396) -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
               <div>
-                <h1 class="text-lg font-bold text-slate-900">Monitoring Presensi & Kehadiran Siswa</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Pencatatan kehadiran gerbang RFID/Barcode, presensi jam KBM guru mapel, dan perizinan</p>
+                <h1 class="h4 fw-bold mb-1 text-dark">Order & Presensi Management</h1>
+                <p class="text-muted small mb-0">Track kehadiran siswa, kepulangan 3-jendela, presensi jam KBM, dan rekonsiliasi keadilan</p>
               </div>
-              <div class="flex items-center flex-wrap gap-2">
-                <button 
-                  @click="openLeaveRequestModal()" 
-                  class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5 shadow-xs"
-                >
-                  <span>📝 Ajukan Izin / Sakit Ortu</span>
+              <div class="d-flex flex-wrap gap-2">
+                <button @click="openLeaveRequestModal()" class="btn btn-sm btn-primary">
+                  <i class="bi bi-file-earmark-medical me-1"></i>Ajukan Izin / Sakit
                 </button>
-                <button 
-                  @click="openGatePassModal()" 
-                  class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
-                >
-                  <span>🎫 Terbitkan Gate Pass</span>
+                <button @click="openGatePassModal()" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-ticket-perforated me-1"></i>Gate Pass
                 </button>
-                <button 
-                  v-if="canEditAttendance && attendanceMode === 'daily'"
-                  @click="markAllPresent()" 
-                  class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
-                >
-                  ✓ Set Semua Hadir
+                <button v-if="canEditAttendance && attendanceMode === 'daily'" @click="markAllPresent()" class="btn btn-sm btn-outline-success">
+                  <i class="bi bi-check2-all me-1"></i>Set Semua Hadir
                 </button>
-                <button 
-                  v-if="attendanceMode === 'daily'"
-                  @click="executeCheckoutJustice()" 
-                  class="bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
-                  title="Rekonsiliasi 17:00 WIB: Siswa hadir KBM tapi lupa tap pulang TIDAK dihukum Alpa"
-                >
-                  <span>⚖️ Evaluasi Keadilan Pulang (17:00 WIB)</span>
+                <button v-if="attendanceMode === 'daily'" @click="executeCheckoutJustice()" class="btn btn-sm btn-outline-info" title="Evaluasi Keadilan Pulang (17:00 WIB)">
+                  <i class="bi bi-shield-check me-1"></i>Keadilan Pulang (17:00)
                 </button>
-                <button 
-                  v-if="attendanceMode === 'daily'"
-                  @click="filterConsecutiveAlpa()" 
-                  class="bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
-                  title="Deteksi Siswa Alpa 3 Hari Berturut-turut untuk Tindak Lanjut Home Visit BK"
-                >
-                  <span>🚨 Deteksi Alpa ≥ 3 Hari</span>
-                </button>
-                <button 
-                  @click="exportMockData('Presensi')"
-                  class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold px-3 py-2 rounded-xl transition-colors"
-                >
-                  📥 Export Excel
+                <button @click="exportMockData('Presensi')" class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-download me-1"></i>Export
                 </button>
               </div>
             </div>
 
-            <!-- Switcher Mode Presensi: Harian Gerbang vs KBM Jam Mapel -->
-            <div class="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <button 
-                  @click="attendanceMode = 'daily'"
-                  :class="attendanceMode === 'daily' ? 'bg-slate-900 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
-                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5"
-                >
-                  <span>📋 Presensi Harian Gerbang (RFID / Barcode)</span>
-                </button>
-                <button 
-                  @click="attendanceMode = 'subject'"
-                  :class="attendanceMode === 'subject' ? 'bg-slate-900 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
-                  class="px-3.5 py-1.5 rounded-xl text-xs transition-colors flex items-center gap-1.5"
-                >
-                  <span>📚 Presensi KBM Jam Mapel (Guru Kelas)</span>
-                </button>
+            <!-- 4 Stats Cards matching Metis orders.html (lines 402-475) -->
+            <div class="row g-3 mb-4">
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="bi bi-people"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Total Siswa Terdata</p>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceData.length }}</div>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 100% Terdaftar</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="text-[11px] text-slate-500">
-                <span v-if="attendanceMode === 'daily'">Mode: Presensi kedatangan gerbang sekolah utama</span>
-                <span v-else>Mode: Presensi per jam mata pelajaran (Cek siswa membolos KBM)</span>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-success bg-opacity-10 text-success me-3">
+                        <i class="bi bi-check-circle"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Hadir Pagi Ini</p>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Hadir').length }}</div>
+                        <small class="text-success"><i class="bi bi-check2"></i> 70% Presensi Normal</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="bi bi-clock-history"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Terlambat</p>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Terlambat').length }}</div>
+                        <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> Masuk > 07:00</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-danger bg-opacity-10 text-danger me-3">
+                        <i class="bi bi-shield-exclamation"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Alpa / Tanpa Keterangan</p>
+                        <div class="h4 mb-0 fw-bold">{{ attendanceData.filter(a => a.status === 'Alpa').length }}</div>
+                        <small class="text-danger"><i class="bi bi-bell"></i> Perlu Tindak Lanjut</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Banner Persetujuan Izin Ortu (Jika ada yang pending & user punya wewenang) -->
-            <div v-if="pendingLeaveRequests.length > 0 && (currentUser.role === 'wali_kelas' || currentUser.role === 'admin' || currentUser.role === 'bk')" class="bg-amber-50 border border-amber-200 p-4 rounded-2xl space-y-3 shadow-xs">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                  <span class="text-base">🔔</span>
+            <div v-if="pendingLeaveRequests.length > 0 && (currentUser.role === 'wali_kelas' || currentUser.role === 'admin' || currentUser.role === 'bk')" class="alert alert-warning border-warning-subtle p-3 rounded-3 shadow-none mb-4">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-bell-fill text-warning fs-5"></i>
                   <div>
-                    <div class="text-xs font-bold text-amber-950">Permohonan Izin / Sakit Mandiri Menunggu Persetujuan ({{ pendingLeaveRequests.length }})</div>
-                    <div class="text-[11px] text-amber-800">Orang tua telah melampirkan berkas permohonan. Persetujuan otomatis membebaskan siswa dari status Alpa.</div>
+                    <strong class="d-block text-dark small">Permohonan Izin / Sakit Mandiri Menunggu Persetujuan ({{ pendingLeaveRequests.length }})</strong>
+                    <small class="text-muted">Orang tua telah melampirkan surat permohonan. Persetujuan otomatis membebaskan siswa dari status Alpa.</small>
                   </div>
                 </div>
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900">Perlu Tindakan</span>
+                <span class="badge bg-warning text-dark">Perlu Tindakan</span>
               </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                <div v-for="req in pendingLeaveRequests" :key="req.id" class="bg-white p-3.5 rounded-xl border border-amber-200 text-xs space-y-2 shadow-xs">
-                  <div class="flex items-center justify-between">
-                    <span class="font-bold text-slate-900">{{ req.studentName }} ({{ req.classroom }})</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono">{{ req.submittedAt }}</span>
-                  </div>
-                  <div class="text-[11px] text-slate-600 space-y-0.5">
-                    <div><span class="font-medium text-slate-400">Pengaju:</span> {{ req.parentName }}</div>
-                    <div><span class="font-medium text-slate-400">Jenis:</span> <span class="font-semibold text-amber-700">{{ req.type }}</span> ({{ req.period }})</div>
-                    <div><span class="font-medium text-slate-400">Alasan:</span> {{ req.reason }}</div>
-                    <div class="text-emerald-700 font-mono text-[10px] pt-1">📄 Lampiran: {{ req.attachment }}</div>
-                  </div>
-                  <div class="pt-2 border-t border-slate-100 flex justify-end gap-2">
-                    <button @click="approveLeaveRequest(req)" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-colors">
-                      ✓ Setujui Izin & Update Presensi
-                    </button>
+              <div class="row g-2 mt-1">
+                <div v-for="req in pendingLeaveRequests" :key="req.id" class="col-md-6">
+                  <div class="card card-body p-3 bg-white border">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <strong class="text-dark">{{ req.studentName }} ({{ req.classroom }})</strong>
+                      <span class="badge bg-light text-dark font-monospace">{{ req.submittedAt }}</span>
+                    </div>
+                    <div class="small text-muted mb-2">
+                      <div>Wali: {{ req.parentName }} &middot; Jenis: <strong class="text-dark">{{ req.type }}</strong> ({{ req.period }})</div>
+                      <div>Alasan: {{ req.reason }}</div>
+                      <div class="text-primary font-monospace mt-1"><i class="bi bi-file-earmark-text me-1"></i>Lampiran: {{ req.attachment }}</div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button @click="approveLeaveRequest(req)" class="btn btn-sm btn-success">
+                        <i class="bi bi-check-lg me-1"></i>Setujui Izin & Update Presensi
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- TAMPILAN MODE 2: PRESENSI PER JAM MAPEL (KBM) -->
-            <div v-if="attendanceMode === 'subject'" class="space-y-4">
-              <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                <div>
-                  <span class="text-xs font-bold text-slate-900">Pilih Mata Pelajaran KBM:</span>
-                  <select v-model="selectedSubject" class="mt-1 block w-full md:w-auto p-2 border border-slate-200 rounded-xl text-xs font-semibold focus:border-slate-900 focus:outline-none bg-white font-medium">
+            <!-- Orders / Presensi Table matching preview.themewagon.com/metis/orders.html -->
+            <div class="card mb-4">
+              <div class="card-header bg-white py-3">
+                <div class="row align-items-center g-2">
+                  <div class="col-12 col-md">
+                    <div class="d-flex align-items-center gap-2">
+                      <h2 class="h5 card-title mb-0 fw-bold">Daftar Kehadiran Siswa</h2>
+                      <span class="badge bg-light text-secondary border px-2 py-0.5 small">{{ filteredAttendance.length }} Siswa</span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-auto">
+                    <div class="d-flex flex-wrap gap-2">
+                      <!-- Search -->
+                      <div class="position-relative" style="min-width: 180px;">
+                        <input type="search" class="form-control form-control-sm pe-4" placeholder="Cari nama / NISN..." v-model="attendanceFilters.search">
+                        <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y me-2 text-muted small"></i>
+                      </div>
+                      <!-- Kelas Filter -->
+                      <select class="form-select form-select-sm" v-model="attendanceFilters.classroom" style="width: 130px;">
+                        <option value="">Semua Kelas</option>
+                        <option value="X-RPL-1">X-RPL-1</option>
+                        <option value="XI-TKJ-2">XI-TKJ-2</option>
+                        <option value="XII-MM-1">XII-MM-1</option>
+                      </select>
+                      <!-- Status Filter -->
+                      <select class="form-select form-select-sm" v-model="attendanceFilters.status" style="width: 140px;">
+                        <option value="">Semua Status</option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Terlambat">Terlambat</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Alpa">Alpa</option>
+                      </select>
+                      <!-- Mode Switcher -->
+                      <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn" :class="attendanceMode === 'daily' ? 'btn-primary' : 'btn-outline-secondary'" @click="attendanceMode = 'daily'">
+                          <i class="bi bi-upc-scan me-1"></i>Harian
+                        </button>
+                        <button type="button" class="btn" :class="attendanceMode === 'subject' ? 'btn-primary' : 'btn-outline-secondary'" @click="attendanceMode = 'subject'">
+                          <i class="bi bi-book me-1"></i>KBM Mapel
+                        </button>
+                      </div>
+                      <button class="btn btn-sm btn-outline-secondary" @click="resetAttendanceFilters" title="Reset Filter">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bulk Actions Bar -->
+              <div class="bulk-actions-bar p-3 d-flex justify-content-between align-items-center" v-show="selectedAttendance.length > 0">
+                <span class="text-primary fw-medium small">
+                  <i class="bi bi-check2-circle me-1"></i><strong>{{ selectedAttendance.length }}</strong> siswa dipilih
+                </span>
+                <div class="d-flex gap-1.5">
+                  <button class="btn btn-sm btn-success" @click="bulkAttendanceAction('Hadir')">
+                    <i class="bi bi-check-lg me-1"></i>Set Hadir
+                  </button>
+                  <button class="btn btn-sm btn-warning text-dark" @click="bulkAttendanceAction('Terlambat')">
+                    <i class="bi bi-clock me-1"></i>Set Terlambat
+                  </button>
+                  <button class="btn btn-sm btn-info text-white" @click="bulkAttendanceAction('Sakit')">
+                    <i class="bi bi-hospital me-1"></i>Set Sakit
+                  </button>
+                  <button class="btn btn-sm btn-danger" @click="bulkAttendanceAction('Alpa')">
+                    <i class="bi bi-x-circle me-1"></i>Set Alpa
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" @click="selectedAttendance = []; showToast('Seleksi dibatalkan.')">
+                    Batal
+                  </button>
+                </div>
+              </div>
+
+              <!-- Alert Banner: Deteksi Alpa Berturut-turut -->
+              <div v-if="filteredAttendance.some(a => a.status === 'Alpa' && a.consecutiveAlpa >= 3)" class="p-3 bg-danger-subtle border-bottom border-danger-subtle d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="bi bi-exclamation-octagon-fill text-danger fs-5"></i>
+                  <div>
+                    <span class="fw-bold text-danger small d-block">Peringatan Kesiswaan: Ditemukan Siswa Alpa 3 Hari Berturut-turut!</span>
+                    <small class="text-danger-emphasis">Sesuai SOP Buku Panduan, Guru BK direkomendasikan melakukan Kunjungan Rumah (Home Visit) dan menerbitkan Surat Panggilan Orang Tua.</small>
+                  </div>
+                </div>
+                <button @click="showToast('Rekomendasi Home Visit tercatat. Surat Panggilan Wali Murid otomatis digenerate.')" class="btn btn-sm btn-danger flex-shrink-0">
+                  <i class="bi bi-house-door me-1"></i>Jadwalkan Home Visit BK
+                </button>
+              </div>
+
+              <!-- Mode KBM Banner -->
+              <div v-if="attendanceMode === 'subject'" class="p-3 bg-light border-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                <div class="d-flex align-items-center gap-2">
+                  <label class="small fw-semibold text-muted text-nowrap mb-0">Mata Pelajaran KBM:</label>
+                  <select v-model="selectedSubject" class="form-select form-select-sm" style="max-width: 320px;">
                     <option v-for="sub in subjectList" :key="sub.id" :value="sub">
-                      {{ sub.name }} • {{ sub.hours }} ({{ sub.teacher }})
+                      {{ sub.name }} &middot; {{ sub.hours }} ({{ sub.teacher }})
                     </option>
                   </select>
                 </div>
-                <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-[11px] text-blue-900 flex items-center gap-2 max-w-xl">
-                  <span class="text-base">💡</span>
-                  <span>Guru Mapel mencatat kehadiran di kelas. Jika siswa hadir di gerbang pagi namun tidak berada di kelas saat KBM, gunakan tombol <strong>🚨 Lapor Membolos</strong> untuk eskalasi poin tatib BK.</span>
-                </div>
+                <small class="text-primary"><i class="bi bi-info-circle me-1"></i>Guru Mapel mencatat kehadiran di kelas. Gunakan tombol aksi untuk lapor membolos.</small>
               </div>
 
-              <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-                <div class="overflow-x-auto">
-                  <table class="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
-                        <th class="p-3.5 pl-5">Nama Siswa & NISN</th>
-                        <th class="p-3.5">Kelas</th>
-                        <th class="p-3.5">Status KBM Mapel</th>
-                        <th class="p-3.5">Catatan Guru Mapel</th>
-                        <th class="p-3.5 pr-5 text-right">Tindakan Disiplin</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 text-slate-700 font-medium">
-                      <tr v-for="st in subjectAttendanceList" :key="st.studentId" class="hover:bg-slate-50/70 transition-colors">
-                        <td class="p-3.5 pl-5">
-                          <div class="font-bold text-slate-900">{{ st.name }}</div>
-                          <div class="text-[10px] text-slate-400 font-mono">NISN: {{ st.nisn }}</div>
-                        </td>
-                        <td class="p-3.5">
-                          <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono text-[11px] font-semibold">{{ st.classroom }}</span>
-                        </td>
-                        <td class="p-3.5">
-                          <span :class="st.status === 'Hadir' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : (st.status === 'Membolos' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-amber-50 text-amber-700 border-amber-200')" class="px-2.5 py-1 rounded-full text-[10px] font-bold border">
-                            {{ st.status }}
-                          </span>
-                        </td>
-                        <td class="p-3.5 text-slate-500 text-[11px]">
-                          {{ st.notes }}
-                        </td>
-                        <td class="p-3.5 pr-5 text-right">
-                          <button 
-                            v-if="st.status === 'Membolos'"
-                            @click="reportClassSkipping(st)"
-                            class="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-[11px] font-bold transition-colors inline-flex items-center gap-1 shadow-xs"
-                          >
-                            🚨 Lapor Membolos ke BK
-                          </button>
-                          <span v-else-if="st.status === 'Telah Dilaporkan ke BK'" class="text-xs text-red-600 font-bold">
-                            ✓ Terlaporkan ke BK (+10 Poin)
-                          </span>
-                          <span v-else class="text-slate-400 text-xs">
-                            -
-                          </span>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- TAMPILAN MODE 1: PRESENSI HARIAN GERBANG (RFID / BARCODE) -->
-            <div v-if="attendanceMode === 'daily'" class="space-y-4">
-
-            <!-- Data Table Control Bar (Instant Search, Filter, Reset) -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                
-                <!-- Search Box -->
-                <div class="relative">
-                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    🔍
-                  </span>
-                  <input 
-                    v-model="attendanceFilters.search" 
-                    type="text" 
-                    placeholder="Cari nama siswa / NISN..." 
-                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                </div>
-
-                <!-- Filter Kelas -->
-                <div>
-                  <select 
-                    v-model="attendanceFilters.classroom" 
-                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                    <option value="">Semua Kelas</option>
-                    <option value="X-RPL-1">X-RPL-1</option>
-                    <option value="XI-TKJ-2">XI-TKJ-2</option>
-                    <option value="XII-MM-1">XII-MM-1</option>
-                  </select>
-                </div>
-
-                <!-- Filter Status -->
-                <div>
-                  <select 
-                    v-model="attendanceFilters.status" 
-                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                    <option value="">Semua Status Kehadiran</option>
-                    <option value="Hadir">Hadir</option>
-                    <option value="Terlambat">Terlambat</option>
-                    <option value="Sakit">Sakit</option>
-                    <option value="Izin">Izin</option>
-                    <option value="Alpa">Alpa</option>
-                  </select>
-                </div>
-
-                <!-- Reset Filter Button -->
-                <div class="flex items-center gap-2">
-                  <button 
-                    @click="resetAttendanceFilters" 
-                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
-                  >
-                    Reset Filter
-                  </button>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Alert Banner: Deteksi Alpa Berturut-turut (Jika Filter Alpa aktif atau ada siswa Alpa ≥ 3 hari) -->
-            <div v-if="filteredAttendance.some(a => a.status === 'Alpa' && a.consecutiveAlpa >= 3)" class="bg-rose-50 border border-rose-200 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
-              <div class="flex items-center gap-3">
-                <span class="text-xl">🚨</span>
-                <div>
-                  <div class="text-xs font-bold text-rose-950">Peringatan Kesiswaan: Ditemukan Siswa Alpa 3 Hari Berturut-turut!</div>
-                  <div class="text-[11px] text-rose-800">Sesuai SOP Buku Panduan, Guru BK direkomendasikan melakukan Kunjungan Rumah (Home Visit) dan menerbitkan Surat Panggilan Orang Tua fisik.</div>
-                </div>
-              </div>
-              <div class="flex items-center gap-2">
-                <button @click="showToast('Rekomendasi Home Visit tercatat. Surat Panggilan Wali Murid otomatis digenerate.')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold whitespace-nowrap transition-colors shadow-xs">
-                  📋 Jadwalkan Home Visit BK
-                </button>
-              </div>
-            </div>
-
-            <!-- Clean White Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+              <!-- Table: EXACT METIS ORDERS.HTML LAYOUT -->
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
                     <tr>
-                      <th class="py-3 px-4">NISN / Siswa</th>
-                      <th class="py-3 px-3">Kelas</th>
-                      <th class="py-3 px-3">Jam Masuk</th>
-                      <th class="py-3 px-3">Jam Pulang & Status Kepulangan</th>
-                      <th class="py-3 px-3">Status Kehadiran</th>
-                      <th class="py-3 px-3">Catatan / Rekonsiliasi</th>
-                      <th class="py-3 px-4 text-right">Aksi Cepat</th>
+                      <th style="width: 40px;" class="text-center">
+                        <input type="checkbox" class="form-check-input" @change="toggleSelectAllAttendance($event.target.checked)" :checked="selectedAttendance.length === filteredAttendance.length && filteredAttendance.length > 0">
+                      </th>
+                      <th style="width: 140px;">ORDER # / NISN</th>
+                      <th>CUSTOMER / SISWA</th>
+                      <th>ITEMS / KELAS & KBM</th>
+                      <th>TOTAL / WAKTU PULANG</th>
+                      <th style="width: 130px;">STATUS</th>
+                      <th style="width: 110px;">DATE</th>
+                      <th style="width: 80px;" class="text-center">ACTIONS</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-100 text-slate-700">
-                    <tr v-for="att in paginatedAttendance" :key="att.id" class="hover:bg-slate-50/60 transition-colors">
-                      <td class="py-3 px-4">
-                        <div class="font-bold text-slate-900">{{ att.studentName }}</div>
-                        <div class="text-[11px] text-slate-400">NISN: {{ att.nisn }}</div>
+                  <tbody>
+                    <tr v-for="att in paginatedAttendance" :key="att.id" :class="{ 'selected': selectedAttendance.includes(att.id) }">
+                      <td class="text-center">
+                        <input type="checkbox" class="form-check-input" :value="att.id" v-model="selectedAttendance">
                       </td>
-                      <td class="py-3 px-3 font-medium">{{ att.classroom }}</td>
-                      <td class="py-3 px-3">
-                        <span class="font-mono text-[11px] font-semibold" :class="att.checkInTime ? 'text-slate-800' : 'text-slate-400'">
-                          {{ att.checkInTime ? att.checkInTime + ' WIB' : '-' }}
-                        </span>
+                      <td>
+                        <div class="fw-semibold text-dark">ORD-{{ att.nisn.substring(att.nisn.length - 4) }}</div>
+                        <small class="text-muted">ID: {{ att.id }} &middot; {{ att.nisn }}</small>
                       </td>
-                      <td class="py-3 px-3">
-                        <!-- Indikator Kepulangan 3-Jendela -->
-                        <div v-if="att.checkoutStatus === 'Check-out Normal'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold">
-                          <span>✓ Pulang:</span>
-                          <span class="font-mono">{{ att.checkOutTime || '14:15' }} WIB</span>
-                        </div>
-                        <div v-else-if="att.checkoutStatus === 'Izin Pulang Cepat'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold" :title="att.earlyLeaveReason">
-                          <span>🎫 Gate Pass:</span>
-                          <span class="font-mono">{{ att.earlyLeaveTime || '10:15' }} WIB</span>
-                        </div>
-                        <div v-else-if="att.checkoutStatus === 'Check-out Default (Selesai KBM)'" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold" title="Keadilan Siswa: Hadir KBM penuh, bebas Alpa">
-                          <span>⚖️ Default KBM</span>
-                        </div>
-                        <div v-else-if="att.status === 'Hadir' || att.status === 'Terlambat'" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold">
-                          <span class="w-1.5 h-1.5 rounded-full bg-slate-400 animate-pulse"></span>
-                          <span>Belum Pulang</span>
-                        </div>
-                        <div v-else class="text-slate-400 text-[10px]">
-                          -
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="customer-avatar bg-secondary bg-opacity-10 text-secondary me-2.5 flex-shrink-0" style="font-weight: 700; font-size: 0.8rem;">
+                            {{ att.studentName.substring(0, 2).toUpperCase() }}
+                          </div>
+                          <div>
+                            <div class="fw-semibold text-dark">{{ att.studentName }}</div>
+                            <small class="text-muted">{{ att.studentName.toLowerCase().replace(/\s+/g, '') }}@edutrack.sch.id</small>
+                          </div>
                         </div>
                       </td>
-                      <td class="py-3 px-3">
-                        <span 
-                          :class="[
-                            att.status === 'Hadir' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                            att.status === 'Terlambat' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                            att.status === 'Sakit' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                            att.status === 'Izin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
-                            'bg-rose-50 text-rose-700 border-rose-200',
-                            'inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-bold border text-[11px]'
-                          ]"
-                        >
-                          <span class="w-1.5 h-1.5 rounded-full" :class="{
-                            'bg-emerald-500': att.status === 'Hadir',
-                            'bg-amber-500': att.status === 'Terlambat',
-                            'bg-blue-500': att.status === 'Sakit',
-                            'bg-purple-500': att.status === 'Izin',
-                            'bg-rose-500': att.status === 'Alpa'
-                          }"></span>
+                      <td>
+                        <div class="fw-medium text-dark">{{ att.classroom }}</div>
+                        <small class="text-muted">{{ att.notes || 'Hadir via Scan Kartu' }}</small>
+                      </td>
+                      <td>
+                        <div class="d-flex flex-column gap-0.5">
+                          <span class="small fw-semibold text-dark">
+                            <i class="bi bi-box-arrow-in-right text-success me-1"></i>Masuk: {{ att.checkInTime ? att.checkInTime + ' WIB' : '-' }}
+                          </span>
+                          <span v-if="att.checkoutStatus === 'Check-out Normal'" class="small text-muted">
+                            <i class="bi bi-box-arrow-right text-primary me-1"></i>Pulang: {{ att.checkOutTime || '14:15' }} WIB
+                          </span>
+                          <span v-else-if="att.checkoutStatus === 'Izin Pulang Cepat'" class="badge bg-warning-subtle text-warning border border-warning-subtle align-self-start" style="font-size: 0.68rem;">
+                            <i class="bi bi-ticket-perforated me-1"></i>Gate Pass: {{ att.earlyLeaveTime || '10:15' }}
+                          </span>
+                          <span v-else-if="att.checkoutStatus === 'Check-out Default (Selesai KBM)'" class="badge bg-info-subtle text-info border border-info-subtle align-self-start" style="font-size: 0.68rem;">
+                            <i class="bi bi-shield-check me-1"></i>Default KBM
+                          </span>
+                          <span v-else-if="att.status === 'Hadir' || att.status === 'Terlambat'" class="small text-muted">
+                            <span class="spinner-grow spinner-grow-sm me-1" style="width: 6px; height: 6px;"></span>Belum Pulang
+                          </span>
+                          <span v-else class="small text-muted">-</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="status-badge" :class="{
+                          'status-hadir': att.status === 'Hadir',
+                          'status-terlambat': att.status === 'Terlambat',
+                          'status-sakit': att.status === 'Sakit',
+                          'status-izin': att.status === 'Izin',
+                          'status-alpa': att.status === 'Alpa'
+                        }">
+                          <i class="bi" :class="{
+                            'bi-check-circle-fill': att.status === 'Hadir',
+                            'bi-exclamation-triangle-fill': att.status === 'Terlambat',
+                            'bi-heart-pulse-fill': att.status === 'Sakit',
+                            'bi-file-text-fill': att.status === 'Izin',
+                            'bi-x-circle-fill': att.status === 'Alpa'
+                          }"></i>
                           {{ att.status }}
                         </span>
-                        <div v-if="att.consecutiveAlpa >= 3" class="text-[9px] font-bold text-rose-700 mt-0.5">
+                        <div v-if="att.consecutiveAlpa >= 3" class="badge bg-danger-subtle text-danger border border-danger-subtle mt-1" style="font-size: 0.65rem;">
                           ⚠️ {{ att.consecutiveAlpa }} Hari Alpa
                         </div>
                       </td>
-                      <td class="py-3 px-3 text-slate-500 text-[11px]">
-                        {{ att.notes || 'Hadir via Scan Kartu' }}
+                      <td>
+                        <span class="small text-muted">{{ currentDateFormatted }}</span>
                       </td>
-                      <td class="py-3 px-4 text-right whitespace-nowrap">
-                        <!-- Fast Change Status Toggle (If permitted) -->
-                        <button 
-                          v-if="canEditAttendance"
-                          @click="openEditAttendanceNote(att)"
-                          class="px-2 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-[10px] font-semibold transition-colors mr-1.5 bg-white"
-                          title="Koreksi Kehadiran & Catatan Khusus"
-                        >
-                          ✏️ Catatan
-                        </button>
-                        <div v-if="canEditAttendance" class="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-50">
-                          <button 
-                            @click="changeAttendanceStatus(att, 'Hadir')"
-                            :class="att.status === 'Hadir' ? 'bg-emerald-600 text-white' : 'text-slate-600 hover:text-slate-900'"
-                            class="px-2 py-0.5 rounded text-[10px] font-bold"
-                            title="Set Hadir"
-                          >H</button>
-                          <button 
-                            @click="changeAttendanceStatus(att, 'Sakit')"
-                            :class="att.status === 'Sakit' ? 'bg-blue-600 text-white' : 'text-slate-600 hover:text-slate-900'"
-                            class="px-2 py-0.5 rounded text-[10px] font-bold"
-                            title="Set Sakit"
-                          >S</button>
-                          <button 
-                            @click="changeAttendanceStatus(att, 'Izin')"
-                            :class="att.status === 'Izin' ? 'bg-purple-600 text-white' : 'text-slate-600 hover:text-slate-900'"
-                            class="px-2 py-0.5 rounded text-[10px] font-bold"
-                            title="Set Izin"
-                          >I</button>
-                          <button 
-                            @click="changeAttendanceStatus(att, 'Alpa')"
-                            :class="att.status === 'Alpa' ? 'bg-rose-600 text-white' : 'text-slate-600 hover:text-slate-900'"
-                            class="px-2 py-0.5 rounded text-[10px] font-bold"
-                            title="Set Alpa (Memicu Notif WA Ortu)"
-                          >A</button>
-                          <button 
-                            @click="changeAttendanceStatus(att, 'Terlambat')"
-                            :class="att.status === 'Terlambat' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:text-slate-900'"
-                            class="px-2 py-0.5 rounded text-[10px] font-bold"
-                            title="Set Terlambat"
-                          >T</button>
+                      <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-outline-secondary py-0 px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 6px; height: 28px;">
+                            <i class="bi bi-three-dots"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="font-size: 0.8125rem;">
+                            <li><h6 class="dropdown-header py-1 text-uppercase" style="font-size: 0.68rem;">Ubah Status Kehadiran</h6></li>
+                            <li><a class="dropdown-item py-1 text-success" href="#" @click.prevent="changeAttendanceStatus(att, 'Hadir')"><i class="bi bi-check-circle me-2"></i>Set Hadir (H)</a></li>
+                            <li><a class="dropdown-item py-1 text-warning" href="#" @click.prevent="changeAttendanceStatus(att, 'Terlambat')"><i class="bi bi-clock me-2"></i>Set Terlambat (T)</a></li>
+                            <li><a class="dropdown-item py-1 text-primary" href="#" @click.prevent="changeAttendanceStatus(att, 'Sakit')"><i class="bi bi-heart me-2"></i>Set Sakit (S)</a></li>
+                            <li><a class="dropdown-item py-1 text-purple" href="#" @click.prevent="changeAttendanceStatus(att, 'Izin')"><i class="bi bi-file-earmark-text me-2"></i>Set Izin (I)</a></li>
+                            <li><a class="dropdown-item py-1 text-danger" href="#" @click.prevent="changeAttendanceStatus(att, 'Alpa')"><i class="bi bi-x-circle me-2"></i>Set Alpa (A)</a></li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><a class="dropdown-item py-1" href="#" @click.prevent="openEditAttendanceNote(att)"><i class="bi bi-pencil me-2"></i>Koreksi & Catatan Khusus</a></li>
+                            <li><a class="dropdown-item py-1 text-success" href="#" @click.prevent="openWhatsAppModal(att)"><i class="bi bi-whatsapp me-2"></i>Kirim Notifikasi WA Ortu</a></li>
+                            <li><a class="dropdown-item py-1" href="#" @click.prevent="selectedStudentCardId = att.id; activePage = 'kartu_pelajar'"><i class="bi bi-person-badge me-2"></i>Cetak Kartu CR-80</a></li>
+                          </ul>
                         </div>
-                        <span v-else class="text-slate-400 text-[11px]">Hanya Lihat</span>
                       </td>
                     </tr>
                     <tr v-if="filteredAttendance.length === 0">
-                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                      <td colspan="8" class="text-center py-5 text-muted">
+                        <i class="bi bi-search fs-3 d-block mb-2"></i>
                         Tidak ada data siswa yang cocok dengan kriteria filter pencarian.
                       </td>
                     </tr>
@@ -1357,219 +1437,259 @@
                 </table>
               </div>
 
-              <!-- Pagination Footer -->
-              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <div>
-                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(attendancePage, attendancePerPage, filteredAttendance.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredAttendance.length }}</span> siswa
+              <!-- Metis Pagination Footer matching orders.html (lines 684-700) -->
+              <div class="card-footer bg-white d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 py-3 border-top">
+                <div class="text-muted small">
+                  Showing <span class="fw-semibold text-dark">{{ paginationRangeText(attendancePage, attendancePerPage, filteredAttendance.length) }}</span> to <span class="fw-semibold text-dark">{{ filteredAttendance.length }}</span> results
                 </div>
-                <div class="flex items-center gap-1">
-                  <button 
-                    @click="attendancePage--" 
-                    :disabled="attendancePage === 1"
-                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
-                  >
-                    Sebelumnya
-                  </button>
-                  <span class="px-2 font-semibold text-slate-900">{{ attendancePage }} / {{ maxAttendancePages }}</span>
-                  <button 
-                    @click="attendancePage++" 
-                    :disabled="attendancePage >= maxAttendancePages"
-                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
-                  >
-                    Berikutnya
-                  </button>
-                </div>
+                <nav aria-label="Attendance pagination">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" :class="{ 'disabled': attendancePage === 1 }">
+                      <a class="page-link" href="#" @click.prevent="attendancePage--" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </a>
+                    </li>
+                    <li class="page-item" v-for="p in maxAttendancePages" :key="p" :class="{ 'active': attendancePage === p }">
+                      <a class="page-link" href="#" @click.prevent="attendancePage = p">{{ p }}</a>
+                    </li>
+                    <li class="page-item" :class="{ 'disabled': attendancePage >= maxAttendancePages }">
+                      <a class="page-link" href="#" @click.prevent="attendancePage++" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
               </div>
             </div>
 
-            </div> <!-- End of attendanceMode === 'daily' -->
-
           </div>
-
 
           <!-- ============================================== -->
           <!-- PAGE: PELANGGARAN & DISIPLIN (POIN & SP)       -->
           <!-- ============================================== -->
           <div v-if="activePage === 'pelanggaran'" class="space-y-4">
             
-            <!-- Page Header -->
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <!-- Page Header matching Metis -->
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
               <div>
-                <h1 class="text-lg font-bold text-slate-900">Pencatatan Pelanggaran & Buku Kedisiplinan</h1>
-                <p class="text-xs text-slate-500 mt-0.5">Sistem akumulasi poin demerit, trigger Surat Peringatan (SP), dan pemanggilan wali murid</p>
+                <h1 class="h4 fw-bold mb-1 text-dark">Buku Kedisiplinan & Tata Tertib Siswa</h1>
+                <p class="text-muted small mb-0">Sistem akumulasi poin demerit, trigger Surat Peringatan (SP), dan rekonsiliasi pembinaan kesiswaan</p>
               </div>
-              <button 
-                v-if="canRecordViolation"
-                @click="openViolationModal()"
-                class="inline-flex items-center gap-1.5 bg-slate-950 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-colors shadow-xs"
-              >
-                <span>+</span>
-                <span>Catat Pelanggaran Siswa</span>
-              </button>
-            </div>
-
-            <!-- Control Bar (Filter & Search) -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                <div class="relative">
-                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">🔍</span>
-                  <input 
-                    v-model="violationFilters.search" 
-                    type="text" 
-                    placeholder="Cari siswa, kasus, kelas..." 
-                    class="block w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                </div>
-
-                <div>
-                  <select 
-                    v-model="violationFilters.severity" 
-                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                    <option value="">Semua Tingkat (Ringan/Sedang/Berat)</option>
-                    <option value="Ringan">Ringan (5-15 Poin)</option>
-                    <option value="Sedang">Sedang (20-40 Poin)</option>
-                    <option value="Berat">Berat (50+ Poin)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <select 
-                    v-model="violationFilters.status" 
-                    class="block w-full py-2 px-3 text-xs border border-slate-200 rounded-xl focus:border-slate-900 focus:outline-none"
-                  >
-                    <option value="">Semua Status Tindak Lanjut</option>
-                    <option value="Diproses">Diproses BK</option>
-                    <option value="SP-1">Surat Peringatan 1</option>
-                    <option value="Selesai">Selesai / Dibina</option>
-                  </select>
-                </div>
-
-                <div>
-                  <button 
-                    @click="resetViolationFilters" 
-                    class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
-                  >
-                    Reset Filter
-                  </button>
-                </div>
+              <div class="d-flex gap-2">
+                <button v-if="canRecordViolation" @click="openViolationModal()" class="btn btn-sm btn-primary">
+                  <i class="bi bi-shield-plus me-1"></i>Catat Pelanggaran Siswa
+                </button>
               </div>
             </div>
 
-            <!-- Violations Table -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                  <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold uppercase tracking-wider text-[10px]">
+            <!-- 4 Stats Cards -->
+            <div class="row g-3 mb-4">
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-danger bg-opacity-10 text-danger me-3">
+                        <i class="bi bi-shield-slash"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Total Kasus Tercatat</p>
+                        <div class="h4 mb-0 fw-bold">{{ violations.length }}</div>
+                        <small class="text-danger"><i class="bi bi-clock-history"></i> Semester Berjalan</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="bi bi-exclamation-triangle"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Kasus Ringan (5-15 P)</p>
+                        <div class="h4 mb-0 fw-bold">{{ violations.filter(v => v.severity === 'Ringan').length }}</div>
+                        <small class="text-warning"><i class="bi bi-info-circle"></i> Pembinaan Guru</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-danger bg-opacity-10 text-danger me-3">
+                        <i class="bi bi-envelope-exclamation"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Surat Peringatan (SP-1)</p>
+                        <div class="h4 mb-0 fw-bold">{{ violations.filter(v => v.status === 'SP-1').length }}</div>
+                        <small class="text-danger"><i class="bi bi-file-earmark-pdf"></i> Panggilan Wali Murid</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6">
+                <div class="card stats-card h-100">
+                  <div class="card-body p-3">
+                    <div class="d-flex align-items-center">
+                      <div class="stats-icon bg-success bg-opacity-10 text-success me-3">
+                        <i class="bi bi-patch-check"></i>
+                      </div>
+                      <div>
+                        <p class="small mb-0 text-muted">Selesai Dibina</p>
+                        <div class="h4 mb-0 fw-bold">{{ violations.filter(v => v.status === 'Selesai').length }}</div>
+                        <small class="text-success"><i class="bi bi-check2"></i> Konseling Sukses</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table Card matching orders.html -->
+            <div class="card mb-4">
+              <div class="card-header bg-white py-3">
+                <div class="row align-items-center g-2">
+                  <div class="col-12 col-md">
+                    <div class="d-flex align-items-center gap-2">
+                      <h2 class="h5 card-title mb-0 fw-bold">Daftar Pelanggaran Siswa</h2>
+                      <span class="badge bg-light text-secondary border px-2 py-0.5 small">{{ filteredViolations.length }} Kasus</span>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-auto">
+                    <div class="d-flex flex-wrap gap-2">
+                      <div class="position-relative" style="min-width: 180px;">
+                        <input type="search" class="form-control form-control-sm pe-4" placeholder="Cari siswa, kasus..." v-model="violationFilters.search">
+                        <i class="bi bi-search position-absolute top-50 end-0 translate-middle-y me-2 text-muted small"></i>
+                      </div>
+                      <select class="form-select form-select-sm" v-model="violationFilters.severity" style="width: 150px;">
+                        <option value="">Semua Tingkat</option>
+                        <option value="Ringan">Ringan (5-15 Poin)</option>
+                        <option value="Sedang">Sedang (20-40 Poin)</option>
+                        <option value="Berat">Berat (50+ Poin)</option>
+                      </select>
+                      <select class="form-select form-select-sm" v-model="violationFilters.status" style="width: 150px;">
+                        <option value="">Semua Status SP</option>
+                        <option value="Diproses">Diproses BK</option>
+                        <option value="SP-1">Surat Peringatan 1</option>
+                        <option value="Selesai">Selesai / Dibina</option>
+                      </select>
+                      <button class="btn btn-sm btn-outline-secondary" @click="resetViolationFilters" title="Reset Filter">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
                     <tr>
-                      <th class="py-3 px-4">Tanggal</th>
-                      <th class="py-3 px-4">Siswa & Kelas</th>
-                      <th class="py-3 px-4">Jenis Pelanggaran</th>
-                      <th class="py-3 px-3">Tingkat</th>
-                      <th class="py-3 px-3">Poin Demerit</th>
-                      <th class="py-3 px-3">Status</th>
-                      <th class="py-3 px-4 text-right">Aksi Dokumen</th>
+                      <th style="width: 40px;" class="text-center">
+                        <input type="checkbox" class="form-check-input">
+                      </th>
+                      <th style="width: 110px;">DATE</th>
+                      <th>PELANGGAR / SISWA</th>
+                      <th>KASUS PELANGGARAN</th>
+                      <th style="width: 100px;">TINGKAT</th>
+                      <th style="width: 110px;">DEMERIT</th>
+                      <th style="width: 120px;">STATUS SP</th>
+                      <th style="width: 80px;" class="text-center">ACTIONS</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-slate-100 text-slate-700">
-                    <tr v-for="v in paginatedViolations" :key="v.id" class="hover:bg-slate-50/60">
-                      <td class="py-3 px-4 text-slate-500 font-mono text-[11px]">{{ v.date }}</td>
-                      <td class="py-3 px-4">
-                        <div class="font-bold text-slate-900">{{ v.studentName }}</div>
-                        <div class="text-[11px] text-slate-400">{{ v.classroom }} • NISN: {{ v.nisn }}</div>
+                  <tbody>
+                    <tr v-for="v in paginatedViolations" :key="v.id">
+                      <td class="text-center">
+                        <input type="checkbox" class="form-check-input">
                       </td>
-                      <td class="py-3 px-4">
-                        <div class="font-semibold text-slate-800">{{ v.title }}</div>
-                        <div class="text-[11px] text-slate-500">{{ v.notes }}</div>
+                      <td class="font-monospace small text-muted">{{ v.date }}</td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="customer-avatar bg-danger bg-opacity-10 text-danger me-2.5 flex-shrink-0" style="font-weight: 700; font-size: 0.8rem;">
+                            {{ v.studentName.substring(0, 2).toUpperCase() }}
+                          </div>
+                          <div>
+                            <div class="fw-semibold text-dark">{{ v.studentName }}</div>
+                            <small class="text-muted">{{ v.classroom }} &middot; NISN: {{ v.nisn }}</small>
+                          </div>
+                        </div>
                       </td>
-                      <td class="py-3 px-3">
-                        <span 
-                          :class="[
-                            v.severity === 'Berat' ? 'text-rose-700 font-bold' :
-                            v.severity === 'Sedang' ? 'text-amber-700 font-semibold' :
-                            'text-slate-600 font-medium'
-                          ]"
-                        >
+                      <td>
+                        <div class="fw-medium text-dark">{{ v.title }}</div>
+                        <small class="text-muted">{{ v.notes }}</small>
+                      </td>
+                      <td>
+                        <span class="badge" :class="v.severity === 'Berat' ? 'bg-danger-subtle text-danger border border-danger-subtle' : (v.severity === 'Sedang' ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-light text-dark border')">
                           {{ v.severity }}
                         </span>
                       </td>
-                      <td class="py-3 px-3">
-                        <span class="inline-flex items-center px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-bold border border-rose-200 text-[11px]">
-                          -{{ v.points }}
+                      <td>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle font-monospace fw-bold">
+                          -{{ v.points }} Poin
                         </span>
                       </td>
-                      <td class="py-3 px-3">
-                        <span 
-                          :class="[
-                            v.status === 'Selesai' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                            v.status === 'SP-1' ? 'bg-rose-50 text-rose-700 border-rose-200' :
-                            'bg-amber-50 text-amber-700 border-amber-200',
-                            'px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block'
-                          ]"
-                        >
+                      <td>
+                        <span class="status-badge" :class="v.status === 'Selesai' ? 'status-delivered' : (v.status === 'SP-1' ? 'status-sp1' : 'status-pending')">
+                          <i class="bi" :class="v.status === 'Selesai' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill'"></i>
                           {{ v.status }}
                         </span>
                       </td>
-                      <td class="py-3 px-4 text-right space-x-1">
-                        <button 
-                          @click="openEditViolation(v)" 
-                          class="px-2 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold transition-colors"
-                          title="Edit Pelanggaran"
-                        >
-                          ✏️ Edit
-                        </button>
-                        <button 
-                          @click="deleteViolation(v)" 
-                          class="px-2 py-1 rounded-lg border border-rose-200 bg-white hover:bg-rose-50 text-rose-700 text-[10px] font-semibold transition-colors"
-                          title="Batalkan Pelanggaran"
-                        >
-                          🗑️ Batalkan
-                        </button>
-                        <button 
-                          @click="previewSP(v)" 
-                          class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-[10px] font-semibold"
-                          title="Preview Surat Peringatan Resmi (PDF)"
-                        >
-                          📄 Lihat SP
-                        </button>
+                      <td class="text-center">
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-outline-secondary py-0 px-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 6px; height: 28px;">
+                            <i class="bi bi-three-dots"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="font-size: 0.8125rem;">
+                            <li><a class="dropdown-item py-1" href="#" @click.prevent="previewSP(v)"><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Lihat Surat Peringatan (SP)</a></li>
+                            <li><a class="dropdown-item py-1" href="#" @click.prevent="openEditViolation(v)"><i class="bi bi-pencil me-2 text-primary"></i>Koreksi Data Kasus</a></li>
+                            <li><a class="dropdown-item py-1 text-success" href="#" @click.prevent="showToast('SOP Pembinaan BK dijadwalkan untuk ' + v.studentName)"><i class="bi bi-calendar-check me-2"></i>Jadwalkan Konseling BK</a></li>
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li><a class="dropdown-item py-1 text-danger" href="#" @click.prevent="deleteViolation(v)"><i class="bi bi-trash me-2"></i>Batalkan Pelanggaran</a></li>
+                          </ul>
+                        </div>
                       </td>
                     </tr>
                     <tr v-if="filteredViolations.length === 0">
-                      <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
-                        Tidak ada data pelanggaran yang sesuai dengan filter.
+                      <td colspan="8" class="text-center py-5 text-muted">
+                        <i class="bi bi-shield-check fs-3 d-block mb-2 text-success"></i>
+                        Tidak ada data pelanggaran yang sesuai dengan filter pencarian.
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <!-- Pagination Footer -->
-              <div class="px-4 py-3 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <div>
-                  Menampilkan <span class="font-bold text-slate-800">{{ paginationRangeText(violationPage, violationPerPage, filteredViolations.length) }}</span> dari <span class="font-bold text-slate-800">{{ filteredViolations.length }}</span> kasus
+              <!-- Metis Pagination Footer -->
+              <div class="card-footer bg-white d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 py-3 border-top">
+                <div class="text-muted small">
+                  Showing <span class="fw-semibold text-dark">{{ paginationRangeText(violationPage, violationPerPage, filteredViolations.length) }}</span> to <span class="fw-semibold text-dark">{{ filteredViolations.length }}</span> results
                 </div>
-                <div class="flex items-center gap-1">
-                  <button 
-                    @click="violationPage--" 
-                    :disabled="violationPage === 1"
-                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
-                  >
-                    Sebelumnya
-                  </button>
-                  <span class="px-2 font-semibold text-slate-900">{{ violationPage }} / {{ maxViolationPages }}</span>
-                  <button 
-                    @click="violationPage++" 
-                    :disabled="violationPage >= maxViolationPages"
-                    class="px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium"
-                  >
-                    Berikutnya
-                  </button>
-                </div>
+                <nav aria-label="Violation pagination">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" :class="{ 'disabled': violationPage === 1 }">
+                      <a class="page-link" href="#" @click.prevent="violationPage--" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                      </a>
+                    </li>
+                    <li class="page-item" v-for="p in maxViolationPages" :key="p" :class="{ 'active': violationPage === p }">
+                      <a class="page-link" href="#" @click.prevent="violationPage = p">{{ p }}</a>
+                    </li>
+                    <li class="page-item" :class="{ 'disabled': violationPage >= maxViolationPages }">
+                      <a class="page-link" href="#" @click.prevent="violationPage++" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
               </div>
             </div>
 
           </div>
-
 
           <!-- ============================================== -->
           <!-- PAGE: PRESTASI SISWA (BANK PRESTASI)           -->
@@ -5824,6 +5944,33 @@
         // ==========================================
 
         // Attendance
+        const selectedAttendance = ref([]);
+        const toggleSelectAllAttendance = (checked) => {
+          if (checked) {
+            selectedAttendance.value = filteredAttendance.value.map(a => a.id);
+          } else {
+            selectedAttendance.value = [];
+          }
+        };
+        const bulkAttendanceAction = (newStatus) => {
+          attendanceData.value.forEach(a => {
+            if (selectedAttendance.value.includes(a.id)) {
+              a.status = newStatus;
+            }
+          });
+          showToast(`Berhasil memperbarui status ${selectedAttendance.value.length} siswa menjadi ${newStatus}!`);
+          selectedAttendance.value = [];
+        };
+
+        const selectedStudents = ref([]);
+        const toggleSelectAllStudents = (checked) => {
+          if (checked) {
+            selectedStudents.value = filteredStudentsList.value.map(s => s.id);
+          } else {
+            selectedStudents.value = [];
+          }
+        };
+
         const attendanceFilters = ref({ search: '', classroom: '', status: '' });
         const attendancePage = ref(1);
         const attendancePerPage = ref(6);
@@ -6651,6 +6798,11 @@
           filteredAttendance,
           maxAttendancePages,
           paginatedAttendance,
+          selectedAttendance,
+          toggleSelectAllAttendance,
+          bulkAttendanceAction,
+          selectedStudents,
+          toggleSelectAllStudents,
           resetAttendanceFilters,
           changeAttendanceStatus,
           markAllPresent,
