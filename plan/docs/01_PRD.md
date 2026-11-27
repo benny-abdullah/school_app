@@ -106,10 +106,15 @@ Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi 
 - Opsi pelaporan **Anonim (Whistleblower)** atau **Terbuka**.
 - Enkripsi tingkat kolom **AES-256-GCM** pada isi laporan dan riwayat pesan chat investigasi dua arah antara pelapor dan Tim Satgas Anti-Kekerasan Sekolah.
 
-### Modul 7: Generator & Cetak Kartu Pelajar PVC (ISO CR-80)
-- Dimensi fisik perbankan internasional: $85.60\text{ mm} \times 53.98\text{ mm}$ (Tebal $0.76\text{ mm}$).
-- Simbologi ganda: Barcode 1D (Code 128) dan QR Code 2D bertanda tangan digital **HMAC-SHA256**.
-- Kebijakan **One-Card One-Active**: Tombol *Revoke & Regenerate* seketika menonaktifkan kartu lama yang hilang.
+### Modul 7: Generator & Cetak Kartu Pelajar PVC (ISO CR-80) dengan Smart Student Directory
+- **Dimensi Fisik**: Standar perbankan internasional ISO/IEC 7810 ID-1 CR-80: $85.60\text{ mm} \times 53.98\text{ mm}$ (Tebal $0.76\text{ mm}$).
+- **Simbologi Ganda**: Barcode 1D (Code 128 untuk nomor NISN) dan QR Code 2D bertanda tangan kriptografis **HMAC-SHA256**.
+- **Direktori Siswa Kapasitas Tinggi (*High-Capacity Directory*)**:
+  - Menggantikan dropdown tunggal yang panjang dengan antarmuka tabel interaktif responsif 2-kolom.
+  - **Live Search & Filter Multi-Kriteria**: Pencarian instan menurut nama siswa, nomor NISN, atau kelas; filter seleksi rombel kelas; filter status kartu (*Aktif*, *Perlu Cetak Ulang*, *Revoked*); dan pilihan item per halaman (5, 10, 20 baris).
+  - **Paginasi Cerdas**: Navigasi halaman cepat dilengkapi rekap jumlah baris siswa aktif.
+  - **Pratinjau Sinkron Real-Time**: Memilih baris siswa seketika memperbarui kanvas fisik kartu sisi depan (*Front View*) & sisi belakang (*Back View*) di kolom pratinjau.
+- **Kebijakan Keamanan One-Card One-Active**: Fitur *Revoke Token & Terbitkan Ulang* menginvalidasi token lama seketika dan membuat token UID baru jika kartu dilaporkan hilang atau dicuri.
 
 ### Modul 8: Master Data Guru & Tenaga Kependidikan (GTK) — Eksklusif Admin
 - CRUD lengkap biodata GTK: NIP, NUPTK, Nama Lengkap & Gelar, Gender, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Kontak WhatsApp, dan Status Keaktifan.

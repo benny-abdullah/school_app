@@ -194,20 +194,26 @@ Alat pemindai gerbang dilengkapi nada audio sintetis otomatis menggunakan Web Au
 
 ---
 
-## 5. Spesifikasi Kartu Pelajar PVC ISO CR-80
+## 5. Spesifikasi Kartu Pelajar PVC ISO CR-80 & Direktori Siswa Interaktif
 
-Kartu pelajar fisik mematuhi standar internasional perbankan **ISO/IEC 7810 ID-1 CR-80**:
-- **Dimensi Fisik**: $85.60\text{ mm} \times 53.98\text{ mm}$ (Ketebalan $0.76\text{ mm}$, material PVC glossy/doff tahan air).
+### 5.1 Standar Fisik Kartu ISO/IEC 7810 ID-1 CR-80
+- **Dimensi Fisik**: $85.60\text{ mm} \times 53.98\text{ mm}$ (Rasio aspek 85.6:53.98, ketebalan $0.76\text{ mm}$, material PVC tahan air).
 - **Tampak Depan (*Front View*)**:
-  - Latar putih bersih dengan watermark logo resmi SDN Kebonagung Kota Pasuruan.
+  - Latar putih bersih dengan kop resmi SDN Kebonagung Kota Pasuruan.
   - Pas foto 3x4 potret resmi siswa.
-  - Biodata: Nama Lengkap Siswa, NISN, NIS, Rombel/Kelas, TTL, Golongan Darah.
+  - Biodata: Nama Lengkap Siswa, NISN, Rombel/Kelas, Status Siswa.
   - Barcode 1D Code 128 di sudut kiri bawah untuk laser scanner cepat pos gerbang.
   - QR Code 2D bertanda tangan digital HMAC-SHA256 di sudut kanan bawah.
 - **Tampak Belakang (*Back View*)**:
-  - Tata tertib pemegang kartu identitas siswa.
-  - Tanda tangan digital Kepala Sekolah ber-stempel kedinasan resmi.
-  - Kontak darurat pos pengaduan sekolah.
+  - Ketentuan & tata tertib pemegang kartu identitas siswa.
+  - Masa berlaku kartu s.d. kelulusan dan nomor telepon darurat sekolah.
+  - Tanda tangan digital Kepala Sekolah ber-NIP dan stempel resmi QR.
+
+### 5.2 Antarmuka Direktori Siswa & Toolbar Pencarian Berkapasitas Tinggi
+- **Komponen Search Bar**: Input `bg-slate-50 border-slate-200` berikon `bi-search` dengan clear button `bi-x-circle-fill`, pencarian live pada kolom Nama, NISN, dan Rombel Kelas.
+- **Komponen Filter Toolbar**: Filter seleksi Rombel Kelas, Filter Status Kartu (*Aktif*, *Perlu Cetak Ulang*, *Revoked*), Selector Baris per Halaman (*5*, *10*, *20*), dan tombol Reset Filter.
+- **Komponen Tabel Direktori**: Baris bergaris halus dengan badge inisial avatar, indikator kelas `bg-rose-50 text-rose-700`, monospace UID barcode `font-mono`, badge status penerbitan, baris aktif dengan sorotan `bg-rose-50/70 border-l-4 border-l-rose-600`, tombol aksi baris **"Pilih" / "Ditinjau"**, serta tombol cetak instan **"🖨️ Cetak"**.
+- **Komponen Paginasi**: Teks indikator *"Menampilkan X - Y dari Z siswa"*, tombol Sebelumnya (*Prev*), tombol halaman bernomor dengan status aktif `bg-rose-600 text-white font-bold`, dan tombol Selanjutnya (*Next*).
 
 ---
 

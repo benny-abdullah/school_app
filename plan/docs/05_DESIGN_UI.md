@@ -176,11 +176,38 @@ Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Mini
 
 ---
 
-### 3.4 Cetak Kartu Pelajar PVC ISO CR-80 (`/kartu-pelajar`)
-- Pratinjau kanvas bolak-balik dimensi fisik $85.60\text{ mm} \times 53.98\text{ mm}$.
-- Tampilan depan: Pas foto 3x4, Barcode Code 128 (NISN), dan QR Code 2D (HMAC-SHA256).
-- Tampilan belakang: Aturan kartu dan tanda tangan digital kepala sekolah.
-- Tombol **"🖨️ Cetak Kartu Siswa Ini"** (otomatis print CSS ukuran CR-80) dan tombol **"Revoke & Regenerate"** (jika kartu hilang).
+### 3.4 Cetak Kartu Pelajar PVC ISO CR-80 (`/kartu-pelajar`) — High-Capacity Student Directory
+
+Antarmuka pencetakan kartu pelajar dirancang ulang secara modern, profesional, dan ergonomis untuk menangani ratusan hingga ribuan siswa tanpa kendala lag atau dropdown yang menumpuk.
+
+#### 1. Header & Quick Actions
+- Banner header putih minimalis berbingkai halus dengan label standar ISO CR-80 ($85.60\text{ mm} \times 53.98\text{ mm}$) dan indikator keamanan HMAC-SHA256 Signed.
+- Tombol aksi cepat: **"🖨️ Cetak Kartu Siswa Ini"** (cetak kartu tunggal) dan **"Cetak Massal 1 Kelas (A4)"** (template grid cetak A4 8-kartu).
+
+#### 2. KPI Summary Strip (4 Kartu Ringkasan)
+- **Total Siswa**: Jumlah siswa terdaftar dalam direktori sekolah.
+- **Kartu Aktif**: Rasio kartu aktif yang sah dan dapat dipindai di scanner gerbang.
+- **Rombel Kelas**: Jumlah rombongan belajar aktif (contoh: X-RPL-1, XI-TKJ-2, XII-MM-1).
+- **Siswa Terpilih**: Indikator nama siswa yang saat ini sedang dimuat pada kanvas pratinjau kartu.
+
+#### 3. Smart Search & Multi-Filter Toolbar
+- **Live Search Bar**: Input pencarian reaktif dengan debounce pencarian nama lengkap, nomor NISN 10-digit, atau nama kelas secara real-time. Dilengkapi tombol hapus (*clear button*).
+- **Filter Rombel/Kelas**: Dropdown dinamis berisi seluruh kelas aktif untuk isolasi per rombel dalam 1 klik.
+- **Filter Status Kartu**: Pemilahan berdasarkan status penerbitan (*Semua Status*, *Kartu Aktif*, *Perlu Cetak Ulang*, atau *Di-Revoke / Hilang*).
+- **Items Per Page**: Pilihan ukuran halaman (*5 / hal*, *10 / hal*, *20 / hal*) untuk navigasi cepat.
+- **Reset Toolbar**: Tombol kembalikan seluruh filter ke kondisi bawaan secara instan.
+
+#### 4. Dual-Column Responsive Workspace
+- **Kolom Kiri (7 Kolom Grid) - Interactive Student Directory Table**:
+  - Tabel modern bergaris halus dengan badge avatar inisial, Nama Lengkap Siswa, Tag Status Siswa Aktif, Nomor NISN, Badge Rombel Kelas, Kode UID Barcode, dan Badge Status Kartu.
+  - Baris siswa aktif ditandai secara visual (*highlight*) dengan aksen warna `rose-50` dan border kiri tebal `border-l-4 border-rose-600`.
+  - Tombol aksi pada tiap baris: Tombol **"Pilih" / "Ditinjau"** untuk memuat pratinjau kartu ke kanvas kanan, serta tombol ikon printer **"🖨️"** untuk cetak cepat tanpa meninggalkan tabel.
+  - **Paginasi Cerdas**: Indikator *"Menampilkan X - Y dari Z siswa"*, tombol Sebelumnya (*Prev*), nomor halaman interaktif, dan tombol Selanjutnya (*Next*).
+- **Kolom Kanan (5 Kolom Grid) - Pratinjau Kanvas Fisik ISO CR-80 (Sticky Desktop)**:
+  - Pratinjau bolak-balik fisik CR-80 berskala akurat $85.60\text{ mm} \times 53.98\text{ mm}$.
+  - **Sisi Depan (*Front View*)**: Latar bersih bertekstur, Header Resmi SDN Kebonagung Kota Pasuruan, Pas Foto 3x4 berlatar belakang merah/biru, Biodata Siswa, Barcode 1D Code 128 (NISN), QR Code 2D (HMAC-SHA256 Token), dan UID Kartu.
+  - **Sisi Belakang (*Back View*)**: Tata tertib kepatuhan kartu pelajar, masa berlaku s.d. kelulusan, kontak darurat sekolah, dan Tanda Tangan Digital QR Kepala Sekolah resmi ber-NIP.
+  - Tombol keamanan **"Revoke Token"** untuk invalidasi instan jika kartu siswa dilaporkan hilang atau rusak.
 
 ---
 
