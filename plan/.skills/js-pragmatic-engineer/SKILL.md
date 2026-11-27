@@ -1,6 +1,6 @@
 ---
 name: js-pragmatic-engineer
-description: Write clean, modern, idiomatic JavaScript (ES2022+) using native Web/Node APIs and minimal dependencies. Use when the user asks for JavaScript code, refactoring JS, async/event logic, DOM manipulation, or Node.js scripts.
+description: Write clean, modern, idiomatic JavaScript (ES2022+) using native Web APIs (Web Audio, Fetch, Alpine.js helpers) and minimal dependencies. Use when writing frontend scripts, audio feedback synthesizers, Chart.js integrations, or client-side barcode buffer handlers.
 ---
 # JavaScript Pragmatic Engineer
 

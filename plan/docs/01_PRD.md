@@ -2,8 +2,10 @@
 **Aplikasi**: Sistem Monitoring Terpadu Sekolah (EduTrack Pro)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
 **Versi**: 2.6 (SSOT Canonical - Production Blueprint & AI Integration)  
-**Teknologi Acuan**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + PostgreSQL 16 + Redis)  
-**Estetika UI & Tema**: Metis Bootstrap 5 Admin Dashboard Template + Colorlib Login Form 11 + Responsive Mini-Collapsible Sidebar  
+**Teknologi Acuan**: Laravel 13 (PHP 8.4) + Laravel Livewire 3 + Alpine.js + Tailwind CSS v4 + PostgreSQL 16 + Redis 7
+**ORM**: Laravel Eloquent (UUIDv7 via spatie/laravel-ulid)
+**Queue**: Laravel Queue + Redis Worker (dengan Laravel Reverb untuk real-time notifications)  
+**Estetika UI & Tema**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal + Responsive Mini-Collapsible Sidebar  
 **Fitur Unggulan**: Presensi Gerbang 3-Mode, Tatib & SP, Bank Prestasi, Aduan AES-256, Studio Bahan Ajar AI & Floating Copilot (Kurikulum Merdeka 2026)  
 **Standar Regulasi**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi (UU PDP No. 27/2022)
 
@@ -11,7 +13,7 @@
 
 ## 1. Ikhtisar Produk & Visi Bisnis (Executive Summary)
 
-**EduTrack Pro** adalah sistem informasi dan pemantauan terpadu kesiswaan modern yang dibangun di atas ekosistem **Full-stack JavaScript / TypeScript** (Nuxt 3 / Node.js Fastify) untuk menghadirkan performa reaktif berlatensi rendah, kemudahan migrasi komponen Vue 3 dari [index.html](file:///c:/scholl_app/index.html), dan keandalan operasional sekolah nyata.
+**EduTrack Pro** adalah sistem informasi dan pemantauan terpadu kesiswaan modern yang dibangun di atas **Laravel 13 (PHP 8.4)** untuk menghadirkan performa reaktif berlatensi rendah, arsitektur monolitik-modular yang aman, dan keandalan operasional sekolah nyata. Dengan Laravel Livewire 3, seluruh interaksi tabel reaktif, modal popup, dan filter dinamis dapat dibangun tanpa kompleksitas REST API terpisah.
 
 Sistem ini dirancang untuk menyatukan:
 1. **Presensi Otomatis 3 Jendela Waktu**:
@@ -113,12 +115,12 @@ Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi 
 - CRUD lengkap biodata GTK: NIP, NUPTK, Nama Lengkap & Gelar, Gender, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Kontak WhatsApp, dan Status Keaktifan.
 - Seluruh mutasi GTK tercatat dalam Log Audit ISO 27001.
 
-### Modul 9: Komponen Tampilan Wajib (Metis Bootstrap 5 & Colorlib Form 11)
+### Modul 9: Komponen Tampilan Wajib (Enterprise Clean White & Glassmorphism Modal)
 Setiap tabel dan tampilan fitur wajib dilengkapi:
-1. **Tema Baku Metis Admin**: Layout sidebar vertikal responsif (260px expanded, 68px collapsed mini-sidebar, drawer overlay mobile), top header dengan logo Metis, toggle button, search input Ctrl+K, role switcher badge, quick logout, notification bell, dan profile menu.
-2. **Halaman Autentikasi Colorlib Form 11**: Desain 2-kolom split modern. Kolom kiri form sign-in dengan 5 quick-switch role chips (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa), kolom kanan hero value proposition sekolah dengan visual point & trust metrics (432 Siswa, 0.3s RFID, ISO 27001).
+1. **Tema Baku Enterprise Clean White**: Layout sidebar vertikal responsif (260px expanded, 68px collapsed mini-sidebar, drawer overlay mobile) dengan tautan `rounded-xl` (hover Rose-50/70, active Rose-50 text-rose-700), top sticky header glassmorphism (`backdrop-blur-md bg-white/90 border-b border-slate-200/80 shadow-xs`) dengan Logo EduTrack.Pro, toggle button, search input Ctrl+K, header role switcher pill, quick logout, notification bell, dan profile menu dengan avatar gradient circle.
+2. **Halaman Autentikasi Modern (Welcome Page & Glassmorphism Modal)**: Desain pendaratan enterprise modern dengan ambient subtle pastel blurs (`from-rose-100/50 via-red-50/30`), trust counter metrics (432 Siswa, 0.3s Laser, ISO 27001, UU PDP), 5 quick-switch role cards (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa), dan modal login clean glassmorphism.
 3. **Dynamic Pagination & Filtering**: Navigasi halaman cepat dengan indikator jumlah baris, pemilih *per-page* (10, 25, 50), debounced search reaktif, multi-filter dropdown, dan tombol reset filter instan.
-4. **Data Visualization Charts**: Grafik batang presensi mingguan/bulanan, kurva revenue/aktivitas, donut chart disiplin vs prestasi, dan sparkline mini.
+4. **Data Visualization Charts**: Grafik kurva tren presensi mingguan/bulanan (Rose-600 & Emerald-500), kurva aktivitas, donut chart disiplin vs prestasi, dan sparkline mini.
 
 ### Modul 10: AI Executive Decision Support & Smart Insight
 - **Executive Morning Briefing**: Widget khusus di bagian atas Dashboard Admin & Kepala Sekolah yang menyajikan analisis analitis kehadiran pagi secara real-time (contoh: 94.8% hadir, anomali kesiswaan terdeteksi).
@@ -153,7 +155,7 @@ Khusus role **Guru (Wali Kelas)** dan **Admin/Kepsek**:
 
 ## 4. Kebutuhan Non-Fungsional (Non-Functional Requirements)
 
-1. **Throughput Scanner Gerbang**: Waktu respon endpoint scan $\le 100\text{ ms}$ pada Node.js Fastify/Nitro Engine untuk menangani 500 siswa dalam 20 menit.
+1. **Throughput Scanner Gerbang**: Waktu respon endpoint scan $\le 100\text{ ms}$ pada Laravel Controller untuk menangani 500 siswa dalam 20 menit.
 2. **Ketersediaan (*Availability*)**: Target SLA $\ge 99.8\%$ jam operasional sekolah (06:00 - 18:00 WIB).
 3. **Keamanan Informasi (*Information Security*)**:
    - Enkripsi transit wajib HTTPS / TLS 1.3.

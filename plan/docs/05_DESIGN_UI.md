@@ -1,11 +1,13 @@
 # Desain Antarmuka Pengguna & Spesifikasi Halaman (Design UI) - SSOT
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Gaya Desain**: Metis Bootstrap 5 Admin Dashboard Template + Colorlib Login Form 11  
-**Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Interactive Charts, Pagination, Multi-Filter, Studio Bahan Ajar AI, Floating Copilot  
+**Gaya Desain**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal  
+**Tipografi**: Plus Jakarta Sans (300-800)  
+**Palet Utama**: Clean White Slate Canvas (`#f8fafc`), Primary Rose-600 (`#e11d48`), Rose-700 hover (`#be123c`), Soft Tint Rose-50 (`#fff1f2`), Emerald-500, Amber-500  
+**Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Sticky Glassmorphism Header (`backdrop-blur-md bg-white/90`), Role Switcher Pill di Header, Omnibox Quick Search (`Ctrl+K`), Ambient Subtle Pastel Blurs, Rounded-2xl Cards, Soft Pill Badges, Studio Bahan Ajar AI, Floating Copilot  
 **Total Tampilan**: 16 Modul Halaman & 12 Modal Interaktif
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Metis Admin, formulir login split-screen Colorlib Form 11, kartu statistik, grafik analitik data, bilah pencarian & filter dinamis, paginasi, studio bahan ajar AI, dan alur antarmuka pemindai gerbang 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Enterprise Clean White Admin, halaman pendaratan Glassmorphism Welcome Page & Modal Otentikasi Terpadu, kartu statistik `rounded-2xl`, grafik analitik data, bilah pencarian & filter dinamis, paginasi, studio bahan ajar AI, dan alur antarmuka pemindai gerbang 3 mode.
 
 ---
 
@@ -13,9 +15,9 @@ Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak
 
 ```mermaid
 graph TD
-    LOGIN["🔐 Split Sign-In Colorlib Form 11 (5 Role Quick Switcher & Trust Metrics)"]
+    LOGIN["🔐 Glassmorphism Welcome Page & Modern Auth Modal (5 Role Quick Switcher & Trust Metrics)"]
 
-    subgraph Internal_Portal ["Metis Admin Portal - Responsive Shell (Desktop 260px/68px & Mobile Drawer)"]
+    subgraph Internal_Portal ["Enterprise Clean White Admin Portal - Responsive Shell (Desktop 260px/68px & Mobile Drawer)"]
         DASH["📊 Dashboard Utama & AI Executive Briefing (/dashboard)"]
         
         subgraph Modul_Presensi ["Operasional Kehadiran & Gerbang 3 Mode"]
@@ -56,36 +58,36 @@ graph TD
 
 ---
 
-## 2. Struktur Tata Letak Halaman Standar (Metis Admin Shell)
+## 2. Struktur Tata Letak Halaman Standar (Enterprise Clean White Shell)
 
-Setiap halaman modul menerapkan shell standar Metis Bootstrap 5 yang bersih, modern, dan sangat responsif:
+Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Minimalist yang elegan, bersih, dan sangat responsif:
 
 ```
 +--------------------------------------------------------------------------------------------------------------------------------+
-| [M] Metis  [≡ Toggle]  [🔍 Search... (Ctrl+K)    ]         [🚪 Keluar]  [Role: 👑 Super Admin v]  [☀] [⛶] [🔔 3]  [👤 John Doe v] |
+| [E] EduTrack.Pro  [≡ Toggle]  [🔍 Search... (Ctrl+K)]        [Role: 👑 Super Admin v]  [🚪 Keluar]  [🔔 3]  [👤 John Doe (Super Admin)]|
 +---------------+----------------------------------------------------------------------------------------------------------------+
-| SIDEBAR       | CONTENT AREA (admin-main container-fluid p-3 p-lg-4)                                                           |
+| SIDEBAR       | CONTENT AREA (admin-main container-fluid p-3 p-lg-4, Canvas bg-slate-100 / ambient subtle pastel blurs)       |
 | (260px/68px)  |                                                                                                                |
-|               | [ AI EXECUTIVE BRIEFING & SMART INSIGHT CARD ]                                                                 |
+|               | [ AI EXECUTIVE BRIEFING & SMART INSIGHT CARD (Border Rose-100 / bg-white rounded-2xl shadow-sm) ]              |
 | [📊 Dashboard]| +------------------------------------------------------------------------------------------------------------+ |
 | [✅ Kehadiran]| | [✨] AI Executive Briefing · Analisis Real-Time Pagi Hari             [📄 Drafkan SP]  [💬 Buka AI Copilot] | |
 | [📷 Scanner]  | | Kehadiran 94.8% · Ditemukan 1 Kasus Kesiswaan Perlu Tindak Lanjut: Budi Santoso (XI-TKJ-2) Alpa 3 hari.   | |
 | [🪪 Kartu]    | +------------------------------------------------------------------------------------------------------------+ |
 | [⚠️ Tatib]    |                                                                                                                |
-| [🏆 Prestasi] | [ 4 METIS STATS CARDS (TOTAL USERS, REVENUE, ORDERS, AVG. RESPONSE / KEHADIRAN) ]                              |
+| [🏆 Prestasi] | [ 4 ENTERPRISE STATS CARDS (TOTAL SISWA, KEHADIRAN HARI INI, PELANGGARAN AKTIF, LAPORAN ADUAN) ]              |
 | [✨ Bahan Ajar| +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
-|     (AI)]     | | TOTAL USERS        | | REVENUE            | | ORDERS             | | AVG. RESPONSE / PRESENSI                | |
-| [📢 Aduan]    | | 12,426   ↑ 12.5%   | | $54,320   ↑ 8.2%   | | 1,852    ↓ 2.1%    | | 2.3s / 94.8% Hadir            ↑ 5.4%   | |
+|     (AI)]     | | TOTAL SISWA AKTIF  | | KEHADIRAN HARI INI | | PELANGGARAN AKTIF  | | ADUAN / WHISTLEBLOWER                   | |
+| [📢 Aduan]    | | 432 Siswa   ↑ 1.2% | | 94.8% Hadir ↑ 5.4% | | 3 Kasus    ↓ 25%   | | 0 Kasus Terbuka (Aman)                | |
 | [👔 GTK]      | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
 | [🎓 Siswa]    |                                                                                                                |
-| [👨‍👩‍👦 Ortu]     | [ SEKSI GRAFIK & AKTIVITAS DUA KOLOM ]                                                                         |
+| [👨‍👩‍👦 Ortu]     | [ SEKSI GRAFIK & AKTIVITAS DUA KOLOM (Clean White Card rounded-2xl border-slate-100) ]                        |
 | [👥 User]     | +------------------------------------------------------------+ +-----------------------------------------------+ |
-| [💾 Backup]   | | REVENUE / PRESENSI OVERVIEW (Chart.js Kurva 7D/30D/90D/1Y) | | RECENT ACTIVITY / LOG KESISWAAN               | |
+| [💾 Backup]   | | TREN KEHADIRAN MINGGUAN (Rose-600 & Emerald-500 Curves)    | | RECENT ACTIVITY / LOG KESISWAAN               | |
 | [🔒 Audit]    | | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                         | | • Siswa baru terdaftar                        | |
-|               | | ----------------------------------                         | | • Presensi gerbang selesai                    | |
+|               | | ----------------------------------                         | | • Presensi gerbang selesai (410 hadir)        | |
 |               | +------------------------------------------------------------+ +-----------------------------------------------+ |
 |               |                                                                                                                |
-|               | [ TABEL DATA INTERAKTIF DENGAN ACTION DROPDOWN & STATUS PILLS ]                                                |
+|               | [ TABEL DATA INTERAKTIF DENGAN ACTION DROPDOWN & SOFT STATUS PILLS ]                                           |
 |               | +------------------------------------------------------------------------------------------------------------+ |
 |               | | NISN/SISWA         | KELAS   | JAM MASUK | JAM PULANG & STATUS | STATUS    | REKONSILIASI   | AKSI CEPAT   | |
 |               | | Ahmad Rifai        | X-RPL-1 | 07:15 WIB | ✔ Pulang: 14:15 WIB | Terlambat | Ban bocor      | [Catatan][H] | |
@@ -93,9 +95,9 @@ Setiap halaman modul menerapkan shell standar Metis Bootstrap 5 yang bersih, mod
 |               | | Budi Santoso       | XI-TKJ-2| -         | -                   | Alpa (3x) | Butuh HomeVisit| [Catatan][A] | |
 |               | +------------------------------------------------------------------------------------------------------------+ |
 |               |                                                                                                                |
-|               | [ METIS ADMIN FOOTER: Metis Admin © 2026. SDN Kebonagung Pasuruan · Sistem Informasi Kesiswaan ]              |
+|               | [ FOOTER: EduTrack Pro © 2026. SDN Kebonagung Pasuruan · Sistem Informasi Terpadu Kesiswaan & Presensi ]       |
 +---------------+----------------------------------------------------------------------------------------------------------------+
-                                                                                       [ ✨ AI Copilot Launcher Pill (Fixed) ]
+                                                                                       [ ✨ AI Copilot Launcher Pill (Rose-600) ]
 ```
 
 ---

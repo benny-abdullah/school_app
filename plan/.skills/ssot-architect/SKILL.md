@@ -17,7 +17,7 @@ Design and refactor systems so every piece of knowledge, state, schema, or confi
 1. **Match Prompt Language:** Respond in Indonesian or English matching the user's prompt.
 2. **Audit Duplication:** Identify where the same data, type, validation rule, or config is defined in multiple places.
 3. **Establish One Authoritative Owner:**
-   - **Types & Validation:** Derive TypeScript/static types from runtime schemas (e.g., Zod, OpenAPI, Protobuf, DB schema) instead of maintaining both manually.
+   - **Types & Validation:** Derive static types and validation rules from authoritative runtime schemas (e.g., Eloquent Models, Form Requests, DB migrations, OpenAPI) instead of maintaining duplicates manually.
    - **State:** Compute derived values on the fly rather than syncing duplicate state variables.
    - **Constants & Config:** Centralize shared constants, routes, and feature flags in one canonical module.
 4. **Show the Refactor:** Provide the canonical definition and show how downstream consumers import or derive from it.

@@ -1,13 +1,13 @@
 # Arsitektur Sistem & Spesifikasi Database Produksi (SSOT)
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Arsitektur Inti**: Full-stack JavaScript / TypeScript (Nuxt 3 Vue 3 / Node.js Fastify + PostgreSQL 16 + Redis 7)  
-**ORM & Database Layer**: Drizzle ORM / Prisma + Native PostgreSQL DDL (21 Tabel Relasional)  
-**Antrean Asinkron**: BullMQ + Redis 7 Daemon  
+**Arsitektur Inti**: Full-Stack Laravel 13 (PHP 8.4) + Laravel Livewire 3 + Alpine.js + PostgreSQL 16 + Redis 7  
+**ORM & Database Layer**: Laravel Eloquent ORM + Native PostgreSQL Migrations & DDL (21 Tabel Relasional dengan UUIDv7)  
+**Antrean & Real-Time**: Laravel Queue (Redis 7 Driver) + Laravel Horizon + Laravel Reverb (WebSockets Real-Time Engine)  
 **Kepatuhan Standar**: ISO/IEC 27001:2022 & OWASP Top 10 (2021/2026)  
-**Target Server**: aaPanel Linux (PM2 Cluster + Nginx) & Bare VPS / Docker Compose
+**Target Server**: aaPanel Linux (PHP 8.4-FPM + Nginx + Supervisor) & Bare VPS / Docker Compose (Multi-Container Production)
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur teknis berbasis JavaScript, struktur monorepo/modular, skema DDL 21 tabel basis data relasional lengkap dengan atribut jam pulang dan izin fleksibel, serta konfigurasi server produksi.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur teknis berbasis **Laravel 13**, struktur modular framework, skema DDL 21 tabel basis data relasional lengkap dengan atribut jam pulang dan izin fleksibel, mapping migrasi Eloquent, serta konfigurasi server produksi enterprise.
 
 ---
 
@@ -17,35 +17,37 @@ Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh arsitektur
 graph TD
     subgraph Clients ["Lapisan Perangkat Klien (Client Layer)"]
         POS["📷 Pos Gerbang Sekolah (USB Laser Scanner + Laptop Satpam - 3 Mode Auto-Switch)"]
-        TEACH["💻 Laptop Guru & Wali Kelas (Browser KBM & Presensi Harian)"]
+        TEACH["💻 Laptop Guru & Wali Kelas (Livewire KBM & Presensi Harian)"]
         BK["🛡️ Meja Bimbingan Konseling (Desktop BK - Cetak SP & Kartu PVC CR-80)"]
         ORTU["📱 Ponsel Orang Tua / Siswa (PWA Mobile Portal & Notifikasi WhatsApp)"]
     end
 
     subgraph Security_Gateway ["Pintu Masuk Keamanan & Reverse Proxy"]
         WAF["Cloudflare WAF / ModSecurity (Anti-DDoS, Rate Limit, SSL TLS 1.3)"]
-        NGX["Nginx Web Server (Reverse Proxy, HSTS, HTTP/2, Let's Encrypt)"]
+        NGX["Nginx Web Server (Reverse Proxy, HSTS, HTTP/2, PHP-FPM Socket)"]
     end
 
-    subgraph Application_Core ["Full-Stack JavaScript / TypeScript Core (Nuxt 3 / Fastify)"]
-        AUTH["Auth Module & RBAC Engine (2FA TOTP, UUIDv7, Argon2id)"]
-        SCOPE["Server-Side Data Scoping Middleware (Anti-IDOR)"]
-        VUE["Vue 3 Composition API Reactive Frontend Engine (1:1 index.html)"]
-        API["Fastify / Nitro High-Throughput REST Endpoints (Scanner < 50ms)"]
+    subgraph Application_Core ["Laravel 13 (PHP 8.4) Core & Livewire 3 Engine"]
+        AUTH["Auth Module & RBAC Engine (Argon2id, UUIDv7, Laravel Policies & Gates)"]
+        SCOPE["Server-Side Data Scoping (Eloquent Global Scopes & Anti-IDOR Middleware)"]
+        LIVEWIRE["Livewire 3 + Blade + Alpine.js Reactive Engine (Clean White Admin)"]
+        API["High-Throughput Scanner Action (POST /api/attendance/gate-scan < 50ms)"]
         
-        subgraph Business_Services ["Layanan Bisnis Terisolasi (Services)"]
-        RULE["⚙️ 3-Mode Auto-Switch Gate Scanner Engine (Masuk/GatePass/Pulang)"]
-        JUSTICE["⚖️ Checkout Fallback Engine (Keadilan Lupa Tap Pulang)"]
-        CRYPTO["🔒 AES-256-GCM & HMAC-SHA256 Token Signer"]
-        CARD["🪪 PVC ISO CR-80 Generator & One-Card One-Active Manager"]
-        NOTIF["📲 WhatsApp Notification Dispatcher (Check-in & Check-out)"]
-        AUDIT["📝 Immutable Audit Logger (ISO 27001 A.12.4)"]
-        AI_ENGINE["✨ AI EduAssistant & Teaching Studio Engine (Kurikulum Merdeka 2026)"]
+        subgraph Business_Services ["Layanan Bisnis Terisolasi (Domain Services - PHP 8.4)"]
+            RULE["⚙️ AttendanceRuleEngineService (Evaluasi Jam Server: Masuk / Gate Pass / Pulang)"]
+            JUSTICE["⚖️ CheckoutJusticeService (Keadilan Lupa Tap Pulang vs KBM Terakhir)"]
+            CRYPTO["🔒 BarcodeCryptoService (HMAC-SHA256 Token) & FieldEncryptionService (AES-256)"]
+            CARD["🪪 StudentCardService (PVC ISO CR-80 Generator & One-Card One-Active)"]
+            NOTIF["📲 WhatsAppNotificationService (Dispatched via Redis Queue)"]
+            AUDIT["📝 ImmutableAuditLogService (ISO 27001 A.12.4 Append-Only)"]
+            AI_ENGINE["✨ AiTeachingStudioService & AiCopilotEngine (Kurikulum Merdeka 2026)"]
         end
     end
 
-    subgraph Async_Queue ["Message Queue & In-Memory Cache (Redis 7)"]
-        BULLMQ[("BullMQ Worker: WhatsApp Queue, Cron Auto-Alpa 08:00, S3 Backup")]
+    subgraph Async_Queue_Realtime ["Asynchronous Queue & WebSockets (Redis 7)"]
+        REDIS_QUEUE[("Redis 7 Queue: SendWhatsAppNotificationJob & Horizon Dashboard")]
+        REVERB["Laravel Reverb: WebSocket Server (Instant Scanner Live Audio & Screen Cue)"]
+        CRON["Laravel Task Scheduling: Auto-Alpa 08:00 WIB & Daily S3 Encrypted Backup"]
     end
 
     subgraph Data_Persistence ["Penyimpanan Data & Backup ISO 27001"]
@@ -54,101 +56,171 @@ graph TD
     end
 
     POS -->|HTTP POST Latensi Ultra-Rendah| WAF
-    TEACH -->|HTTPS| WAF
+    TEACH -->|HTTPS Livewire Socket / Wire:Poll| WAF
     BK -->|HTTPS| WAF
     ORTU -->|HTTPS| WAF
 
     WAF --> NGX
     NGX --> AUTH
     AUTH --> SCOPE
-    SCOPE --> VUE & API
+    SCOPE --> LIVEWIRE & API
     API --> Business_Services
+    LIVEWIRE --> Business_Services
     
-    NOTIF -->|Async Push Job| BULLMQ
-    BULLMQ -->|Worker Daemon| WABOT["WhatsApp Gateway API (Wablas/Fonnte/Twilio)"]
+    API -->|Broadcast Event| REVERB
+    REVERB -.->|Push WS Feedback| POS
+    
+    NOTIF -->|Push Job| REDIS_QUEUE
+    REDIS_QUEUE -->|Supervisor Worker| WABOT["WhatsApp Gateway API (Wablas/Fonnte/Twilio)"]
     
     Business_Services --> PG
-    PG -.->|Daily Snapshot Cron| S3
+    CRON -->|Daily Snapshot Job| PG
+    CRON -.->|AES-256-GCM Backup| S3
 ```
 
 ---
 
-## 2. Struktur Proyek Full-stack JavaScript / TypeScript
+## 2. Struktur Proyek Laravel 13 (PHP 8.4) Enterprise
 
-Mengadopsi struktur monorepo / modular modern yang menyatukan backend API berkecepatan tinggi dengan antarmuka Vue 3 dari `index.html`:
+Mengadopsi struktur arsitektur standar **Laravel 13** modern yang menggabungkan kecepatan REST API controller, reaktivitas interaktif **Livewire 3**, integrasi desain **Enterprise Clean White Admin Dashboard**, serta pemisahan logika bisnis murni ke lapisan *Services*:
 
 ```
 edutrack-app/
-├── server/                                   # Backend & API Engine (Nitro / Fastify)
-│   ├── api/
-│   │   ├── attendance/
-│   │   │   ├── gate-scan.post.ts            # Endpoint scanner 3-mode (< 50ms)
-│   │   │   ├── classroom-bulk.post.ts       # Presensi cepat H/S/I/A/T
-│   │   │   └── subject-sync.post.ts         # Deteksi siswa membolos KBM
-│   │   ├── gate-pass/
-│   │   │   ├── issue.post.ts                # Terbitkan tiket izin keluar
-│   │   │   └── verify.post.ts               # Verifikasi satpam pos gerbang
-│   │   ├── leave-requests/
-│   │   │   ├── submit.post.ts               # Pengajuan izin sakit fleksibel ortu
-│   │   │   └── approve.put.ts               # Persetujuan wali kelas
-│   │   ├── violations/                      # CRUD tatib, SP 1-3 & QR verifikasi
-│   │   ├── achievements/                    # CRUD bank prestasi & poin merit
-│   │   ├── complaints/                      # Aduan whistleblower AES-256
-│   │   ├── master/
-│   │   │   ├── teachers.ts                  # Master GTK (Khusus Super Admin)
-│   │   │   ├── students.ts                  # Master Siswa & Rombel
-│   │   │   └── parents.ts                   # Master Wali Murid & Aktivasi WA
-│   │   └── system/
-│   │       ├── audit-logs.get.ts            # Log audit kekal ISO 27001
-│   │       └── backup.post.ts               # Snapshot terenkripsi 3-2-1
-│   ├── services/
-│   │   ├── AttendanceRuleEngineService.ts   # 3 Jendela waktu & rule keterlambatan
-│   │   ├── CheckoutJusticeService.ts        # Keadilan lupa tap pulang vs KBM
-│   │   ├── BarcodeCryptoService.ts          # HMAC-SHA256 & Code 128
-│   │   ├── FieldEncryptionService.ts        # AES-256-GCM cipher
-│   │   ├── WhatsAppQueueService.ts          # BullMQ queue dispatcher
-│   │   ├── AiTeachingStudioService.ts       # Generator Modul Ajar, Soal HOTS, LKPD & KKTP
-│   │   └── AiCopilotEngineService.ts        # Chat context kesiswaan, draf SP, WA & briefing
-│   ├── jobs/
-│   │   ├── AutoAlpaCronJob.ts               # Cron cutoff jam 08:00 WIB
-│   │   ├── SendWhatsAppNotificationJob.ts   # Worker pengiriman WA masuk & pulang
-│   │   └── DailyEncryptedBackupJob.ts       # Cron snapshot jam 02:00 WIB ke S3
-│   └── middleware/
-│       ├── auth.ts                          # Verifikasi JWT / Sesi & 2FA
-│       └── dataScope.ts                     # Isolasi query data sisi server
-├── database/                                # Skema Database & Migrasi (Drizzle ORM)
-│   ├── schema/
-│   │   ├── users.ts
-│   │   ├── teachers.ts                      # Master GTK
-│   │   ├── students.ts
-│   │   ├── attendances.ts                   # Harian, KBM, Gate Pass, Izin
-│   │   ├── discipline.ts                    # Pelanggaran, Presets, SP
-│   │   ├── complaints.ts                    # Aduan terenkripsi AES-256
-│   │   └── audit.ts                         # Immutable audit logs
-│   ├── migrations/                          # Berkas migrasi SQL
-│   └── seeders/                             # Data seeder SDN Kebonagung
-├── app/ (atau client/)                       # Frontend Vue 3 (Migrasi 1:1 index.html)
-│   ├── layouts/
-│   │   ├── MetisAdminLayout.vue             # Shell Metis (Sidebar 260px/68px, Navbar, Floating Copilot)
-│   │   └── AuthLayout.vue                   # Split layout Colorlib Form 11
-│   ├── components/
-│   │   ├── ui/                              # Pagination, SearchBar, MultiFilter, InfoCards
-│   │   ├── charts/                          # TrendBarChart, DisciplineDonutChart, RevenueChart
-│   │   ├── scanner/                         # GateScannerStation, WebAudioFeedback
-│   │   ├── cards/                           # StudentCardCR80Preview
-│   │   └── ai/                              # AiTeachingStudio, AiCopilotDrawer, AiBriefingCard
-│   ├── pages/                               # Rute Halaman (Dashboard, Presensi, Bahan Ajar, Scanner, dll.)
-│   └── composables/                         # useAttendance, useRoleScope, useAudioScanner, useAiTeachingStudio
-├── package.json
-├── tsconfig.json
-└── ecosystem.config.js                      # PM2 Cluster Mode Configuration
+├── app/
+│   ├── Console/
+│   │   └── Commands/
+│   │       ├── AutoAlpaCutoffCommand.php            # Artisan command cutoff alpa jam 08:00 WIB
+│   │       ├── ReconcileMissedCheckoutCommand.php   # Artisan command keadilan checkout jam 17:00 WIB
+│   │       └── DailyEncryptedBackupCommand.php      # Artisan command snapshot 3-2-1 jam 02:00 WIB
+│   ├── Enums/
+│   │   ├── UserRole.php                             # Enum: admin, bk, wali_kelas, orang_tua, siswa, satpam
+│   │   ├── AttendanceStatus.php                     # Enum: Hadir, Terlambat, Sakit, Izin, Alpa, Dispensasi
+│   │   ├── LateCategory.php                         # Enum: T-1, T-2, T-3
+│   │   ├── CheckoutStatus.php                       # Enum: Belum Pulang, Check-out Normal, Izin Pulang Cepat, Check-out Default
+│   │   └── GateMode.php                             # Enum: CheckIn, GatePass, CheckOut
+│   ├── Events/
+│   │   ├── GateAttendanceScanned.php                # Broadcastable event via Laravel Reverb
+│   │   └── DigitalGatePassVerified.php              # Broadcastable event
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Api/
+│   │   │   │   ├── GateAttendanceScanController.php # Endpoint scanner ultra-cepat (< 50ms)
+│   │   │   │   ├── GatePassApiController.php        # API verifikasi QR satpam
+│   │   │   │   └── CardVerificationApiController.php# API validasi HMAC kartu
+│   │   │   └── Auth/
+│   │   │       ├── AuthenticatedSessionController.php # Login Glassmorphism Modal
+│   │   │       └── TwoFactorAuthController.php
+│   │   ├── Middleware/
+│   │   │   ├── EnforceServerDataScope.php           # Middleware isolasi data anti-IDOR
+│   │   │   └── ValidateRolePermission.php           # RBAC enforcer
+│   │   └── Requests/
+│   │       ├── GateScanRequest.php                  # Form request validasi scanner
+│   │       └── LeaveRequestFormRequest.php
+│   ├── Jobs/
+│   │   ├── SendWhatsAppNotificationJob.php          # Worker pengiriman notif WA masuk/pulang
+│   │   ├── DispatchAutoAlpaNotificationsJob.php     # Worker blast WA darurat alpa 08:00 WIB
+│   │   └── GenerateWarningLetterPdfJob.php          # Worker pembuatan PDF SP ber-QR Code
+│   ├── Livewire/                                    # Full-stack Livewire 3 Components (Enterprise Clean White)
+│   │   ├── Admin/
+│   │   │   ├── ExecutiveDashboard.php               # Dashboard GitHub-style & Morning Briefing
+│   │   │   ├── TeacherStaffManagement.php           # Master GTK (Khusus Super Admin)
+│   │   │   ├── StudentManagement.php                # Master Siswa & Data Scope
+│   │   │   ├── ParentManagement.php                 # Master Orang Tua & Portal Sync
+│   │   │   ├── UserScopeManagement.php              # RBAC & Scopes Dinamis
+│   │   │   ├── AuditLogViewer.php                   # Viewer Log Audit Kekal ISO 27001
+│   │   │   └── BackupRegistryPanel.php              # Redundansi 3-2-1 AWS S3 Vault
+│   │   ├── Attendance/
+│   │   │   ├── DailyClassroomAttendance.php         # Presensi cepat H/S/I/A/T rombel
+│   │   │   ├── SubjectAttendanceKbm.php             # Presensi KBM & deteksi membolos
+│   │   │   └── ParentLeaveRequestModal.php          # Pengajuan izin sakit fleksibel ortu
+│   │   ├── Scanner/
+│   │   │   ├── GateScannerStation.php               # Meja scanner 3-mode & Web Audio cue
+│   │   │   └── GatePassVerifierStation.php          # Verifikasi gate pass satpam pos gerbang
+│   │   ├── Discipline/
+│   │   │   ├── ViolationCatalogTable.php            # Rekapitulasi tatib & demerit points
+│   │   │   ├── WarningLetterModal.php               # Modal pratinjau SP 1-3 resmi ber-QR
+│   │   │   └── AchievementBankTable.php             # Bank prestasi & merit points
+│   │   ├── Whistleblower/
+│   │   │   ├── SecretComplaintForm.php              # Aduan anonim terenkripsi AES-256
+│   │   │   └── InvestigationChatThread.php          # Ruang obrolan dua arah rahasia
+│   │   └── Ai/
+│   │       ├── TeachingStudioView.php               # Generator Modul Ajar, HOTS, LKPD, KKTP
+│   │       ├── FloatingCopilotDrawer.php            # Floating Copilot pill & slide-out chat
+│   │       └── MorningBriefingWidget.php            # Analitik ringkasan eksekutif pagi
+│   ├── Models/                                      # 21 Eloquent Models (UUIDv7 & Relasi)
+│   │   ├── User.php
+│   │   ├── Teacher.php                              # Master GTK Admin
+│   │   ├── Classroom.php
+│   │   ├── Student.php
+│   │   ├── ParentModel.php
+│   │   ├── StudentParentRelation.php
+│   │   ├── StudentCard.php
+│   │   ├── AttendanceDaily.php
+│   │   ├── Subject.php
+│   │   ├── AttendanceSubject.php
+│   │   ├── LeaveRequest.php
+│   │   ├── GatePass.php
+│   │   ├── ViolationPreset.php
+│   │   ├── StudentViolation.php
+│   │   ├── WarningLetter.php
+│   │   ├── Achievement.php
+│   │   ├── Complaint.php
+│   │   ├── ComplaintMessage.php
+│   │   ├── AuditLog.php
+│   │   └── BackupArchive.php
+│   ├── Policies/                                    # Policy Anti-IDOR per Model
+│   │   ├── StudentPolicy.php
+│   │   ├── AttendanceDailyPolicy.php
+│   │   └── ComplaintPolicy.php
+│   ├── Scopes/                                      # Eloquent Global Scopes
+│   │   └── ClassroomScope.php
+│   └── Services/                                    # Domain Services (PHP 8.4 Typed)
+│       ├── AttendanceRuleEngineService.php          # Evaluasi 3 mode otomatis & jam server
+│       ├── CheckoutJusticeService.php               # Keadilan lupa tap pulang vs sesi KBM
+│       ├── BarcodeCryptoService.php                 # HMAC-SHA256 & Code 128 generator
+│       ├── FieldEncryptionService.php               # AES-256-GCM via Illuminate\Support\Facades\Crypt
+│       ├── WhatsAppNotificationService.php          # Redis Queue dispatcher WhatsApp API
+│       ├── StudentCardService.php                   # Generator ISO CR-80 PVC & Revocation
+│       ├── ImmutableAuditLogService.php             # ISO 27001 A.12.4 Append-only logger
+│       ├── AiTeachingStudioService.php              # LLM Service Modul Ajar, Soal HOTS, LKPD & KKTP
+│       └── AiCopilotEngineService.php               # LLM Chat context kesiswaan real-time
+├── config/
+│   ├── app.php
+│   ├── auth.php                                     # RBAC Multi-guards
+│   ├── database.php                                 # PostgreSQL 16 & Redis 7 driver
+│   ├── queue.php                                    # Redis default queue connection
+│   ├── reverb.php                                   # Laravel Reverb WebSocket configuration
+│   └── services.php                                 # WhatsApp API & LLM credentials
+├── database/
+│   ├── migrations/                                  # 21 Berkas Migrasi DDL PostgreSQL 16
+│   └── seeders/                                     # DatabaseSeeder, GTKSeeder, StudentSeeder
+├── resources/
+│   ├── css/
+│   │   └── app.css                                  # Tailwind CSS v4 + Plus Jakarta Sans + HRD Clean White CSS
+│   ├── js/
+│   │   ├── app.js                                   # Alpine.js + Reverb Echo + Chart.js
+│   │   └── audio-scanner.js                         # Web Audio API sintetis (Beep, Buzz, Chime)
+│   └── views/
+│       ├── components/                              # Blade UI Components (Pagination, InfoCards)
+│       ├── layouts/
+│       │   ├── app.blade.php                        # Shell Enterprise Clean White (Sidebar 260px/68px, Sticky Header)
+│       │   └── guest.blade.php                      # Glassmorphism Welcome Page & Auth Modal layout
+│       └── livewire/                                # Template Blade untuk Livewire 3
+├── routes/
+│   ├── web.php                                      # Rute halaman internal & portal Livewire
+│   ├── api.php                                      # REST API pemindai gerbang (< 50ms)
+│   ├── console.php                                  # Task Scheduler (Cron 08:00, 17:00, 02:00)
+│   └── channels.php                                 # Laravel Reverb private channels
+├── composer.json                                    # PHP 8.4, Laravel 13, Livewire 3, Reverb
+├── package.json                                     # Vite, Tailwind CSS v4, Alpine.js, Chart.js
+└── docker-compose.yml                               # Bare VPS Multi-container configuration
 ```
 
 ---
 
 ## 3. Skema Basis Data Relasional (DDL 21 Tabel PostgreSQL 16)
 
-Skema basis data relasional dirancang dengan **UUIDv7**, indeks komposit teroptimasi, serta kolom operasional terbaru untuk **presensi pulang, izin sakit fleksibel, dan digital gate pass**:
+Skema basis data relasional dirancang menggunakan **UUIDv7**, indeks komposit teroptimasi, serta kolom operasional presisi untuk **presensi pulang, izin sakit fleksibel, dan digital gate pass**. Di Laravel 13, tabel-tabel ini dimigrasikan via `database/migrations/` dan dihubungkan ke model Eloquent:
 
 ```sql
 -- 1. EXTENSIONS
@@ -469,41 +541,139 @@ CREATE TABLE backup_archives (
 
 ---
 
-## 4. Konfigurasi Deployment Ganda JavaScript (aaPanel & Bare VPS / Docker)
+## 4. Konfigurasi Deployment Ganda Laravel 13 (aaPanel & Bare VPS / Docker)
 
-### Target 1: aaPanel Linux Hosting (Node.js Version Manager & PM2)
-1. **Node.js Project Manager (aaPanel GUI)**:
-   - Menjalankan aplikasi Nuxt 3 / Node.js Fastify via PM2 Cluster Mode (`instances: 'max'`).
-   - Berkas `ecosystem.config.js`:
-     ```javascript
-     module.exports = {
-       apps: [
-         {
-           name: 'edutrack-app',
-           script: './.output/server/index.mjs',
-           instances: 'max',
-           exec_mode: 'cluster',
-           env: {
-             PORT: 3000,
-             NODE_ENV: 'production'
-           }
-         },
-         {
-           name: 'edutrack-bullmq-worker',
-           script: './server/jobs/worker.ts',
-           instances: 1,
-           exec_mode: 'fork'
-         }
-       ]
-     };
+### Target 1: aaPanel Linux Hosting (PHP 8.4-FPM + Nginx + Supervisor)
+1. **PHP 8.4 & Ekstensi Wajib (aaPanel App Store)**:
+   - Pasang PHP 8.4 dengan ekstensi: `pdo_pgsql`, `pgsql`, `redis`, `opcache`, `bcmath`, `fileinfo`, `gd`, `zip`.
+   - Konfigurasi OPcache produksi (`opcache.enable=1`, `opcache.jit=tracing`, `opcache.jit_buffer_size=128M`).
+2. **Supervisor Daemon (Proses Asinkron & Real-Time)**:
+   - Daemon 1: Laravel Queue Worker
+     ```ini
+     [program:edutrack-queue]
+     process_name=%(program_name)s_%(process_num)02d
+     command=php /www/wwwroot/edutrack.sdnkebonagung.sch.id/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+     autostart=true
+     autorestart=true
+     user=www
+     numprocs=2
+     redirect_stderr=true
+     stdout_logfile=/www/wwwroot/edutrack.sdnkebonagung.sch.id/storage/logs/worker.log
      ```
-2. **Nginx Reverse Proxy GUI**:
-   - Proxy Pass ke port `3000` dengan WebSocket support (`Upgrade $http_upgrade`).
-   - Konfigurasi Cron Tab aaPanel: Menjalankan skrip backup terenkripsi harian pukul 02:00 WIB.
+   - Daemon 2: Laravel Reverb WebSocket Server
+     ```ini
+     [program:edutrack-reverb]
+     command=php /www/wwwroot/edutrack.sdnkebonagung.sch.id/artisan reverb:start --port=8080 --host=0.0.0.0
+     autostart=true
+     autorestart=true
+     user=www
+     redirect_stderr=true
+     stdout_logfile=/www/wwwroot/edutrack.sdnkebonagung.sch.id/storage/logs/reverb.log
+     ```
+3. **Nginx Reverse Proxy & WebSocket Sub-Path**:
+   - Konfigurasi Root Nginx mengarah ke `/www/wwwroot/edutrack.sdnkebonagung.sch.id/public`.
+   - Blok Reverse Proxy WebSocket Laravel Reverb:
+     ```nginx
+     location /app {
+         proxy_pass http://127.0.0.1:8080;
+         proxy_http_version 1.1;
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "Upgrade";
+         proxy_set_header Host $host;
+     }
+     ```
+4. **Cron Tab aaPanel (Task Scheduling)**:
+   - Jalankan scheduler Laravel setiap menit:
+     ```bash
+     * * * * * cd /www/wwwroot/edutrack.sdnkebonagung.sch.id && php artisan schedule:run >> /dev/null 2>&1
+     ```
 
-### Target 2: Bare VPS Linux (Ubuntu 24.04 LTS / Docker Compose)
-- Multi-container mandiri:
-  - `edutrack-web`: Nginx Alpine dengan SSL Let's Encrypt Certbot & Header Keamanan ISO 27001.
-  - `edutrack-node`: Node.js 20/22 LTS Alpine yang menjalankan runtime server.
-  - `edutrack-postgres`: PostgreSQL 16 Alpine pada NVMe SSD.
-  - `edutrack-redis`: Redis 7 Alpine untuk antrean pesan WhatsApp BullMQ.
+### Target 2: Bare VPS Linux (Ubuntu 24.04 LTS / Docker Compose Production)
+Menggunakan multi-container mandiri terisolasi:
+
+```yaml
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: edutrack-app:13.0
+    restart: always
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./storage:/var/www/html/storage
+    environment:
+      APP_ENV: production
+      APP_KEY: ${APP_KEY}
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: edutrack_db
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: redis
+      QUEUE_CONNECTION: redis
+      BROADCAST_CONNECTION: reverb
+    depends_on:
+      - postgres
+      - redis
+
+  web:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/ssl:/etc/nginx/ssl
+    depends_on:
+      - app
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: edutrack_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+  queue-worker:
+    image: edutrack-app:13.0
+    restart: always
+    working_dir: /var/www/html
+    command: ["php", "artisan", "queue:work", "redis", "--sleep=3", "--tries=3"]
+    depends_on:
+      - app
+      - redis
+
+  reverb:
+    image: edutrack-app:13.0
+    restart: always
+    working_dir: /var/www/html
+    command: ["php", "artisan", "reverb:start", "--host=0.0.0.0", "--port=8080"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+```
