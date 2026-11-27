@@ -215,6 +215,12 @@ Alat pemindai gerbang dilengkapi nada audio sintetis otomatis menggunakan Web Au
 - **Komponen Tabel Direktori**: Baris bergaris halus dengan badge inisial avatar, indikator kelas `bg-rose-50 text-rose-700`, monospace UID barcode `font-mono`, badge status penerbitan, baris aktif dengan sorotan `bg-rose-50/70 border-l-4 border-l-rose-600`, tombol aksi baris **"Pilih" / "Ditinjau"**, serta tombol cetak instan **"🖨️ Cetak"**.
 - **Komponen Paginasi**: Teks indikator *"Menampilkan X - Y dari Z siswa"*, tombol Sebelumnya (*Prev*), tombol halaman bernomor dengan status aktif `bg-rose-600 text-white font-bold`, dan tombol Selanjutnya (*Next*).
 
+### 5.3 Spesifikasi Komponen Kamera Pemindai Barcode HP (WebRTC Mobile Scanner)
+- **Komponen Pemilih Kamera (*Facing Mode Switcher*)**: Tombol pill bersegmen ganda `[📷 Kamera Belakang (Utama)]` dan `[🤳 Kamera Depan (User/Stand)]` dengan indikator aktif putih beraksen `text-rose-700`.
+- **Komponen Viewport Video**: Kotak rasio 4:3 / 16:9 berbingkai sudut tajam (*corner brackets*) `border-rose-500` dengan garis laser scan animasi vertikal `.scanner-laser` (durasi 2 detik, gradien `#e11d48` bercahaya `box-shadow`).
+- **Komponen Tombol Kontrol**: Tombol Buka/Tutup Kamera (`bg-rose-600 hover:bg-rose-700` saat standby, `bg-slate-900` saat aktif), Tombol Lampu Senter (`bg-amber-100 text-amber-800` saat menyala), dan status badge real-time *Kamera Aktif & Memindai*.
+- **Mekanisme Umpan Balik Kesiswaan**: Getar haptic HP ganda `[70ms, 40ms, 70ms]`, Web Audio synthesizer, dan jeda anti-duplikasi 2.5 detik antar-pemindaian.
+
 ---
 
 ## 6. Spesifikasi Halaman Welcome & Auth Modal (Clean White HRD-Style)

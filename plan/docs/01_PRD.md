@@ -53,7 +53,13 @@ Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi 
 
 ## 3. Fitur Utama & Kebutuhan Fungsional (Functional Requirements)
 
-### Modul 1: Presensi Gerbang 3 Jendela Waktu Otomatis (*3-Mode Auto-Switch Scanner*)
+### Modul 1: Presensi Gerbang 3 Jendela Waktu Otomatis & Pemindai Barcode Kamera HP (*Mobile WebRTC Scanner*)
+- **Pemindai Barcode Kamera HP (Mobile-First)**:
+  - Dirancang khusus agar Guru, Wali Kelas, Guru Piket, dan Satpam dapat memindai kartu pelajar siswa langsung melalui kamera browser smartphone (Chrome Android / Safari iOS) tanpa memerlukan periferal tambahan.
+  - **Pilihan Lensa Fleksibel**: Pilihan cepat antara **Kamera Belakang (*Environment / Rear*)** untuk guru yang memegang HP ke arah siswa, atau **Kamera Depan (*User / Front*)** jika HP dipasang pada tripod/dudukan meja gerbang mandiri.
+  - **Fitur Viewfinder & Lampu Senter**: Garis animasi laser scan merah/rose, sudut target bingkai, tombol senter (*torch*) untuk pemindaian malam/pagi hari, getar haptic HP, serta umpan balik suara *beep/chime*.
+  - **Auto-Continuous Scan**: Pemindaian multi-siswa berurutan secara otomatis dengan jeda *anti-duplikasi* 2.5 detik.
+  - **Dukungan Barcode 1D & 2D**: Mendukung pembacaan Barcode 1D Code 128 (NISN) dan QR Code 2D (HMAC-SHA256 Token) secara real-time.
 - **Mode 1: Presensi Masuk (Check-in) [06:00 - 08:00 WIB]**:
   - `06:00 - 07:00 WIB`: **Hadir Tepat Waktu** (0 Poin, masuk kelas normal, audio Beep 880Hz).
   - `07:01 - 07:15 WIB`: **Terlambat Ringan (T-1)** (-2 Poin Tatib, dispensasi masuk kelas, audio Buzz 180Hz, notif WA info).

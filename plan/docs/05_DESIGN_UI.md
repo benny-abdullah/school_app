@@ -135,14 +135,20 @@ Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Mini
 
 ## 4. Rincian Wireframe Modul Kunci Lainnya
 
-### 3.1 Scanner Barcode Gerbang 3 Mode Otomatis (`/scanner`)
+### 3.1 Scanner Barcode Gerbang 3 Mode Otomatis & Pemindai Kamera HP (`/scanner`)
+- **Pemindai Barcode Kamera HP (Mobile-First WebRTC)**:
+  - **Pilihan Lensa Fleksibel**: Pilihan kamera depan vs kamera belakang (*Environment* / *User*) dengan toggle pill ramah sentuh.
+  - **Viewport Pemindai Real-Time**: Rasio aspek kamera responsif dilengkapi bingkai target sudut (*corner brackets*) dan animasi laser merah bergerak vertikal (*laser scan animation*).
+  - **Kontrol Lengkap**: Tombol *"Buka Kamera & Mulai Scan"* / *"Hentikan Kamera"*, tombol *"Senter"* (*torchlight*), dan badge indikator *Auto-Continuous Scan (Jeda 2.5s)*.
+  - **Umpan Balik Instan**: Getar haptic HP, suara *beep/chime*, dan pembaruan instan kartu identitas siswa.
+  - **Otomasi Hemat Daya**: Kamera otomatis berhenti saat pengguna berpindah menu atau mengakhiri sesi login.
 - **Indikator Mode Aktif Otomatis**:
   - Banner dinamis di atas layar menampilkan mode yang sedang berjalan sesuai jam server:
     - `06:00 - 08:00 WIB` = **MODE 1: PRESENSI MASUK (CHECK-IN)** (Lencana Hijau Emerald).
     - `08:01 - 13:00 WIB` = **MODE 2: SIAGA DIGITAL GATE PASS (IZIN KELUAR)** (Lencana Biru Sky).
     - `13:01 - 17:00 WIB` = **MODE 3: PRESENSI PULANG (CHECK-OUT)** (Lencana Oranye Amber).
-- **Tab 1: Live Scanner Screen**:
-  - Input auto-focus konstan yang siap menerima semburan keystroke dari laser gun scanner.
+- **Tab 1: Live Scanner Screen (Dual-Input: Kamera HP & Barcode Gun)**:
+  - Input auto-focus konstan yang siap menerima semburan keystroke dari laser gun scanner USB atau pemindaian kamera HP.
   - Kartu Hasil Pemindaian Terakhir (*Feedback Box*):
     - Foto siswa format 3x4.
     - Nama, NISN, Rombel Kelas.

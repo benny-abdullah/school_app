@@ -94,10 +94,13 @@ flowchart LR
     WAQueue --> WABot[Kirim Notifikasi Real-time ke HP Ortu]
 ```
 
-### Keunggulan Barcode Gun Scanner USB (Opsi 1):
-- **Kecepatan Tinggi**: Waktu pemindaian hanya **0.2 - 0.4 detik per siswa**.
-- **Kapasitas**: 1 jalur gerbang dengan 1 scanner mampu melayani **30-40 siswa per menit**. Untuk sekolah dengan 1.000 siswa, 2 pos gerbang hanya membutuhkan waktu sekitar 15-20 menit.
-- **Plug & Play**: Alat bertindak sebagai *Keyboard Wedge*, tidak membutuhkan driver khusus.
+### Moda Pemindaian yang Didukung:
+1. **Pemindai Barcode Kamera HP (WebRTC Mobile Scanner - Opsi Praktis Guru/Wali Kelas)**:
+   - Akses langsung via browser smartphone tanpa instalasi aplikasi tambahan.
+   - Pilihan fleksibel: **Kamera Belakang** (environment) untuk guru berdiri di depan barisan siswa, atau **Kamera Depan** (user) untuk stand meja mandiri.
+   - Dilengkapi *laser guide animation*, kontrol senter HP (*torch*), getar haptic, dan deteksi otomatis Barcode 1D Code 128 / QR Code dengan *anti-duplicate debounce* 2.5 detik.
+2. **Barcode Gun Scanner USB / Wireless 2.4GHz (Opsi Pos Satpam / Desktop)**:
+   - Kecepatan tinggi (0.2 - 0.4 detik per siswa), plug & play sebagai keyboard wedge untuk menangani volume puncak gerbang masuk sekolah.
 
 ---
 

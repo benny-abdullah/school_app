@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- HTML5 QR & Barcode Scanner CDN -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Bootstrap 5.3.3 CSS & Bootstrap Icons CDN -->
@@ -353,6 +355,30 @@
       background-color: #faf5ff !important;
       color: #9333ea !important;
       border: 1px solid #e9d5ff !important;
+    }
+
+    /* Laser Scanner & Camera Viewport Animation */
+    @keyframes scanLaser {
+      0% { top: 8%; opacity: 0.8; }
+      50% { top: 88%; opacity: 1; }
+      100% { top: 8%; opacity: 0.8; }
+    }
+    .scanner-laser {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #e11d48, #f43f5e, #e11d48, transparent);
+      box-shadow: 0 0 14px 3px rgba(225, 29, 72, 0.85);
+      animation: scanLaser 2s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 10;
+    }
+    #camera-reader-viewport video {
+      border-radius: 1rem;
+      object-fit: cover;
+      width: 100% !important;
+      height: 100% !important;
     }
 
   </style>
@@ -1998,6 +2024,177 @@
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span>Jendela Aktif: <strong>{{ scannerTab === 'gate_in' ? 'Check-in Masuk' : (scannerTab === 'gate_pass' ? 'Siaga Tiket Keluar' : 'Check-out Kepulangan') }}</strong></span>
               </div>
+            </div>
+
+            <!-- ============================================================ -->
+            <!-- PEMINDAI BARCODE KAMERA HP (MOBILE-FIRST WEBRTC SCANNER) -->
+            <!-- ============================================================ -->
+            <div v-if="scannerTab === 'gate_in' || scannerTab === 'gate_out'" class="card border-0 shadow-xs rounded-2xl bg-white border border-slate-100 overflow-hidden p-4 sm:p-5">
+              
+              <!-- Header Bar Pemindai Kamera -->
+              <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-3 pb-3 border-b border-slate-100">
+                <div class="d-flex align-items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-xl flex-shrink-0 shadow-xs transition-all"
+                       :class="isCameraScanning ? 'bg-rose-600 text-white animate-pulse shadow-rose-200' : 'bg-rose-50 text-rose-600'">
+                    <i class="bi bi-camera-video-fill"></i>
+                  </div>
+                  <div>
+                    <div class="d-flex align-items-center gap-2 flex-wrap mb-0.5">
+                      <h5 class="text-sm font-bold text-slate-900 mb-0">Pemindai Barcode Kamera HP</h5>
+                      <span v-if="isCameraScanning" class="badge bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] d-inline-flex align-items-center gap-1 font-bold">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                        Kamera Aktif & Memindai
+                      </span>
+                      <span v-else class="badge bg-slate-100 text-slate-600 border border-slate-200 text-[10px]">
+                        Kamera Standby
+                      </span>
+                      <span class="badge bg-rose-50 text-rose-700 border border-rose-200/60 text-[10px] font-semibold">
+                        {{ scannerTab === 'gate_in' ? 'Mode 1: Presensi Masuk' : 'Mode 3: Check-out Pulang' }}
+                      </span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-0">
+                      Gunakan kamera HP untuk memindai Barcode 1D (Code 128) atau QR Code kartu pelajar siswa secara real-time.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Pilihan Kamera Depan vs Belakang -->
+                <div class="d-flex align-items-center gap-1 bg-slate-100 p-1 rounded-xl self-stretch self-sm-auto justify-content-center border border-slate-200/60">
+                  <button 
+                    type="button"
+                    @click="switchCameraFacing('environment')"
+                    :class="cameraFacingMode === 'environment' ? 'bg-white text-rose-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                    class="px-3 py-1.5 rounded-lg text-xs transition d-flex align-items-center gap-1.5 border-0"
+                    title="Kamera Belakang (Environment - Utama)"
+                  >
+                    <i class="bi bi-camera-fill"></i>
+                    <span>Kamera Belakang</span>
+                  </button>
+                  <button 
+                    type="button"
+                    @click="switchCameraFacing('user')"
+                    :class="cameraFacingMode === 'user' ? 'bg-white text-rose-700 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                    class="px-3 py-1.5 rounded-lg text-xs transition d-flex align-items-center gap-1.5 border-0"
+                    title="Kamera Depan (User / Stand Meja)"
+                  >
+                    <i class="bi bi-person-bounding-box"></i>
+                    <span>Kamera Depan</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Viewport Area Pemindai Kamera -->
+              <div class="mt-4">
+                <div class="relative w-full max-w-xl mx-auto bg-slate-950 rounded-2xl overflow-hidden shadow-inner border border-slate-800" style="min-height: 290px; max-height: 380px;">
+                  
+                  <!-- Video Element Container for Html5Qrcode -->
+                  <div id="camera-reader-viewport" class="w-full h-full flex items-center justify-center overflow-hidden">
+                    
+                    <!-- Placeholder saat kamera belum aktif -->
+                    <div v-if="!isCameraScanning" class="p-6 text-center text-slate-400 d-flex flex-column align-items-center justify-content-center my-auto" style="min-height: 290px;">
+                      <div class="w-16 h-16 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-rose-400 flex items-center justify-center text-3xl mb-3 shadow-inner">
+                        <i class="bi bi-upc-scan"></i>
+                      </div>
+                      <h6 class="text-sm font-bold text-slate-100 mb-1">Kamera Siap Memindai</h6>
+                      <p class="text-xs text-slate-400 max-w-sm mb-4 leading-relaxed">
+                        Pilih kamera depan/belakang di atas, lalu klik <strong>"Buka Kamera & Mulai Scan"</strong> untuk mulai memindai kartu pelajar siswa.
+                      </p>
+                      <button 
+                        type="button" 
+                        @click="startCameraScanner" 
+                        class="btn btn-primary bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md border-0 d-inline-flex align-items-center gap-2"
+                      >
+                        <i class="bi bi-play-circle-fill text-sm"></i>
+                        <span>Buka Kamera & Mulai Scan</span>
+                      </button>
+                    </div>
+
+                  </div>
+
+                  <!-- Laser Scanner Line Overlay saat aktif -->
+                  <div v-if="isCameraScanning" class="scanner-laser"></div>
+
+                  <!-- Corner Viewfinder Frame Guides saat aktif -->
+                  <div v-if="isCameraScanning" class="pointer-events-none absolute inset-0 flex items-center justify-center p-6">
+                    <div class="relative w-4/5 h-3/5 border-2 border-rose-500/40 rounded-xl flex items-center justify-center shadow-lg">
+                      <!-- Top Left Corner -->
+                      <div class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-rose-500 rounded-tl-lg"></div>
+                      <!-- Top Right Corner -->
+                      <div class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-rose-500 rounded-tr-lg"></div>
+                      <!-- Bottom Left Corner -->
+                      <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-rose-500 rounded-bl-lg"></div>
+                      <!-- Bottom Right Corner -->
+                      <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-rose-500 rounded-br-lg"></div>
+                      
+                      <div class="text-[11px] font-mono text-white/90 bg-black/60 px-3 py-1 rounded-full backdrop-blur-xs font-semibold">
+                        Arahkan Barcode / QR ke Kotak Ini
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Error Alert jika kamera ditolak / gagal dibuka -->
+                <div v-if="cameraErrorMsg" class="mt-3 p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 d-flex align-items-center justify-content-between">
+                  <div class="d-flex align-items-center gap-2.5">
+                    <i class="bi bi-exclamation-triangle-fill text-rose-600 text-lg"></i>
+                    <span>{{ cameraErrorMsg }}</span>
+                  </div>
+                  <button @click="cameraErrorMsg = ''" class="btn btn-sm text-rose-700 hover:text-rose-900 border-0 p-0 text-base">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+
+                <!-- Toolbar Kontrol Pemindai Bawah -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-3 pt-3 border-t border-slate-100">
+                  
+                  <!-- Tombol Aksi Kamera -->
+                  <div class="d-flex align-items-center gap-2">
+                    <button 
+                      v-if="!isCameraScanning" 
+                      type="button" 
+                      @click="startCameraScanner" 
+                      class="btn btn-primary bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs border-0 d-inline-flex align-items-center gap-2"
+                    >
+                      <i class="bi bi-camera-fill"></i>
+                      <span>Buka Kamera & Mulai Scan</span>
+                    </button>
+                    <button 
+                      v-else 
+                      type="button" 
+                      @click="stopCameraScanner" 
+                      class="btn btn-dark bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs border-0 d-inline-flex align-items-center gap-2"
+                    >
+                      <i class="bi bi-stop-circle-fill text-rose-400"></i>
+                      <span>Hentikan Kamera</span>
+                    </button>
+
+                    <!-- Tombol Senter (Flash) -->
+                    <button 
+                      type="button" 
+                      @click="toggleTorch" 
+                      :disabled="!isCameraScanning"
+                      :class="isTorchActive ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-100 text-slate-700 border-slate-200'"
+                      class="btn text-xs font-semibold px-3 py-2.5 rounded-xl border d-inline-flex align-items-center gap-1.5 transition disabled:opacity-40"
+                      title="Nyalakan/Matikan Senter HP"
+                    >
+                      <i :class="isTorchActive ? 'bi bi-lightning-fill text-amber-600' : 'bi bi-lightning'"></i>
+                      <span class="d-none d-sm-inline">Senter</span>
+                    </button>
+                  </div>
+
+                  <!-- Informasi Status Mode Pemindaian -->
+                  <div class="d-flex align-items-center gap-2 text-xs text-slate-500">
+                    <span class="d-none d-md-inline">Mendukung Barcode 1D (Code 128) & 2D QR Code</span>
+                    <span class="badge bg-slate-100 text-slate-700 border border-slate-200 font-mono text-[11px] px-2.5 py-1">
+                      ⚡ Auto-Continuous Scan (Jeda 2.5s)
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
             </div>
 
             <!-- TAMPILAN TAB 2: VERIFIKASI DIGITAL GATE PASS KELUAR -->
@@ -7214,6 +7411,172 @@
           showToast(`🚨 Memfilter Siswa Alpa: Ditemukan siswa dengan indikasi Alpa berturut-turut. Rekomendasi Home Visit BK & Panggilan Fisik disiapkan.`);
         };
 
+        // ==========================================
+        // MOBILE WEBRTC CAMERA BARCODE/QR SCANNER
+        // ==========================================
+        const cameraFacingMode = ref('environment'); // 'environment' (belakang) | 'user' (depan)
+        const isCameraScanning = ref(false);
+        const cameraErrorMsg = ref('');
+        const isTorchActive = ref(false);
+        const availableCameras = ref([]);
+        const lastScannedCode = ref('');
+        let cameraScannerInstance = null;
+        let lastScanTimestamp = 0;
+
+        const onBarcodeDetected = (decodedText) => {
+          if (!decodedText) return;
+          const now = Date.now();
+          // Anti-duplication debounce: 2.5 seconds
+          if (now - lastScanTimestamp < 2500) {
+            return;
+          }
+          lastScanTimestamp = now;
+
+          let cleanCode = decodedText.trim().replace(/^\*+|\*+$/g, '');
+
+          // Check if QR contains NISN format
+          if (cleanCode.includes('NISN:')) {
+            const match = cleanCode.match(/NISN:\s*(\d+)/i);
+            if (match) cleanCode = match[1];
+          } else if (cleanCode.startsWith('CRD-')) {
+            const s = students.value.find(st => ('CRD-' + (88000 + st.id * 111) + '-X') === cleanCode);
+            if (s) cleanCode = s.nisn;
+          }
+
+          // Haptic vibration feedback on mobile
+          if (typeof navigator !== 'undefined' && navigator.vibrate) {
+            try { navigator.vibrate([70, 40, 70]); } catch (e) {}
+          }
+
+          lastScannedCode.value = cleanCode;
+          executeBarcodeScan(cleanCode);
+        };
+
+        const startCameraScanner = async () => {
+          cameraErrorMsg.value = '';
+          isCameraScanning.value = true;
+
+          await nextTick();
+
+          try {
+            if (typeof Html5Qrcode === 'undefined') {
+              cameraErrorMsg.value = 'Library pemindai kamera belum siap. Periksa koneksi internet Anda.';
+              isCameraScanning.value = false;
+              return;
+            }
+
+            if (!cameraScannerInstance) {
+              cameraScannerInstance = new Html5Qrcode("camera-reader-viewport");
+            }
+
+            // Enumerate cameras if possible
+            try {
+              const devices = await Html5Qrcode.getCameras();
+              if (devices && devices.length) {
+                availableCameras.value = devices;
+              }
+            } catch (devErr) {
+              console.warn("Camera enum error:", devErr);
+            }
+
+            const config = {
+              fps: 15,
+              qrbox: (viewfinderWidth, viewfinderHeight) => ({
+                width: Math.floor(viewfinderWidth * 0.85),
+                height: Math.floor(viewfinderHeight * 0.65)
+              }),
+              aspectRatio: 1.333334,
+              experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+              }
+            };
+
+            await cameraScannerInstance.start(
+              { facingMode: cameraFacingMode.value },
+              config,
+              (decodedText) => {
+                onBarcodeDetected(decodedText);
+              },
+              (error) => {
+                // ignore continuous frame parse errors
+              }
+            );
+
+            showToast(`Kamera ${cameraFacingMode.value === 'environment' ? 'Belakang' : 'Depan'} aktif. Arahkan ke barcode kartu siswa.`);
+          } catch (err) {
+            console.error("Camera start error:", err);
+            isCameraScanning.value = false;
+            let msg = 'Gagal mengakses kamera. ';
+            if (err && (err.name === 'NotAllowedError' || err.message?.includes('Permission'))) {
+              msg += 'Izin akses kamera ditolak browser. Mohon izinkan kamera di setelan browser HP.';
+            } else if (err && err.name === 'NotFoundError') {
+              msg += 'Kamera tidak ditemukan pada perangkat ini.';
+            } else {
+              msg += (err.message || err.toString());
+            }
+            cameraErrorMsg.value = msg;
+            showToast(msg);
+          }
+        };
+
+        const stopCameraScanner = async () => {
+          if (cameraScannerInstance && cameraScannerInstance.isScanning) {
+            try {
+              await cameraScannerInstance.stop();
+              cameraScannerInstance.clear();
+            } catch (e) {
+              console.warn("Camera stop error:", e);
+            }
+          }
+          isCameraScanning.value = false;
+          isTorchActive.value = false;
+        };
+
+        const switchCameraFacing = async (mode) => {
+          if (cameraFacingMode.value === mode) return;
+          cameraFacingMode.value = mode;
+          if (isCameraScanning.value) {
+            await stopCameraScanner();
+            await startCameraScanner();
+          } else {
+            showToast(`Pilihan diubah ke Kamera ${mode === 'environment' ? 'Belakang' : 'Depan'}`);
+          }
+        };
+
+        const toggleTorch = async () => {
+          if (!cameraScannerInstance || !cameraScannerInstance.isScanning) {
+            showToast('Kamera belum aktif.');
+            return;
+          }
+          try {
+            const capabilities = cameraScannerInstance.getRunningTrackCapabilities();
+            if (capabilities.torch) {
+              isTorchActive.value = !isTorchActive.value;
+              await cameraScannerInstance.applyVideoConstraints({
+                advanced: [{ torch: isTorchActive.value }]
+              });
+              showToast(isTorchActive.value ? 'Lampu senter HP dinyalakan' : 'Lampu senter dimatikan');
+            } else {
+              showToast('Perangkat tidak mendukung kontrol senter');
+            }
+          } catch (e) {
+            showToast('Gagal mengubah lampu senter');
+          }
+        };
+
+        // Otomatis matikan kamera jika pengguna berpindah menu atau logout
+        watch(activePage, (newPage) => {
+          if (newPage !== 'scanner' && isCameraScanning.value) {
+            stopCameraScanner();
+          }
+        });
+
+        watch(isLoggedIn, (loggedIn) => {
+          if (!loggedIn && isCameraScanning.value) {
+            stopCameraScanner();
+          }
+        });
+
         const executeBarcodeScan = (nisnInput) => {
           if (!nisnInput) return;
           const cleanNisn = nisnInput.trim().replace(/\*/g, '');
@@ -7745,6 +8108,19 @@
           lastScanResult,
           gateScansHistory,
           executeBarcodeScan,
+
+          // Mobile WebRTC Camera Scanner
+          cameraFacingMode,
+          isCameraScanning,
+          cameraErrorMsg,
+          isTorchActive,
+          availableCameras,
+          lastScannedCode,
+          startCameraScanner,
+          stopCameraScanner,
+          switchCameraFacing,
+          toggleTorch,
+          onBarcodeDetected,
 
           // Student Card Generator (Search, Filter & Pagination)
           selectedStudentCardId,
