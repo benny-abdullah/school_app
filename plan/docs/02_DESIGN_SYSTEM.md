@@ -4,9 +4,9 @@
 **Tema Utama**: Enterprise Clean White Modern Minimalist Dashboard + Glassmorphism Welcome & Auth Modal (HRD-Style)  
 **Tipografi Baku**: Plus Jakarta Sans (Weights: 300, 400, 500, 600, 700, 800)  
 **Kombinasi Framework**: Tailwind CSS Utility + Bootstrap Icons (BI) + Bootstrap 5.3 Modern Components  
-**Komponen Wajib**: Glassmorphism Welcome Screen, Ambient Pastel Glows, Collapsible Mini-Sidebar, Header Role Switcher Pill, Dynamic Pagination, Debounced Search, Multi-Filter, Interactive Charts, KPI Info Cards, Studio Bahan Ajar AI & Floating Copilot
+**Komponen Wajib**: Glassmorphism Welcome Screen, Ambient Pastel Glows, Collapsible Mini-Sidebar, Header Role Switcher Pill, Dynamic Pagination, Debounced Search, Multi-Filter, Interactive Charts, KPI Info Cards, Dasbor Analisis AI (Gemini 1.5 Flash) & Floating Copilot
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh antarmuka visual, palet warna, layout shell admin modern, halaman pembuka edukasi (*welcome page*), kartu statistik, grafik analitik data, tipografi, studio bahan ajar AI, dan umpan balik audio pemindai 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh antarmuka visual, palet warna, layout shell admin modern, halaman pembuka edukasi (*welcome page*), kartu statistik, grafik analitik data, tipografi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan umpan balik audio pemindai 3 mode.
 
 ---
 
@@ -244,18 +244,18 @@ Menerapkan arsitektur halaman depan modern berkelas korporat/edukasi:
 - Ikon bintang berkilau `bi bi-stars` berlatar rose dengan efek elevasi lembut.
 - Tombol aksi terintegrasi: `[ 📄 Drafkan SP & Surat ]` dan `[ 💬 Buka AI Copilot ]`.
 
-### 7.2 Studio Bahan Ajar AI View (`activePage === 'bahan_ajar'`)
-- **Banner Gelap Modern**: Gradien `linear-gradient(135deg, #1e293b 0%, #0f172a 100%)` dengan lencana *Kurikulum Merdeka 2026* dan *Fase A - F*.
-- **Toolbar 6 Alat**:
-  1. `modul_ajar`: Modul Ajar / RPP Lengkap
-  2. `bank_soal`: Bank Soal HOTS & Asesmen AKM
-  3. `lkpd`: Lembar Kerja Siswa (LKPD)
-  4. `rubrik_kktp`: Rubrik KKTP Kriteria Nilai BSKAP
-  5. `ice_breaking`: Ice Breaking & Kuis KBM
-  6. `remedial`: Program Remedial & Pengayaan
-- **Dua Kolom Kerja**:
-  - Kolom Kiri: Form Parameter (Preset cepat, Mapel, Fase, Topik, Model Pembelajaran, Alokasi Waktu, Jumlah Soal) + Tombol `[ 🚀 Generate Bahan Ajar AI ]`.
-  - Kolom Kanan: Card Dokumen Terbitan AI + Tombol `[ 📋 Salin ]`, `[ 🖨️ Cetak ]`, `[ 💾 Unduh ]`.
+### 7.2 Dasbor Analisis AI View (`activePage === 'bahan_ajar'`)
+- **Header Banner Card**: Berlatar putih bersih dengan bayangan halus `shadow-xs border border-slate-100 rounded-2xl p-5`, ikon `bi bi-graph-up-arrow` bergradasi Rose-50, serta input pengaturan cepat `geminiApiKey`.
+- **Tabel Data Siswa Simulasi**: Menampilkan data kehadiran dan nilai siswa (Ahmad, Budi, Citra) dengan indikator status otomatis:
+  - Penurunan Nilai: Lencana Rose-50 (`nilai_matematika_minggu2 < nilai_matematika_minggu1 - 10`).
+  - Absensi Kritis: Lencana Amber-50 (`alpa_bulan_ini >= 3`).
+  - Normal/Aman: Lencana Emerald-50.
+- **Kartu Utama "Analisis Mingguan AI"**:
+  - Background putih, sudut membulat `rounded-2xl`, shadow halus `shadow-sm border border-slate-100 p-6 md:p-8`.
+  - Ikon peringatan oranye/merah (`bi bi-exclamation-triangle-fill text-amber-500`) di sebelah kiri judul.
+  - Judul: *"Analisis Mingguan AI"*.
+  - Isi Teks: Output respons empatik hasil analisis Google Gemini 1.5 Flash (maksimal 3 kalimat penjelasan kondisi siswa bermasalah + 1 rekomendasi tindakan guru).
+  - Tombol Aksi: Tombol *"Muat Ulang Analisis"* berwarna biru (`bg-blue-600 hover:bg-blue-700 text-white rounded-xl`) dengan ikon reload berputar (`spin-anim`) saat proses asinkron berlangsung.
 
 ### 7.3 Floating Copilot Launcher & Slide-Out Chat Drawer
 - **Launcher Pill**: Posisi `fixed; bottom: 24px; right: 24px; z-index: 1045;`, gradien rose-crimson `linear-gradient(135deg, #e11d48, #be123c)`, shadow-lg `shadow-rose-600/35`, lencana online hijau.

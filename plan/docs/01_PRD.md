@@ -6,7 +6,7 @@
 **ORM**: Laravel Eloquent (UUIDv7 via spatie/laravel-ulid)
 **Queue**: Laravel Queue + Redis Worker (dengan Laravel Reverb untuk real-time notifications)  
 **Estetika UI & Tema**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal + Responsive Mini-Collapsible Sidebar  
-**Fitur Unggulan**: Presensi Gerbang 3-Mode, Tatib & SP, Bank Prestasi, Aduan AES-256, Studio Bahan Ajar AI & Floating Copilot (Kurikulum Merdeka 2026)  
+**Fitur Unggulan**: Presensi Gerbang 3-Mode, Tatib & SP, Bank Prestasi, Aduan AES-256, Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash) & Floating Copilot  
 **Standar Regulasi**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi (UU PDP No. 27/2022)
 
 ---
@@ -127,21 +127,22 @@ Setiap tabel dan tampilan fitur wajib dilengkapi:
 - **Proactive Anomaly Detection**: Mendeteksi pola kritis kesiswaan, seperti siswa yang Alpa 3 hari berturut-turut atau akumulasi poin pelanggaran mencapai ambang batas SP.
 - **Instant Action Trigger**: Tombol aksi langsung dari card briefing untuk mendrafkan Surat Panggilan (SP), menjadwalkan Home Visit Guru BK, atau membuka dialog interaktif bersama AI Copilot.
 
-### Modul 11: Studio Bahan Ajar & Asisten Mengajar AI (Kurikulum Merdeka 2026)
-Khusus role **Guru (Wali Kelas)** dan **Admin/Kepsek**:
-1. **Generator Modul Ajar (RPP Lengkap)**:
-   - Menghasilkan draf Modul Ajar terstruktur: Identitas Umum, Capaian Pembelajaran (CP), Alur Tujuan Pembelajaran (ATP), Model Pembelajaran (PBL, PjBL, Discovery, Inquiry, Cooperative), Dimensi Profil Pelajar Pancasila, Kegiatan Pembelajaran (Pendahuluan, Inti, Penutup), dan Asesmen Terdiferensiasi.
-2. **Generator Bank Soal HOTS & Asesmen AKM**:
-   - Menghasilkan soal pilihan ganda kompleks dan uraian berbasis stimulus kontekstual nyata, indikator asesmen, serta rubrik kunci jawaban.
-3. **Lembar Kerja Peserta Didik (LKPD)**:
-   - Menghasilkan lembar aktivitas belajar kolaboratif siap cetak yang memandu investigasi siswa.
-4. **Rubrik Penilaian Ketercapaian Tujuan Pembelajaran (KKTP)**:
-   - Menghasilkan matriks interval nilai standar BSKAP Kemendikbudristek (Perlu Bimbingan, Cukup, Baik, Sangat Baik).
-5. **Ice Breaking & Pembelajaran Bermakna**:
-   - Menghasilkan ide kuis energik, games interaktif 5-10 menit, dan pantun pembuka KBM yang relevan dengan topik mapel.
-6. **Program Remedial & Pengayaan**:
-   - Menghasilkan strategi bimbingan ulang untuk siswa di bawah KKTP dan materi tantangan eksploratif bagi siswa yang telah tuntas.
-7. **Action Toolbar Siap Pakai**: Salin teks 1-klik (`copyAiOutput`), Cetak dokumen instan (`printAiOutput`), dan Unduh berkas format Rich Text / Word (`downloadAiOutput`).
+### Modul 11: Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash API)
+Khusus role **Guru (Wali Kelas)**, **Guru BK**, dan **Admin/Kepsek**:
+1. **Skenario Data Simulasi Kesiswaan**:
+   - Struktur JSON data nilai dan absensi: Nama Siswa, Kelas, Nilai Matematika Minggu 1, Nilai Matematika Minggu 2, dan Alpa Bulan Ini.
+2. **Logika Analisis Cerdas (Rule-Based Filter)**:
+   - Fungsi `filterSiswaBermasalah(dataSiswa)` mengevaluasi dua pemicu risiko:
+     - **Penurunan Nilai Belajar**: Terdeteksi jika `(nilai_matematika_minggu2 < nilai_matematika_minggu1 - 10)`.
+     - **Absensi Kritis**: Terdeteksi jika `(alpa_bulan_ini >= 3)`.
+   - Menghasilkan daftar siswa berisiko (`siswaBermasalah`). Jika nihil, mengembalikan array kosong `[]`.
+3. **Integrasi Generatif Google Gemini API (Endpoint v1beta)**:
+   - Fungsi async `analisisDenganGemini(siswaBermasalah)`:
+     - Jika tidak ada siswa bermasalah: Mengembalikan teks default *"Tidak ada penurunan nilai atau absensi kritis minggu ini. Pertahankan!"*.
+     - Jika ada siswa bermasalah: Mengirim data ke endpoint `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=YOUR_API_KEY`.
+     - Prompt instruksi empatik: *"Anda adalah asisten guru yang empatik. Berdasarkan data siswa berikut: [data siswa bermasalah], buatkan ringkasan singkat (maksimal 3 kalimat) yang menjelaskan kondisi mereka dan berikan 1 saran tindakan nyata untuk guru."*.
+4. **Antarmuka Dasbor Kartu (Card-Based UI)**:
+   - Kartu utama "Analisis Mingguan AI" berlatar putih dengan bayangan halus (`rounded-2xl border-slate-100 shadow-sm`), ikon peringatan oranye/merah di samping judul, teks interpretasi Gemini, serta tombol "Muat Ulang Analisis" (warna biru) yang memicu pemanggilan ulang API secara asinkron.
 
 ### Modul 12: Floating AI Copilot & Slide-Out Chat Assistant
 - **Floating Launcher Pill**: Tombol mengambang di pojok kanan bawah bergradasi modern (`linear-gradient(135deg, #2563eb, #7c3aed)`) dengan lencana status online hijau.

@@ -18,11 +18,11 @@ Anda berperan sebagai **Lead Orchestrator Agent**.
 Tugas Anda adalah mengoordinasikan pembangunan sistem produksi **EduTrack Pro (SDN Kebonagung Kota Pasuruan)** menggunakan ekosistem **Full-Stack Laravel 13 (PHP 8.4) + Laravel Livewire 3 + Alpine.js + Tailwind CSS v4 + PostgreSQL 16 + Redis 7 + Laravel Reverb** berdasarkan dokumentasi Single Source of Truth di folder `plan/docs/` dan konsep acuan antarmuka di `C:\scholl_app\index.html`.
 
 Daftar Acuan SSOT:
-- `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang, Studio Bahan Ajar AI & Copilot)
+- `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang, Dasbor Analisis AI & Copilot)
 - `plan/docs/02_DESIGN_SYSTEM.md` (Enterprise Clean White Admin Dashboard, Glassmorphism Welcome & Auth Modal, Charts, Audio Feedback, AI Tokens)
 - `plan/docs/03_ARSITEKTUR.md` (Laravel 13 Architecture, DDL 21 Tabel PostgreSQL 16, Redis Queue, Reverb & Dual Deployment)
 - `plan/docs/04_DESIGN_PATTERN.md` (3-Mode Scanner Pattern, Checkout Justice, HMAC Token & AES-256 via Laravel Crypt)
-- `plan/docs/05_DESIGN_UI.md` (Wireframe 16 Halaman Enterprise Clean White Admin, Meja Scanner 3-Mode, Studio Bahan Ajar AI & Kartu CR-80)
+- `plan/docs/05_DESIGN_UI.md` (Wireframe 16 Halaman Enterprise Clean White Admin, Meja Scanner 3-Mode, Dasbor Analisis AI & Kartu CR-80)
 - `plan/docs/06_PROJECT_MANAGEMENT.md` (WBS Laravel 13, Roadmap 5 Fase, Risk Register & DoD)
 - `plan/docs/07_ORCHESTRASI.md` (Topologi Swarm Laravel 13, Batas Wilayah Worker & Gerbang Eksekusi)
 

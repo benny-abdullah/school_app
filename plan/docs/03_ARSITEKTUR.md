@@ -144,7 +144,7 @@ edutrack-app/
 │   │   │   ├── SecretComplaintForm.php              # Aduan anonim terenkripsi AES-256
 │   │   │   └── InvestigationChatThread.php          # Ruang obrolan dua arah rahasia
 │   │   └── Ai/
-│   │       ├── TeachingStudioView.php               # Generator Modul Ajar, HOTS, LKPD, KKTP
+│   │       ├── AiAnalysisDashboardView.php          # Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash)
 │   │       ├── FloatingCopilotDrawer.php            # Floating Copilot pill & slide-out chat
 │   │       └── MorningBriefingWidget.php            # Analitik ringkasan eksekutif pagi
 │   ├── Models/                                      # 21 Eloquent Models (UUIDv7 & Relasi)
@@ -182,7 +182,7 @@ edutrack-app/
 │       ├── WhatsAppNotificationService.php          # Redis Queue dispatcher WhatsApp API
 │       ├── StudentCardService.php                   # Generator ISO CR-80 PVC & Revocation
 │       ├── ImmutableAuditLogService.php             # ISO 27001 A.12.4 Append-only logger
-│       ├── AiTeachingStudioService.php              # LLM Service Modul Ajar, Soal HOTS, LKPD & KKTP
+│       ├── AiAnalysisGeminiService.php              # LLM Service Google Gemini 1.5 Flash (Deteksi Nilai & Absensi)
 │       └── AiCopilotEngineService.php               # LLM Chat context kesiswaan real-time
 ├── config/
 │   ├── app.php

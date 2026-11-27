@@ -4,10 +4,10 @@
 **Gaya Desain**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal  
 **Tipografi**: Plus Jakarta Sans (300-800)  
 **Palet Utama**: Clean White Slate Canvas (`#f8fafc`), Primary Rose-600 (`#e11d48`), Rose-700 hover (`#be123c`), Soft Tint Rose-50 (`#fff1f2`), Emerald-500, Amber-500  
-**Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Sticky Glassmorphism Header (`backdrop-blur-md bg-white/90`), Role Switcher Pill di Header, Omnibox Quick Search (`Ctrl+K`), Ambient Subtle Pastel Blurs, Rounded-2xl Cards, Soft Pill Badges, Studio Bahan Ajar AI, Floating Copilot  
+**Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Sticky Glassmorphism Header (`backdrop-blur-md bg-white/90`), Role Switcher Pill di Header, Omnibox Quick Search (`Ctrl+K`), Ambient Subtle Pastel Blurs, Rounded-2xl Cards, Soft Pill Badges, Dasbor Analisis AI (Gemini 1.5 Flash), Floating Copilot  
 **Total Tampilan**: 16 Modul Halaman & 12 Modal Interaktif
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Enterprise Clean White Admin, halaman pendaratan Glassmorphism Welcome Page & Modal Otentikasi Terpadu, kartu statistik `rounded-2xl`, grafik analitik data, bilah pencarian & filter dinamis, paginasi, studio bahan ajar AI, dan alur antarmuka pemindai gerbang 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Enterprise Clean White Admin, halaman pendaratan Glassmorphism Welcome Page & Modal Otentikasi Terpadu, kartu statistik `rounded-2xl`, grafik analitik data, bilah pencarian & filter dinamis, paginasi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan alur antarmuka pemindai gerbang 3 mode.
 
 ---
 
@@ -34,8 +34,8 @@ graph TD
             WHISTLE["📢 Pusat Aduan & Whistleblower Terenkripsi AES-256 (/aduan)"]
         end
 
-        subgraph Modul_AI ["Kecerdasan Buatan & Kurikulum Merdeka 2026"]
-            AI_STUDIO["✨ Studio Bahan Ajar AI: Modul Ajar, Soal HOTS, LKPD, Rubrik KKTP (/bahan_ajar)"]
+        subgraph Modul_AI ["Kecerdasan Buatan & Analisis Kesiswaan"]
+            AI_STUDIO["📊 Dasbor Analisis AI: Deteksi Nilai & Absensi Kritis via Gemini 1.5 Flash (/bahan_ajar)"]
             AI_COPILOT["💬 Floating AI Copilot Assistant & Slide-Out Chat Drawer"]
         end
 
@@ -75,8 +75,8 @@ Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Mini
 | [🪪 Kartu]    | +------------------------------------------------------------------------------------------------------------+ |
 | [⚠️ Tatib]    |                                                                                                                |
 | [🏆 Prestasi] | [ 4 ENTERPRISE STATS CARDS (TOTAL SISWA, KEHADIRAN HARI INI, PELANGGARAN AKTIF, LAPORAN ADUAN) ]              |
-| [✨ Bahan Ajar| +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
-|     (AI)]     | | TOTAL SISWA AKTIF  | | KEHADIRAN HARI INI | | PELANGGARAN AKTIF  | | ADUAN / WHISTLEBLOWER                   | |
+| [📊 Analisis  | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
+|      AI]      | | TOTAL SISWA AKTIF  | | KEHADIRAN HARI INI | | PELANGGARAN AKTIF  | | ADUAN / WHISTLEBLOWER                   | |
 | [📢 Aduan]    | | 432 Siswa   ↑ 1.2% | | 94.8% Hadir ↑ 5.4% | | 3 Kasus    ↓ 25%   | | 0 Kasus Terbuka (Aman)                | |
 | [👔 GTK]      | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
 | [🎓 Siswa]    |                                                                                                                |
@@ -102,31 +102,39 @@ Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Mini
 
 ---
 
-## 3. Wireframe Studio Bahan Ajar AI (`/bahan_ajar`)
+## 3. Wireframe Dasbor Analisis AI (`/bahan_ajar`)
 
 ```
 +--------------------------------------------------------------------------------------------------------------------------------+
-| STUDIO BAHAN AJAR & ASISTEN GURU AI (KURIKULUM MERDEKA 2026)                                                                   |
-| [Kurikulum Merdeka 2026] [AI Teaching Studio] [Fase A - F]                             [💬 Chat AI Copilot]                    |
+| DASBOR ANALISIS AI KESISWAAN                                                                                                   |
+| [Dasbor Analisis AI] [Rule-Based Filter] [Google Gemini 1.5 Flash]          [API Key: ••••••••••••] [✓ Simpan]                 |
 +--------------------------------------------------------------------------------------------------------------------------------+
-| [📘 Modul Ajar (RPP)] [📝 Bank Soal HOTS] [📋 Lembar LKPD] [🎯 Rubrik KKTP] [🎲 Ice Breaking] [💡 Remedial & Pengayaan]       |
+| DATA SISWA SIMULASI & INDIKATOR RULE-BASED                                                                                     |
+| Total: 3 Siswa · Bermasalah: 2 Siswa (Kriteria: Penurunan Nilai M2 < M1 - 10 atau Alpa >= 3x)                                  |
+| +-----------------+-------+-------------+-------------+---------------+---------------+--------------------------------------+ |
+| | NAMA SISWA      | KELAS | NILAI M1    | NILAI M2    | SELISIH NILAI | ALPA BULAN INI| STATUS RULE-BASED                    | |
+| | Ahmad           | 5A    | 80          | 65          | 🔻 -15 (Turun)| 0             | [⚠️ Penurunan Nilai Signifikan]       | |
+| | Budi            | 5A    | 70          | 72          | 🔺 +2 (Naik)  | 3 Hari        | [🚨 Absensi Kritis (>= 3x Alpa)]     | |
+| | Citra           | 5B    | 90          | 85          | -5            | 1 Hari        | [✅ Normal / Aman]                   | |
+| +-----------------+-------+-------------+-------------+---------------+---------------+--------------------------------------+ |
 +--------------------------------------------------------------------------------------------------------------------------------+
-| PARAMETER & KONFIGURASI (KOLOM KIRI - 40%)                   | HASIL DOKUMEN TERBITAN AI (KOLOM KANAN - 60%)                  |
-|                                                              |                                                                |
-| Preset Cepat: [➗ Pecahan] [💧 Siklus Air] [📖 Fantasi]       | [Siap Digunakan]          [📋 Salin] [🖨️ Cetak] [💾 Unduh File] |
-|                                                              | +------------------------------------------------------------+ |
-| Mata Pelajaran: [Matematika                           v]     | | # MODUL AJAR KURIKULUM MERDEKA (RPP PLUS)                  | |
-| Jenjang/Fase:   [Fase B - Kelas 4 SD                  v]     | | INFORMASI UMUM: SDN Kebonagung Kota Pasuruan               | |
-| Topik/Materi:   [Pecahan Senilai dan Operasi Hitung   ]     | | Fase B / Kelas 4 / Matematika / 2 x 35 Menit (PBL)         | |
-| Model Belajar:  [Problem Based Learning (PBL)         v]     | |                                                            | |
-| Alokasi Waktu:  [2 x 35 Menit (2 JP)                  v]     | | I. TUJUAN PEMBELAJARAN (TP & KKTP):                        | |
-| Jumlah Soal:    [5 Butir Soal                         v]     | | Peserta didik dapat menganalisis representasi pecahan...   | |
-|                                                              | | II. KEGIATAN PEMBELAJARAN (LENGKAP):                       | |
-| [ 🚀 Generate Bahan Ajar dengan AI ]                         | | - Pendahuluan (10 Menit): Ice breaking & apersepsi         | |
-|                                                              | | - Inti (50 Menit): Orientasi masalah & diskusi kelompok    | |
-| 🛡️ Terverifikasi BSKAP Kemendikbudristek & Profil Pancasila | | - Penutup (10 Menit): Refleksi & asesmen formatif          | |
-|                                                              | +------------------------------------------------------------+ |
-+--------------------------------------------------------------+----------------------------------------------------------------+
+| KARTU UTAMA: ANALISIS MINGGUAN AI (Background Putih, Rounded-2xl, Shadow Halus)                                                |
+|                                                                                                                                |
+| [⚠️ Ikon Oranye/Merah]  Analisis Mingguan AI                                       [🕒 17:30:15 WIB]                          |
+|                         Rangkuman empatik kondisi siswa bermasalah dan rekomendasi tindakan guru via Google Gemini 1.5 Flash   |
+|                                                                                                                                |
+| +----------------------------------------------------------------------------------------------------------------------------+ |
+| | [Gemini 1.5 Flash Empathetic Response · Maks. 3 kalimat + 1 saran tindakan guru]                                          | |
+| |                                                                                                                            | |
+| | Ahmad (5A) mengalami penurunan nilai matematika yang cukup signifikan dari 80 ke 65 (-15 poin), sedangkan Budi (5A)      | |
+| | berada pada status absensi kritis dengan catatan 3 kali alpa dalam bulan ini. Kondisi kedua siswa ini memerlukan          | |
+| | perhatian dan pendampingan segera agar ketertinggalan materi numerasi serta kebiasaan ketidakhadiran tidak semakin         | |
+| | mendalam. Saran tindakan nyata: Guru wali kelas disarankan menjadwalkan sesi bimbingan belajar remedial personal untuk     | |
+| | Ahmad dan segera menghubungi orang tua Budi secara empatik untuk mencari solusi bersama terkait penyebab ketidakhadirannya.| |
+| +----------------------------------------------------------------------------------------------------------------------------+ |
+|                                                                                                                                |
+| [ 🔄 Muat Ulang Analisis (Tombol Biru) ]                                       🛡️ Model: gemini-1.5-flash · Data Diproses Aman  |
++--------------------------------------------------------------------------------------------------------------------------------+
 ```
 
 ---
