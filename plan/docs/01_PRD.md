@@ -122,12 +122,7 @@ Setiap tabel dan tampilan fitur wajib dilengkapi:
 3. **Dynamic Pagination & Filtering**: Navigasi halaman cepat dengan indikator jumlah baris, pemilih *per-page* (10, 25, 50), debounced search reaktif, multi-filter dropdown, dan tombol reset filter instan.
 4. **Data Visualization Charts**: Grafik kurva tren presensi mingguan/bulanan (Rose-600 & Emerald-500), kurva aktivitas, donut chart disiplin vs prestasi, dan sparkline mini.
 
-### Modul 10: AI Executive Decision Support & Smart Insight
-- **Executive Morning Briefing**: Widget khusus di bagian atas Dashboard Admin & Kepala Sekolah yang menyajikan analisis analitis kehadiran pagi secara real-time (contoh: 94.8% hadir, anomali kesiswaan terdeteksi).
-- **Proactive Anomaly Detection**: Mendeteksi pola kritis kesiswaan, seperti siswa yang Alpa 3 hari berturut-turut atau akumulasi poin pelanggaran mencapai ambang batas SP.
-- **Instant Action Trigger**: Tombol aksi langsung dari card briefing untuk mendrafkan Surat Panggilan (SP), menjadwalkan Home Visit Guru BK, atau membuka dialog interaktif bersama AI Copilot.
-
-### Modul 11: Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash API)
+### Modul 10: Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash API)
 Khusus role **Guru (Wali Kelas)**, **Guru BK**, dan **Admin/Kepsek**:
 1. **Skenario Data Simulasi Kesiswaan**:
    - Struktur JSON data nilai dan absensi: Nama Siswa, Kelas, Nilai Matematika Minggu 1, Nilai Matematika Minggu 2, dan Alpa Bulan Ini.
@@ -144,7 +139,7 @@ Khusus role **Guru (Wali Kelas)**, **Guru BK**, dan **Admin/Kepsek**:
 4. **Antarmuka Dasbor Kartu (Card-Based UI)**:
    - Kartu utama "Analisis Mingguan AI" berlatar putih dengan bayangan halus (`rounded-2xl border-slate-100 shadow-sm`), ikon peringatan oranye/merah di samping judul, teks interpretasi Gemini, serta tombol "Muat Ulang Analisis" (warna biru) yang memicu pemanggilan ulang API secara asinkron.
 
-### Modul 12: Floating AI Copilot & Slide-Out Chat Assistant
+### Modul 11: Floating AI Copilot & Slide-Out Chat Assistant
 - **Floating Launcher Pill**: Tombol mengambang di pojok kanan bawah bergradasi modern (`linear-gradient(135deg, #2563eb, #7c3aed)`) dengan lencana status online hijau.
 - **Slide-Out Chat Drawer**: Panel interaktif setinggi 570px dilengkapi:
   - Header AI EduAssistant dengan tombol tutup cepat.

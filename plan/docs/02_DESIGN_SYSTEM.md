@@ -236,15 +236,9 @@ Menerapkan arsitektur halaman depan modern berkelas korporat/edukasi:
 
 ---
 
-## 7. Spesifikasi Desain AI Teaching Studio & Floating Copilot
+## 7. Spesifikasi Desain Dasbor Analisis AI & Floating Copilot
 
-### 7.1 AI Executive Briefing Card (Dashboard)
-- Latar gradien halus: `linear-gradient(135deg, #fff1f2 0%, #f5f3ff 100%)`.
-- Border: `1px solid #fecdd3`, sudut `rounded-2xl`.
-- Ikon bintang berkilau `bi bi-stars` berlatar rose dengan efek elevasi lembut.
-- Tombol aksi terintegrasi: `[ 📄 Drafkan SP & Surat ]` dan `[ 💬 Buka AI Copilot ]`.
-
-### 7.2 Dasbor Analisis AI View (`activePage === 'bahan_ajar'`)
+### 7.1 Dasbor Analisis AI View (`activePage === 'bahan_ajar'`)
 - **Header Banner Card**: Berlatar putih bersih dengan bayangan halus `shadow-xs border border-slate-100 rounded-2xl p-5`, ikon `bi bi-graph-up-arrow` bergradasi Rose-50, serta input pengaturan cepat `geminiApiKey`.
 - **Tabel Data Siswa Simulasi**: Menampilkan data kehadiran dan nilai siswa (Ahmad, Budi, Citra) dengan indikator status otomatis:
   - Penurunan Nilai: Lencana Rose-50 (`nilai_matematika_minggu2 < nilai_matematika_minggu1 - 10`).

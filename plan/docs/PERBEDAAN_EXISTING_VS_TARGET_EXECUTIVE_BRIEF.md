@@ -48,7 +48,7 @@ graph LR
 
 | Pihak Sekolah | Manfaat Nyata Sistem Produksi Target |
 | :--- | :--- |
-| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* berbasis **Enterprise Clean White Admin Dashboard** dengan kartu AI Executive Briefing pagi hari dan grafik Chart.js mingguan (Rose/Emerald); modul Master GTK (Guru & Pegawai) terlindung penuh; backup otomatis redundansi 3-2-1 aman dari kehilangan data. |
+| **👑 Kepala Sekolah** | Dashboard eksekutif *real-time* berbasis **Enterprise Clean White Admin Dashboard** dengan 4 kartu KPI statistik kesiswaan dan grafik Chart.js mingguan (Rose/Emerald); modul Master GTK (Guru & Pegawai) terlindung penuh; backup otomatis redundansi 3-2-1 aman dari kehilangan data. |
 | **🛡️ Guru BK / Kesiswaan** | Otomatisasi SP 1-3 ber-QR resmi tanpa ketik manual; deteksi dini siswa alpa 3 hari berturut-turut untuk rekomendasi kunjungan rumah (*Home Visit*); kanal aduan perundungan terenkripsi AES-256 yang aman secara hukum UU PDP. |
 | **📋 Wali Kelas & Guru Mapel** | **Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash)**: Deteksi otomatis penurunan nilai matematika (-10 poin) dan absensi kritis (alpa $\ge 3$ hari) dalam hitungan detik; rekomendasi tindakan empatik terarah; didampingi Floating AI Copilot untuk draf surat dan pesan WA ortu; absensi harian selesai dalam 10 detik (tombol *Set Semua Hadir*); presensi KBM jam pelajaran mendeteksi siswa membolos KBM (+10 Poin Tatib); verifikasi pengajuan izin sakit ortu yang fleksibel. |
 | **👮 Petugas Keamanan (Satpam)**| Pemindai gerbang otomatis beralih fungsi 3 mode (Pagi Masuk, Siang Gate Pass, Sore Pulang); nada suara Web Audio API (*Beep* masuk, *Buzz* terlambat, *Chime* pulang); verifikasi tiket izin keluar (*Digital Gate Pass*) sekali klik. |

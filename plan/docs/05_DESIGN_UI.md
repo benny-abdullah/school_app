@@ -18,7 +18,7 @@ graph TD
     LOGIN["🔐 Direct Modern Login Page (5-Role Quick Switcher, Credentials & Trust Badges)"]
 
     subgraph Internal_Portal ["Enterprise Clean White Admin Portal - Responsive Shell (Desktop 260px/68px & Mobile Drawer)"]
-        DASH["📊 Dashboard Utama & AI Executive Briefing (/dashboard)"]
+        DASH["📊 Dashboard Utama & KPI Statistik (/dashboard)"]
         
         subgraph Modul_Presensi ["Operasional Kehadiran & Gerbang 3 Mode"]
             ATT_DAY["✅ Kehadiran Siswa Harian Bulk H/S/I/A/T (/presensi)"]
@@ -68,14 +68,8 @@ Setiap halaman modul menerapkan shell standar Enterprise Clean White Modern Mini
 +---------------+----------------------------------------------------------------------------------------------------------------+
 | SIDEBAR       | CONTENT AREA (admin-main container-fluid p-3 p-lg-4, Canvas bg-slate-100 / ambient subtle pastel blurs)       |
 | (260px/68px)  |                                                                                                                |
-|               | [ AI EXECUTIVE BRIEFING & SMART INSIGHT CARD (Border Rose-100 / bg-white rounded-2xl shadow-sm) ]              |
-| [📊 Dashboard]| +------------------------------------------------------------------------------------------------------------+ |
-| [✅ Kehadiran]| | [✨] AI Executive Briefing · Analisis Real-Time Pagi Hari             [📄 Drafkan SP]  [💬 Buka AI Copilot] | |
-| [📷 Scanner]  | | Kehadiran 94.8% · Ditemukan 1 Kasus Kesiswaan Perlu Tindak Lanjut: Budi Santoso (XI-TKJ-2) Alpa 3 hari.   | |
-| [🪪 Kartu]    | +------------------------------------------------------------------------------------------------------------+ |
-| [⚠️ Tatib]    |                                                                                                                |
-| [🏆 Prestasi] | [ 4 ENTERPRISE STATS CARDS (TOTAL SISWA, KEHADIRAN HARI INI, PELANGGARAN AKTIF, LAPORAN ADUAN) ]              |
-| [📊 Analisis  | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
+| [📊 Dashboard]| [ 4 ENTERPRISE STATS CARDS (TOTAL SISWA, KEHADIRAN HARI INI, PELANGGARAN AKTIF, LAPORAN ADUAN) ]              |
+| [✅ Kehadiran]| +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |
 |      AI]      | | TOTAL SISWA AKTIF  | | KEHADIRAN HARI INI | | PELANGGARAN AKTIF  | | ADUAN / WHISTLEBLOWER                   | |
 | [📢 Aduan]    | | 432 Siswa   ↑ 1.2% | | 94.8% Hadir ↑ 5.4% | | 3 Kasus    ↓ 25%   | | 0 Kasus Terbuka (Aman)                | |
 | [👔 GTK]      | +--------------------+ +--------------------+ +--------------------+ +-----------------------------------------+ |

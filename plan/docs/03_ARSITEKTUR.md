@@ -145,8 +145,7 @@ edutrack-app/
 │   │   │   └── InvestigationChatThread.php          # Ruang obrolan dua arah rahasia
 │   │   └── Ai/
 │   │       ├── AiAnalysisDashboardView.php          # Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash)
-│   │       ├── FloatingCopilotDrawer.php            # Floating Copilot pill & slide-out chat
-│   │       └── MorningBriefingWidget.php            # Analitik ringkasan eksekutif pagi
+│   │       └── FloatingCopilotDrawer.php            # Floating Copilot pill & slide-out chat
 │   ├── Models/                                      # 21 Eloquent Models (UUIDv7 & Relasi)
 │   │   ├── User.php
 │   │   ├── Teacher.php                              # Master GTK Admin
