@@ -29,7 +29,7 @@ graph TD
     subgraph Frontend_Pool ["Frontend Squad (3 Sub-Agent Paralel - Livewire 3 Clean White)"]
         FE1["💻 fe-worker-scanner\n(Livewire Scanner 3-Mode, Web Audio Beep/Buzz/Chime & Kartu PVC CR-80)"]
         FE2["💻 fe-worker-academic\n(Livewire Presensi Bulk H/S/I/A/T, Presensi KBM Mapel & Modal Izin Sakit Ortu)"]
-        FE3["💻 fe-worker-admin\n(Welcome Page ASN, Dashboard Eksekutif, Chart.js, Master GTK & Backup 3-2-1)"]
+        FE3["💻 fe-worker-admin\n(Direct Login Page, Dashboard Eksekutif, Chart.js, Master GTK & Backup 3-2-1)"]
     end
 
     subgraph QA_Pool ["QA & Stress Squad (4 Sub-Agent Pengujian Paralel)"]

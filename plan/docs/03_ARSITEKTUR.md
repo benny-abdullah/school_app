@@ -204,7 +204,7 @@ edutrack-app/
 │       ├── components/                              # Blade UI Components (Pagination, InfoCards)
 │       ├── layouts/
 │       │   ├── app.blade.php                        # Shell Enterprise Clean White (Sidebar 260px/68px, Sticky Header)
-│       │   └── guest.blade.php                      # Glassmorphism Welcome Page & Auth Modal layout
+│       │   └── guest.blade.php                      # Direct Modern Login Page layout (1-Click Role Switcher)
 │       └── livewire/                                # Template Blade untuk Livewire 3
 ├── routes/
 │   ├── web.php                                      # Rute halaman internal & portal Livewire

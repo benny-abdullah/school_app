@@ -5,7 +5,7 @@
 **Teknologi Acuan**: Laravel 13 (PHP 8.4) + Laravel Livewire 3 + Alpine.js + Tailwind CSS v4 + PostgreSQL 16 + Redis 7
 **ORM**: Laravel Eloquent (UUIDv7 via spatie/laravel-ulid)
 **Queue**: Laravel Queue + Redis Worker (dengan Laravel Reverb untuk real-time notifications)  
-**Estetika UI & Tema**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal + Responsive Mini-Collapsible Sidebar  
+**Estetika UI & Tema**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Direct Modern Login Page (1-Click Role Switcher) + Responsive Mini-Collapsible Sidebar  
 **Fitur Unggulan**: Presensi Gerbang 3-Mode, Tatib & SP, Bank Prestasi, Aduan AES-256, Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash) & Floating Copilot  
 **Standar Regulasi**: ISO/IEC 27001:2022 & UU Pelindungan Data Pribadi (UU PDP No. 27/2022)
 
@@ -115,10 +115,10 @@ Sistem menerapkan **Role-Based Access Control (RBAC)** dengan isolasi data sisi 
 - CRUD lengkap biodata GTK: NIP, NUPTK, Nama Lengkap & Gelar, Gender, Status Kepegawaian (PNS / PPPK / Honorer Daerah / Kontrak), Jabatan Utama, Rombel/Mapel Binaan, Kontak WhatsApp, dan Status Keaktifan.
 - Seluruh mutasi GTK tercatat dalam Log Audit ISO 27001.
 
-### Modul 9: Komponen Tampilan Wajib (Enterprise Clean White & Glassmorphism Modal)
+### Modul 9: Komponen Tampilan Wajib (Enterprise Clean White & Direct Login Page)
 Setiap tabel dan tampilan fitur wajib dilengkapi:
 1. **Tema Baku Enterprise Clean White**: Layout sidebar vertikal responsif (260px expanded, 68px collapsed mini-sidebar, drawer overlay mobile) dengan tautan `rounded-xl` (hover Rose-50/70, active Rose-50 text-rose-700), top sticky header glassmorphism (`backdrop-blur-md bg-white/90 border-b border-slate-200/80 shadow-xs`) dengan Logo EduTrack.Pro, toggle button, search input Ctrl+K, header role switcher pill, quick logout, notification bell, dan profile menu dengan avatar gradient circle.
-2. **Halaman Autentikasi Modern (Welcome Page & Glassmorphism Modal)**: Desain pendaratan enterprise modern dengan ambient subtle pastel blurs (`from-rose-100/50 via-red-50/30`), trust counter metrics (432 Siswa, 0.3s Laser, ISO 27001, UU PDP), 5 quick-switch role cards (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa), dan modal login clean glassmorphism.
+2. **Halaman Autentikasi Langsung (Direct Login Page)**: Mengarahkan pengguna langsung ke halaman login (tanpa welcome page), berlatar `bg-slate-50` dengan ambient subtle pastel blurs (`from-rose-100/50 via-red-50/30`), kartu login putih `rounded-3xl shadow-xl`, input form kredensial, toggle password, 5 tombol cepat *1-click role switcher* (Super Admin/Kepsek, Guru BK, Wali Kelas, Satpam, Ortu/Siswa), dan lencana kepatuhan ISO 27001 & UU PDP.
 3. **Dynamic Pagination & Filtering**: Navigasi halaman cepat dengan indikator jumlah baris, pemilih *per-page* (10, 25, 50), debounced search reaktif, multi-filter dropdown, dan tombol reset filter instan.
 4. **Data Visualization Charts**: Grafik kurva tren presensi mingguan/bulanan (Rose-600 & Emerald-500), kurva aktivitas, donut chart disiplin vs prestasi, dan sparkline mini.
 

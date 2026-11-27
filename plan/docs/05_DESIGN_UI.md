@@ -1,13 +1,13 @@
 # Desain Antarmuka Pengguna & Spesifikasi Halaman (Design UI) - SSOT
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Gaya Desain**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Glassmorphism Welcome Page & Modern Auth Modal  
+**Gaya Desain**: Enterprise Clean White Modern Minimalist Dashboard (HRD-Style) + Direct Modern Login Page (1-Click Role Switcher)  
 **Tipografi**: Plus Jakarta Sans (300-800)  
 **Palet Utama**: Clean White Slate Canvas (`#f8fafc`), Primary Rose-600 (`#e11d48`), Rose-700 hover (`#be123c`), Soft Tint Rose-50 (`#fff1f2`), Emerald-500, Amber-500  
 **Komponen Inti**: Responsive Mini-Collapsible Sidebar (260px / 68px), Sticky Glassmorphism Header (`backdrop-blur-md bg-white/90`), Role Switcher Pill di Header, Omnibox Quick Search (`Ctrl+K`), Ambient Subtle Pastel Blurs, Rounded-2xl Cards, Soft Pill Badges, Dasbor Analisis AI (Gemini 1.5 Flash), Floating Copilot  
 **Total Tampilan**: 16 Modul Halaman & 12 Modal Interaktif
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Enterprise Clean White Admin, halaman pendaratan Glassmorphism Welcome Page & Modal Otentikasi Terpadu, kartu statistik `rounded-2xl`, grafik analitik data, bilah pencarian & filter dinamis, paginasi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan alur antarmuka pemindai gerbang 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak visual (*wireframe*), struktur shell Enterprise Clean White Admin, halaman masuk langsung (*Direct Modern Login Page* dengan 1-Click Role Switcher), kartu statistik `rounded-2xl`, grafik analitik data, bilah pencarian & filter dinamis, paginasi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan alur antarmuka pemindai gerbang 3 mode.
 
 ---
 
@@ -15,7 +15,7 @@ Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh tata letak
 
 ```mermaid
 graph TD
-    LOGIN["🔐 Glassmorphism Welcome Page & Modern Auth Modal (5 Role Quick Switcher & Trust Metrics)"]
+    LOGIN["🔐 Direct Modern Login Page (5-Role Quick Switcher, Credentials & Trust Badges)"]
 
     subgraph Internal_Portal ["Enterprise Clean White Admin Portal - Responsive Shell (Desktop 260px/68px & Mobile Drawer)"]
         DASH["📊 Dashboard Utama & AI Executive Briefing (/dashboard)"]

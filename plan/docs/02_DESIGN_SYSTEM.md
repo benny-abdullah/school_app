@@ -1,12 +1,12 @@
 # Design System & UI Token Standard (SSOT)
 **Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
-**Tema Utama**: Enterprise Clean White Modern Minimalist Dashboard + Glassmorphism Welcome & Auth Modal (HRD-Style)  
+**Tema Utama**: Enterprise Clean White Modern Minimalist Dashboard + Direct Modern Login Page (HRD-Style)  
 **Tipografi Baku**: Plus Jakarta Sans (Weights: 300, 400, 500, 600, 700, 800)  
 **Kombinasi Framework**: Tailwind CSS Utility + Bootstrap Icons (BI) + Bootstrap 5.3 Modern Components  
-**Komponen Wajib**: Glassmorphism Welcome Screen, Ambient Pastel Glows, Collapsible Mini-Sidebar, Header Role Switcher Pill, Dynamic Pagination, Debounced Search, Multi-Filter, Interactive Charts, KPI Info Cards, Dasbor Analisis AI (Gemini 1.5 Flash) & Floating Copilot
+**Komponen Wajib**: Direct Modern Login Page (1-Click Role Switcher), Ambient Pastel Glows, Collapsible Mini-Sidebar, Header Role Switcher Pill, Dynamic Pagination, Debounced Search, Multi-Filter, Interactive Charts, KPI Info Cards, Dasbor Analisis AI (Gemini 1.5 Flash) & Floating Copilot
 
-Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh antarmuka visual, palet warna, layout shell admin modern, halaman pembuka edukasi (*welcome page*), kartu statistik, grafik analitik data, tipografi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan umpan balik audio pemindai 3 mode.
+Dokumen ini merupakan **Single Source of Truth (SSOT)** untuk seluruh antarmuka visual, palet warna, layout shell admin modern, halaman login mandiri langsung (*direct login page*), kartu statistik, grafik analitik data, tipografi, Dasbor Analisis AI (Rule-Based & Gemini 1.5 Flash), dan umpan balik audio pemindai 3 mode.
 
 ---
 

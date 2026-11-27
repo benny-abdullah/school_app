@@ -19,7 +19,7 @@ Tugas Anda adalah mengoordinasikan pembangunan sistem produksi **EduTrack Pro (S
 
 Daftar Acuan SSOT:
 - `plan/docs/01_PRD.md` (Product & Business Rules: Scanner 3-Mode, Izin Fleksibel, Keadilan Pulang, Dasbor Analisis AI & Copilot)
-- `plan/docs/02_DESIGN_SYSTEM.md` (Enterprise Clean White Admin Dashboard, Glassmorphism Welcome & Auth Modal, Charts, Audio Feedback, AI Tokens)
+- `plan/docs/02_DESIGN_SYSTEM.md` (Enterprise Clean White Admin Dashboard, Direct Modern Login Page, Charts, Audio Feedback, AI Tokens)
 - `plan/docs/03_ARSITEKTUR.md` (Laravel 13 Architecture, DDL 21 Tabel PostgreSQL 16, Redis Queue, Reverb & Dual Deployment)
 - `plan/docs/04_DESIGN_PATTERN.md` (3-Mode Scanner Pattern, Checkout Justice, HMAC Token & AES-256 via Laravel Crypt)
 - `plan/docs/05_DESIGN_UI.md` (Wireframe 16 Halaman Enterprise Clean White Admin, Meja Scanner 3-Mode, Dasbor Analisis AI & Kartu CR-80)
@@ -68,7 +68,7 @@ Luncurkan 4 sub-agent backend paralel sekaligus di runtime PHP 8.4 / Laravel 13 
 Luncurkan 3 sub-agent frontend paralel sekaligus di Laravel Livewire 3 + Alpine.js (workspace: "share"):
 1. Sub-agent `fe-worker-scanner`: Bangun komponen Livewire Meja Scanner Gerbang 3-Mode (/scanner) dengan penanganan burst input barcode scanner laser USB, banner indikator 3 mode otomatis, umpan balik suara Web Audio API (Beep 880Hz masuk, Buzz 180Hz terlambat, Chime 3 nada C-E-G pulang), verifikasi Gate Pass satpam, serta modul generator cetak kartu pelajar PVC ISO CR-80 (preview bolak-balik & tombol revoke).
 2. Sub-agent `fe-worker-academic`: Bangun komponen Livewire Presensi Kehadiran (/presensi) dengan tab Presensi Cepat H/S/I/A/T rombel, tab Presensi KBM Jam Mapel (dengan tombol merah 'Lapor Membolos ke BK'), modal pengajuan izin sakit fleksibel ortu, tabel kedisiplinan tatib, lengkap dengan pagination dinamis Livewire, debounced search (wire:model.live.debounce), dan multi-filter.
-3. Sub-agent `fe-worker-admin`: Bangun komponen Livewire Welcome Page edukasi (karakter Guru PNS khaki, lencana SDN Kebonagung), Dashboard Eksekutif bergaya GitHub (Commit Bar hash 34acc33, KPI kartu statistik putih dengan shadow-sm, grafik Chart.js tren kehadiran mingguan dan donut chart disiplin), modul Master GTK (CRUD lengkap Admin), Manajemen User Scopes, dan Backup Snapshot ISO 27001.
+3. Sub-agent `fe-worker-admin`: Bangun komponen Livewire Direct Modern Login Page (1-Click Role Switcher, kredensial, trust metrics), Dashboard Eksekutif bergaya GitHub (Commit Bar hash 34acc33, KPI kartu statistik putih dengan shadow-sm, grafik Chart.js tren kehadiran mingguan dan donut chart disiplin), modul Master GTK (CRUD lengkap Admin), Manajemen User Scopes, dan Backup Snapshot ISO 27001.
 ```
 
 ### 🔹 Fase 4: Fan-Out QA Assault & Security Audit (4 QA Workers)
