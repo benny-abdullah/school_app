@@ -16,12 +16,16 @@
                 </div>
                 <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Selamat Datang, {{ Auth::user()->name }}</h1>
                 <p class="text-xs text-slate-500">
-                    Memantau kehadiran dan kesiswaan ananda: <span class="font-bold text-slate-800">{{ $studentName }}</span> (NISN: {{ $studentNisn }})
+                    Memantau kehadiran dan kesiswaan ananda: <strong class="text-slate-800">{{ $studentName }}</strong> (NISN: <span class="font-mono font-bold">{{ $studentNisn }}</span> &bull; Kelas: {{ $classroomCode }})
                 </p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('ortu.child.profile') }}" class="btn-outline-primary px-4 py-2.5 text-xs flex items-center gap-2 cursor-pointer border border-rose-200 shadow-2xs">
+                <i class="bi bi-person-vcard text-rose-600"></i>
+                <span>Biodata & Edit Foto Anak</span>
+            </a>
             <button type="button" class="btn-primary px-4 py-2.5 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
                 <i class="bi bi-envelope-paper-fill"></i>
                 <span>Ajukan Surat Izin / Sakit</span>
@@ -34,56 +38,103 @@
         <!-- Status Kehadiran Hari Ini (2 Cols) -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Today's Attendance Realtime Card -->
-            <div class="card p-6 bg-gradient-to-br from-white to-emerald-50/30 border-emerald-200">
+            <div class="card p-6 bg-gradient-to-br from-white to-slate-50/50 border-slate-200">
                 <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
-                        <i class="bi bi-broadcast text-emerald-600 animate-pulse mr-1"></i> Status Presensi Hari Ini
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                        <i class="bi bi-broadcast text-rose-600 animate-pulse"></i> Status Presensi Hari Ini
                     </span>
-                    <span class="status-badge status-hadir text-xs px-3 py-1">
-                        <i class="bi bi-check-circle-fill"></i> Hadir Tepat Waktu
-                    </span>
+
+                    @if($todayAttendance)
+                        @if($todayAttendance->status === 'Hadir' && $todayAttendance->late_level === 'T-0')
+                            <span class="status-badge status-hadir text-xs px-3 py-1">
+                                <i class="bi bi-check-circle-fill"></i> Hadir Tepat Waktu
+                            </span>
+                        @elseif($todayAttendance->status === 'Terlambat')
+                            <span class="status-badge status-pending text-xs px-3 py-1">
+                                <i class="bi bi-clock-history"></i> Terlambat ({{ $todayAttendance->late_level }})
+                            </span>
+                        @else
+                            <span class="status-badge status-hadir text-xs px-3 py-1">
+                                <i class="bi bi-check-circle-fill"></i> {{ $todayAttendance->status }}
+                            </span>
+                        @endif
+                    @else
+                        <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold flex items-center gap-1.5">
+                            <i class="bi bi-hourglass-split text-amber-500"></i> Belum Melakukan Presensi
+                        </span>
+                    @endif
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-2">
                     <!-- Check-in Time -->
                     <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
                         <div class="text-[11px] font-bold text-slate-400 uppercase">Jam Masuk (Check-In)</div>
-                        <div class="text-2xl font-extrabold text-emerald-600 mt-1">06:42:15 <span class="text-xs font-medium text-slate-500">WIB</span></div>
-                        <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                            <i class="bi bi-geo-alt-fill text-slate-400"></i> Gerbang Utama Barat (Kamera Scanner)
-                        </div>
+                        @if($todayAttendance && $todayAttendance->checkin_time)
+                            <div class="text-2xl font-extrabold text-emerald-600 mt-1">
+                                {{ \Carbon\Carbon::parse($todayAttendance->checkin_time)->format('H:i:s') }} 
+                                <span class="text-xs font-medium text-slate-500">WIB</span>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                <i class="bi bi-geo-alt-fill text-slate-400"></i> Gerbang Sekolah (Metode: {{ $todayAttendance->method === 'camera' ? 'Kamera WebRTC' : 'Barcode USB' }})
+                            </div>
+                        @else
+                            <div class="text-2xl font-extrabold text-slate-400 mt-1">
+                                --:--:-- <span class="text-xs font-medium text-slate-400">WIB</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                <i class="bi bi-info-circle"></i> Menunggu siswa tap di gerbang sekolah
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Check-out Time -->
                     <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-2xs">
                         <div class="text-[11px] font-bold text-slate-400 uppercase">Jam Pulang (Check-Out)</div>
-                        <div class="text-xl font-bold text-slate-700 mt-1.5 flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
-                            <span>Sedang Mengikuti KBM</span>
-                        </div>
-                        <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                            <i class="bi bi-bell text-slate-400"></i> Estimasi bel kepulangan: 12:30 WIB
-                        </div>
+                        @if($todayAttendance && $todayAttendance->checkout_time)
+                            <div class="text-2xl font-extrabold text-blue-600 mt-1">
+                                {{ \Carbon\Carbon::parse($todayAttendance->checkout_time)->format('H:i:s') }} 
+                                <span class="text-xs font-medium text-slate-500">WIB</span>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                <i class="bi bi-check2-all text-blue-500"></i> Telah menyelesaikan kepulangan
+                            </div>
+                        @elseif($todayAttendance && $todayAttendance->checkin_time)
+                            <div class="text-xl font-bold text-slate-700 mt-1.5 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+                                <span>Sedang Mengikuti KBM</span>
+                            </div>
+                            <div class="text-xs text-slate-500 mt-1 flex items-center gap-1">
+                                <i class="bi bi-bell text-slate-400"></i> Estimasi bel kepulangan: 12:30 WIB
+                            </div>
+                        @else
+                            <div class="text-xl font-bold text-slate-400 mt-1.5 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                                <span>Belum Masuk Sekolah</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                <i class="bi bi-bell text-slate-400"></i> Estimasi bel kepulangan: 12:30 WIB
+                            </div>
+                        @endif
                     </div>
                 </div>
 
                 <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <div>Wali Kelas: <span class="font-bold text-slate-800">{{ $classroom->homeroom_teacher ?? 'Bambang S.Pd' }}</span> (Kelas {{ $classroomCode }})</div>
+                    <div>Wali Kelas: <span class="font-bold text-slate-800">{{ $classroom->homeroom_teacher ?? '-' }}</span> (Kelas {{ $classroomCode }})</div>
                     <div class="text-emerald-700 font-semibold flex items-center gap-1">
-                        <i class="bi bi-shield-check"></i> Notifikasi Terverifikasi Sistem
+                        <i class="bi bi-shield-check"></i> Basis Data Relasional Terverifikasi
                     </div>
                 </div>
             </div>
 
-            <!-- Attendance History Table -->
+            <!-- Attendance History Table (100% Dinamis dari Tabel attendances) -->
             <div class="card overflow-hidden">
                 <div class="card-header flex items-center justify-between">
                     <div>
                         <h2 class="text-sm font-bold text-slate-900">Riwayat Kehadiran Terakhir</h2>
-                        <p class="text-xs text-slate-500">Rekap 5 hari belajar efektif ananda Ahmad Rifai</p>
+                        <p class="text-xs text-slate-500">Rekap kehadiran riil ananda {{ $studentName }} dari basis data</p>
                     </div>
                     <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                        Kehadiran 100%
+                        Rasio Hadir {{ $attendanceRate }}%
                     </span>
                 </div>
 
@@ -98,24 +149,61 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($attendanceHistory as $hist)
+                            @forelse($attendanceHistory as $hist)
                                 <tr>
                                     <td>
-                                        <div class="font-bold text-slate-800">{{ $hist['date'] }}</div>
+                                        <div class="font-bold text-slate-800">
+                                            {{ \Carbon\Carbon::parse($hist->date)->translatedFormat('l, d F Y') }}
+                                        </div>
+                                        @if($hist->notes)
+                                            <div class="text-[10px] text-slate-400">{{ $hist->notes }}</div>
+                                        @endif
                                     </td>
                                     <td>
-                                        <span class="font-mono text-xs text-emerald-600 font-bold">{{ $hist['checkin'] }}</span>
+                                        @if($hist->checkin_time)
+                                            <span class="font-mono text-xs text-emerald-600 font-bold">
+                                                {{ \Carbon\Carbon::parse($hist->checkin_time)->format('H:i:s') }} WIB
+                                            </span>
+                                        @else
+                                            <span class="font-mono text-xs text-slate-400">-</span>
+                                        @endif
                                     </td>
                                     <td>
-                                        <span class="font-mono text-xs text-slate-600">{{ $hist['checkout'] }}</span>
+                                        @if($hist->checkout_time)
+                                            <span class="font-mono text-xs text-slate-700 font-bold">
+                                                {{ \Carbon\Carbon::parse($hist->checkout_time)->format('H:i:s') }} WIB
+                                            </span>
+                                        @elseif($hist->checkin_time)
+                                            <span class="text-xs text-blue-600 font-medium">Sedang KBM</span>
+                                        @else
+                                            <span class="font-mono text-xs text-slate-400">-</span>
+                                        @endif
                                     </td>
                                     <td class="text-center">
-                                        <span class="status-badge status-hadir">
-                                            <i class="bi bi-check-circle-fill"></i> {{ $hist['status'] }}
-                                        </span>
+                                        @if($hist->status === 'Hadir')
+                                            <span class="status-badge status-hadir">
+                                                <i class="bi bi-check-circle-fill"></i> Tepat Waktu
+                                            </span>
+                                        @elseif($hist->status === 'Terlambat')
+                                            <span class="status-badge status-pending">
+                                                <i class="bi bi-clock-history"></i> Terlambat ({{ $hist->late_level }})
+                                            </span>
+                                        @else
+                                            <span class="status-badge status-hadir">
+                                                {{ $hist->status }}
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-8 text-slate-400">
+                                        <i class="bi bi-calendar-x text-3xl block mb-2 text-slate-300"></i>
+                                        Belum ada riwayat rekaman presensi gerbang untuk ananda {{ $studentName }}.
+                                        <p class="text-[11px] text-slate-400 mt-1">Data presensi akan otomatis tercatat setiap kali kartu di-scan oleh petugas di gerbang sekolah.</p>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -134,9 +222,9 @@
                 <div class="bg-gradient-to-br from-rose-700 via-rose-800 to-slate-900 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
                     <!-- School Header -->
                     <div class="flex items-center gap-3 border-b border-white/20 pb-3 mb-4">
-                        <img src="{{ asset('images/logo_sdnkebonagung.jpeg') }}" alt="Logo" class="w-10 h-10 object-contain bg-white rounded-lg p-0.5">
+                        <img src="{{ asset('images/logo_sdnkebonagung.jpeg') }}" alt="Logo" class="w-10 h-10 object-contain bg-white rounded-lg p-0.5 shadow-2xs">
                         <div>
-                            <div class="text-[11px] font-bold uppercase tracking-wider text-rose-200">KARTU TANDA SISWA</div>
+                            <div class="text-[10px] font-bold uppercase tracking-wider text-rose-200">KARTU TANDA SISWA</div>
                             <div class="text-xs font-extrabold tracking-tight">SDN KEBONAGUNG KOTA PASURUAN</div>
                         </div>
                     </div>
@@ -154,43 +242,40 @@
                             @endif
                         </div>
 
-                        <div class="space-y-1.5 text-xs flex-1">
+                        <div class="space-y-1 text-xs flex-1 min-w-0">
                             <div>
-                                <div class="text-[10px] text-rose-200 uppercase font-medium">Nama Siswa</div>
-                                <div class="font-extrabold text-sm tracking-wide">{{ $studentName }}</div>
+                                <div class="text-[9px] text-rose-200 uppercase font-medium">Nama Siswa</div>
+                                <div class="font-extrabold text-sm tracking-wide truncate">{{ $studentName }}</div>
                             </div>
-                            <div class="grid grid-cols-2 gap-2">
+                            <div class="grid grid-cols-2 gap-1">
                                 <div>
-                                    <div class="text-[10px] text-rose-200 uppercase font-medium">NISN</div>
-                                    <div class="font-mono font-bold">{{ $studentNisn }}</div>
+                                    <div class="text-[9px] text-rose-200 uppercase font-medium">NISN</div>
+                                    <div class="font-mono font-bold text-[11px]">{{ $studentNisn }}</div>
                                 </div>
                                 <div>
-                                    <div class="text-[10px] text-rose-200 uppercase font-medium">Rombel</div>
-                                    <div class="font-bold">Kelas {{ $classroomCode }}</div>
+                                    <div class="text-[9px] text-rose-200 uppercase font-medium">Rombel</div>
+                                    <div class="font-bold text-[11px] text-amber-300">Kelas {{ $classroomCode }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Barcode Strip Preview -->
-                    <div class="mt-4 pt-3 border-t border-white/20 bg-white rounded-lg p-2.5 text-center">
-                        <div class="h-8 flex items-center justify-center space-x-1 select-none">
-                            <span class="w-1 h-full bg-slate-900"></span>
-                            <span class="w-0.5 h-full bg-slate-900"></span>
-                            <span class="w-2 h-full bg-slate-900"></span>
-                            <span class="w-1.5 h-full bg-slate-900"></span>
-                            <span class="w-0.5 h-full bg-slate-900"></span>
-                            <span class="w-2 h-full bg-slate-900"></span>
-                            <span class="w-1 h-full bg-slate-900"></span>
-                            <span class="w-0.5 h-full bg-slate-900"></span>
-                            <span class="w-1.5 h-full bg-slate-900"></span>
-                            <span class="w-2 h-full bg-slate-900"></span>
-                            <span class="w-0.5 h-full bg-slate-900"></span>
-                            <span class="w-1 h-full bg-slate-900"></span>
-                            <span class="w-2 h-full bg-slate-900"></span>
-                        </div>
-                        <div class="font-mono text-[10px] font-bold text-slate-800 tracking-widest mt-1">
-                            *{{ $studentNisn }}*
+                    <div class="mt-4 pt-2.5 border-t border-white/20 bg-white rounded-lg p-2 text-center">
+                        @if($barcodeSvg)
+                            <div class="w-full overflow-hidden flex justify-center max-h-7">
+                                {!! $barcodeSvg !!}
+                            </div>
+                        @else
+                            <div class="h-6 flex items-center justify-center space-x-1 select-none">
+                                <span class="w-1 h-full bg-slate-900"></span>
+                                <span class="w-2 h-full bg-slate-900"></span>
+                                <span class="w-0.5 h-full bg-slate-900"></span>
+                                <span class="w-1.5 h-full bg-slate-900"></span>
+                            </div>
+                        @endif
+                        <div class="font-mono text-[9px] font-bold text-slate-800 tracking-widest mt-0.5">
+                            * {{ $studentNisn }} *
                         </div>
                     </div>
 
@@ -199,8 +284,12 @@
                     </div>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <p class="text-xs text-slate-500">Kartu ini dapat digunakan untuk presensi mandiri di gerbang sekolah.</p>
+                <div class="mt-4 space-y-2">
+                    <a href="{{ route('ortu.child.profile') }}" class="btn-primary text-xs w-full py-2 flex items-center justify-center gap-2">
+                        <i class="bi bi-person-vcard"></i>
+                        <span>Lihat Profil Lengkap & Edit Foto</span>
+                    </a>
+                    <p class="text-[11px] text-slate-400 text-center">Kartu digital ini dapat disimpan atau difoto pada HP orang tua jika kartu fisik tertinggal.</p>
                 </div>
             </div>
         </div>

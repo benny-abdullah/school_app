@@ -70,6 +70,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Relasi ke Data Siswa Anak Asuh (Jika User adalah Orang Tua / Wali Murid)
+     */
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class, 'nisn', 'nisn');
+    }
+
+    /**
      * Relasi ke Log Aktivitas yang Dilakukan User
      */
     public function activityLogs(): \Illuminate\Database\Eloquent\Relations\HasMany

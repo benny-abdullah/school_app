@@ -238,7 +238,7 @@ class AttendanceRuleEngineService
 
             // Jika siswa belum tap pagi, tetap dicatat hadir pulang agar tidak alpa sepihak
             if (empty($attendance->checkin_time)) {
-                $attendance->checkin_time = '07:00:00 WIB (KBM)';
+                $attendance->checkin_time = '07:00:00 WIB';
                 $attendance->status = 'Hadir';
                 $attendance->notes = 'Tap Pulang (Hadir KBM)';
             }

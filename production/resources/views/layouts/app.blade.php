@@ -237,6 +237,10 @@
                         <i class="bi bi-house-door text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Dasbor Presensi Anak</span>
                     </a>
+                    <a href="{{ route('ortu.child.profile') }}" class="nav-link {{ request()->routeIs('ortu.child.*') ? 'active' : '' }}">
+                        <i class="bi bi-person-vcard text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Biodata & Profil Anak</span>
+                    </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-file-earmark-medical text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Pengajuan Izin / Sakit</span>
@@ -260,7 +264,7 @@
                     <div class="p-3 bg-rose-50/70 border border-rose-100 rounded-xl text-center">
                         <div class="text-[11px] font-bold text-rose-800">SDN Kebonagung</div>
                         <div class="text-[10px] text-rose-600 mt-0.5">Kota Pasuruan, Jawa Timur</div>
-                        <div class="text-[9px] text-slate-500 mt-2 font-mono">v1.0-prod (Laravel 13)</div>
+                        <div class="text-[9px] text-slate-500 mt-2 font-mono">STAR KIDS v1.0</div>
                     </div>
                 </div>
             </nav>

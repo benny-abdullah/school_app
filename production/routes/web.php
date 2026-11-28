@@ -118,8 +118,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/ai-analytics/save-settings', [\App\Http\Controllers\AiAnalyticsController::class, 'saveSettings'])->name('ai.analytics.settings');
     });
 
-    // Dashboard Orang Tua Murid / Siswa
+    // Dashboard Orang Tua Murid / Siswa & Profil Anak
     Route::middleware('role:orangtua')->group(function () {
         Route::get('/ortu/dashboard', [DashboardController::class, 'orangtua'])->name('ortu.dashboard');
+        Route::get('/ortu/profil-anak', [\App\Http\Controllers\Ortu\ChildProfileController::class, 'show'])->name('ortu.child.profile');
+        Route::post('/ortu/profil-anak/update-photo', [\App\Http\Controllers\Ortu\ChildProfileController::class, 'updatePhoto'])->name('ortu.child.update_photo');
+        Route::delete('/ortu/profil-anak', [\App\Http\Controllers\Ortu\ChildProfileController::class, 'destroy'])->name('ortu.child.destroy');
     });
 });

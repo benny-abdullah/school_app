@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Student;
 use App\Models\User;
+use App\Services\CardService;
 use App\Services\ExportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -230,27 +232,57 @@ class DashboardController extends Controller
     }
 
     /**
-     * Dashboard Portal Orang Tua & Siswa
+     * Dashboard Portal Orang Tua & Siswa (100% Dinamis dari Tabel Attendances & Students)
      */
     public function orangtua()
     {
         $user = Auth::user();
-        $studentInfo = $user->additional_info ?? [];
-        $studentName = $studentInfo['student_name'] ?? 'Ahmad Rifai';
-        $studentNisn = $user->nisn ?? $studentInfo['student_nisn'] ?? '0081234567';
-        $classroomCode = $studentInfo['classroom'] ?? '5A';
+        $studentNisn = $user->nisn ?? ($user->additional_info['student_nisn'] ?? $user->username);
 
-        $classroom = Classroom::where('code', $classroomCode)->first();
-        $student = \App\Models\Student::where('nisn', $studentNisn)->first();
+        $student = Student::with(['classroom', 'todayAttendance.operator'])
+            ->where('nisn', $studentNisn)
+            ->first();
 
-        // Riwayat kehadiran 5 hari terakhir siswa bersangkutan
-        $attendanceHistory = [
-            ['date' => 'Hari Ini (Jumat, 28 Nov 2026)', 'checkin' => '06:42:15 WIB', 'checkout' => 'Sedang KBM', 'status' => 'Hadir Tepat Waktu', 'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['date' => 'Kamis, 27 Nov 2026', 'checkin' => '06:38:40 WIB', 'checkout' => '12:35:10 WIB', 'status' => 'Hadir Lengkap', 'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['date' => 'Rabu, 26 Nov 2026', 'checkin' => '06:45:02 WIB', 'checkout' => '12:32:44 WIB', 'status' => 'Hadir Lengkap', 'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['date' => 'Selasa, 25 Nov 2026', 'checkin' => '06:50:18 WIB', 'checkout' => '12:30:05 WIB', 'status' => 'Hadir Lengkap', 'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-            ['date' => 'Senin, 24 Nov 2026', 'checkin' => '06:32:11 WIB', 'checkout' => '12:40:22 WIB', 'status' => 'Hadir (Upacara Bendera)', 'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
-        ];
+        // Fallback jika belum terikat
+        if (!$student && isset($user->additional_info['student_name'])) {
+            $student = Student::with(['classroom', 'todayAttendance.operator'])
+                ->where('name', $user->additional_info['student_name'])
+                ->first();
+        }
+
+        if (!$student) {
+            $student = Student::with(['classroom', 'todayAttendance.operator'])->first();
+        }
+
+        $studentName = $student?->name ?? 'Ananda';
+        $studentNisn = $student?->nisn ?? '-';
+        $classroom = $student?->classroom;
+        $classroomCode = $classroom?->code ?? '-';
+
+        // 1. Presensi Riil Hari Ini
+        $todayAttendance = $student 
+            ? Attendance::where('student_id', $student->id)
+                ->whereDate('date', Carbon::today('Asia/Jakarta'))
+                ->first()
+            : null;
+
+        // 2. Riwayat Kehadiran Riil Siswa (Paling Baru)
+        $attendanceHistory = $student 
+            ? Attendance::where('student_id', $student->id)
+                ->orderBy('date', 'desc')
+                ->orderBy('checkin_time', 'desc')
+                ->take(7)
+                ->get()
+            : collect();
+
+        // 3. Statistik Kehadiran Siswa
+        $totalScanned = $student ? Attendance::where('student_id', $student->id)->count() : 0;
+        $totalOntime = $student ? Attendance::where('student_id', $student->id)->where('status', 'Hadir')->where('late_level', 'T-0')->count() : 0;
+        $attendanceRate = $totalScanned > 0 ? round(($totalOntime / $totalScanned) * 100, 1) : 100;
+
+        // 4. Pratinjau Kartu Siswa Digital CR-80
+        $barcodeSvg = $student ? CardService::generateBarcodeSvg($student->nisn) : null;
+        $qrCodeSvg = $student ? CardService::generateQrCodeSvg(CardService::getStudentPayload($student)) : null;
 
         return view('ortu.dashboard', compact(
             'user',
@@ -259,7 +291,12 @@ class DashboardController extends Controller
             'studentNisn',
             'classroomCode',
             'classroom',
-            'attendanceHistory'
+            'todayAttendance',
+            'attendanceHistory',
+            'attendanceRate',
+            'totalScanned',
+            'barcodeSvg',
+            'qrCodeSvg'
         ));
     }
 }

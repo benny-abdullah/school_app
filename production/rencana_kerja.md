@@ -124,9 +124,14 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] **Dashboard Operator**: Status 29 kelas lengkap, siswa aktif, shortcut cetak kartu CR-80, scanner gerbang
     - [x] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi siswa 5A realtime, tombol scanner kamera
     - [x] Fitur Ekspor Presensi Kelas Binaan Guru (Download PDF Jurnal Presensi Harian & Download Excel .xlsx untuk Guru/Wali Kelas)
-    - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
+    - [x] **Dashboard Orang Tua**: Terkoneksi 100% dinamis ke basis data riil tabel `attendances` (menghapus data dummy statis; menampilkan status `--:--:-- WIB` & "Belum Melakukan Presensi" jika anak belum tap gerbang, serta jam tap aktual & riwayat presensi riil).
   - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
   - [x] Halaman & Menu Lihat Profil Pengguna Terintegrasi untuk 4 Role (Admin, Operator, Guru, Orang Tua) beserta fitur pembaruan kontak & sandi
+  - [x] **Modul Biodata & Profil Anak (Khusus Role Orang Tua / Wali Murid)**:
+    - [x] Halaman Detail Biodata Lengkap Anak: Informasi identitas resmi Dapodik (Nama, NISN 10 digit, NIS, Rombel, Wali Kelas & Kontak WA, TTL, Agama, Alamat Domisili, Saldo Poin Tatib, dan Pratinjau Kartu Pelajar Digital ISO CR-80).
+    - [x] Fitur Edit & Unggah Pas Foto Anak: Orang tua berhak mengunggah foto resmi ananda terbaru (JPG/JPEG/PNG/WebP maks 2MB, live preview, tersimpan ke storage publik).
+    - [x] Proteksi Integritas Data Pokok (*Read-Only*): Field identitas akademik vital (NISN, Nama, Rombel, TTL, Poin Tatib) dikunci dan hanya dapat diubah oleh Operator Sekolah/Admin Dapodik.
+    - [x] Proteksi Anti-Hapus & Keamanan Akses (*Strict Zero-IDOR & Forbidden Delete*): Orang tua dilarang keras menghapus data anaknya (tombol hapus ditiadakan di antarmuka orang tua dan endpoint delete diproteksi 403 Forbidden). Orang tua hanya dapat melihat dan memperbarui foto anak kandungnya sendiri.
 - [x] **3.4 Master CRUD Admin & Operator: GTK, Manajemen Akun Pengguna & Log Aktifitas Sistem**
   - [x] **Master Data GTK (Guru & Tenaga Kependidikan)**:
     - [x] Akses untuk Operator & Admin (Supervisi Kepala Sekolah)
