@@ -54,42 +54,51 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [ ] Model `Student`, `Teacher`, `Attendance`, `GatePass`, `DisciplineViolation`, `StudentMerit`, `WhistleblowerReport`
   - [ ] Trait `HasUuids` (UUIDv7 berurutan berbasis waktu untuk performa indeks tinggi)
   - [ ] Local Query Scopes per Role (`scopeForUserRole`, `scopeActiveToday`)
-- [x] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
-  - [x] Seeder 4 Akun Role Demo Siap Uji Login:
-    - [x] Role `admin`: Login NIP / Username `198708222019031004`, Password `198708222019031004` (WAHYU AGUNG SETIYAWAN S.Pd - Kepala Sekolah)
-    - [x] Role `operator`: Login NIP/NUPTK `198504202008011005`, Password NIP `198504202008011005` (Siti Aminah S.Kom - Operator Dapodik/TU)
-    - [x] Role `guru/walikelas`: Login NIP/NUPTK `198007152006041012`, Password NIP `198007152006041012` (Bambang S.Pd - Wali Kelas 5A)
-    - [x] Role `orangtua`: Login NISN Anak `0081234567`, Password NISN `0081234567` (Bpk. Hendra - Wali Murid Ahmad Rifai Kelas 5A)
-  - [x] Seeder Master GTK (Guru Kelas 1 s/d 6 sebanyak 29 guru ber-NIP resmi, Guru Mapel, Operator TU, Kepala Sekolah)
-  - [x] Seeder Master 29 Rombel Kelas Lengkap:
+- [x] **2.3 Database Seeder & Impor Data Riil Dapodik (SDN Kebonagung Kota Pasuruan)**
+  - [x] Impor Data Resmi 40 GTK (Guru & Tenaga Kependidikan) dari berkas `data Guru dan pegawai SDN Kebonagung.xlsx`:
+    - [x] Kepala Sekolah: Wahyu Agung Setiyawan, S.Pd. (NIP `198708222019031004`, Role: `admin`)
+    - [x] 28 Wali Kelas resmi untuk kelas 1A s/d 6E (Role: `guru/walikelas`)
+    - [x] Guru Mapel PAI & PJOK (Role: `guru/walikelas`)
+    - [x] Tenaga Kependidikan TU & PPSD/Satpam (Role: `operator`)
+    - [x] Pembuatan akun login otomatis dengan Username = NIP 18 digit dan Password default = NIP
+  - [x] Sinkronisasi 28 Rombongan Belajar Resmi SDN Kebonagung (1A s/d 6E):
     - [x] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
-    - [x] Tingkat 2 (5 Kelas): `2A`, `2B`, `2C`, `2D`, `2E`
+    - [x] Tingkat 2 (4 Kelas): `2A`, `2B`, `2C`, `2D`
     - [x] Tingkat 3 (5 Kelas): `3A`, `3B`, `3C`, `3D`, `3E`
     - [x] Tingkat 4 (5 Kelas): `4A`, `4B`, `4C`, `4D`, `4E`
     - [x] Tingkat 5 (5 Kelas): `5A`, `5B`, `5C`, `5D`, `5E`
     - [x] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
-  - [x] Seeder Siswa & Wali Murid Binaan SDN Kebonagung (Ahmad Rifai NISN `0081234567` dkk)
-  - [ ] Seeder Preset Aturan Poin Pelanggaran & Poin Prestasi
-- [x] **2.4 Master CRUD 29 Rombel Kelas & Relasi Data Guru/Wali Kelas (Operator & Admin)**
+    - [x] Keterhubungan relasi `homeroom_teacher_id` ke tabel `users` 100% lengkap tanpa orphan
+  - [x] Impor Data Resmi 791 Siswa Aktif dari berkas `data siswa sdn kebonagung 791.xlsx`:
+    - [x] Validasi 10 digit NISN unik resmi Kemdikbud (0 duplikasi)
+    - [x] Penyesuaian kolom: Penambahan kolom `religion` (Agama: Islam, Kristen, Hindu) pada tabel `students`
+    - [x] Parser cerdas tanggal lahir (mendukung format ISO YYYY-MM-DD, serial angka Excel, dan DD/MM/YYYY)
+    - [x] Relasi langsung ke rombel `classroom_id` yang sesuai
+    - [x] Pembersihan nomor kontak orang tua / WhatsApp
+  - [x] Pembuatan 791 Akun Pengguna Orang Tua (`role: orangtua`) di tabel `users` dengan kredensial Login Username = NISN dan Password = NISN
+  - [x] Rekalkulasi kapasitas dan jumlah siswa riil di setiap kelas (`total_students` terisi 26-32 siswa)
+- [x] **2.4 Master CRUD 28 Rombel Kelas & Relasi Data Guru/Wali Kelas (Operator & Admin)**
   - [x] Relasi Skema Basis Data: Penambahan foreign key `homeroom_teacher_id` pada tabel `classrooms` yang merujuk langsung ke tabel data Guru/GTK
   - [x] Relasi Eloquent Dua Arah: `Classroom::belongsTo(User::class, 'homeroom_teacher_id')` dan `User::hasOne(Classroom::class, 'homeroom_teacher_id')`
   - [x] Wewenang Role Operator (Tata Usaha): Form edit teknis rombel (pengaturan kuota daya tampung maks 32, penamaan ruang kelas, tahun ajaran aktif)
-  - [x] Wewenang Role Admin (Kepala Sekolah): Modul SK Penugasan Wali Kelas resmi (menetapkan dan merotasi guru pengampu 29 rombel 1A s/d 6E)
+  - [x] Wewenang Role Admin (Kepala Sekolah): Modul SK Penugasan Wali Kelas resmi (menetapkan dan merotasi guru pengampu 28 rombel 1A s/d 6E)
   - [x] Antarmuka CRUD Rombel Interaktif: Tabel direktori rombel, filter tingkat 1 s/d 6, metrik kuota dan kapasitas kelas
-  - [x] Fitur Tambah Rombel Baru (`create` & `store`): Pendaftaran kelas baru jika terjadi pemekaran/penambahan rombel PPDB (misal: Kelas 1E) lengkap dengan *live preview* kode dan nama rombel otomatis
+  - [x] Fitur Tambah Rombel Baru (`create` & `store`): Pendaftaran kelas baru jika terjadi pemekaran/penambahan rombel PPDB lengkap dengan *live preview* kode dan nama rombel otomatis
   - [x] Fitur Hapus Rombel Aman (`destroy`): Proteksi *Anti-Orphan Siswa* (sistem melarang keras penghapusan kelas jika masih berisi siswa aktif; siswa wajib dimutasikan terlebih dahulu) dan pelepasan SK wali kelas otomatis
   - [x] Integrasi Dropdown Dinamis Terpusat: Seluruh *dropdown list* pada formulir pendaftaran siswa, mutasi kelas, filter direktori, dan profil GTK otomatis tersinkron saat rombel ditambah/diedit
   - [x] Validasi Anti-Bentrok Penugasan: 1 guru hanya boleh mengampu 1 rombel (sistem otomatis memutasi penugasan jika guru dipindahkan antar-kelas)
   - [x] Sinkronisasi Otomatis ke Dasbor Guru: Guru yang login langsung terhubung ke rombel asuhannya secara dinamis dari basis data relasional
   - [x] Fitur Ekspor Master Rombel (Download PDF & Download Excel .xlsx untuk Operator & Admin)
 - [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
-  - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
-  - [x] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
+  - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Religion, TTL, Ortu, No WA, Alamat, Poin Tatib, Status)
+  - [x] Form CRUD Master Siswa yang Disesuaikan: Form tambah siswa & edit biodata lengkap dengan input Agama (Islam, Kristen, Katolik, Hindu, Buddha, Konghucu), NISN 10 digit, nomor kontak ortu/WA
+  - [x] Halaman Detail Siswa Lengkap (`show.blade.php`): Informasi agama, kontak wali, riwayat kelas, dan status keaktifan
   - [x] Fitur Unggah Berkas Pas Foto Siswa (JPEG/PNG/WebP maks 2MB, live preview & penyimpanan storage public)
   - [x] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & sinkronisasi otomatis kapasitas
   - [x] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
-  - [x] Filter Cerdas Direktori Siswa (Pencarian nama/NISN, Filter 29 Rombel, Status Kesiswaan, Gender)
+  - [x] Filter Cerdas Direktori Siswa (Pencarian nama/NISN, Filter 28 Rombel, Status Kesiswaan, Gender)
   - [x] Fitur Ekspor Data Siswa (Download PDF Rekap Buku Induk & Download Excel .xlsx untuk Operator & Admin)
+  - [x] Panel Statistik Interaktif & Card Info di Dasbor Eksekutif (Chart Distribusi Rombel, Rasio Gender Siswa 411 L / 380 P, Status GTK PNS/PPPK, dan Daya Tampung Kuota)
 
 ---
 

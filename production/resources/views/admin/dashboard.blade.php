@@ -122,6 +122,93 @@
         </div>
     </div>
 
+    <!-- Statistik Interaktif & Grafik Chart.js Dapodik (Tahap 2) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Grafik 1: Distribusi Siswa di 28 Rombel (8 Kolom) -->
+        <div class="lg:col-span-8 card p-5 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                        <i class="bi bi-bar-chart-line-fill text-rose-600"></i> Distribusi Siswa Riil di 28 Rombel
+                    </h3>
+                    <p class="text-xs text-slate-500">Jumlah peserta didik per rombongan belajar (Tingkat 1A s/d 6E)</p>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                    Total {{ number_format($totalStudents) }} Siswa
+                </span>
+            </div>
+
+            <!-- Canvas Chart -->
+            <div class="h-64 sm:h-72 w-full">
+                <canvas id="rombelBarChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Grafik 2: Komposisi Gender & Kuota Sekolah (4 Kolom) -->
+        <div class="lg:col-span-4 space-y-4">
+            <!-- Doughnut Chart Gender Siswa -->
+            <div class="card p-5 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <h3 class="text-xs font-extrabold text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                        <i class="bi bi-pie-chart-fill text-indigo-600"></i> Rasio Gender Siswa
+                    </h3>
+                    <span class="text-[11px] font-mono font-bold text-slate-500">791 Siswa</span>
+                </div>
+
+                <div class="h-44 w-full flex items-center justify-center">
+                    <canvas id="genderDoughnutChart"></canvas>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-center">
+                    <div class="p-2 rounded-xl bg-blue-50/70 border border-blue-100">
+                        <span class="text-[10px] font-bold text-blue-700 uppercase">Laki-Laki</span>
+                        <div class="text-lg font-black text-blue-900">{{ $genderStats['male'] }}</div>
+                        <span class="text-[10px] text-blue-600 font-semibold">{{ round($genderStats['male'] / max(1, $totalStudents) * 100, 1) }}%</span>
+                    </div>
+                    <div class="p-2 rounded-xl bg-pink-50/70 border border-pink-100">
+                        <span class="text-[10px] font-bold text-pink-700 uppercase">Perempuan</span>
+                        <div class="text-lg font-black text-pink-900">{{ $genderStats['female'] }}</div>
+                        <span class="text-[10px] text-pink-600 font-semibold">{{ round($genderStats['female'] / max(1, $totalStudents) * 100, 1) }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Card Daya Tampung Kuota Sekolah -->
+            <div class="card p-4.5 bg-gradient-to-br from-slate-900 to-slate-800 text-white space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="bi bi-buildings-fill text-amber-400"></i> Kuota & Daya Tampung
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                        {{ $occupancyRate }}% Terisi
+                    </span>
+                </div>
+
+                <div>
+                    <div class="flex items-baseline justify-between text-xs mb-1">
+                        <span class="text-slate-300">Total Terisi:</span>
+                        <span class="font-extrabold text-white font-mono">{{ $totalStudents }} / {{ $totalCapacity }} Kursi</span>
+                    </div>
+                    <!-- Progress Bar Kuota -->
+                    <div class="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                        <div class="bg-gradient-to-r from-emerald-400 to-teal-300 h-2 rounded-full" style="width: {{ $occupancyRate }}%"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-700 text-xs">
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Sisa Kuota:</span>
+                        <span class="font-bold text-amber-300">{{ $totalCapacity - $totalStudents }} Kursi</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block">Kapasitas Maks:</span>
+                        <span class="font-bold text-slate-200">32 Siswa / Kelas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Master Rombel Overview -->
     <div class="card overflow-hidden">
         <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -159,4 +246,86 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ChartClass = window.Chart;
+    if (!ChartClass) return;
+
+    // 1. Bar Chart: Distribusi 28 Rombel
+    const ctxBar = document.getElementById('rombelBarChart');
+    if (ctxBar) {
+        new ChartClass(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: @json($rombelLabels),
+                datasets: [{
+                    label: 'Jumlah Siswa (Kapasitas 32)',
+                    data: @json($rombelData),
+                    backgroundColor: 'rgba(225, 29, 72, 0.8)',
+                    hoverBackgroundColor: '#e11d48',
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw + ' Siswa (Maks 32)';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 35,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { size: 10 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 9, weight: 'bold' } }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. Doughnut Chart: Rasio Gender Siswa
+    const ctxDoughnut = document.getElementById('genderDoughnutChart');
+    if (ctxDoughnut) {
+        new ChartClass(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: ['Laki-Laki', 'Perempuan'],
+                datasets: [{
+                    data: [{{ $genderStats['male'] }}, {{ $genderStats['female'] }}],
+                    backgroundColor: ['#2563eb', '#db2777'],
+                    borderWidth: 3,
+                    borderColor: '#ffffff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 10, font: { size: 10, weight: 'bold' } }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+    }
+});
+</script>
+@endpush
 @endsection

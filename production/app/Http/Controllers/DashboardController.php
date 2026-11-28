@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Classroom;
+use App\Models\Student;
 use App\Models\User;
 use App\Services\ExportService;
 use Carbon\Carbon;
@@ -17,19 +18,45 @@ class DashboardController extends Controller
     public function admin()
     {
         $classrooms = Classroom::orderBy('grade_level')->orderBy('section')->get();
-        $totalStudents = Classroom::sum('total_students');
+        $totalStudents = Student::where('status', 'active')->count();
         $totalClasses = Classroom::count();
         $totalTeachers = User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count();
+        $totalCapacity = Classroom::sum('capacity');
+        $occupancyRate = $totalCapacity > 0 ? round(($totalStudents / $totalCapacity) * 100, 1) : 0;
 
         $currentTimeWib = Carbon::now('Asia/Jakarta')->translatedFormat('l, d F Y - H:i:s') . ' WIB';
 
+        // Statistik Gender Siswa Riil
+        $genderStats = [
+            'male'   => Student::where('gender', 'L')->count(),
+            'female' => Student::where('gender', 'P')->count(),
+        ];
+
+        // Statistik Agama Siswa Riil
+        $religionStats = Student::selectRaw('religion, COUNT(*) as count')
+            ->groupBy('religion')
+            ->orderBy('count', 'desc')
+            ->pluck('count', 'religion')
+            ->toArray();
+
+        // Distribusi 28 Rombel
+        $rombelLabels = $classrooms->pluck('code')->toArray();
+        $rombelData = $classrooms->pluck('total_students')->toArray();
+
+        // Statistik GTK Riil
+        $gtkStats = [
+            'pns'     => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->where('employment_status', 'PNS')->count(),
+            'pppk'    => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->where('employment_status', 'like', 'PPPK%')->count(),
+            'wali'    => Classroom::whereNotNull('homeroom_teacher_id')->count(),
+        ];
+
         $attendanceStats = [
-            'total' => $totalStudents,
-            'present' => round($totalStudents * 0.965),
-            'late' => 4,
+            'total'           => $totalStudents,
+            'present'         => round($totalStudents * 0.965),
+            'late'            => 4,
             'sick_permission' => 12,
-            'absent' => 0,
-            'rate' => 98.4,
+            'absent'          => 0,
+            'rate'            => 98.4,
         ];
 
         return view('admin.dashboard', compact(
@@ -37,8 +64,15 @@ class DashboardController extends Controller
             'totalStudents',
             'totalClasses',
             'totalTeachers',
+            'totalCapacity',
+            'occupancyRate',
             'currentTimeWib',
-            'attendanceStats'
+            'attendanceStats',
+            'genderStats',
+            'religionStats',
+            'rombelLabels',
+            'rombelData',
+            'gtkStats'
         ));
     }
 
@@ -55,8 +89,20 @@ class DashboardController extends Controller
         }
         $classrooms = $query->get();
 
-        $totalStudents = Classroom::sum('total_students');
+        $totalStudents = Student::where('status', 'active')->count();
         $totalClasses = Classroom::count();
+        $totalGtk = User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count();
+        $totalCapacity = Classroom::sum('capacity');
+
+        // Statistik Gender Siswa
+        $genderStats = [
+            'male'   => Student::where('gender', 'L')->count(),
+            'female' => Student::where('gender', 'P')->count(),
+        ];
+
+        $allClassrooms = Classroom::orderBy('grade_level')->orderBy('section')->get();
+        $rombelLabels = $allClassrooms->pluck('code')->toArray();
+        $rombelData = $allClassrooms->pluck('total_students')->toArray();
 
         // Breakdown per tingkat
         $gradeCounts = Classroom::selectRaw('grade_level, COUNT(*) as total_classes, SUM(total_students) as students_count')
@@ -68,6 +114,11 @@ class DashboardController extends Controller
             'classrooms',
             'totalStudents',
             'totalClasses',
+            'totalGtk',
+            'totalCapacity',
+            'genderStats',
+            'rombelLabels',
+            'rombelData',
             'gradeCounts',
             'selectedGrade'
         ));

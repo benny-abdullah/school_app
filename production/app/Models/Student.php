@@ -18,6 +18,7 @@ class Student extends Model
         'classroom_id',
         'birth_place',
         'birth_date',
+        'religion',
         'address',
         'guardian_name',
         'guardian_relation',

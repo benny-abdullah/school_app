@@ -12,7 +12,7 @@
             </div>
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Master Direktori Siswa</h1>
             <p class="text-xs text-slate-500 mt-1">
-                Kelola data pokok siswa, mutasi 29 rombongan belajar, dan verifikasi kontak orang tua SDN Kebonagung.
+                Kelola data pokok 791 siswa, mutasi 28 rombongan belajar, dan verifikasi kontak orang tua SDN Kebonagung.
             </p>
         </div>
 
@@ -59,7 +59,7 @@
         <div class="card p-4">
             <span class="text-[11px] font-bold text-slate-500 uppercase">Total Rombel</span>
             <div class="mt-2 text-2xl sm:text-3xl font-extrabold text-indigo-600">{{ $stats['total_classes'] }} Kelas</div>
-            <p class="text-[11px] text-indigo-600 font-semibold mt-0.5">1A-1D & 2A-6E</p>
+            <p class="text-[11px] text-indigo-600 font-semibold mt-0.5">1A-1D & 2A-6E (Resmi)</p>
         </div>
     </div>
 
@@ -81,7 +81,7 @@
 
             <!-- Filter Rombel -->
             <div>
-                <label class="block text-[11px] font-bold text-slate-600 mb-1">Filter Rombel (29 Kelas)</label>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Filter Rombel (28 Kelas)</label>
                 <select name="classroom_id" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition">
                     <option value="all">Semua Rombel</option>
                     @foreach($classrooms as $c)
@@ -171,7 +171,7 @@
                                     <div>
                                         <div class="font-bold text-slate-900">{{ $s->name }}</div>
                                         <div class="text-[11px] text-slate-400">
-                                            {{ $s->birth_place ? $s->birth_place . ', ' : '' }}{{ $s->birth_date ? $s->birth_date->translatedFormat('d M Y') : '-' }}
+                                            {{ $s->birth_place ? $s->birth_place . ', ' : '' }}{{ $s->birth_date ? $s->birth_date->translatedFormat('d M Y') : '-' }} &bull; <span class="font-semibold text-slate-600">{{ $s->religion ?? 'Islam' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -218,6 +218,34 @@
                             </td>
                             <td class="text-center">
                                 <div class="flex items-center justify-center gap-1.5">
+                                    <!-- Detail Modal Trigger -->
+                                    <button type="button" 
+                                        onclick="showStudentDetail({{ json_encode([
+                                            'id' => $s->id,
+                                            'name' => $s->name,
+                                            'nisn' => $s->nisn,
+                                            'nis' => $s->nis ?? '-',
+                                            'gender' => $s->gender == 'L' ? 'Laki-Laki' : 'Perempuan',
+                                            'religion' => $s->religion ?? 'Islam',
+                                            'classroom' => $s->classroom->code ?? '-',
+                                            'homeroom' => $s->classroom->homeroom_teacher ?? '-',
+                                            'birth_place' => $s->birth_place ?? '-',
+                                            'birth_date' => $s->birth_date ? $s->birth_date->translatedFormat('d F Y') : '-',
+                                            'address' => $s->address ?? 'Alamat belum diisi',
+                                            'guardian_name' => $s->guardian_name ?? '-',
+                                            'guardian_relation' => $s->guardian_relation ?? 'Orang Tua / Wali',
+                                            'guardian_phone' => $s->guardian_phone ?? '-',
+                                            'point_balance' => $s->point_balance,
+                                            'status' => ucfirst($s->status),
+                                            'photo' => $s->photo ? asset('storage/' . $s->photo) : null,
+                                            'edit_url' => route('operator.students.edit', $s->id),
+                                            'card_url' => route('cards.print.single', $s->id),
+                                        ]) }})"
+                                        title="Lihat Detail Siswa"
+                                        class="p-1.5 bg-slate-100 hover:bg-slate-200 hover:text-slate-900 rounded-lg transition text-slate-600">
+                                        <i class="bi bi-eye text-sm"></i>
+                                    </button>
+
                                     <!-- Edit & Mutasi Button -->
                                     <a href="{{ route('operator.students.edit', $s->id) }}" title="Edit Data & Mutasi Rombel" 
                                         class="p-1.5 bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition text-slate-600">
@@ -256,4 +284,174 @@
         @endif
     </div>
 </div>
+
+<!-- Modal Detail Biodata Siswa -->
+<div id="studentDetailModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                    <i class="bi bi-person-vcard text-lg"></i>
+                </span>
+                <div>
+                    <h3 class="text-sm font-extrabold text-slate-900">Biodata Lengkap Peserta Didik</h3>
+                    <p class="text-[11px] text-slate-500">Buku Induk & Basis Data Siswa SDN Kebonagung</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition">
+                <i class="bi bi-x-lg text-sm"></i>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+            <!-- Profile Overview Card -->
+            <div class="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+                <div id="mPhotoContainer" class="w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-xs flex-shrink-0 bg-rose-100 text-rose-700 font-extrabold text-xl flex items-center justify-center">
+                    <span id="mAvatarInitial">S</span>
+                    <img id="mAvatarImg" src="" alt="Foto Siswa" class="w-full h-full object-cover hidden">
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h4 id="mName" class="text-base font-extrabold text-slate-900 truncate">Nama Siswa</h4>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span id="mClassroom" class="px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">Kelas 1A</span>
+                        <span id="mStatusBadge" class="status-badge status-active text-[10px]">Aktif</span>
+                    </div>
+                    <div class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                        <i class="bi bi-person-badge text-slate-400"></i>
+                        <span id="mHomeroom" class="truncate">Wali Kelas: -</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Grid -->
+            <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">NISN Resmi</span>
+                    <span id="mNisn" class="font-mono font-extrabold text-slate-900 text-sm mt-0.5 block">0012345678</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Nomor Induk (NIS)</span>
+                    <span id="mNis" class="font-mono font-bold text-slate-700 mt-0.5 block">-</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Jenis Kelamin</span>
+                    <span id="mGender" class="font-semibold text-slate-800 mt-0.5 block">Laki-Laki</span>
+                </div>
+                <div class="p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Agama</span>
+                    <span id="mReligion" class="font-semibold text-slate-800 mt-0.5 block">Islam</span>
+                </div>
+                <div class="col-span-2 p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Tempat & Tanggal Lahir</span>
+                    <span id="mTtl" class="font-semibold text-slate-800 mt-0.5 block">Pasuruan, 12 Januari 2017</span>
+                </div>
+                <div class="col-span-2 p-3 rounded-xl bg-white border border-slate-200/70">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Alamat Domisili Siswa</span>
+                    <span id="mAddress" class="font-medium text-slate-700 mt-0.5 block">Jl. Kebonagung No. 1</span>
+                </div>
+            </div>
+
+            <!-- Guardian & Parent Portal Info -->
+            <div class="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200/70 space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                        <i class="bi bi-people-fill text-emerald-600"></i> Data Wali Murid & Akun Portal
+                    </span>
+                    <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Login: NISN</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs pt-1">
+                    <div>
+                        <span class="text-[10px] text-slate-500 block">Nama Wali:</span>
+                        <span id="mGuardianName" class="font-bold text-slate-800 block">-</span>
+                        <span id="mGuardianRelation" class="text-[10px] text-slate-500">Orang Tua</span>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-500 block">Kontak WhatsApp:</span>
+                        <div id="mGuardianPhoneWrapper" class="mt-0.5">
+                            <span id="mGuardianPhone" class="font-bold text-slate-800">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-2">
+            <button type="button" onclick="closeStudentModal()" class="btn-outline text-xs px-4 py-2">
+                Tutup
+            </button>
+            <div class="flex items-center gap-2">
+                <a id="mCardBtn" href="#" target="_blank" class="btn-primary text-xs px-3.5 py-2 flex items-center gap-1.5 shadow-xs">
+                    <i class="bi bi-person-badge-fill"></i>
+                    <span>Cetak Kartu Siswa</span>
+                </a>
+                <a id="mEditBtn" href="#" class="btn-outline-primary text-xs px-3.5 py-2 flex items-center gap-1.5">
+                    <i class="bi bi-pencil-square"></i>
+                    <span>Edit / Mutasi</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function showStudentDetail(data) {
+    document.getElementById('mName').textContent = data.name;
+    document.getElementById('mNisn').textContent = data.nisn;
+    document.getElementById('mNis').textContent = data.nis;
+    document.getElementById('mGender').textContent = data.gender;
+    document.getElementById('mReligion').textContent = data.religion;
+    document.getElementById('mClassroom').textContent = 'Kelas ' + data.classroom;
+    document.getElementById('mHomeroom').textContent = 'Wali Kelas: ' + data.homeroom;
+    document.getElementById('mTtl').textContent = data.birth_place + ', ' + data.birth_date;
+    document.getElementById('mAddress').textContent = data.address;
+    document.getElementById('mGuardianName').textContent = data.guardian_name;
+    document.getElementById('mGuardianRelation').textContent = data.guardian_relation;
+    document.getElementById('mStatusBadge').textContent = data.status;
+
+    // Contact link
+    const phoneWrapper = document.getElementById('mGuardianPhoneWrapper');
+    if (data.guardian_phone && data.guardian_phone !== '-') {
+        const cleanPhone = data.guardian_phone.replace(/[^0-9]/g, '');
+        phoneWrapper.innerHTML = `<a href="https://wa.me/${cleanPhone}" target="_blank" class="text-xs text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1"><i class="bi bi-whatsapp"></i> ${data.guardian_phone}</a>`;
+    } else {
+        phoneWrapper.innerHTML = `<span class="text-xs text-slate-400">Belum terdata</span>`;
+    }
+
+    // Photo
+    const avatarImg = document.getElementById('mAvatarImg');
+    const avatarInitial = document.getElementById('mAvatarInitial');
+    if (data.photo) {
+        avatarImg.src = data.photo;
+        avatarImg.classList.remove('hidden');
+        avatarInitial.classList.add('hidden');
+    } else {
+        avatarImg.classList.add('hidden');
+        avatarInitial.classList.remove('hidden');
+        avatarInitial.textContent = data.name.charAt(0).toUpperCase();
+    }
+
+    // Action links
+    document.getElementById('mEditBtn').href = data.edit_url;
+    document.getElementById('mCardBtn').href = data.card_url;
+
+    // Show modal
+    document.getElementById('studentDetailModal').classList.remove('hidden');
+}
+
+function closeStudentModal() {
+    document.getElementById('studentDetailModal').classList.add('hidden');
+}
+
+// Close when clicking outside modal box
+document.getElementById('studentDetailModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeStudentModal();
+    }
+});
+</script>
+@endpush
 @endsection

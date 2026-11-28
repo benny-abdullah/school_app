@@ -55,7 +55,7 @@ class GtkController extends Controller
             'total_gtk'        => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count(),
             'total_guru_kelas' => Classroom::whereNotNull('homeroom_teacher_id')->count(),
             'total_pns'        => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->where('employment_status', 'PNS')->count(),
-            'total_pppk'       => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->where('employment_status', 'PPPK')->count(),
+            'total_pppk'       => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->where('employment_status', 'like', 'PPPK%')->count(),
             'total_honorer'    => User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->whereIn('employment_status', ['GTT', 'PTT', 'Honorer'])->count(),
         ];
 
