@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,6 +54,14 @@ class User extends Authenticatable
             'password' => 'hashed',
             'additional_info' => 'array',
         ];
+    }
+
+    /**
+     * Relasi ke Rombel yang Diampu (Jika User adalah Wali Kelas)
+     */
+    public function homeroomClassroom(): HasOne
+    {
+        return $this->hasOne(Classroom::class, 'homeroom_teacher_id');
     }
 
     /**

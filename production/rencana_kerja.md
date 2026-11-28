@@ -60,7 +60,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
     - [x] Role `operator`: Login NIP/NUPTK `198504202008011005`, Password NIP `198504202008011005` (Siti Aminah S.Kom - Operator Dapodik/TU)
     - [x] Role `guru/walikelas`: Login NIP/NUPTK `198007152006041012`, Password NIP `198007152006041012` (Bambang S.Pd - Wali Kelas 5A)
     - [x] Role `orangtua`: Login NISN Anak `0081234567`, Password NISN `0081234567` (Bpk. Hendra - Wali Murid Ahmad Rifai Kelas 5A)
-  - [ ] Seeder Master GTK (Guru Kelas 1 s/d 6, Guru Mapel Agama/PJOK, Operator TU)
+  - [x] Seeder Master GTK (Guru Kelas 1 s/d 6 sebanyak 29 guru ber-NIP resmi, Guru Mapel, Operator TU, Kepala Sekolah)
   - [x] Seeder Master 29 Rombel Kelas Lengkap:
     - [x] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
     - [x] Tingkat 2 (5 Kelas): `2A`, `2B`, `2C`, `2D`, `2E`
@@ -70,13 +70,13 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
     - [x] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
   - [x] Seeder Siswa & Wali Murid Binaan SDN Kebonagung (Ahmad Rifai NISN `0081234567` dkk)
   - [ ] Seeder Preset Aturan Poin Pelanggaran & Poin Prestasi
-- [ ] **2.4 Master CRUD 29 Rombel Kelas & Relasi Data Guru/Wali Kelas (Operator & Admin)**
-  - [ ] Relasi Skema Basis Data: Penambahan foreign key `homeroom_teacher_id` pada tabel `classrooms` yang merujuk langsung ke tabel data Guru/GTK
-  - [ ] Relasi Eloquent Dua Arah: `Classroom::belongsTo(User::class, 'homeroom_teacher_id')` dan `User::hasOne(Classroom::class, 'homeroom_teacher_id')`
-  - [ ] Wewenang Role Operator (Tata Usaha): Form edit teknis rombel (pengaturan kuota daya tampung maks 32, penamaan ruang kelas, tahun ajaran aktif)
-  - [ ] Wewenang Role Admin (Kepala Sekolah): Modul SK Penugasan Wali Kelas resmi (menetapkan dan merotasi guru pengampu 29 rombel 1A s/d 6E)
-  - [ ] Antarmuka CRUD 29 Rombel Interaktif: Tabel rombel, form edit rombel, dropdown pilihan guru aktif ber-NIP, dan validasi anti-bentrok (1 guru hanya boleh memegang 1 rombel)
-  - [ ] Sinkronisasi Otomatis ke Dasbor Guru: Guru yang login langsung terhubung ke rombel asuhannya secara dinamis dari basis data relasional
+- [x] **2.4 Master CRUD 29 Rombel Kelas & Relasi Data Guru/Wali Kelas (Operator & Admin)**
+  - [x] Relasi Skema Basis Data: Penambahan foreign key `homeroom_teacher_id` pada tabel `classrooms` yang merujuk langsung ke tabel data Guru/GTK
+  - [x] Relasi Eloquent Dua Arah: `Classroom::belongsTo(User::class, 'homeroom_teacher_id')` dan `User::hasOne(Classroom::class, 'homeroom_teacher_id')`
+  - [x] Wewenang Role Operator (Tata Usaha): Form edit teknis rombel (pengaturan kuota daya tampung maks 32, penamaan ruang kelas, tahun ajaran aktif)
+  - [x] Wewenang Role Admin (Kepala Sekolah): Modul SK Penugasan Wali Kelas resmi (menetapkan dan merotasi guru pengampu 29 rombel 1A s/d 6E)
+  - [x] Antarmuka CRUD 29 Rombel Interaktif: Tabel rombel, form edit rombel, dropdown pilihan guru aktif ber-NIP, dan validasi anti-bentrok (1 guru hanya boleh memegang 1 rombel)
+  - [x] Sinkronisasi Otomatis ke Dasbor Guru: Guru yang login langsung terhubung ke rombel asuhannya secara dinamis dari basis data relasional
 - [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
   - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
   - [x] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA

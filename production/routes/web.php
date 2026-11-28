@@ -51,6 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:operator,admin')->group(function () {
         Route::get('/operator/dashboard', [DashboardController::class, 'operator'])->name('operator.dashboard');
 
+        // Master CRUD 29 Rombel Kelas & Relasi Wali Kelas (Operator & Admin)
+        Route::get('/operator/classrooms', [\App\Http\Controllers\ClassroomController::class, 'index'])->name('classrooms.index');
+        Route::get('/operator/classrooms/{classroom}/edit', [\App\Http\Controllers\ClassroomController::class, 'edit'])->name('classrooms.edit');
+        Route::put('/operator/classrooms/{classroom}', [\App\Http\Controllers\ClassroomController::class, 'update'])->name('classrooms.update');
+
         // Master CRUD Data Siswa & Mutasi Rombel
         Route::resource('operator/students', \App\Http\Controllers\Operator\StudentController::class)->names([
             'index'   => 'operator.students.index',
