@@ -55,7 +55,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [ ] Trait `HasUuids` (UUIDv7 berurutan berbasis waktu untuk performa indeks tinggi)
   - [ ] Local Query Scopes per Role (`scopeForUserRole`, `scopeActiveToday`)
 - [ ] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
-  - [ ] Seeder 5 Akun Role Demo (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa)
+  - [ ] Seeder 4 Akun Role Demo: `admin`, `operator`, `guru/walikelas`, `orangtua`
   - [ ] Seeder Master GTK (Guru Kelas, Guru Mapel Agama/PJOK, Tenaga Kependidikan)
   - [ ] Seeder Master 29 Rombel Kelas Lengkap:
     - [ ] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
@@ -77,11 +77,11 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
 
 - [ ] **3.1 Sistem Autentikasi Modern (Direct Login Page)**
   - [ ] Tampilan halaman login langsung (tanpa halaman landing page) dengan gaya HRD Modern Clean White
-  - [ ] Fitur 1-Klik Pemilih Role Demo (Super Admin, Guru, Wali, Ortu, Siswa) untuk pengujian cepat
+  - [ ] Fitur 1-Klik Pemilih Role Demo (Admin, Operator, Guru/Wali Kelas, Orang Tua) untuk pengujian cepat
   - [ ] Validasi keamanan login (Argon2id hashing, Rate Limiting throttler, proteksi Brute Force)
 - [ ] **3.2 RBAC Multi-Role & Middleware Proteksi Data (Zero IDOR)**
-  - [ ] Definisi Laravel Gates & Policies untuk 5 Role
-  - [ ] Middleware `EnforceServerDataScope` (Orang Tua hanya bisa akses anaknya, Wali Kelas hanya rombelnya)
+  - [ ] Definisi Laravel Gates & Policies untuk 4 Role (`admin`, `operator`, `guru/walikelas`, `orangtua`)
+  - [ ] Middleware `EnforceServerDataScope` (Orang Tua hanya bisa akses anaknya, Guru/Wali Kelas hanya rombelnya)
   - [ ] Audit Trail Logger otomatis saat user login, logout, atau mengubah data sensitif
 - [ ] **3.3 Shell Antarmuka Enterprise Clean White (Master Layout)**
   - [ ] Sidebar navigasi vertikal responsif (260px expanded, 68px collapsed mini, drawer mobile overlay)
