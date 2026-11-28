@@ -68,17 +68,17 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
     - [x] Tingkat 4 (5 Kelas): `4A`, `4B`, `4C`, `4D`, `4E`
     - [x] Tingkat 5 (5 Kelas): `5A`, `5B`, `5C`, `5D`, `5E`
     - [x] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
-  - [ ] Seeder Siswa & Wali Murid Binaan SDN Kebonagung (Ahmad Rifai NISN `0081234567` dkk)
+  - [x] Seeder Siswa & Wali Murid Binaan SDN Kebonagung (Ahmad Rifai NISN `0081234567` dkk)
   - [ ] Seeder Preset Aturan Poin Pelanggaran & Poin Prestasi
 - [x] **2.4 Master Data & Manajemen Rombel Kelas (CRUD & Filter 29 Kelas)**
   - [x] Model `Classroom` dengan atribut: `id`, `code`, `name` (1A s/d 6E), `grade_level` (1 s/d 6), `homeroom_teacher`, `homeroom_nip`, `capacity`, `total_students`
   - [x] Antarmuka Manajemen Kelas di Modul Operator & Filter Tab 29 Kelas
-- [ ] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
-  - [ ] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
-  - [ ] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & riwayat mutasi
-  - [ ] Impor Data Siswa Massal: Format Excel / CSV Dapodik dengan validasi duplikasi NISN otomatis
-  - [ ] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
-  - [ ] Pengaturan Kuota & Kapasitas 29 Rombel Kelas (1A s/d 6E)
+- [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
+  - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
+  - [x] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
+  - [x] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & sinkronisasi otomatis kapasitas
+  - [x] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
+  - [x] Filter Cerdas Direktori Siswa (Pencarian nama/NISN, Filter 29 Rombel, Status Kesiswaan, Gender)
 
 ---
 

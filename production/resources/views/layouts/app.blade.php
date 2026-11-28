@@ -119,6 +119,11 @@
                         <i class="bi bi-grid-1x2 text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Dasbor Operator</span>
                     </a>
+                    <a href="{{ route('operator.students.index') }}" class="nav-link {{ request()->routeIs('operator.students.*') ? 'active' : '' }}">
+                        <i class="bi bi-people-fill text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Master Data Siswa</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CRUD</span>
+                    </a>
                     <a href="{{ route('operator.dashboard') }}" class="nav-link {{ request()->routeIs('operator.dashboard') ? 'active' : '' }}">
                         <i class="bi bi-diagram-3 text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Master 29 Rombel</span>

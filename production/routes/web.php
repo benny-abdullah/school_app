@@ -46,6 +46,16 @@ Route::middleware('auth')->group(function () {
     // Dashboard Operator Sekolah & Tata Usaha
     Route::middleware('role:operator')->group(function () {
         Route::get('/operator/dashboard', [DashboardController::class, 'operator'])->name('operator.dashboard');
+
+        // Master CRUD Data Siswa & Mutasi Rombel
+        Route::resource('operator/students', \App\Http\Controllers\Operator\StudentController::class)->names([
+            'index'   => 'operator.students.index',
+            'create'  => 'operator.students.create',
+            'store'   => 'operator.students.store',
+            'edit'    => 'operator.students.edit',
+            'update'  => 'operator.students.update',
+            'destroy' => 'operator.students.destroy',
+        ]);
     });
 
     // Dashboard Guru & Wali Kelas
