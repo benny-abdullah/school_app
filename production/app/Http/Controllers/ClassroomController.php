@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\User;
+use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -36,6 +37,79 @@ class ClassroomController extends Controller
         ];
 
         return view('operator.classrooms.index', compact('classrooms', 'stats', 'selectedGrade'));
+    }
+
+    /**
+     * Ekspor Data Rombel ke PDF Resmi
+     */
+    public function exportPdf(Request $request)
+    {
+        $selectedGrade = $request->get('grade', 'all');
+
+        $query = Classroom::with('homeroomTeacher')->withCount('students')->orderBy('grade_level')->orderBy('section');
+        if ($selectedGrade !== 'all') {
+            $query->where('grade_level', $selectedGrade);
+        }
+        $classrooms = $query->get();
+
+        ActivityLog::record('EXPORT_PDF', 'Master Rombel', 'Mengunduh laporan PDF direktori rombongan belajar (' . $classrooms->count() . ' rombel)');
+
+        return ExportService::pdf('Rekap_Rombel_SDN_Kebonagung_' . date('Ymd_His'), 'exports.classrooms_pdf', compact('classrooms', 'selectedGrade'), 'portrait');
+    }
+
+    /**
+     * Ekspor Data Rombel ke Excel (.xlsx)
+     */
+    public function exportExcel(Request $request)
+    {
+        $selectedGrade = $request->get('grade', 'all');
+
+        $query = Classroom::with('homeroomTeacher')->withCount('students')->orderBy('grade_level')->orderBy('section');
+        if ($selectedGrade !== 'all') {
+            $query->where('grade_level', $selectedGrade);
+        }
+        $classrooms = $query->get();
+
+        $headers = [
+            'no'               => 'No',
+            'code'             => 'Kode Rombel',
+            'name'             => 'Nama Rombel',
+            'grade_level'      => 'Tingkat',
+            'room_name'        => 'Lokasi Ruangan',
+            'homeroom_teacher' => 'Wali Kelas Resmi',
+            'homeroom_nip'     => 'NIP Guru',
+            'students_count'   => 'Siswa Terdaftar',
+            'capacity'         => 'Kapasitas Kuota',
+            'academic_year'    => 'Tahun Ajaran',
+            'status'           => 'Status',
+        ];
+
+        $rows = [];
+        foreach ($classrooms as $idx => $cls) {
+            $rows[] = [
+                'no'               => $idx + 1,
+                'code'             => $cls->code,
+                'name'             => $cls->name,
+                'grade_level'      => 'Kelas ' . $cls->grade_level,
+                'room_name'        => $cls->room_name ?? '-',
+                'homeroom_teacher' => $cls->homeroomTeacher?->name ?? ($cls->homeroom_teacher ?? 'Belum Ada'),
+                'homeroom_nip'     => $cls->homeroomTeacher?->nip_nuptk ?? ($cls->homeroom_nip ?? '-'),
+                'students_count'   => $cls->students_count > 0 ? $cls->students_count : $cls->total_students,
+                'capacity'         => $cls->capacity,
+                'academic_year'    => $cls->academic_year,
+                'status'           => ucfirst($cls->status),
+            ];
+        }
+
+        ActivityLog::record('EXPORT_EXCEL', 'Master Rombel', 'Mengunduh berkas Excel data rombongan belajar (' . $classrooms->count() . ' rombel)');
+
+        return ExportService::excel(
+            'Rekap_Rombel_SDN_Kebonagung_' . date('Ymd_His'),
+            'Rekapitulasi Rombongan Belajar & SK Wali Kelas',
+            'UPTD SDN Kebonagung | Tahun Ajaran 2025/2026 | Total: ' . count($rows) . ' Rombel',
+            $headers,
+            $rows
+        );
     }
 
     /**

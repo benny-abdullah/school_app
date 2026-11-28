@@ -16,7 +16,15 @@
             </p>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.logs.export.pdf', request()->query()) }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-rose-200 text-rose-700 hover:bg-rose-50" target="_blank">
+                <i class="bi bi-file-earmark-pdf-fill text-rose-600"></i>
+                <span>Unduh PDF</span>
+            </a>
+            <a href="{{ route('admin.logs.export.excel', request()->query()) }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+                <i class="bi bi-file-earmark-excel-fill text-emerald-600"></i>
+                <span>Unduh Excel</span>
+            </a>
             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-extrabold">
                 <i class="bi bi-shield-check"></i> Audit Trail Aktif
             </span>

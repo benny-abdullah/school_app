@@ -17,6 +17,14 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('guru.attendance.export.pdf') }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-rose-200 text-rose-700 hover:bg-rose-50" target="_blank">
+                <i class="bi bi-file-earmark-pdf-fill text-rose-600"></i>
+                <span>Unduh PDF</span>
+            </a>
+            <a href="{{ route('guru.attendance.export.excel') }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+                <i class="bi bi-file-earmark-excel-fill text-emerald-600"></i>
+                <span>Unduh Excel</span>
+            </a>
             <button type="button" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
                 <i class="bi bi-camera-fill"></i>
                 <span>Scan Barcode Siswa</span>
@@ -62,8 +70,16 @@
                 <h2 class="text-base font-bold text-slate-900">Daftar Kehadiran Siswa Kelas {{ $classroom->code ?? '5A' }} (Hari Ini)</h2>
                 <p class="text-xs text-slate-500">Status tercatat realtime dari pemindai barcode / gerbang sekolah</p>
             </div>
-            <div class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                <i class="bi bi-calendar-event"></i> Realtime Hari Ini
+            <div class="flex items-center gap-2">
+                <a href="{{ route('guru.attendance.export.pdf') }}" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 flex items-center gap-1" target="_blank" title="Cetak Jurnal PDF">
+                    <i class="bi bi-file-earmark-pdf-fill"></i> PDF
+                </a>
+                <a href="{{ route('guru.attendance.export.excel') }}" class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 flex items-center gap-1" title="Unduh Rekap Excel">
+                    <i class="bi bi-file-earmark-excel-fill"></i> Excel
+                </a>
+                <div class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                    <i class="bi bi-calendar-event"></i> Realtime Hari Ini
+                </div>
             </div>
         </div>
 

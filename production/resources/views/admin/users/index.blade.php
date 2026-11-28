@@ -16,7 +16,15 @@
             </p>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('admin.users.export.pdf', request()->query()) }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-rose-200 text-rose-700 hover:bg-rose-50" target="_blank">
+                <i class="bi bi-file-earmark-pdf-fill text-rose-600"></i>
+                <span>Unduh PDF</span>
+            </a>
+            <a href="{{ route('admin.users.export.excel', request()->query()) }}" class="btn-secondary px-3 py-2 text-xs flex items-center gap-1.5 shadow-xs border border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+                <i class="bi bi-file-earmark-excel-fill text-emerald-600"></i>
+                <span>Unduh Excel</span>
+            </a>
             <a href="{{ route('admin.users.create') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 shadow-xs">
                 <i class="bi bi-person-plus-fill text-sm"></i>
                 <span>Tambah Pengguna Baru</span>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\Student;
+use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -41,6 +42,85 @@ class StudentController extends Controller
         ];
 
         return view('operator.students.index', compact('students', 'classrooms', 'filters', 'stats'));
+    }
+
+    /**
+     * Ekspor Data Siswa ke PDF Resmi
+     */
+    public function exportPdf(Request $request)
+    {
+        $filters = [
+            'search'       => $request->get('search'),
+            'classroom_id' => $request->get('classroom_id', 'all'),
+            'status'       => $request->get('status', 'active'),
+            'gender'       => $request->get('gender', 'all'),
+        ];
+
+        $students = Student::with('classroom')->filter($filters)->orderBy('classroom_id')->orderBy('name')->get();
+        $currentClassroom = ($filters['classroom_id'] !== 'all') ? Classroom::find($filters['classroom_id']) : null;
+
+        ActivityLog::record('EXPORT_PDF', 'Master Siswa', 'Mengunduh laporan PDF data peserta didik (' . $students->count() . ' siswa)');
+
+        return ExportService::pdf('Data_Siswa_SDN_Kebonagung_' . date('Ymd_His'), 'exports.students_pdf', compact('students', 'currentClassroom'), 'landscape');
+    }
+
+    /**
+     * Ekspor Data Siswa ke Excel (.xlsx)
+     */
+    public function exportExcel(Request $request)
+    {
+        $filters = [
+            'search'       => $request->get('search'),
+            'classroom_id' => $request->get('classroom_id', 'all'),
+            'status'       => $request->get('status', 'active'),
+            'gender'       => $request->get('gender', 'all'),
+        ];
+
+        $students = Student::with('classroom')->filter($filters)->orderBy('classroom_id')->orderBy('name')->get();
+        $currentClassroom = ($filters['classroom_id'] !== 'all') ? Classroom::find($filters['classroom_id']) : null;
+
+        $headers = [
+            'no'             => 'No',
+            'nisn'           => 'NISN',
+            'nis'            => 'NIS',
+            'name'           => 'Nama Siswa',
+            'gender'         => 'L/P',
+            'classroom'      => 'Rombel',
+            'birth_info'     => 'Tempat & Tgl Lahir',
+            'guardian_name'  => 'Nama Orang Tua / Wali',
+            'guardian_phone' => 'Kontak WA',
+            'status'         => 'Status Kesiswaan',
+        ];
+
+        $rows = [];
+        foreach ($students as $idx => $s) {
+            $birth = ($s->birth_place || $s->birth_date)
+                ? ($s->birth_place ?? '') . ', ' . ($s->birth_date ? date('d/m/Y', strtotime($s->birth_date)) : '')
+                : '-';
+
+            $rows[] = [
+                'no'             => $idx + 1,
+                'nisn'           => $s->nisn,
+                'nis'            => $s->nis ?? '-',
+                'name'           => $s->name,
+                'gender'         => $s->gender,
+                'classroom'      => $s->classroom->code ?? '-',
+                'birth_info'     => $birth,
+                'guardian_name'  => ($s->guardian_name ?? '-') . ' (' . ($s->guardian_relation ?? 'Wali') . ')',
+                'guardian_phone' => $s->guardian_phone ?? '-',
+                'status'         => ucfirst($s->status),
+            ];
+        }
+
+        ActivityLog::record('EXPORT_EXCEL', 'Master Siswa', 'Mengunduh berkas Excel data peserta didik (' . $students->count() . ' siswa)');
+
+        return ExportService::excel(
+            'Data_Siswa_SDN_Kebonagung_' . date('Ymd_His'),
+            'Daftar Buku Induk Kesiswaan SDN Kebonagung',
+            'Rombel: ' . ($currentClassroom?->name ?? 'Seluruh Kelas') . ' | Total: ' . count($rows) . ' Siswa',
+            $headers,
+            $rows
+        );
     }
 
     /**

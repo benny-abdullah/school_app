@@ -81,6 +81,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [x] Integrasi Dropdown Dinamis Terpusat: Seluruh *dropdown list* pada formulir pendaftaran siswa, mutasi kelas, filter direktori, dan profil GTK otomatis tersinkron saat rombel ditambah/diedit
   - [x] Validasi Anti-Bentrok Penugasan: 1 guru hanya boleh mengampu 1 rombel (sistem otomatis memutasi penugasan jika guru dipindahkan antar-kelas)
   - [x] Sinkronisasi Otomatis ke Dasbor Guru: Guru yang login langsung terhubung ke rombel asuhannya secara dinamis dari basis data relasional
+  - [x] Fitur Ekspor Master Rombel (Download PDF & Download Excel .xlsx untuk Operator & Admin)
 - [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
   - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
   - [x] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
@@ -88,6 +89,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [x] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & sinkronisasi otomatis kapasitas
   - [x] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
   - [x] Filter Cerdas Direktori Siswa (Pencarian nama/NISN, Filter 29 Rombel, Status Kesiswaan, Gender)
+  - [x] Fitur Ekspor Data Siswa (Download PDF Rekap Buku Induk & Download Excel .xlsx untuk Operator & Admin)
 
 ---
 
@@ -112,6 +114,7 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] **Dashboard Admin (Kepsek)**: Monitoring metrik global sekolah, rasio kehadiran, dan ringkasan 29 rombel
     - [x] **Dashboard Operator**: Status 29 kelas lengkap, siswa aktif, shortcut cetak kartu CR-80, scanner gerbang
     - [x] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi siswa 5A realtime, tombol scanner kamera
+    - [x] Fitur Ekspor Presensi Kelas Binaan Guru (Download PDF Jurnal Presensi Harian & Download Excel .xlsx untuk Guru/Wali Kelas)
     - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
   - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
   - [x] Halaman & Menu Lihat Profil Pengguna Terintegrasi untuk 4 Role (Admin, Operator, Guru, Orang Tua) beserta fitur pembaruan kontak & sandi
@@ -123,6 +126,7 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] Form Edit GTK, upload pas foto resmi GTK, pembaruan data kepegawaian & jabatan
     - [x] Fitur Reset Password GTK ke default NIP/NUPTK
     - [x] Fitur Nonaktifkan / Hapus GTK dengan proteksi pelepasan rombel wali kelas otomatis
+    - [x] Fitur Ekspor Data GTK (Download PDF Daftar Nominatif & Download Excel .xlsx untuk Operator & Admin)
   - [x] **Master Manajemen User (*User Management* - Eksklusif Role Admin)**:
     - [x] Akses eksklusif Kepala Sekolah (Admin) untuk tata kelola seluruh akun pengguna (`admin`, `operator`, `guru/walikelas`, `orangtua`)
     - [x] Filter direktori akun berdasarkan Role, Status (`active` / `inactive`), dan pencarian (Nama, Username, NIP, NISN, Email)
@@ -131,11 +135,13 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] Tombol 1-Klik Suspend / Aktivasi Akun Pengguna
     - [x] Tombol 1-Klik Reset Password akun ke default (NIP atau NISN)
     - [x] Proteksi keamanan akun: Mencegah admin menghapus atau menonaktifkan akunnya sendiri yang sedang aktif
+    - [x] Fitur Ekspor Pengguna Sistem (Download Excel .xlsx & Download PDF untuk Admin)
   - [x] **Modul Log Aktifitas Sistem (*Audit Trail ISO 27001* - Eksklusif Role Admin)**:
     - [x] Skema tabel `activity_logs`: Timestamp, User (ID, Nama, Role), Action Event, Modul, Deskripsi Aktivitas, IP Address, User Agent
     - [x] Service Logger Otomatis (`ActivityLog::record()`) yang mencatat peristiwa penting: Autentikasi (login, logout, gagal), CRUD Siswa, CRUD GTK, Manajemen User, Mutasi Rombel, Ubah Profil/Sandi
     - [x] Antarmuka Audit Trail Viewer khusus Admin dengan filter Modul, Role, Rentang Tanggal, Pencarian Teks, dan Metrik Ringkas
     - [x] Desain *Append-Only* (tidak ada tombol edit atau hapus log untuk menjamin integritas forensik audit)
+    - [x] Fitur Ekspor Audit Trail ISO 27001 (Download PDF Berita Acara & Download Excel .xlsx untuk Admin)
   - [x] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
   - [ ] CRUD Master Aturan Poin Tatib & Prestasi: Konfigurasi ambang batas SP1, SP2, SP3, bobot minus pelanggaran, dan reward merit points
   - [ ] Floating AI Copilot Drawer (kanan bawah)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\User;
+use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -12,9 +13,9 @@ use Illuminate\Validation\Rule;
 class UserController extends Controller
 {
     /**
-     * Tampilkan direktori seluruh akun pengguna sistem
+     * Bangun query pengguna terfilter
      */
-    public function index(Request $request)
+    protected function getFilteredQuery(Request $request)
     {
         $search = $request->get('search');
         $roleFilter = $request->get('role', 'all');
@@ -40,7 +41,19 @@ class UserController extends Controller
             $query->where('status', $statusFilter);
         }
 
-        $users = $query->paginate(15)->withQueryString();
+        return $query;
+    }
+
+    /**
+     * Tampilkan direktori seluruh akun pengguna sistem
+     */
+    public function index(Request $request)
+    {
+        $search = $request->get('search');
+        $roleFilter = $request->get('role', 'all');
+        $statusFilter = $request->get('status', 'all');
+
+        $users = $this->getFilteredQuery($request)->paginate(15)->withQueryString();
 
         $stats = [
             'total'    => User::count(),
@@ -51,6 +64,70 @@ class UserController extends Controller
         ];
 
         return view('admin.users.index', compact('users', 'stats', 'search', 'roleFilter', 'statusFilter'));
+    }
+
+    /**
+     * Ekspor Direktori Pengguna ke Format PDF Resmi Kop Surat
+     */
+    public function exportPdf(Request $request)
+    {
+        $users = $this->getFilteredQuery($request)->get();
+
+        return ExportService::pdf(
+            'Direktori_Pengguna_STAR_KIDS_' . date('Ymd_His'),
+            'exports.users_pdf',
+            compact('users'),
+            'portrait'
+        );
+    }
+
+    /**
+     * Ekspor Direktori Pengguna ke Format Excel (.xlsx)
+     */
+    public function exportExcel(Request $request)
+    {
+        $users = $this->getFilteredQuery($request)->get();
+
+        $headers = [
+            'no'        => 'No',
+            'name'      => 'Nama Pengguna',
+            'username'  => 'Username',
+            'email'     => 'Email',
+            'role'      => 'Role Hak Akses',
+            'nip_nuptk' => 'NIP / NUPTK',
+            'nisn'      => 'NISN (Orang Tua / Murid)',
+            'phone'     => 'Nomor Telepon',
+            'status'    => 'Status Akun',
+        ];
+
+        $roleLabels = [
+            'admin'          => 'Kepala Sekolah (Super Admin)',
+            'operator'       => 'Operator Sekolah / TU',
+            'guru/walikelas' => 'Guru / Wali Kelas',
+            'orangtua'       => 'Orang Tua Murid',
+        ];
+
+        $rows = $users->map(function ($u, $idx) use ($roleLabels) {
+            return [
+                'no'        => $idx + 1,
+                'name'      => $u->name,
+                'username'  => $u->username ?? '-',
+                'email'     => $u->email ?? '-',
+                'role'      => $roleLabels[$u->role] ?? strtoupper($u->role),
+                'nip_nuptk' => $u->nip_nuptk ?? '-',
+                'nisn'      => $u->nisn ?? '-',
+                'phone'     => $u->phone ?? '-',
+                'status'    => $u->status === 'active' ? 'Aktif' : 'Ditangguhkan (Suspend)',
+            ];
+        })->toArray();
+
+        return ExportService::excel(
+            'Direktori_Pengguna_STAR_KIDS_' . date('Ymd_His'),
+            'Direktori Akun Pengguna Sistem STAR-KIDS',
+            'Tata Kelola Identitas & Hak Akses UPTD SDN Kebonagung',
+            $headers,
+            $rows
+        );
     }
 
     /**

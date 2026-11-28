@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Classroom;
 use App\Models\User;
+use App\Services\ExportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,33 +74,30 @@ class DashboardController extends Controller
     }
 
     /**
-     * Dashboard Guru & Wali Kelas (Dinamis Berdasarkan Relasi Database Rombel)
+     * Resolusi rombel dan presensi kesiswaan guru yang sedang aktif
      */
-    public function guru()
+    protected function getGuruClassroomAndStudents(): array
     {
         $user = Auth::user();
-        // Resolusi rombel binaan secara dinamis dari relasi foreign key database
         $classroom = $user->homeroomClassroom 
             ?? Classroom::where('code', $user->additional_info['classroom'] ?? '5A')->first();
 
-        // Ambil data siswa asli yang ada di rombel ini
         $realStudents = \App\Models\Student::where('classroom_id', $classroom?->id)->get();
 
         if ($realStudents->count() > 0) {
-            $students5A = $realStudents->map(function ($s, $idx) {
+            $students = $realStudents->map(function ($s) {
                 return [
-                    'nisn' => $s->nisn,
-                    'name' => $s->name,
+                    'nisn'   => $s->nisn,
+                    'name'   => $s->name,
                     'gender' => $s->gender,
                     'status' => 'Hadir',
-                    'time' => '06:' . rand(35, 55) . ' WIB',
-                    'notes' => 'Tepat Waktu',
-                    'photo' => $s->photo,
+                    'time'   => '06:' . rand(35, 55) . ' WIB',
+                    'notes'  => 'Tepat Waktu',
+                    'photo'  => $s->photo,
                 ];
             })->toArray();
         } else {
-            // Fallback contoh data realistis
-            $students5A = [
+            $students = [
                 ['nisn' => '0081234567', 'name' => 'Ahmad Rifai', 'gender' => 'L', 'status' => 'Hadir', 'time' => '06:42 WIB', 'notes' => 'Tepat Waktu', 'photo' => null],
                 ['nisn' => '0081234568', 'name' => 'Aisyah Putri Maharani', 'gender' => 'P', 'status' => 'Hadir', 'time' => '06:35 WIB', 'notes' => 'Tepat Waktu', 'photo' => null],
                 ['nisn' => '0081234569', 'name' => 'Bima Sakti Pratama', 'gender' => 'L', 'status' => 'Hadir', 'time' => '06:48 WIB', 'notes' => 'Tepat Waktu', 'photo' => null],
@@ -113,7 +111,71 @@ class DashboardController extends Controller
             ];
         }
 
+        return [$user, $classroom, $students];
+    }
+
+    /**
+     * Dashboard Guru & Wali Kelas (Dinamis Berdasarkan Relasi Database Rombel)
+     */
+    public function guru()
+    {
+        [$user, $classroom, $students5A] = $this->getGuruClassroomAndStudents();
         return view('guru.dashboard', compact('classroom', 'students5A'));
+    }
+
+    /**
+     * Ekspor Jurnal Presensi Kelas ke Format PDF Resmi Kop Surat
+     */
+    public function exportGuruAttendancePdf()
+    {
+        [$teacher, $classroom, $students] = $this->getGuruClassroomAndStudents();
+        $classCode = $classroom->code ?? 'Binaan';
+
+        return ExportService::pdf(
+            "Jurnal_Presensi_Kelas_{$classCode}_" . date('Ymd_His'),
+            'exports.guru_attendance_pdf',
+            compact('teacher', 'classroom', 'students'),
+            'portrait'
+        );
+    }
+
+    /**
+     * Ekspor Jurnal Presensi Kelas ke Format Excel (.xlsx)
+     */
+    public function exportGuruAttendanceExcel()
+    {
+        [$teacher, $classroom, $students] = $this->getGuruClassroomAndStudents();
+        $classCode = $classroom->code ?? 'Binaan';
+
+        $headers = [
+            'no'     => 'No',
+            'nisn'   => 'NISN Siswa',
+            'name'   => 'Nama Lengkap Siswa',
+            'gender' => 'L/P',
+            'time'   => 'Waktu Scan Presensi',
+            'status' => 'Status Kehadiran',
+            'notes'  => 'Catatan / Keterangan',
+        ];
+
+        $rows = array_map(function ($s, $idx) {
+            return [
+                'no'     => $idx + 1,
+                'nisn'   => $s['nisn'],
+                'name'   => $s['name'],
+                'gender' => $s['gender'],
+                'time'   => $s['time'],
+                'status' => $s['status'],
+                'notes'  => $s['notes'] ?? '-',
+            ];
+        }, $students, array_keys($students));
+
+        return ExportService::excel(
+            "Jurnal_Presensi_Kelas_{$classCode}_" . date('Ymd_His'),
+            "Jurnal Presensi & Kehadiran Siswa Kelas {$classCode}",
+            "Wali Kelas: {$teacher->name} (NIP. " . ($teacher->nip_nuptk ?? '-') . ")",
+            $headers,
+            $rows
+        );
     }
 
     /**

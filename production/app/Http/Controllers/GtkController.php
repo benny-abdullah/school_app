@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\User;
+use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -59,6 +60,113 @@ class GtkController extends Controller
         ];
 
         return view('operator.gtk.index', compact('gtks', 'stats', 'search', 'statusFilter', 'employmentFilter', 'roleFilter'));
+    }
+
+    /**
+     * Ekspor Data GTK ke PDF
+     */
+    public function exportPdf(Request $request)
+    {
+        $search = $request->get('search');
+        $statusFilter = $request->get('status', 'all');
+        $employmentFilter = $request->get('employment', 'all');
+        $roleFilter = $request->get('role', 'all');
+
+        $query = User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])
+            ->with('homeroomClassroom')
+            ->orderBy('name');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nip_nuptk', 'like', "%{$search}%")
+                  ->orWhere('nuptk', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('position', 'like', "%{$search}%");
+            });
+        }
+        if ($statusFilter !== 'all') $query->where('status', $statusFilter);
+        if ($employmentFilter !== 'all') $query->where('employment_status', $employmentFilter);
+        if ($roleFilter !== 'all') $query->where('role', $roleFilter);
+
+        $gtks = $query->get();
+
+        ActivityLog::record('EXPORT_PDF', 'Master GTK', 'Mengunduh laporan PDF direktori GTK (' . $gtks->count() . ' personil)');
+
+        return ExportService::pdf('Daftar_GTK_SDN_Kebonagung_' . date('Ymd_His'), 'exports.gtk_pdf', compact('gtks'), 'landscape');
+    }
+
+    /**
+     * Ekspor Data GTK ke Excel (.xlsx)
+     */
+    public function exportExcel(Request $request)
+    {
+        $search = $request->get('search');
+        $statusFilter = $request->get('status', 'all');
+        $employmentFilter = $request->get('employment', 'all');
+        $roleFilter = $request->get('role', 'all');
+
+        $query = User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])
+            ->with('homeroomClassroom')
+            ->orderBy('name');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nip_nuptk', 'like', "%{$search}%")
+                  ->orWhere('nuptk', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('position', 'like', "%{$search}%");
+            });
+        }
+        if ($statusFilter !== 'all') $query->where('status', $statusFilter);
+        if ($employmentFilter !== 'all') $query->where('employment_status', $employmentFilter);
+        if ($roleFilter !== 'all') $query->where('role', $roleFilter);
+
+        $gtks = $query->get();
+
+        $headers = [
+            'no'                => 'No',
+            'name'              => 'Nama Lengkap & Gelar',
+            'nip_nuptk'         => 'NIP',
+            'nuptk'             => 'NUPTK',
+            'gender'            => 'L/P',
+            'position'          => 'Jabatan Utama',
+            'employment_status' => 'Status Kepegawaian',
+            'classroom'         => 'Rombel Asuhan',
+            'phone'             => 'Kontak WA',
+            'email'             => 'Email Resmi',
+            'role'              => 'Hak Akses Role',
+            'status'            => 'Status Akun',
+        ];
+
+        $rows = [];
+        foreach ($gtks as $idx => $g) {
+            $rows[] = [
+                'no'                => $idx + 1,
+                'name'              => $g->name,
+                'nip_nuptk'         => $g->nip_nuptk ?? '-',
+                'nuptk'             => $g->nuptk ?? '-',
+                'gender'            => $g->gender ?? '-',
+                'position'          => $g->position ?? ($g->additional_info['jabatan'] ?? 'Pendidik'),
+                'employment_status' => $g->employment_status ?? 'PNS',
+                'classroom'         => $g->homeroomClassroom ? 'Wali Kelas ' . $g->homeroomClassroom->code : 'Non-Wali',
+                'phone'             => $g->phone ?? '-',
+                'email'             => $g->email ?? '-',
+                'role'              => $g->role_label,
+                'status'            => ucfirst($g->status),
+            ];
+        }
+
+        ActivityLog::record('EXPORT_EXCEL', 'Master GTK', 'Mengunduh berkas Excel data GTK (' . $gtks->count() . ' personil)');
+
+        return ExportService::excel(
+            'Daftar_GTK_SDN_Kebonagung_' . date('Ymd_His'),
+            'Daftar Tenaga Pendidik & Kependidikan (GTK)',
+            'UPTD SDN Kebonagung | Tahun Ajaran 2025/2026 | Total: ' . count($rows) . ' Personil',
+            $headers,
+            $rows
+        );
     }
 
     /**

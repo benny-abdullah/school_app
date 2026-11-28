@@ -16,7 +16,15 @@
             </p>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('gtk.export.excel', request()->query()) }}" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Unduh Rekap GTK Excel (.xlsx)">
+                <i class="bi bi-file-earmark-excel-fill text-emerald-600 text-sm"></i>
+                <span>Unduh Excel</span>
+            </a>
+            <a href="{{ route('gtk.export.pdf', request()->query()) }}" class="px-3 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Unduh Daftar Nominatif GTK PDF">
+                <i class="bi bi-file-earmark-pdf-fill text-rose-600 text-sm"></i>
+                <span>Unduh PDF</span>
+            </a>
             <a href="{{ route('gtk.create') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 shadow-xs">
                 <i class="bi bi-person-plus-fill text-sm"></i>
                 <span>Tambah GTK Baru</span>

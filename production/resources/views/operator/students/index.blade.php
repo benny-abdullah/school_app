@@ -16,8 +16,16 @@
             </p>
         </div>
 
-        <div class="flex items-center gap-2">
-            <a href="{{ route('operator.students.create') }}" class="btn-primary px-4 py-2.5 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('operator.students.export.excel', request()->query()) }}" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Unduh Berkas Excel (.xlsx)">
+                <i class="bi bi-file-earmark-excel-fill text-emerald-600 text-sm"></i>
+                <span>Unduh Excel</span>
+            </a>
+            <a href="{{ route('operator.students.export.pdf', request()->query()) }}" class="px-3 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Unduh Laporan PDF Resmi">
+                <i class="bi bi-file-earmark-pdf-fill text-rose-600 text-sm"></i>
+                <span>Unduh PDF</span>
+            </a>
+            <a href="{{ route('operator.students.create') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
                 <i class="bi bi-person-plus-fill"></i>
                 <span>Tambah Siswa Baru</span>
             </a>
