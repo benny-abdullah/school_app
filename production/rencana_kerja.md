@@ -75,7 +75,11 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [x] Relasi Eloquent Dua Arah: `Classroom::belongsTo(User::class, 'homeroom_teacher_id')` dan `User::hasOne(Classroom::class, 'homeroom_teacher_id')`
   - [x] Wewenang Role Operator (Tata Usaha): Form edit teknis rombel (pengaturan kuota daya tampung maks 32, penamaan ruang kelas, tahun ajaran aktif)
   - [x] Wewenang Role Admin (Kepala Sekolah): Modul SK Penugasan Wali Kelas resmi (menetapkan dan merotasi guru pengampu 29 rombel 1A s/d 6E)
-  - [x] Antarmuka CRUD 29 Rombel Interaktif: Tabel rombel, form edit rombel, dropdown pilihan guru aktif ber-NIP, dan validasi anti-bentrok (1 guru hanya boleh memegang 1 rombel)
+  - [x] Antarmuka CRUD Rombel Interaktif: Tabel direktori rombel, filter tingkat 1 s/d 6, metrik kuota dan kapasitas kelas
+  - [x] Fitur Tambah Rombel Baru (`create` & `store`): Pendaftaran kelas baru jika terjadi pemekaran/penambahan rombel PPDB (misal: Kelas 1E) lengkap dengan *live preview* kode dan nama rombel otomatis
+  - [x] Fitur Hapus Rombel Aman (`destroy`): Proteksi *Anti-Orphan Siswa* (sistem melarang keras penghapusan kelas jika masih berisi siswa aktif; siswa wajib dimutasikan terlebih dahulu) dan pelepasan SK wali kelas otomatis
+  - [x] Integrasi Dropdown Dinamis Terpusat: Seluruh *dropdown list* pada formulir pendaftaran siswa, mutasi kelas, filter direktori, dan profil GTK otomatis tersinkron saat rombel ditambah/diedit
+  - [x] Validasi Anti-Bentrok Penugasan: 1 guru hanya boleh mengampu 1 rombel (sistem otomatis memutasi penugasan jika guru dipindahkan antar-kelas)
   - [x] Sinkronisasi Otomatis ke Dasbor Guru: Guru yang login langsung terhubung ke rombel asuhannya secara dinamis dari basis data relasional
 - [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
   - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
