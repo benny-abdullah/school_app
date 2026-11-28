@@ -111,10 +111,28 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
   - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
   - [x] Halaman & Menu Lihat Profil Pengguna Terintegrasi untuk 4 Role (Admin, Operator, Guru, Orang Tua) beserta fitur pembaruan kontak & sandi
-- [ ] **3.4 Master CRUD Admin / Kepala Sekolah (Manajemen Akun, GTK & Penetapan Wali Kelas)**
-  - [ ] CRUD Manajemen Akun Pengguna (*User Management*): Tambah user baru, suspend akun, reset password ke default NIP/NISN
-  - [ ] CRUD Master GTK (Guru & Tenaga Kependidikan): Form tambah/edit guru, NIP (18 digit), NUPTK (16 digit), jabatan, mapel
-  - [ ] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
+- [x] **3.4 Master CRUD Admin & Operator: GTK, Manajemen Akun Pengguna & Log Aktifitas Sistem**
+  - [x] **Master Data GTK (Guru & Tenaga Kependidikan)**:
+    - [x] Akses untuk Operator & Admin (Supervisi Kepala Sekolah)
+    - [x] Tabel data direktori GTK lengkap: Nama & Gelar, NIP (18 digit), NUPTK (16 digit), Jenis Kelamin, Status Kepegawaian (PNS, PPPK, GTT/Honorer, PTT), Jabatan Utama, Rombel Asuhan (relasi `classrooms`), No WA, Status Akun
+    - [x] Form Tambah GTK baru dengan integrasi pembuatan akun login `users` otomatis (password default NIP/NUPTK)
+    - [x] Form Edit GTK, upload pas foto resmi GTK, pembaruan data kepegawaian & jabatan
+    - [x] Fitur Reset Password GTK ke default NIP/NUPTK
+    - [x] Fitur Nonaktifkan / Hapus GTK dengan proteksi pelepasan rombel wali kelas otomatis
+  - [x] **Master Manajemen User (*User Management* - Eksklusif Role Admin)**:
+    - [x] Akses eksklusif Kepala Sekolah (Admin) untuk tata kelola seluruh akun pengguna (`admin`, `operator`, `guru/walikelas`, `orangtua`)
+    - [x] Filter direktori akun berdasarkan Role, Status (`active` / `inactive`), dan pencarian (Nama, Username, NIP, NISN, Email)
+    - [x] Form Tambah Akun Pengguna baru untuk segala role
+    - [x] Form Edit Akun Pengguna (Nama, Email, Role, Telepon, Status, Ubah Sandi)
+    - [x] Tombol 1-Klik Suspend / Aktivasi Akun Pengguna
+    - [x] Tombol 1-Klik Reset Password akun ke default (NIP atau NISN)
+    - [x] Proteksi keamanan akun: Mencegah admin menghapus atau menonaktifkan akunnya sendiri yang sedang aktif
+  - [x] **Modul Log Aktifitas Sistem (*Audit Trail ISO 27001* - Eksklusif Role Admin)**:
+    - [x] Skema tabel `activity_logs`: Timestamp, User (ID, Nama, Role), Action Event, Modul, Deskripsi Aktivitas, IP Address, User Agent
+    - [x] Service Logger Otomatis (`ActivityLog::record()`) yang mencatat peristiwa penting: Autentikasi (login, logout, gagal), CRUD Siswa, CRUD GTK, Manajemen User, Mutasi Rombel, Ubah Profil/Sandi
+    - [x] Antarmuka Audit Trail Viewer khusus Admin dengan filter Modul, Role, Rentang Tanggal, Pencarian Teks, dan Metrik Ringkas
+    - [x] Desain *Append-Only* (tidak ada tombol edit atau hapus log untuk menjamin integritas forensik audit)
+  - [x] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
   - [ ] CRUD Master Aturan Poin Tatib & Prestasi: Konfigurasi ambang batas SP1, SP2, SP3, bobot minus pelanggaran, dan reward merit points
   - [ ] Floating AI Copilot Drawer (kanan bawah)
 
@@ -216,12 +234,12 @@ Fokus: Deteksi dini siswa bermasalah dan rekomendasi tindakan pedagogik empatik.
 ## 👥 Tahap 8: Master Data GTK, Log Audit & Backup Data ISO 27001
 Fokus: Tata kelola kepegawaian Dapodik dan kepatuhan standar keamanan data internasional.
 
-- [ ] **8.1 Master Data Guru & Tenaga Kependidikan (Eksklusif Admin/Kepsek)**
-  - [ ] Manajemen CRUD data GTK (NIP, NUPTK, Nama & Gelar, Gender, Status Kepegawaian, Jabatan, Rombel Binaan, No WA)
-  - [ ] Validasi penomoran NIP 18 digit & NUPTK 16 digit
-- [ ] **8.2 Log Audit Kekal ISO/IEC 27001 A.12.4**
-  - [ ] Pencatatan transaksi sistem (aktor, peran, timestamp, IP address, modul, payload sebelum/sesudah)
-  - [ ] Fitur pelindung integritas log (*append-only*, tidak dapat di-edit atau dihapus oleh siapapun)
+- [x] **8.1 Master Data Guru & Tenaga Kependidikan (Eksklusif Admin/Kepsek & Operator)**
+  - [x] Manajemen CRUD data GTK (NIP, NUPTK, Nama & Gelar, Gender, Status Kepegawaian, Jabatan, Rombel Binaan, No WA)
+  - [x] Validasi penomoran NIP 18 digit & NUPTK 16 digit
+- [x] **8.2 Log Audit Kekal ISO/IEC 27001 A.12.4**
+  - [x] Pencatatan transaksi sistem (aktor, peran, timestamp, IP address, modul, payload sebelum/sesudah)
+  - [x] Fitur pelindung integritas log (*append-only*, tidak dapat di-edit atau dihapus oleh siapapun)
 - [ ] **8.3 Manajemen Snapshot Backup 3-2-1**
   - [ ] Jadwal backup otomatis database & berkas terenkripsi
   - [ ] Simulasi uji restore pemulihan data bencana (*disaster recovery verification*)

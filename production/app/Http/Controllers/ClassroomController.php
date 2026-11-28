@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -119,6 +120,12 @@ class ClassroomController extends Controller
         $classroom->academic_year = $validated['academic_year'];
         $classroom->status        = $validated['status'];
         $classroom->save();
+
+        ActivityLog::record(
+            'ROTASI_ROMBEL',
+            'Master Rombel',
+            "Memperbarui data Kelas {$classroom->code} (Kapasitas: {$classroom->capacity}, Wali Kelas: " . ($classroom->homeroom_teacher ?? 'Kosong') . "){$notice}"
+        );
 
         return redirect()->route('classrooms.index')
             ->with('success', "Pengaturan Kelas {$classroom->code} dan penetapan Wali Kelas berhasil disimpan!{$notice}");

@@ -45,11 +45,23 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
         Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'));
+
+        // Master Manajemen User (Eksklusif Admin / Kepala Sekolah)
+        Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)->names('admin.users');
+        Route::post('admin/users/{user}/toggle-status', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
+        Route::post('admin/users/{user}/reset-password', [\App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('admin.users.reset-password');
+
+        // Log Aktifitas Sistem & Jejak Audit ISO 27001 (Eksklusif Admin)
+        Route::get('/admin/logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('admin.logs.index');
     });
 
     // Modul Operasional & Kesiswaan (Operator & Supervisi Kepala Sekolah/Admin)
     Route::middleware('role:operator,admin')->group(function () {
         Route::get('/operator/dashboard', [DashboardController::class, 'operator'])->name('operator.dashboard');
+
+        // Master Data GTK (Guru & Tenaga Kependidikan - Operator & Admin)
+        Route::resource('operator/gtk', \App\Http\Controllers\GtkController::class)->names('gtk');
+        Route::post('operator/gtk/{gtk}/reset-password', [\App\Http\Controllers\GtkController::class, 'resetPassword'])->name('gtk.reset-password');
 
         // Master CRUD 29 Rombel Kelas & Relasi Wali Kelas (Operator & Admin)
         Route::get('/operator/classrooms', [\App\Http\Controllers\ClassroomController::class, 'index'])->name('classrooms.index');

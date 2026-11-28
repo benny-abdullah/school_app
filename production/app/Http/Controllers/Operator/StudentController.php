@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -90,6 +91,12 @@ class StudentController extends Controller
         // Update jumlah siswa di kelas bersangkutan
         $this->updateClassroomStudentCount($student->classroom_id);
 
+        ActivityLog::record(
+            'CREATE_STUDENT',
+            'Master Siswa',
+            "Menambahkan siswa baru: {$student->name} (NISN: {$student->nisn}, Kelas: {$student->classroom->code})"
+        );
+
         return redirect()->route('operator.students.index')
             ->with('success', "Data siswa {$student->name} (NISN: {$student->nisn}) berhasil ditambahkan ke rombel {$student->classroom->code}!");
     }
@@ -153,6 +160,14 @@ class StudentController extends Controller
             $message = "Perubahan data siswa {$student->name} berhasil disimpan!";
         }
 
+        ActivityLog::record(
+            $isMutated ? 'MUTASI_ROMBEL' : 'UPDATE_STUDENT',
+            'Master Siswa',
+            $isMutated
+                ? "Memutasikan siswa {$student->name} (NISN: {$student->nisn}) ke Kelas {$student->classroom->code}"
+                : "Memperbarui data siswa {$student->name} (NISN: {$student->nisn})"
+        );
+
         return redirect()->route('operator.students.index')->with('success', $message);
     }
 
@@ -162,6 +177,7 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         $name = $student->name;
+        $nisn = $student->nisn;
         $classroomId = $student->classroom_id;
 
         if ($student->photo && Storage::disk('public')->exists($student->photo)) {
@@ -171,6 +187,12 @@ class StudentController extends Controller
         $student->delete();
 
         $this->updateClassroomStudentCount($classroomId);
+
+        ActivityLog::record(
+            'DELETE_STUDENT',
+            'Master Siswa',
+            "Menghapus data siswa: {$name} (NISN: {$nisn})"
+        );
 
         return redirect()->route('operator.students.index')
             ->with('info', "Data siswa {$name} telah berhasil dihapus dari sistem.");

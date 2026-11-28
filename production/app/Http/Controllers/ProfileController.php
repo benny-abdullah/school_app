@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\Student;
 use Illuminate\Http\Request;
@@ -88,6 +89,17 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        $actionDetails = [];
+        if ($request->filled('phone')) $actionDetails[] = 'nomor kontak';
+        if ($request->filled('new_password')) $actionDetails[] = 'kata sandi';
+        $detailStr = implode(' dan ', $actionDetails) ?: 'profil';
+
+        ActivityLog::record(
+            'UPDATE_PROFILE',
+            'Profil',
+            "Pengguna {$user->name} ({$user->role_label}) memperbarui {$detailStr} mandiri"
+        );
 
         return back()->with('success', 'Profil dan informasi akun Anda berhasil diperbarui!');
     }

@@ -24,9 +24,14 @@ class User extends Authenticatable
         'username',
         'email',
         'nip_nuptk',
+        'nuptk',
         'nisn',
         'role',
         'phone',
+        'avatar',
+        'gender',
+        'employment_status',
+        'position',
         'status',
         'additional_info',
         'password',
@@ -62,6 +67,25 @@ class User extends Authenticatable
     public function homeroomClassroom(): HasOne
     {
         return $this->hasOne(Classroom::class, 'homeroom_teacher_id');
+    }
+
+    /**
+     * Relasi ke Log Aktivitas yang Dilakukan User
+     */
+    public function activityLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+    /**
+     * URL Avatar Foto Profil
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if ($this->avatar && file_exists(public_path('storage/' . $this->avatar))) {
+            return asset('storage/' . $this->avatar);
+        }
+        return null;
     }
 
     /**

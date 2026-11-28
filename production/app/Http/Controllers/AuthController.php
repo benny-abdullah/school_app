@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,6 +86,9 @@ class AuthController extends Controller
             ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
+            // Catat log percobaan login gagal
+            ActivityLog::record('LOGIN_FAILED', 'Autentikasi', "Percobaan login gagal untuk identifier: '{$identifier}'");
+
             // Re-generate captcha untuk percobaan login berikutnya
             $num1 = rand(2, 9);
             $num2 = rand(1, 9);
@@ -96,6 +100,8 @@ class AuthController extends Controller
         }
 
         if ($user->status !== 'active') {
+            ActivityLog::record('LOGIN_FAILED', 'Autentikasi', "Login ditolak karena akun nonaktif: '{$identifier}'", null, $user);
+
             return back()
                 ->withInput($request->only('identifier'))
                 ->withErrors(['identifier' => 'Akun Anda sedang dinonaktifkan. Silakan hubungi Administrator.']);
@@ -104,6 +110,8 @@ class AuthController extends Controller
         // Berhasil login
         Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
+
+        ActivityLog::record('LOGIN_SUCCESS', 'Autentikasi', "Pengguna {$user->name} ({$user->role_label}) berhasil login ke sistem", null, $user);
 
         return $this->redirectByRole($user)->with('success', "Selamat datang, {$user->name}!");
     }
@@ -127,7 +135,13 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $userName = Auth::user()?->name ?? 'Pengguna';
+        $currentUser = Auth::user();
+        $userName = $currentUser?->name ?? 'Pengguna';
+
+        if ($currentUser) {
+            ActivityLog::record('LOGOUT', 'Autentikasi', "Pengguna {$userName} telah logout dari sistem", null, $currentUser);
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();
