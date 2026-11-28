@@ -1,5 +1,5 @@
 # 📋 Rencana Kerja Implementasi Produksi (Production Roadmap)
-**Aplikasi**: EduTrack Pro (Sistem Monitoring Terpadu Sekolah & Kesiswaan)  
+**Aplikasi**: Star Kids SDN Kebonagung (Sistem Monitoring Terpadu Sekolah & Kesiswaan)  
 **Institusi**: SDN Kebonagung Kota Pasuruan  
 **Target Arsitektur**: Full-Stack Laravel 13 (PHP 8.4) + Livewire 3 + Alpine.js + Tailwind CSS + PostgreSQL 16 / MySQL + Redis 7  
 **Lokasi Direktori Produksi**: `C:\my_project\scholl_app\production`  
