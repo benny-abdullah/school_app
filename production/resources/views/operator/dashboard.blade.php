@@ -17,10 +17,10 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-            <button type="button" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
+            <a href="{{ route('scanner.index') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
                 <i class="bi bi-upc-scan"></i>
                 <span>Scanner Gerbang</span>
-            </button>
+            </a>
             <a href="{{ route('cards.index') }}" class="btn-outline-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer border border-rose-200">
                 <i class="bi bi-person-badge-fill text-rose-600"></i>
                 <span>Cetak Kartu Siswa</span>

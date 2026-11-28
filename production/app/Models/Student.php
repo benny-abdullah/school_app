@@ -44,6 +44,22 @@ class Student extends Model
     }
 
     /**
+     * Relasi ke Riwayat Presensi Siswa
+     */
+    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    /**
+     * Presensi Hari Ini
+     */
+    public function todayAttendance(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Attendance::class)->whereDate('date', \Carbon\Carbon::today('Asia/Jakarta'));
+    }
+
+    /**
      * Scope untuk siswa aktif
      */
     public function scopeActive($query)

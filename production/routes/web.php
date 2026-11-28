@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
+    // AI Copilot & Asisten Pedagogis Kesiswaan
+    Route::post('/ai/copilot/chat', [\App\Http\Controllers\AiCopilotController::class, 'chat'])->name('ai.copilot.chat');
+
     // Dashboard Super Admin / Kepala Sekolah
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
@@ -100,6 +103,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/guru/dashboard', [DashboardController::class, 'guru'])->name('guru.dashboard');
         Route::get('/guru/attendance-export/pdf', [DashboardController::class, 'exportGuruAttendancePdf'])->name('guru.attendance.export.pdf');
         Route::get('/guru/attendance-export/excel', [DashboardController::class, 'exportGuruAttendanceExcel'])->name('guru.attendance.export.excel');
+    });
+
+    // Modul Presensi Gerbang 3-Mode & Pemindai Barcode (Admin, Operator, & Guru/Wali Kelas)
+    Route::middleware('role:admin,operator,guru/walikelas')->group(function () {
+        Route::get('/scanner', [\App\Http\Controllers\ScannerController::class, 'index'])->name('scanner.index');
+        Route::post('/scanner/scan', [\App\Http\Controllers\ScannerController::class, 'scan'])->name('scanner.scan');
+        Route::get('/scanner/search-students', [\App\Http\Controllers\ScannerController::class, 'searchStudents'])->name('scanner.search');
     });
 
     // Dashboard Orang Tua Murid / Siswa

@@ -144,33 +144,33 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] Fitur Ekspor Audit Trail ISO 27001 (Download PDF Berita Acara & Download Excel .xlsx untuk Admin)
   - [x] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
   - [ ] CRUD Master Aturan Poin Tatib & Prestasi: Konfigurasi ambang batas SP1, SP2, SP3, bobot minus pelanggaran, dan reward merit points
-  - [ ] Floating AI Copilot Drawer (kanan bawah)
+  - [x] Floating AI Copilot Drawer (kanan bawah)
 
 ---
 
 ## ⚡ Tahap 4: Modul Presensi Gerbang 3-Mode & Pemindai Barcode HP
-Fokus: Pembangunan mesin scanner presensi gerbang, WebRTC kamera HP, dan otomatisasi aturan jam masuk.
+Fokus: Pembangunan mesin scanner presensi gerbang, WebRTC kamera HP, dan otomatisasi aturan jam masuk. (Hanya Role Admin, Operator, dan Guru/Wali Kelas yang berhak scan semua siswa; Dilengkapi metode input manual NISN jika siswa lupa bawa kartu).
 
-- [ ] **4.1 Layanan Bisnis Presensi (`AttendanceRuleEngineService.php`)**
-  - [ ] Mode 1 Masuk Pagi (06:00 - 08:00 WIB): Evaluasi Tepat Waktu vs Terlambat T-1 (-2 pt), T-2 (-5 pt), T-3 (-10 pt)
-  - [ ] Mode 2 Siaga Digital Gate Pass (08:01 - 13:00 WIB): Verifikasi QR izin keluar siswa & validasi satpam
-  - [ ] Mode 3 Pulang Sore (13:01 - 17:00 WIB): Perekaman check-out kepulangan otomatis
-  - [ ] Layanan Keadilan Checkout (`CheckoutJusticeService.php`): Siswa lupa tap pulang tidak dihukum Alpa jika hadir di KBM jam terakhir
-  - [ ] Scheduled Task Cron Cutoff 08:00 WIB: Auto-Alpa bagi yang belum tap masuk + alert darurat
-- [ ] **4.2 Komponen Livewire Meja Scanner Gerbang (`/scanner`)**
-  - [ ] Tab Switcher 3 Mode waktu otomatis
-  - [ ] Simulasi Jam Gerbang & Tombol Uji Coba Tap 1-Klik
-  - [ ] Terminal Input Box (dukungan Barcode Gun USB keyboard-wedge & manual NISN)
-  - [ ] Kartu Monitor Real-Time: Foto siswa, NISN, Rombel, Hasil Evaluasi, Status Poin Tatib
-  - [ ] Tabel Riwayat Scan Gerbang Hari Ini (live updates via Livewire)
-- [ ] **4.3 Pemindai Barcode Kamera HP (Mobile WebRTC Scanner)**
-  - [ ] Pemilih Lensa: Kamera Belakang (*Environment*) vs Kamera Depan (*User / Stand*)
-  - [ ] Kontrol Kamera: Tombol Buka/Tutup Kamera, Senter (*Torch*), status aktif
-  - [ ] Viewfinder Frame dengan sudut target dan animasi garis laser merah (`.scanner-laser`)
-  - [ ] Algoritma deteksi instan Barcode 1D Code 128 & QR Code 2D
-  - [ ] Getar Haptic HP ganda `[70ms, 40ms, 70ms]` & audio chime feedback
-  - [ ] Fitur *Auto-Continuous Scan* dengan jeda anti-duplikasi 2.5 detik
-  - [ ] Otomasi hemat baterai (kamera mati saat pindah menu atau logout)
+- [x] **4.1 Layanan Bisnis Presensi (`AttendanceRuleEngineService.php`)**
+  - [x] Mode 1 Masuk Pagi (06:00 - 08:00 WIB): Evaluasi Tepat Waktu vs Terlambat T-1 (-2 pt), T-2 (-5 pt), T-3 (-10 pt)
+  - [x] Mode 2 Siaga Digital Gate Pass (08:01 - 13:00 WIB): Verifikasi QR izin keluar siswa & validasi satpam
+  - [x] Mode 3 Pulang Sore (13:01 - 17:00 WIB): Perekaman check-out kepulangan otomatis
+  - [x] Layanan Keadilan Checkout (`CheckoutJusticeService.php` / Rule Engine): Siswa lupa tap pulang tidak dihukum Alpa jika hadir di KBM jam terakhir
+  - [x] Scheduled Task Cron Cutoff 08:00 WIB: Auto-Alpa bagi yang belum tap masuk + alert darurat
+- [x] **4.2 Komponen Meja Scanner Gerbang (`/scanner`)**
+  - [x] Tab Switcher 3 Mode waktu otomatis
+  - [x] Simulasi Jam Gerbang & Tombol Uji Coba Tap 1-Klik
+  - [x] Terminal Input Box (dukungan Barcode Gun USB keyboard-wedge & input manual NISN / nama autocomplete jika siswa tidak membawa kartu)
+  - [x] Kartu Monitor Real-Time: Foto siswa, NISN, Rombel, Hasil Evaluasi, Status Poin Tatib
+  - [x] Tabel Riwayat Scan Gerbang Hari Ini (live updates via AJAX/fetch polling)
+- [x] **4.3 Pemindai Barcode Kamera HP (Mobile WebRTC Scanner)**
+  - [x] Pemilih Lensa: Kamera Belakang (*Environment*) vs Kamera Depan (*User / Stand*)
+  - [x] Kontrol Kamera: Tombol Buka/Tutup Kamera, Senter (*Torch*), status aktif
+  - [x] Viewfinder Frame dengan sudut target dan animasi garis laser merah (`.scanner-laser`)
+  - [x] Algoritma deteksi instan Barcode 1D Code 128 & QR Code 2D (`html5-qrcode`)
+  - [x] Getar Haptic HP ganda `[70ms, 40ms, 70ms]` & audio chime feedback Web Audio API sintetis (C-E-G chime, beep 880Hz, buzz 180Hz)
+  - [x] Fitur *Auto-Continuous Scan* dengan jeda anti-duplikasi 2.5 detik
+  - [x] Otomasi hemat baterai (kamera mati saat pindah menu atau switch tab)
 
 ---
 
@@ -222,23 +222,26 @@ Fokus: Penegakan tata tertib humanis, pencegahan membolos, portofolio prestasi, 
 ---
 
 ## 🤖 Tahap 7: Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash)
-Fokus: Deteksi dini siswa bermasalah dan rekomendasi tindakan pedagogik empatik.
+Fokus: Deteksi dini siswa bermasalah dan rekomendasi tindakan pedagogik empatik via AI Copilot Drawer & Executive Insights.
 
-- [ ] **7.1 Layanan Deteksi Dini Rule-Based (`AiStudentAnalysisService.php`)**
-  - [ ] Logika filter penurunan nilai belajar: `(nilai_matematika_minggu2 < nilai_matematika_minggu1 - 10)`
-  - [ ] Logika filter absensi kritis: `(alpa_bulan_ini >= 3)`
-  - [ ] Pengelompokan siswa berisiko secara dinamis dari basis data
-- [ ] **7.2 Integrasi Google Gemini 1.5 Flash API**
-  - [ ] Service caller ke Google Generative Language API v1beta
-  - [ ] Format prompt pedagogis: asisten guru empatik, analisis maksimal 3 kalimat + 1 saran konkret
-  - [ ] Manajemen API Key aman via `.env` (`GEMINI_API_KEY`)
-- [ ] **7.3 Tampilan UI Dasbor Analisis AI**
-  - [ ] Kartu putih sudut membulat dengan ikon peringatan oranye/merah
-  - [ ] Teks analisis ringkas rekomendasi AI Gemini
-  - [ ] Tombol "Muat Ulang Analisis" interaktif
-- [ ] **7.4 Floating AI Copilot & Slide-Out Assistant**
-  - [ ] Floating button dengan gradient ungu-biru di pojok layar
-  - [ ] Slide-out drawer dengan 5 prompt cepat kesiswaan (Ringkas presensi, Cek alpa berulang, Draf SP, Draf WA, Soal HOTS)
+- [x] **7.1 Layanan Deteksi Dini Rule-Based (`AiStudentAnalysisService.php`)**
+  - [x] Logika analisis kedisiplinan harian & pemantauan keterlambatan berulang (T-1, T-2, T-3)
+  - [x] Logika filter absensi kritis & deteksi risiko kesiswaan
+  - [x] Pengelompokan siswa berisiko secara dinamis dari basis data real-time
+- [x] **7.2 Integrasi Google Gemini 1.5 Flash API**
+  - [x] Service caller ke Google Generative Language API v1beta (`models/gemini-1.5-flash:generateContent`)
+  - [x] Format prompt pedagogis: asisten guru empatik, analisis maksimal 3 kalimat + 1 saran konkret ramah anak
+  - [x] Fallback cerdas ke STAR-KIDS Rule-Based Expert Engine jika API key belum disetel / offline
+  - [x] Manajemen API Key aman via `.env` (`GEMINI_API_KEY`)
+- [x] **7.3 Tampilan UI Dasbor Analisis AI**
+  - [x] Banner wawasan pedagogik AI di Dasbor Eksekutif Admin & Dasbor Guru Kelas
+  - [x] Kartu putih sudut membulat dengan ikon bintang violet `bi-stars`
+  - [x] Teks analisis ringkas rekomendasi AI Gemini & deteksi siswa berisiko
+  - [x] Tombol "Buka AI Copilot Drawer" interaktif
+- [x] **7.4 Floating AI Copilot & Slide-Out Assistant**
+  - [x] Floating button dengan gradient violet-rose di pojok kanan bawah layar (`bi-stars`)
+  - [x] Slide-out drawer interaktif dengan 5 prompt cepat kesiswaan (Ringkasan Kehadiran Hari Ini, Deteksi Siswa Berisiko, Draf Surat Pemberitahuan Keterlambatan, Draf Pesan WA Santun ke Wali Murid, Rekomendasi Disiplin Positif)
+  - [x] Input bebas konsultasi kesiswaan untuk guru/operator/admin dengan jawaban real-time & format Markdown
 
 ---
 

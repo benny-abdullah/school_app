@@ -25,9 +25,13 @@
                 <i class="bi bi-file-earmark-excel-fill text-emerald-600"></i>
                 <span>Unduh Excel</span>
             </a>
-            <button type="button" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
+            <a href="{{ route('scanner.index') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer shadow-xs">
                 <i class="bi bi-camera-fill"></i>
                 <span>Scan Barcode Siswa</span>
+            </a>
+            <button type="button" @click="$dispatch('open-ai-copilot')" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 flex items-center gap-1.5 cursor-pointer shadow-xs">
+                <i class="bi bi-stars text-purple-600"></i>
+                <span>Tanya AI Copilot</span>
             </button>
             <button type="button" class="btn-outline-primary px-4 py-2 text-xs flex items-center gap-2 cursor-pointer border border-rose-200">
                 <i class="bi bi-pencil-square"></i>

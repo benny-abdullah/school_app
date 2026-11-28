@@ -147,10 +147,10 @@
                         <span class="sidebar-text">Cetak Kartu Siswa (CR-80)</span>
                         <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CR-80</span>
                     </a>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-upc-scan text-base mr-3 text-slate-400"></i>
+                    <a href="{{ route('scanner.index') }}" class="nav-link {{ request()->routeIs('scanner.*') ? 'active' : '' }}">
+                        <i class="bi bi-upc-scan text-base mr-3 text-emerald-500"></i>
                         <span class="sidebar-text">Scanner Gerbang</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                        <span class="ml-auto text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">Live</span>
                     </a>
 
                     <!-- Menu Laporan & Audit -->
@@ -193,10 +193,10 @@
                         <span class="sidebar-text">Cetak Kartu Siswa (CR-80)</span>
                         <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CR-80</span>
                     </a>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-upc-scan text-base mr-3 text-slate-400"></i>
+                    <a href="{{ route('scanner.index') }}" class="nav-link {{ request()->routeIs('scanner.*') ? 'active' : '' }}">
+                        <i class="bi bi-upc-scan text-base mr-3 text-emerald-500"></i>
                         <span class="sidebar-text">Scanner Gerbang</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                        <span class="ml-auto text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">Live</span>
                     </a>
 
                 @elseif(Auth::user()->isGuru())
@@ -209,10 +209,10 @@
                         <i class="bi bi-mortarboard text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Dasbor {{ $sidebarGuruClass ? 'Kelas ' . $sidebarGuruClass : 'Guru' }}</span>
                     </a>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-camera text-base mr-3 text-slate-400"></i>
+                    <a href="{{ route('scanner.index') }}" class="nav-link {{ request()->routeIs('scanner.*') ? 'active' : '' }}">
+                        <i class="bi bi-upc-scan text-base mr-3 text-emerald-500"></i>
                         <span class="sidebar-text">Scan Barcode Siswa</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                        <span class="ml-auto text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">Live</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-chat-square-text text-base mr-3 text-slate-400"></i>
@@ -291,6 +291,9 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Floating AI Copilot & Slide-Out Drawer -->
+    @include('components.ai_copilot_drawer')
 
     @stack('scripts')
 </body>

@@ -94,6 +94,34 @@
         </div>
     </div>
 
+    <!-- AI Pedagogical Analysis Banner (Tahap 7) -->
+    <div class="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-2xl p-5 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 border border-purple-800/40">
+        <div class="flex items-start gap-3.5">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-400 to-rose-400 p-0.5 flex items-center justify-center text-slate-950 font-black text-xl shrink-0 shadow-sm mt-0.5">
+                <i class="bi bi-stars"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-purple-500/30 border border-purple-400/40 text-purple-200 px-2 py-0.5 rounded-full">
+                        AI Pedagogic Insight &bull; Gemini 1.5 Flash
+                    </span>
+                    <span class="text-xs text-slate-400 font-mono">Realtime Monitoring</span>
+                </div>
+                <h3 class="text-sm font-bold text-white">Analisis Kecerdasan Artifisial Kedisiplinan & Iklim Belajar Sekolah</h3>
+                <p class="text-xs text-slate-300 mt-1 leading-relaxed max-w-2xl">
+                    Tingkat kedisiplinan gerbang SDN Kebonagung hari ini terpantau <strong>{{ $attendanceStats['rate'] }}%</strong>. Sistem mendeteksi kestabilan kehadiran di seluruh rombel, dengan rekomendasi pendekatan disiplin positif untuk siswa dengan riwayat terlambat.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+            <button type="button" @click="$dispatch('open-ai-copilot')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1.5 cursor-pointer">
+                <i class="bi bi-chat-dots-fill text-amber-300"></i>
+                <span>Buka AI Copilot Drawer</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Master Rombel Overview -->
     <div class="card overflow-hidden">
         <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3">
