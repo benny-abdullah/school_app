@@ -177,21 +177,22 @@ Fokus: Pembangunan mesin scanner presensi gerbang, WebRTC kamera HP, dan otomati
 ## 🪪 Tahap 5: Direktori Siswa & Generator Cetak Kartu Pelajar ISO CR-80
 Fokus: Pengelolaan data siswa skala besar dan pencetakan kartu fisik standar perbankan.
 
-- [ ] **5.1 Direktori Siswa Berkapasitas Tinggi (*High-Capacity Directory*)**
-  - [ ] 4 Kartu KPI Ringkasan: Total Siswa, Kartu Aktif, Rombel Kelas, Siswa Terpilih
-  - [ ] Live Search Bar (pencarian nama, NISN, atau kelas secara real-time)
-  - [ ] Toolbar Filter Cerdas: Filter Rombel Kelas, Filter Status Kartu (*Aktif*, *Perlu Cetak Ulang*, *Revoked*)
-  - [ ] Pemilih Baris per Halaman (5, 10, 20 data/hal) & Tombol Reset Filter
-  - [ ] Tabel Siswa Interaktif dengan highlight baris aktif (`bg-rose-50/70 border-l-4 border-rose-600`)
-  - [ ] Kontrol Paginasi Cerdas (*"Menampilkan X - Y dari Z siswa"*)
-- [ ] **5.2 Generator Kanvas Fisik Kartu ISO CR-80 (85.60 x 53.98 mm)**
-  - [ ] Pratinjau bolak-balik fisik CR-80 skala akurat di samping tabel
-  - [ ] Sisi Depan: Kop sekolah, Pas foto 3x4, biodata, Barcode 1D Code 128 (NISN), QR Code bertanda tangan HMAC-SHA256
-  - [ ] Sisi Belakang: Ketentuan tata tertib, masa berlaku, kontak darurat, Tanda Tangan Digital QR Kepala Sekolah
-- [ ] **5.3 Layanan Keamanan & Pencetakan Kartu**
-  - [ ] Tombol Cetak Tunggal (CSS Print khusus printer ID Card PVC)
-  - [ ] Tombol Cetak Massal 1 Rombel (Template Grid A4 isi 8 kartu)
-  - [ ] Layanan *Revoke & Regenerate*: Mematikan kartu lama yang hilang seketika dan menerbitkan token UID baru
+- [x] **5.1 Direktori Siswa Berkapasitas Tinggi (*High-Capacity Directory*)**
+  - [x] 4 Kartu KPI Ringkasan: Total Siswa, Rombongan Belajar, Siswa Laki-Laki, Siswa Perempuan
+  - [x] Live Search Bar (pencarian nama, NISN, atau kelas secara real-time)
+  - [x] Toolbar Filter Cerdas: Filter Rombel Kelas, Filter Gender, Pencarian Teks
+  - [x] Pemilih Baris per Halaman (Paginasi interaktif) & Tombol Reset Filter
+  - [x] Tabel Siswa Interaktif dengan highlight baris aktif (`bg-rose-50/60 font-semibold`)
+  - [x] Fitur Multi-Select Checkbox untuk Cetak Siswa Terpilih secara massal
+- [x] **5.2 Generator Kanvas Fisik Kartu ISO CR-80 (85.60 x 53.98 mm)**
+  - [x] Pratinjau bolak-balik fisik CR-80 skala akurat di samping tabel (Tab Sisi Depan vs Sisi Belakang)
+  - [x] Sisi Depan: Kop sekolah, Pas foto 3x4, biodata lengkap, Barcode 1D Code 128 (NISN), QR Code otentikasi publik
+  - [x] Sisi Belakang: 4 Butir ketentuan tata tertib kartu, masa berlaku, Tanda Tangan Digital Resmi Kepala Sekolah Wahyu Agung Setiyawan S.Pd & QR TTE
+- [x] **5.3 Layanan Keamanan & Pencetakan Kartu**
+  - [x] Tombol Cetak Tunggal (CSS Print presisi tinggi khusus printer ID Card PVC ukuran 85.60 x 53.98 mm)
+  - [x] Tombol Cetak Massal 1 Rombel & Siswa Terpilih (Template Grid A4 isi 8 kartu per lembar lengkap dengan garis potong pembatas)
+  - [x] Halaman Publik Verifikasi QR Code Kartu Pelajar (`/card/verify/{student}`) saat di-scan oleh orang tua / pihak luar
+  - [x] Integrasi Navigasi Sidebar Operator & Admin aktif (menggantikan status `Soon` menjadi rute `cards.index`)
 
 ---
 

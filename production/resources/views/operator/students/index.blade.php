@@ -17,6 +17,10 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('cards.index') }}" class="px-3 py-2 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Buka Modul Cetak Kartu Siswa CR-80">
+                <i class="bi bi-person-badge-fill text-indigo-600 text-sm"></i>
+                <span>Cetak Kartu (CR-80)</span>
+            </a>
             <a href="{{ route('operator.students.export.excel', request()->query()) }}" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center gap-1.5 shadow-2xs transition" title="Unduh Berkas Excel (.xlsx)">
                 <i class="bi bi-file-earmark-excel-fill text-emerald-600 text-sm"></i>
                 <span>Unduh Excel</span>

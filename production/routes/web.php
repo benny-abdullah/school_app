@@ -33,6 +33,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login/refresh-captcha', [AuthController::class, 'refreshCaptcha'])->name('captcha.refresh');
 });
 
+// Verifikasi Publik Keabsahan Kartu Siswa (Otentikasi Scan QR Code)
+Route::get('/card/verify/{student}', [\App\Http\Controllers\CardController::class, 'verify'])->name('cards.verify');
+
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -73,6 +76,11 @@ Route::middleware('auth')->group(function () {
         Route::get('operator/classrooms-export/pdf', [\App\Http\Controllers\ClassroomController::class, 'exportPdf'])->name('classrooms.export.pdf');
         Route::get('operator/classrooms-export/excel', [\App\Http\Controllers\ClassroomController::class, 'exportExcel'])->name('classrooms.export.excel');
         Route::resource('operator/classrooms', \App\Http\Controllers\ClassroomController::class)->names('classrooms');
+
+        // Generator & Cetak Kartu Pelajar Digital ISO CR-80 (Operator & Admin)
+        Route::get('operator/cards', [\App\Http\Controllers\CardController::class, 'index'])->name('cards.index');
+        Route::get('operator/cards/print-single/{student}', [\App\Http\Controllers\CardController::class, 'printSingle'])->name('cards.print.single');
+        Route::get('operator/cards/print-bulk', [\App\Http\Controllers\CardController::class, 'printBulk'])->name('cards.print.bulk');
 
         // Master CRUD Data Siswa & Mutasi Rombel
         Route::get('operator/students-export/pdf', [\App\Http\Controllers\Operator\StudentController::class, 'exportPdf'])->name('operator.students.export.pdf');

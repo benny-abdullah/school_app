@@ -137,10 +137,10 @@
                         <span class="sidebar-text">Master Rombel</span>
                         <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarClassroomCount ?? \App\Models\Classroom::count() }}</span>
                     </a>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-person-badge text-base mr-3 text-slate-400"></i>
+                    <a href="{{ route('cards.index') }}" class="nav-link {{ request()->routeIs('cards.*') ? 'active' : '' }}">
+                        <i class="bi bi-person-badge-fill text-base mr-3 text-rose-500"></i>
                         <span class="sidebar-text">Cetak Kartu Siswa (CR-80)</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CR-80</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-upc-scan text-base mr-3 text-slate-400"></i>
@@ -183,10 +183,10 @@
                         <span class="sidebar-text">Master Rombel</span>
                         <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarClassroomCount ?? \App\Models\Classroom::count() }}</span>
                     </a>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-person-badge text-base mr-3 text-slate-400"></i>
+                    <a href="{{ route('cards.index') }}" class="nav-link {{ request()->routeIs('cards.*') ? 'active' : '' }}">
+                        <i class="bi bi-person-badge-fill text-base mr-3 text-rose-500"></i>
                         <span class="sidebar-text">Cetak Kartu Siswa (CR-80)</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CR-80</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-upc-scan text-base mr-3 text-slate-400"></i>
