@@ -55,10 +55,20 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [ ] Trait `HasUuids` (UUIDv7 berurutan berbasis waktu untuk performa indeks tinggi)
   - [ ] Local Query Scopes per Role (`scopeForUserRole`, `scopeActiveToday`)
 - [ ] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
-  - [ ] Seeder 5 Akun Role Demo (Super Admin/Kepsek, Guru BK, Wali Kelas Bambang, Ortu Hendra, Siswa Ahmad)
-  - [ ] Seeder Master GTK (7 Guru/Pegawai Dapodik)
-  - [ ] Seeder Rombel Kelas (X-RPL-1, XI-TKJ-2, XII-MM-1) & 10 Siswa Binaan
+  - [ ] Seeder 5 Akun Role Demo (Super Admin/Kepsek, Guru BK, Wali Kelas, Ortu, Siswa)
+  - [ ] Seeder Master GTK (Guru Kelas, Guru Mapel Agama/PJOK, Tenaga Kependidikan)
+  - [ ] Seeder Master 29 Rombel Kelas Lengkap:
+    - [ ] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
+    - [ ] Tingkat 2 (5 Kelas): `2A`, `2B`, `2C`, `2D`, `2E`
+    - [ ] Tingkat 3 (5 Kelas): `3A`, `3B`, `3C`, `3D`, `3E`
+    - [ ] Tingkat 4 (5 Kelas): `4A`, `4B`, `4C`, `4D`, `4E`
+    - [ ] Tingkat 5 (5 Kelas): `5A`, `5B`, `5C`, `5D`, `5E`
+    - [ ] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
+  - [ ] Seeder Siswa & Wali Murid Binaan SDN Kebonagung
   - [ ] Seeder Preset Aturan Poin Pelanggaran & Poin Prestasi
+- [ ] **2.4 Master Data & Manajemen Rombel Kelas (CRUD & Filter 29 Kelas)**
+  - [ ] Model `Classroom` dengan atribut: `id`, `code`, `name` (1A s/d 6E), `grade_level` (1 s/d 6), `homeroom_teacher_id`, `capacity`
+  - [ ] Antarmuka Manajemen Kelas di Modul Master Data & Integrasi Dropdown Filter 29 Kelas pada Scanner Gerbang dan Cetak Kartu Pelajar
 
 ---
 
@@ -229,7 +239,7 @@ Fokus: Penerapan sistem di server produksi dan serah terima operasional.
 | Tahap | Deskripsi Modul / Paket Kerja | Status |
 | :---: | :--- | :---: |
 | **Tahap 1** | Inisialisasi Proyek & Fondasi Laravel 13 | ✅ Selesai (100%) |
-| **Tahap 2** | Skema Basis Data, Eloquent & Seeder Master Data | ⏳ Pending |
+| **Tahap 2** | Skema Basis Data, Eloquent & Master 29 Kelas (1A-6E) | ⏳ Pending |
 | **Tahap 3** | Autentikasi Modern, RBAC & Clean White Shell | ⏳ Pending |
 | **Tahap 4** | Presensi Gerbang 3-Mode & Pemindai Kamera HP | ⏳ Pending |
 | **Tahap 5** | Direktori Siswa & Cetak Kartu Pelajar ISO CR-80 | ⏳ Pending |
