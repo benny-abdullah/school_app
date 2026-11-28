@@ -54,53 +54,52 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [ ] Model `Student`, `Teacher`, `Attendance`, `GatePass`, `DisciplineViolation`, `StudentMerit`, `WhistleblowerReport`
   - [ ] Trait `HasUuids` (UUIDv7 berurutan berbasis waktu untuk performa indeks tinggi)
   - [ ] Local Query Scopes per Role (`scopeForUserRole`, `scopeActiveToday`)
-- [ ] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
-  - [ ] Seeder 4 Akun Role Demo Siap Uji Login:
-    - [ ] Role `admin`: Login NIP `197103151998021004`, Password NIP `197103151998021004` (Drs. H. Mulyadi M.Pd - Kepala Sekolah)
-    - [ ] Role `operator`: Login NIP/NUPTK `198504202008011005`, Password NIP `198504202008011005` (Siti Aminah S.Kom - Operator Dapodik/TU)
-    - [ ] Role `guru/walikelas`: Login NIP/NUPTK `198007152006041012`, Password NIP `198007152006041012` (Bambang S.Pd - Wali Kelas 5A)
-    - [ ] Role `orangtua`: Login NISN Anak `0081234567`, Password NISN `0081234567` (Bpk. Hendra - Wali Murid Ahmad Rifai Kelas 5A)
+- [x] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
+  - [x] Seeder 4 Akun Role Demo Siap Uji Login:
+    - [x] Role `admin`: Login NIP `197103151998021004`, Password NIP `197103151998021004` (Drs. H. Mulyadi M.Pd - Kepala Sekolah)
+    - [x] Role `operator`: Login NIP/NUPTK `198504202008011005`, Password NIP `198504202008011005` (Siti Aminah S.Kom - Operator Dapodik/TU)
+    - [x] Role `guru/walikelas`: Login NIP/NUPTK `198007152006041012`, Password NIP `198007152006041012` (Bambang S.Pd - Wali Kelas 5A)
+    - [x] Role `orangtua`: Login NISN Anak `0081234567`, Password NISN `0081234567` (Bpk. Hendra - Wali Murid Ahmad Rifai Kelas 5A)
   - [ ] Seeder Master GTK (Guru Kelas 1 s/d 6, Guru Mapel Agama/PJOK, Operator TU)
-  - [ ] Seeder Master 29 Rombel Kelas Lengkap:
-    - [ ] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
-    - [ ] Tingkat 2 (5 Kelas): `2A`, `2B`, `2C`, `2D`, `2E`
-    - [ ] Tingkat 3 (5 Kelas): `3A`, `3B`, `3C`, `3D`, `3E`
-    - [ ] Tingkat 4 (5 Kelas): `4A`, `4B`, `4C`, `4D`, `4E`
-    - [ ] Tingkat 5 (5 Kelas): `5A`, `5B`, `5C`, `5D`, `5E`
-    - [ ] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
+  - [x] Seeder Master 29 Rombel Kelas Lengkap:
+    - [x] Tingkat 1 (4 Kelas): `1A`, `1B`, `1C`, `1D`
+    - [x] Tingkat 2 (5 Kelas): `2A`, `2B`, `2C`, `2D`, `2E`
+    - [x] Tingkat 3 (5 Kelas): `3A`, `3B`, `3C`, `3D`, `3E`
+    - [x] Tingkat 4 (5 Kelas): `4A`, `4B`, `4C`, `4D`, `4E`
+    - [x] Tingkat 5 (5 Kelas): `5A`, `5B`, `5C`, `5D`, `5E`
+    - [x] Tingkat 6 (5 Kelas): `6A`, `6B`, `6C`, `6D`, `6E`
   - [ ] Seeder Siswa & Wali Murid Binaan SDN Kebonagung (Ahmad Rifai NISN `0081234567` dkk)
   - [ ] Seeder Preset Aturan Poin Pelanggaran & Poin Prestasi
-- [ ] **2.4 Master Data & Manajemen Rombel Kelas (CRUD & Filter 29 Kelas)**
-  - [ ] Model `Classroom` dengan atribut: `id`, `code`, `name` (1A s/d 6E), `grade_level` (1 s/d 6), `homeroom_teacher_id`, `capacity`
-  - [ ] Antarmuka Manajemen Kelas di Modul Master Data & Integrasi Dropdown Filter 29 Kelas pada Scanner Gerbang dan Cetak Kartu Pelajar
+- [x] **2.4 Master Data & Manajemen Rombel Kelas (CRUD & Filter 29 Kelas)**
+  - [x] Model `Classroom` dengan atribut: `id`, `code`, `name` (1A s/d 6E), `grade_level` (1 s/d 6), `homeroom_teacher`, `homeroom_nip`, `capacity`, `total_students`
+  - [x] Antarmuka Manajemen Kelas di Modul Operator & Filter Tab 29 Kelas
 
 ---
 
 ## 🔐 Tahap 3: Autentikasi, Multi-Role RBAC & Shell Antarmuka
 Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise Clean White*.
 
-- [ ] **3.1 Sistem Autentikasi Modern (Direct Login Page)**
-  - [ ] Tampilan halaman login langsung (tanpa halaman landing page) dengan gaya HRD Modern Clean White & logo resmi SDN Kebonagung
-  - [ ] Logika Login Fleksibel Multi-Identifier:
-    - [ ] Login Guru, Operator & Admin: Input NIP (18 digit) atau NUPTK (16 digit) & Password = NIP/NUPTK
-    - [ ] Login Orang Tua: Input NISN Siswa/Anaknya (10 digit) & Password = NISN Siswa
-  - [ ] Fitur 1-Klik Pemilih Role Demo (Admin, Operator, Guru/Wali Kelas, Orang Tua) untuk pengujian instan
-  - [ ] Validasi keamanan login (Argon2id hashing, Rate Limiting throttler, proteksi Brute Force)
-  - [ ] Redirection otomatis sesuai role ke dashboard masing-masing setelah autentikasi sukses
-- [ ] **3.2 RBAC Multi-Role & Middleware Proteksi Data (Zero IDOR)**
-  - [ ] Definisi Laravel Gates & Policies untuk 4 Role (`admin`, `operator`, `guru/walikelas`, `orangtua`)
-  - [ ] Middleware `EnforceServerDataScope` (Orang Tua hanya bisa akses anaknya, Guru/Wali Kelas hanya rombelnya)
+- [x] **3.1 Sistem Autentikasi Modern (Direct Login Page)**
+  - [x] Tampilan halaman login langsung (tanpa halaman landing page) dengan gaya HRD Modern Clean White & logo resmi SDN Kebonagung
+  - [x] Logika Login Fleksibel Multi-Identifier:
+    - [x] Login Guru, Operator & Admin: Input NIP (18 digit) atau NUPTK (16 digit) & Password = NIP/NUPTK
+    - [x] Login Orang Tua: Input NISN Siswa/Anaknya (10 digit) & Password = NISN Siswa
+  - [x] Fitur 1-Klik Pemilih Role Demo (Admin, Operator, Guru/Wali Kelas, Orang Tua) untuk pengujian instan
+  - [x] Captcha Penjumlahan Matematika Sederhana untuk proteksi bot & brute-force
+  - [x] Redirection otomatis sesuai role ke dashboard masing-masing setelah autentikasi sukses
+- [x] **3.2 RBAC Multi-Role & Middleware Proteksi Data (Zero IDOR)**
+  - [x] Definisi Middleware `RoleMiddleware` untuk 4 Role (`admin`, `operator`, `guru/walikelas`, `orangtua`)
+  - [x] Proteksi Rute Terisolasi (User role lain tidak dapat mengakses dashboard role lain)
   - [ ] Audit Trail Logger otomatis saat user login, logout, atau mengubah data sensitif
-- [ ] **3.3 Shell Antarmuka & Dashboard Khusus Masing-Masing Role**
-  - [ ] Sidebar navigasi vertikal responsif (260px expanded, 68px collapsed mini, drawer mobile overlay)
-  - [ ] Top Header Sticky Glassmorphism (`backdrop-blur-md bg-white/90`) dengan profil user & tombol logout
-  - [ ] Pill Quick Role Switcher di header
-  - [ ] Tampilan 4 Dashboard Khusus Sesuai Hak Akses Role:
-    - [ ] **Dashboard Admin (Kepsek)**: Monitoring metrik global sekolah, rasio kehadiran, shortcut GTK & audit ISO
-    - [ ] **Dashboard Operator**: Status 29 kelas, siswa aktif, shortcut cetak kartu CR-80, scanner gerbang
-    - [ ] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi KBM, verifikasi izin, tombol scanner HP
-    - [ ] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), waktu tap gerbang realtime, buku saku tatib/prestasi, formulir izin sakit
-  - [ ] Toast Notification Engine reaktif (pemberitahuan sukses/gagal di pojok kanan bawah)
+- [x] **3.3 Shell Antarmuka & Dashboard Khusus Masing-Masing Role**
+  - [x] Shell Antarmuka Master `layouts/app.blade.php` dengan Sidebar responsif, Glassmorphism Header, dan Logo Resmi
+  - [x] Tampilan 4 Dashboard Khusus Sesuai Hak Akses Role:
+    - [x] **Dashboard Admin (Kepsek)**: Monitoring metrik global sekolah, rasio kehadiran, dan ringkasan 29 rombel
+    - [x] **Dashboard Operator**: Status 29 kelas lengkap, siswa aktif, shortcut cetak kartu CR-80, scanner gerbang
+    - [x] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi siswa 5A realtime, tombol scanner kamera
+    - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
+  - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
+  - [ ] Floating AI Copilot Drawer (kanan bawah)
   - [ ] Floating AI Copilot Drawer (kanan bawah)
 
 ---

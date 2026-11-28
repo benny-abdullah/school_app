@@ -1,7 +1,60 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes - Star Kids SDN Kebonagung
+|--------------------------------------------------------------------------
+*/
+
+// Root URL mengarah langsung ke login atau ke dashboard jika sudah login
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        $user = Auth::user();
+        return match ($user->role) {
+            'admin'          => redirect()->route('admin.dashboard'),
+            'operator'       => redirect()->route('operator.dashboard'),
+            'guru/walikelas' => redirect()->route('guru.dashboard'),
+            'orangtua'       => redirect()->route('ortu.dashboard'),
+            default          => redirect()->route('login'),
+        };
+    }
+    return redirect()->route('login');
+})->name('home');
+
+// Guest Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/login/refresh-captcha', [AuthController::class, 'refreshCaptcha'])->name('captcha.refresh');
+});
+
+// Authenticated Routes
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Dashboard Super Admin / Kepala Sekolah
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/admin/dashboard', [DashboardController::class, 'admin'])->name('admin.dashboard');
+        Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'));
+    });
+
+    // Dashboard Operator Sekolah & Tata Usaha
+    Route::middleware('role:operator')->group(function () {
+        Route::get('/operator/dashboard', [DashboardController::class, 'operator'])->name('operator.dashboard');
+    });
+
+    // Dashboard Guru & Wali Kelas
+    Route::middleware('role:guru/walikelas')->group(function () {
+        Route::get('/guru/dashboard', [DashboardController::class, 'guru'])->name('guru.dashboard');
+    });
+
+    // Dashboard Orang Tua Murid / Siswa
+    Route::middleware('role:orangtua')->group(function () {
+        Route::get('/ortu/dashboard', [DashboardController::class, 'orangtua'])->name('ortu.dashboard');
+    });
 });
