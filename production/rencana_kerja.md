@@ -21,10 +21,10 @@ Dokumen ini berfungsi sebagai **Checklist Kendali Utama** bagi Anda untuk memant
 ## 🏗️ Tahap 1: Inisialisasi Proyek & Fondasi Sistem Laravel 13
 Fokus: Membangun kerangka dasar aplikasi Laravel 13 bersih di dalam folder `production/`.
 
-- [ ] **1.1 Inisialisasi Kerangka Laravel 13 (PHP 8.4)**
-  - [ ] Generate struktur proyek Laravel 13 di `production/`
-  - [ ] Konfigurasi file `.env` (Database, App Name, Timezone `Asia/Jakarta`, Locale `id`)
-  - [ ] Konfigurasi Composer dependencies (`livewire/livewire`, `predis/predis`, dsb.)
+- [x] **1.1 Inisialisasi Kerangka Laravel 13 (PHP 8.4)**
+  - [x] Generate struktur proyek Laravel 13 di `production/`
+  - [x] Konfigurasi file `.env` (Database, App Name, Timezone `Asia/Jakarta`, Locale `id`)
+  - [x] Konfigurasi Composer dependencies (`livewire/livewire`, `predis/predis`, dsb.)
 - [ ] **1.2 Setup Aset Antarmuka & Desain Sistem (Tailwind CSS v4 & Alpine.js)**
   - [ ] Setup Tailwind CSS dengan palet warna resmi: Primary Rose-600 (`#e11d48`), Emerald-600, Slate-900
   - [ ] Integrasi Tipografi Google Font *Plus Jakarta Sans*
@@ -226,7 +226,7 @@ Fokus: Penerapan sistem di server produksi dan serah terima operasional.
 ## 📊 Matriks Progres Pekerjaan Ringkas
 | Tahap | Deskripsi Modul / Paket Kerja | Status |
 | :---: | :--- | :---: |
-| **Tahap 1** | Inisialisasi Proyek & Fondasi Laravel 13 | ⏳ Pending |
+| **Tahap 1** | Inisialisasi Proyek & Fondasi Laravel 13 | 🔄 In Progress (1.1 Selesai) |
 | **Tahap 2** | Skema Basis Data, Eloquent & Seeder Master Data | ⏳ Pending |
 | **Tahap 3** | Autentikasi Modern, RBAC & Clean White Shell | ⏳ Pending |
 | **Tahap 4** | Presensi Gerbang 3-Mode & Pemindai Kamera HP | ⏳ Pending |
