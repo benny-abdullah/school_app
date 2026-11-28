@@ -25,11 +25,13 @@ Fokus: Membangun kerangka dasar aplikasi Laravel 13 bersih di dalam folder `prod
   - [x] Generate struktur proyek Laravel 13 di `production/`
   - [x] Konfigurasi file `.env` (Database MySQL `db_starkids`, App Name, Timezone `Asia/Jakarta` WIB, Locale `id`)
   - [x] Konfigurasi Composer dependencies (`livewire/livewire`, `predis/predis`, dsb.)
-- [ ] **1.2 Setup Aset Antarmuka & Desain Sistem (Tailwind CSS v4 & Alpine.js)**
-  - [ ] Setup Tailwind CSS dengan palet warna resmi: Primary Rose-600 (`#e11d48`), Emerald-600, Slate-900
-  - [ ] Integrasi Tipografi Google Font *Plus Jakarta Sans*
-  - [ ] Integrasi Icon Library: *Bootstrap Icons* (v1.11.3)
-  - [ ] Konfigurasi Alpine.js & Livewire 3 micro-interactions
+- [x] **1.2 Setup Aset Antarmuka & Desain Sistem (Tailwind CSS v4 & Alpine.js)**
+  - [x] Setup Tailwind CSS dengan palet warna resmi: Primary Rose-600 (`#e11d48`), Emerald-600, Slate-900
+  - [x] Integrasi Tipografi Google Font *Plus Jakarta Sans* (Weights 300 - 800)
+  - [x] Integrasi Icon Library: *Bootstrap Icons* (v1.11.3) via NPM
+  - [x] Konfigurasi Alpine.js & Livewire 3 micro-interactions
+  - [x] Integrasi Logo Resmi SDN Kebonagung (`logo_sdnkebonagung.jpeg`) ke aset publik
+  - [x] Penyelarasan tema & komponen UI identik dengan `index.html` (HRD Clean White, status badges, laser scanner)
 - [ ] **1.3 Integrasi Library Pemindai & Visualisasi Data**
   - [ ] Integrasi `html5-qrcode` untuk pemindai kamera barcode HP
   - [ ] Integrasi Chart.js untuk dasbor statistik tren kehadiran
@@ -226,7 +228,7 @@ Fokus: Penerapan sistem di server produksi dan serah terima operasional.
 ## 📊 Matriks Progres Pekerjaan Ringkas
 | Tahap | Deskripsi Modul / Paket Kerja | Status |
 | :---: | :--- | :---: |
-| **Tahap 1** | Inisialisasi Proyek & Fondasi Laravel 13 | 🔄 In Progress (1.1 Selesai) |
+| **Tahap 1** | Inisialisasi Proyek & Fondasi Laravel 13 | 🔄 In Progress (1.1 & 1.2 Selesai) |
 | **Tahap 2** | Skema Basis Data, Eloquent & Seeder Master Data | ⏳ Pending |
 | **Tahap 3** | Autentikasi Modern, RBAC & Clean White Shell | ⏳ Pending |
 | **Tahap 4** | Presensi Gerbang 3-Mode & Pemindai Kamera HP | ⏳ Pending |
