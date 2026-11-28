@@ -24,7 +24,10 @@ class RoleMiddleware
         $user = Auth::user();
 
         // Cek apakah role pengguna ada di daftar roles yang diperbolehkan
-        if (!in_array($user->role, $roles)) {
+        // Catatan: Role admin (Kepala Sekolah) memiliki hak supervisi eksekutif atas modul operator
+        $hasAccess = in_array($user->role, $roles) || ($user->isAdmin() && in_array('operator', $roles));
+
+        if (!$hasAccess) {
             // Redirect aman ke dashboard resmi user dengan pemberitahuan
             $redirectRoute = match ($user->role) {
                 'admin'          => 'admin.dashboard',

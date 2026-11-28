@@ -101,6 +101,32 @@
                         <i class="bi bi-speedometer2 text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Dasbor Eksekutif</span>
                     </a>
+
+                    <!-- Menu Operasional & Kesiswaan (Supervisi Kepala Sekolah) -->
+                    <div class="px-3 pt-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Supervisi Operasional</div>
+                    <a href="{{ route('operator.students.index') }}" class="nav-link {{ request()->routeIs('operator.students.*') ? 'active' : '' }}">
+                        <i class="bi bi-people-fill text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Master Data Siswa</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CRUD</span>
+                    </a>
+                    <a href="{{ route('operator.dashboard') }}" class="nav-link {{ request()->routeIs('operator.dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-diagram-3 text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Master 29 Rombel</span>
+                        <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">29</span>
+                    </a>
+                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
+                        <i class="bi bi-person-badge text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Cetak Kartu Siswa (CR-80)</span>
+                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                    </a>
+                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
+                        <i class="bi bi-upc-scan text-base mr-3 text-slate-400"></i>
+                        <span class="sidebar-text">Scanner Gerbang</span>
+                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                    </a>
+
+                    <!-- Menu Laporan & Audit -->
+                    <div class="px-3 pt-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Laporan & Audit</div>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-pie-chart text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Analitik Kehadiran</span>

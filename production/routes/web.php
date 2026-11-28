@@ -43,8 +43,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard', fn() => redirect()->route('admin.dashboard'));
     });
 
-    // Dashboard Operator Sekolah & Tata Usaha
-    Route::middleware('role:operator')->group(function () {
+    // Modul Operasional & Kesiswaan (Operator & Supervisi Kepala Sekolah/Admin)
+    Route::middleware('role:operator,admin')->group(function () {
         Route::get('/operator/dashboard', [DashboardController::class, 'operator'])->name('operator.dashboard');
 
         // Master CRUD Data Siswa & Mutasi Rombel
