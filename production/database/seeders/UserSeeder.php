@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         $coreUsers = [
             [
                 'name' => 'WAHYU AGUNG SETIYAWAN S.Pd',
-                'username' => 'admin_wahyu',
+                'username' => '198708222019031004',
                 'email' => 'kepsek@sdnkebonagung.sch.id',
                 'nip_nuptk' => '198708222019031004',
                 'nisn' => null,

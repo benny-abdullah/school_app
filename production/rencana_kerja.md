@@ -56,7 +56,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
   - [ ] Local Query Scopes per Role (`scopeForUserRole`, `scopeActiveToday`)
 - [x] **2.3 Database Seeder Realistis (SDN Kebonagung Kota Pasuruan)**
   - [x] Seeder 4 Akun Role Demo Siap Uji Login:
-    - [x] Role `admin`: Login NIP `198708222019031004`, Password NIP `198708222019031004` (WAHYU AGUNG SETIYAWAN S.Pd - Kepala Sekolah)
+    - [x] Role `admin`: Login NIP / Username `198708222019031004`, Password `198708222019031004` (WAHYU AGUNG SETIYAWAN S.Pd - Kepala Sekolah)
     - [x] Role `operator`: Login NIP/NUPTK `198504202008011005`, Password NIP `198504202008011005` (Siti Aminah S.Kom - Operator Dapodik/TU)
     - [x] Role `guru/walikelas`: Login NIP/NUPTK `198007152006041012`, Password NIP `198007152006041012` (Bambang S.Pd - Wali Kelas 5A)
     - [x] Role `orangtua`: Login NISN Anak `0081234567`, Password NISN `0081234567` (Bpk. Hendra - Wali Murid Ahmad Rifai Kelas 5A)
