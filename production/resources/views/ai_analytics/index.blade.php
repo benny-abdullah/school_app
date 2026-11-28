@@ -17,7 +17,7 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-            @if(Auth::user()->isAdmin() || Auth::user()->isOperator())
+            @if(Auth::user()->isAdmin())
                 <button type="button" @click="showConfig = !showConfig" 
                     class="px-3.5 py-2 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer shadow-xs"
                     :class="showConfig ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200'">
@@ -33,8 +33,8 @@
         </div>
     </div>
 
-    @if(Auth::user()->isAdmin() || Auth::user()->isOperator())
-    <!-- Panel Konfigurasi API Key Google Gemini (Khusus Admin / Operator) -->
+    @if(Auth::user()->isAdmin())
+    <!-- Panel Konfigurasi API Key Google Gemini (Eksklusif Role Admin / Kepala Sekolah) -->
     <div x-show="showConfig" x-transition.duration.200ms class="card p-6 border-2 border-violet-200 bg-gradient-to-r from-violet-50/40 via-white to-rose-50/30">
         <div class="flex items-start justify-between gap-4 border-b border-slate-200/80 pb-4 mb-4">
             <div class="flex items-center gap-3">

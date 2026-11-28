@@ -55,17 +55,19 @@ class AiAnalyticsController extends Controller
             ->limit(10)
             ->get();
 
-        // Konfigurasi API Key (Khusus Admin / Operator)
-        $rawApiKey = AppSetting::get('gemini_api_key', env('GEMINI_API_KEY', ''));
+        // Konfigurasi API Key (Eksklusif Hanya Untuk Role Admin / Kepala Sekolah)
+        $isAdmin = Auth::user()->isAdmin();
+        $rawApiKey = $isAdmin ? AppSetting::get('gemini_api_key', env('GEMINI_API_KEY', '')) : '';
         $maskedApiKey = '';
         if (!empty($rawApiKey) && $rawApiKey !== 'your_gemini_api_key_here') {
             $maskedApiKey = substr($rawApiKey, 0, 7) . '••••••••••••••••' . substr($rawApiKey, -4);
         }
 
+        $activeKey = AppSetting::get('gemini_api_key', env('GEMINI_API_KEY', ''));
         $aiConfig = [
             'raw_api_key'    => $rawApiKey,
             'masked_api_key' => $maskedApiKey,
-            'has_key'        => !empty($rawApiKey) && $rawApiKey !== 'your_gemini_api_key_here',
+            'has_key'        => !empty($activeKey) && $activeKey !== 'your_gemini_api_key_here',
             'model'          => AppSetting::get('gemini_model', 'gemini-1.5-flash'),
             'status'         => AppSetting::get('gemini_status', 'standby'),
             'last_tested'    => AppSetting::get('gemini_last_tested_at', null),
@@ -102,12 +104,12 @@ class AiAnalyticsController extends Controller
 
     /**
      * Endpoint Uji Koneksi API Key Google Gemini (1-Klik Test Connection)
+     * Eksklusif hanya untuk Role Admin (Kepala Sekolah)
      */
     public function testConnection(Request $request)
     {
-        // Hanya Admin & Operator yang boleh menguji koneksi API
-        if (!Auth::user()->isAdmin() && !Auth::user()->isOperator()) {
-            return response()->json(['success' => false, 'message' => 'Akses ditolak.'], 403);
+        if (!Auth::user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Akses ditolak! Hanya Administrator (Kepala Sekolah) yang berhak menguji koneksi API.'], 403);
         }
 
         $apiKey = $request->input('api_key');
@@ -120,11 +122,12 @@ class AiAnalyticsController extends Controller
 
     /**
      * Endpoint Simpan Konfigurasi API Key Google Gemini
+     * Eksklusif hanya untuk Role Admin (Kepala Sekolah)
      */
     public function saveSettings(Request $request)
     {
-        if (!Auth::user()->isAdmin() && !Auth::user()->isOperator()) {
-            return back()->with('error', 'Hanya Administrator yang berhak mengubah konfigurasi API AI.');
+        if (!Auth::user()->isAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Akses ditolak! Hanya Administrator (Kepala Sekolah) yang berhak mengubah konfigurasi API AI.'], 403);
         }
 
         $request->validate([
