@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') - Star Kids SDN Kebonagung</title>
+    <title>@yield('title', 'Dashboard') - STAR-KIDS SDN Kebonagung</title>
 
     <!-- Google Font Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,8 +36,8 @@
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                     <img src="{{ asset('images/logo_sdnkebonagung.jpeg') }}" alt="Logo SDN Kebonagung" class="w-9 h-9 object-contain rounded-lg border border-slate-200 shadow-xs group-hover:scale-105 transition">
                     <div class="hidden sm:block">
-                        <span class="block font-extrabold text-sm tracking-tight text-slate-900 group-hover:text-rose-600 transition">Star Kids SDN Kebonagung</span>
-                        <span class="block text-[11px] font-semibold text-slate-500">Sistem Monitoring Terpadu Sekolah</span>
+                        <span class="block font-black text-sm tracking-tight text-slate-900 group-hover:text-rose-600 transition">STAR-KIDS</span>
+                        <span class="block text-[11px] font-semibold text-slate-500">Sistem Tata Tertib & Apresiasi Karakter Digital SDN Kebonagung</span>
                     </div>
                 </a>
             </div>

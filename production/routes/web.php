@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes - Star Kids SDN Kebonagung
+| Web Routes - STAR-KIDS SDN Kebonagung
 |--------------------------------------------------------------------------
 */
 
