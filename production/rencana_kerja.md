@@ -73,6 +73,12 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
 - [x] **2.4 Master Data & Manajemen Rombel Kelas (CRUD & Filter 29 Kelas)**
   - [x] Model `Classroom` dengan atribut: `id`, `code`, `name` (1A s/d 6E), `grade_level` (1 s/d 6), `homeroom_teacher`, `homeroom_nip`, `capacity`, `total_students`
   - [x] Antarmuka Manajemen Kelas di Modul Operator & Filter Tab 29 Kelas
+- [ ] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
+  - [ ] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
+  - [ ] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & riwayat mutasi
+  - [ ] Impor Data Siswa Massal: Format Excel / CSV Dapodik dengan validasi duplikasi NISN otomatis
+  - [ ] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
+  - [ ] Pengaturan Kuota & Kapasitas 29 Rombel Kelas (1A s/d 6E)
 
 ---
 
@@ -99,7 +105,11 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi siswa 5A realtime, tombol scanner kamera
     - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
   - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
-  - [ ] Floating AI Copilot Drawer (kanan bawah)
+- [ ] **3.4 Master CRUD Admin / Kepala Sekolah (Manajemen Akun, GTK & Penetapan Wali Kelas)**
+  - [ ] CRUD Manajemen Akun Pengguna (*User Management*): Tambah user baru, suspend akun, reset password ke default NIP/NISN
+  - [ ] CRUD Master GTK (Guru & Tenaga Kependidikan): Form tambah/edit guru, NIP (18 digit), NUPTK (16 digit), jabatan, mapel
+  - [ ] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
+  - [ ] CRUD Master Aturan Poin Tatib & Prestasi: Konfigurasi ambang batas SP1, SP2, SP3, bobot minus pelanggaran, dan reward merit points
   - [ ] Floating AI Copilot Drawer (kanan bawah)
 
 ---
