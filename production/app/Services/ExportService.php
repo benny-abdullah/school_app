@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -12,6 +14,18 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportService
 {
+    /**
+     * Resolusi data resmi Kepala Sekolah dari basis data GTK / Pengguna
+     * Mengutamakan guru/GTK dengan jabatan 'Kepala Sekolah', role 'admin', atau nama Wahyu Agung
+     */
+    public static function getKepalaSekolah(): ?User
+    {
+        return User::where(function ($q) {
+            $q->where('additional_info->jabatan', 'like', '%Kepala Sekolah%')
+              ->orWhere('role', 'admin');
+        })->first() ?? User::where('name', 'like', '%Wahyu Agung%')->first();
+    }
+
     /**
      * Download Excel (.xlsx) dengan PhpSpreadsheet yang terformat profesional
      *
@@ -96,13 +110,43 @@ class ExportService
         $tableRange = "A{$headerRow}:{$lastColLetter}" . ($currentRow - 1);
         $sheet->getStyle($tableRange)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setARGB('FFE2E8F0');
 
-        // 5. Auto-size kolom
+        // 5. Tanda Tangan Resmi Kepala Sekolah (Dinamis dari Basis Data Guru)
+        $kepsek = self::getKepalaSekolah();
+        $kepsekName = $kepsek?->name ?? 'WAHYU AGUNG SETIYAWAN S.Pd';
+        $kepsekNip = $kepsek?->nip_nuptk ?? '198708222019031004';
+
+        $ttdRow = $currentRow + 2;
+        $ttdColStart = max(1, $totalCols - 1);
+        $ttdColLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($ttdColStart);
+        $ttdColEndLetter = $lastColLetter;
+
+        $sheet->mergeCells("{$ttdColLetter}{$ttdRow}:{$ttdColEndLetter}{$ttdRow}");
+        $sheet->setCellValue("{$ttdColLetter}{$ttdRow}", 'Kota Pasuruan, ' . Carbon::now('Asia/Jakarta')->translatedFormat('d F Y'));
+        $sheet->getStyle("{$ttdColLetter}{$ttdRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $ttdRow++;
+        $sheet->mergeCells("{$ttdColLetter}{$ttdRow}:{$ttdColEndLetter}{$ttdRow}");
+        $sheet->setCellValue("{$ttdColLetter}{$ttdRow}", 'Kepala UPTD SDN Kebonagung,');
+        $sheet->getStyle("{$ttdColLetter}{$ttdRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $ttdRow += 3; // Ruang tanda tangan
+        $sheet->mergeCells("{$ttdColLetter}{$ttdRow}:{$ttdColEndLetter}{$ttdRow}");
+        $sheet->setCellValue("{$ttdColLetter}{$ttdRow}", $kepsekName);
+        $sheet->getStyle("{$ttdColLetter}{$ttdRow}")->getFont()->setBold(true)->setUnderline(true);
+        $sheet->getStyle("{$ttdColLetter}{$ttdRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $ttdRow++;
+        $sheet->mergeCells("{$ttdColLetter}{$ttdRow}:{$ttdColEndLetter}{$ttdRow}");
+        $sheet->setCellValueExplicit("{$ttdColLetter}{$ttdRow}", 'NIP. ' . $kepsekNip, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+        $sheet->getStyle("{$ttdColLetter}{$ttdRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // 6. Auto-size kolom
         for ($col = 1; $col <= $totalCols; $col++) {
             $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col);
             $sheet->getColumnDimension($colLetter)->setAutoSize(true);
         }
 
-        // 6. Response Stream
+        // 7. Response Stream
         return response()->streamDownload(function () use ($spreadsheet) {
             $writer = new Xlsx($spreadsheet);
             $writer->save('php://output');
@@ -124,6 +168,11 @@ class ExportService
      */
     public static function pdf(string $filename, string $view, array $data, string $orientation = 'portrait')
     {
+        // Inject data kepala sekolah otomatis ke view jika belum disertakan
+        if (!isset($data['kepsek'])) {
+            $data['kepsek'] = self::getKepalaSekolah();
+        }
+
         $pdf = Pdf::loadView($view, $data);
         $pdf->setPaper('a4', $orientation);
         $pdf->setOptions([

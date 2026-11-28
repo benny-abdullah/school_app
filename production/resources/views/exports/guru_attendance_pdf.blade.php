@@ -69,8 +69,8 @@
             <div>Mengetahui,</div>
             <div style="margin-top: 2px;">Kepala UPTD SDN Kebonagung</div>
             <div class="ttd-space"></div>
-            <div class="ttd-name">Drs. H. Mulyadi M.Pd</div>
-            <div class="ttd-nip">NIP. 197103151998021004</div>
+            <div class="ttd-name">{{ $kepsek?->name ?? 'WAHYU AGUNG SETIYAWAN S.Pd' }}</div>
+            <div class="ttd-nip">NIP. {{ $kepsek?->nip_nuptk ?? '198708222019031004' }}</div>
         </td>
         <td style="width: 50%; text-align: center;">
             <div>Kota Pasuruan, {{ \Carbon\Carbon::now('Asia/Jakarta')->translatedFormat('d F Y') }}</div>

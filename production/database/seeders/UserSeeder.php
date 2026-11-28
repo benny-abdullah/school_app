@@ -15,15 +15,15 @@ class UserSeeder extends Seeder
     {
         $coreUsers = [
             [
-                'name' => 'Drs. H. Mulyadi M.Pd',
-                'username' => 'admin_mulyadi',
+                'name' => 'WAHYU AGUNG SETIYAWAN S.Pd',
+                'username' => 'admin_wahyu',
                 'email' => 'kepsek@sdnkebonagung.sch.id',
-                'nip_nuptk' => '197103151998021004',
+                'nip_nuptk' => '198708222019031004',
                 'nisn' => null,
                 'role' => 'admin',
                 'phone' => '081234567001',
                 'status' => 'active',
-                'password' => Hash::make('197103151998021004'),
+                'password' => Hash::make('198708222019031004'),
                 'additional_info' => [
                     'jabatan' => 'Kepala Sekolah',
                     'instansi' => 'SDN Kebonagung Kota Pasuruan',
