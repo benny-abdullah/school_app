@@ -17,9 +17,10 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <span class="status-badge status-active">
-                <i class="bi bi-shield-check"></i> 29 Rombel Terakreditasi
-            </span>
+            <a href="{{ route('classrooms.create') }}" class="btn-primary px-4 py-2 text-xs flex items-center gap-2 shadow-xs">
+                <i class="bi bi-plus-circle-fill text-sm"></i>
+                <span>Tambah Rombel Baru</span>
+            </a>
         </div>
     </div>
 
@@ -146,11 +147,26 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('classrooms.edit', $cls->id) }}" 
-                                    class="btn-outline-primary px-3 py-1.5 text-xs flex items-center justify-center gap-1.5 shadow-2xs">
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span>Kelola</span>
-                                </a>
+                                <div class="flex items-center justify-center gap-1.5">
+                                    <a href="{{ route('classrooms.edit', $cls->id) }}" 
+                                        class="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition" title="Kelola / Penetapan SK">
+                                        <i class="bi bi-pencil-square text-xs"></i>
+                                    </a>
+
+                                    @if(($cls->students_count > 0 ? $cls->students_count : $cls->total_students) == 0)
+                                        <form action="{{ route('classrooms.destroy', $cls->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus rombel {{ $cls->name }} secara permanen?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-1.5 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-600 transition" title="Hapus Rombel Kosong">
+                                                <i class="bi bi-trash-fill text-xs"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button type="button" class="p-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-300 cursor-not-allowed transition" title="Rombel berisi {{ $cls->students_count > 0 ? $cls->students_count : $cls->total_students }} siswa. Mutasikan siswa terlebih dahulu untuk menghapus." onclick="alert('Kelas {{ $cls->code }} tidak dapat dihapus karena masih menampung {{ $cls->students_count > 0 ? $cls->students_count : $cls->total_students }} siswa aktif. Harap mutasikan siswa terlebih dahulu!');">
+                                            <i class="bi bi-trash text-xs"></i>
+                                        </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty

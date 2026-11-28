@@ -6,11 +6,12 @@ use App\Models\ActivityLog;
 use App\Models\Classroom;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ClassroomController extends Controller
 {
     /**
-     * Tampilkan direktori 29 Master Rombongan Belajar dengan filter dan relasi Wali Kelas
+     * Tampilkan direktori Master Rombongan Belajar dengan filter dan relasi Wali Kelas
      */
     public function index(Request $request)
     {
@@ -35,6 +36,107 @@ class ClassroomController extends Controller
         ];
 
         return view('operator.classrooms.index', compact('classrooms', 'stats', 'selectedGrade'));
+    }
+
+    /**
+     * Form tambah rombel kelas baru
+     */
+    public function create()
+    {
+        $teachers = User::where('role', 'guru/walikelas')
+            ->orderBy('name')
+            ->get();
+
+        $assignedClasses = Classroom::whereNotNull('homeroom_teacher_id')
+            ->pluck('code', 'homeroom_teacher_id')
+            ->toArray();
+
+        return view('operator.classrooms.create', compact('teachers', 'assignedClasses'));
+    }
+
+    /**
+     * Simpan rombel kelas baru ke database
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'grade_level'         => 'required|integer|min:1|max:6',
+            'section'             => 'required|string|max:5',
+            'capacity'            => 'required|integer|min:15|max:40',
+            'room_name'           => 'nullable|string|max:100',
+            'academic_year'       => 'required|string|max:20',
+            'status'              => 'required|in:active,inactive',
+            'homeroom_teacher_id' => 'nullable|exists:users,id',
+        ], [
+            'grade_level.required' => 'Tingkat kelas wajib dipilih.',
+            'section.required'     => 'Huruf / nama seksi rombel wajib diisi.',
+            'capacity.required'    => 'Daya tampung kapasitas kelas wajib diisi.',
+            'capacity.min'         => 'Kapasitas minimal 15 siswa.',
+            'capacity.max'         => 'Kapasitas maksimal 40 siswa.',
+        ]);
+
+        $section = strtoupper(trim($validated['section']));
+        $code = $validated['grade_level'] . $section;
+        $name = 'Kelas ' . $code;
+
+        // Cek keunikan kode kelas
+        if (Classroom::where('code', $code)->exists()) {
+            return back()->withInput()->withErrors(['section' => "Rombel dengan kode {$code} sudah ada di dalam sistem."]);
+        }
+
+        $notice = '';
+        $teacherName = null;
+        $teacherNip = null;
+
+        if (!empty($validated['homeroom_teacher_id'])) {
+            $teacherId = (int)$validated['homeroom_teacher_id'];
+
+            // Cek anti-bentrok jika guru sedang memegang rombel lain
+            $oldClass = Classroom::where('homeroom_teacher_id', $teacherId)->first();
+            if ($oldClass) {
+                $oldClass->update([
+                    'homeroom_teacher_id' => null,
+                    'homeroom_teacher'    => null,
+                    'homeroom_nip'        => null,
+                ]);
+                $notice = " (Catatan: Guru ini dimutasi dari Kelas {$oldClass->code})";
+            }
+
+            $teacher = User::find($teacherId);
+            $teacherName = $teacher->name;
+            $teacherNip = $teacher->nip_nuptk;
+
+            // Update info jabatan di profil guru
+            $info = $teacher->additional_info ?? [];
+            $info['classroom'] = $code;
+            $info['jabatan'] = 'Wali Kelas ' . $code;
+            $teacher->additional_info = $info;
+            $teacher->save();
+        }
+
+        $classroom = Classroom::create([
+            'code'                => $code,
+            'name'                => $name,
+            'grade_level'         => $validated['grade_level'],
+            'section'             => $section,
+            'homeroom_teacher_id' => $validated['homeroom_teacher_id'] ?: null,
+            'homeroom_teacher'    => $teacherName,
+            'homeroom_nip'        => $teacherNip,
+            'room_name'           => $validated['room_name'] ?: 'Ruang ' . $name,
+            'capacity'            => $validated['capacity'],
+            'total_students'      => 0,
+            'academic_year'       => $validated['academic_year'],
+            'status'              => $validated['status'],
+        ]);
+
+        ActivityLog::record(
+            'CREATE_CLASSROOM',
+            'Master Rombel',
+            "Menambahkan rombel baru: {$classroom->name} ({$classroom->code}, Kapasitas: {$classroom->capacity})"
+        );
+
+        return redirect()->route('classrooms.index')
+            ->with('success', "Rombel {$classroom->name} berhasil ditambahkan ke direktori akademik!{$notice}");
     }
 
     /**
@@ -129,5 +231,44 @@ class ClassroomController extends Controller
 
         return redirect()->route('classrooms.index')
             ->with('success', "Pengaturan Kelas {$classroom->code} dan penetapan Wali Kelas berhasil disimpan!{$notice}");
+    }
+
+    /**
+     * Hapus rombel kelas secara aman (Proteksi: Hanya jika 0 siswa)
+     */
+    public function destroy(Classroom $classroom)
+    {
+        $studentCount = $classroom->students()->count();
+
+        // Proteksi: Cegah penghapusan jika masih ada siswa di dalam rombel
+        if ($studentCount > 0) {
+            return back()->with('error', "Gagal menghapus! Kelas {$classroom->code} masih memiliki {$studentCount} siswa aktif. Harap mutasikan seluruh siswa ke rombel lain terlebih dahulu sebelum menghapus kelas ini.");
+        }
+
+        $className = $classroom->name;
+        $classCode = $classroom->code;
+
+        // Jika ada guru wali kelas terkait, lepaskan penugasan di profil guru
+        if ($classroom->homeroom_teacher_id) {
+            $teacher = User::find($classroom->homeroom_teacher_id);
+            if ($teacher) {
+                $info = $teacher->additional_info ?? [];
+                unset($info['classroom']);
+                $info['jabatan'] = 'Guru Mapel / Non-Wali';
+                $teacher->additional_info = $info;
+                $teacher->save();
+            }
+        }
+
+        $classroom->delete();
+
+        ActivityLog::record(
+            'DELETE_CLASSROOM',
+            'Master Rombel',
+            "Menghapus rombel kelas: {$className} ({$classCode})"
+        );
+
+        return redirect()->route('classrooms.index')
+            ->with('success', "Rombel {$className} berhasil dihapus dari direktori sekolah!");
     }
 }

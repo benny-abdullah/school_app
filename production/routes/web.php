@@ -63,10 +63,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('operator/gtk', \App\Http\Controllers\GtkController::class)->names('gtk');
         Route::post('operator/gtk/{gtk}/reset-password', [\App\Http\Controllers\GtkController::class, 'resetPassword'])->name('gtk.reset-password');
 
-        // Master CRUD 29 Rombel Kelas & Relasi Wali Kelas (Operator & Admin)
-        Route::get('/operator/classrooms', [\App\Http\Controllers\ClassroomController::class, 'index'])->name('classrooms.index');
-        Route::get('/operator/classrooms/{classroom}/edit', [\App\Http\Controllers\ClassroomController::class, 'edit'])->name('classrooms.edit');
-        Route::put('/operator/classrooms/{classroom}', [\App\Http\Controllers\ClassroomController::class, 'update'])->name('classrooms.update');
+        // Master CRUD Rombel Kelas & Relasi Wali Kelas (Operator & Admin)
+        Route::resource('operator/classrooms', \App\Http\Controllers\ClassroomController::class)->names('classrooms');
 
         // Master CRUD Data Siswa & Mutasi Rombel
         Route::resource('operator/students', \App\Http\Controllers\Operator\StudentController::class)->names([
