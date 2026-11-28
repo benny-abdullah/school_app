@@ -2,6 +2,11 @@
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import Chart from 'chart.js/auto';
+import Alpine from 'alpinejs';
+
+// Initialize Alpine.js for Mobile Responsive Drawer & Micro-interactions
+window.Alpine = Alpine;
+Alpine.start();
 
 // Expose Libraries on Global Window for Livewire & Alpine.js
 window.Html5Qrcode = Html5Qrcode;
