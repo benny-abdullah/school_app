@@ -61,7 +61,10 @@
                                 @elseif(Auth::user()->isOperator())
                                     <span class="text-indigo-600 font-bold"><i class="bi bi-gear-fill"></i> Operator Sekolah</span>
                                 @elseif(Auth::user()->isGuru())
-                                    <span class="text-emerald-600 font-bold"><i class="bi bi-person-video3"></i> Guru / Wali 5A</span>
+                                    @php
+                                        $headerGuruClass = Auth::user()->homeroomClassroom?->code ?? (Auth::user()->additional_info['classroom'] ?? null);
+                                    @endphp
+                                    <span class="text-emerald-600 font-bold"><i class="bi bi-person-video3"></i> Guru / {{ $headerGuruClass ? 'Wali ' . $headerGuruClass : 'Pendidik' }}</span>
                                 @elseif(Auth::user()->isOrangTua())
                                     <span class="text-amber-600 font-bold"><i class="bi bi-people-fill"></i> Wali Murid</span>
                                 @endif
@@ -122,17 +125,17 @@
                     <a href="{{ route('gtk.index') }}" class="nav-link {{ request()->routeIs('gtk.*') ? 'active' : '' }}">
                         <i class="bi bi-people-fill text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Master Data GTK</span>
-                        <span class="ml-auto text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">GTK</span>
+                        <span class="ml-auto text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarGtkCount ?? \App\Models\User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count() }}</span>
                     </a>
                     <a href="{{ route('operator.students.index') }}" class="nav-link {{ request()->routeIs('operator.students.*') ? 'active' : '' }}">
                         <i class="bi bi-mortarboard-fill text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Master Data Siswa</span>
-                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CRUD</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarStudentCount ?? \App\Models\Student::count() }}</span>
                     </a>
                     <a href="{{ route('classrooms.index') }}" class="nav-link {{ request()->routeIs('classrooms.*') ? 'active' : '' }}">
                         <i class="bi bi-diagram-3 text-base mr-3 text-slate-400"></i>
-                        <span class="sidebar-text">Master 29 Rombel</span>
-                        <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">29</span>
+                        <span class="sidebar-text">Master Rombel</span>
+                        <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarClassroomCount ?? \App\Models\Classroom::count() }}</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-person-badge text-base mr-3 text-slate-400"></i>
@@ -168,17 +171,17 @@
                     <a href="{{ route('gtk.index') }}" class="nav-link {{ request()->routeIs('gtk.*') ? 'active' : '' }}">
                         <i class="bi bi-people-fill text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Master Data GTK</span>
-                        <span class="ml-auto text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">GTK</span>
+                        <span class="ml-auto text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarGtkCount ?? \App\Models\User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count() }}</span>
                     </a>
                     <a href="{{ route('operator.students.index') }}" class="nav-link {{ request()->routeIs('operator.students.*') ? 'active' : '' }}">
                         <i class="bi bi-mortarboard-fill text-base mr-3 text-slate-400"></i>
                         <span class="sidebar-text">Master Data Siswa</span>
-                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">CRUD</span>
+                        <span class="ml-auto text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarStudentCount ?? \App\Models\Student::count() }}</span>
                     </a>
                     <a href="{{ route('classrooms.index') }}" class="nav-link {{ request()->routeIs('classrooms.*') ? 'active' : '' }}">
                         <i class="bi bi-diagram-3 text-base mr-3 text-slate-400"></i>
-                        <span class="sidebar-text">Master 29 Rombel</span>
-                        <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">29</span>
+                        <span class="sidebar-text">Master Rombel</span>
+                        <span class="ml-auto text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-full font-bold">{{ $sidebarClassroomCount ?? \App\Models\Classroom::count() }}</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-person-badge text-base mr-3 text-slate-400"></i>
@@ -193,10 +196,13 @@
 
                 @elseif(Auth::user()->isGuru())
                     <!-- Menu Guru / Wali Kelas -->
+                    @php
+                        $sidebarGuruClass = Auth::user()->homeroomClassroom?->code ?? (Auth::user()->additional_info['classroom'] ?? null);
+                    @endphp
                     <div class="px-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Menu Guru</div>
                     <a href="{{ route('guru.dashboard') }}" class="nav-link {{ request()->routeIs('guru.dashboard') ? 'active' : '' }}">
                         <i class="bi bi-mortarboard text-base mr-3 text-slate-400"></i>
-                        <span class="sidebar-text">Dasbor Kelas 5A</span>
+                        <span class="sidebar-text">Dasbor {{ $sidebarGuruClass ? 'Kelas ' . $sidebarGuruClass : 'Guru' }}</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-camera text-base mr-3 text-slate-400"></i>

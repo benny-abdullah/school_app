@@ -43,7 +43,7 @@
                     <i class="bi bi-arrow-up-short text-base"></i> 100% Dapodik
                 </span>
             </div>
-            <p class="text-xs text-slate-500 mt-1">Tersebar di 29 Rombel Kelas</p>
+            <p class="text-xs text-slate-500 mt-1">Tersebar di {{ $totalClasses }} Rombel Kelas</p>
         </div>
 
         <!-- Card 2: Kehadiran Hari Ini -->
@@ -75,7 +75,7 @@
                 <span class="text-3xl font-extrabold text-slate-900">{{ $totalClasses }} Kelas</span>
                 <span class="text-xs font-medium text-slate-500">Tingkat 1 - 6</span>
             </div>
-            <p class="text-xs text-slate-500 mt-1">1A-1D, 2A-2E, 3A-3E, 4A-4E, 5A-5E, 6A-6E</p>
+            <p class="text-xs text-slate-500 mt-1">{{ $totalClasses }} Rombel Aktif (Tingkat 1 - 6)</p>
         </div>
 
         <!-- Card 4: GTK & Tenaga Pendidik -->
@@ -90,19 +90,19 @@
                 <span class="text-3xl font-extrabold text-slate-900">{{ $totalTeachers }} Orang</span>
                 <span class="text-xs font-semibold text-emerald-600">Aktif Mengajar</span>
             </div>
-            <p class="text-xs text-slate-500 mt-1">29 Wali Kelas + Guru Mapel & TU</p>
+            <p class="text-xs text-slate-500 mt-1">Wali Kelas, Guru Mapel & TU</p>
         </div>
     </div>
 
-    <!-- Master 29 Rombel Overview -->
+    <!-- Master Rombel Overview -->
     <div class="card overflow-hidden">
         <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <h2 class="text-base font-bold text-slate-900">Distribusi Master 29 Rombongan Belajar</h2>
+                <h2 class="text-base font-bold text-slate-900">Distribusi Master Rombongan Belajar</h2>
                 <p class="text-xs text-slate-500">Seluruh kelas telah terdaftar di database MySQL <span class="font-mono text-rose-600 font-bold">db_starkids</span></p>
             </div>
             <span class="status-badge status-active">
-                <i class="bi bi-database-check"></i> 29 Rombel Terverifikasi
+                <i class="bi bi-database-check"></i> {{ $totalClasses }} Rombel Terverifikasi
             </span>
         </div>
 

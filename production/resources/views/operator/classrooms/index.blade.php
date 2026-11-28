@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Master 29 Rombel & Penugasan Wali Kelas')
+@section('title', 'Master Rombongan Belajar & Penugasan Wali Kelas')
 
 @section('content')
 <div class="space-y-6">
@@ -10,7 +10,7 @@
             <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold mb-2">
                 <i class="bi bi-diagram-3-fill"></i> Manajemen Akademik & Kepegawaian
             </div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Master 29 Rombongan Belajar</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Master Rombongan Belajar</h1>
             <p class="text-xs text-slate-500 mt-1">
                 Pengelolaan kuota kelas, sarana ruangan, dan penetapan SK Guru Wali Kelas SDN Kebonagung Kota Pasuruan.
             </p>
@@ -29,13 +29,13 @@
         <div class="card p-4">
             <span class="text-[11px] font-bold text-slate-500 uppercase">Total Rombel</span>
             <div class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">{{ $stats['total_classes'] }} Kelas</div>
-            <p class="text-[11px] text-indigo-600 font-semibold mt-0.5">1A-1D & 2A-6E</p>
+            <p class="text-[11px] text-indigo-600 font-semibold mt-0.5">{{ $stats['total_classes'] }} Rombel Aktif (Tingkat 1 - 6)</p>
         </div>
 
         <div class="card p-4">
             <span class="text-[11px] font-bold text-slate-500 uppercase">Wali Kelas Terisi</span>
             <div class="mt-2 text-2xl sm:text-3xl font-extrabold text-emerald-600">{{ $stats['assigned_teachers_count'] }} Guru</div>
-            <p class="text-[11px] text-emerald-600 font-semibold mt-0.5">Penugasan 100%</p>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-0.5">{{ $stats['assigned_teachers_count'] == $stats['total_classes'] ? 'Penugasan 100%' : $stats['assigned_teachers_count'] . ' Guru Ditugaskan' }}</p>
         </div>
 
         <div class="card p-4">
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <!-- Table Master 29 Rombel Card -->
+    <!-- Table Master Rombel Card -->
     <div class="card overflow-hidden">
         <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -63,7 +63,7 @@
             <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
                 <a href="{{ route('classrooms.index', ['grade' => 'all']) }}" 
                     class="px-3 py-1.5 rounded-lg transition {{ $selectedGrade === 'all' ? 'bg-white text-rose-600 shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
-                    Semua (29)
+                    Semua ({{ $stats['total_classes'] }})
                 </a>
                 @for($g = 1; $g <= 6; $g++)
                     <a href="{{ route('classrooms.index', ['grade' => $g]) }}" 

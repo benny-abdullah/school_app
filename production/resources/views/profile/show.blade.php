@@ -86,8 +86,12 @@
                     @elseif(Auth::user()->isGuru())
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase">Penugasan Wali Kelas</div>
-                            <div class="font-bold text-rose-600 text-sm mt-0.5">Kelas {{ $roleData['classroom']->code ?? '5A' }}</div>
-                            <div class="text-slate-500">Kapasitas: {{ $roleData['total_students'] ?? 30 }} Peserta Didik</div>
+                            <div class="font-bold text-rose-600 text-sm mt-0.5">
+                                {{ isset($roleData['classroom']) && $roleData['classroom'] ? 'Kelas ' . $roleData['classroom']->code : 'Guru Mapel / Non-Wali' }}
+                            </div>
+                            <div class="text-slate-500">
+                                {{ isset($roleData['classroom']) && $roleData['classroom'] ? 'Kapasitas: ' . ($roleData['total_students'] ?? 32) . ' Peserta Didik' : 'Pendidik SDN Kebonagung' }}
+                            </div>
                         </div>
                         <div>
                             <div class="text-[11px] font-bold text-slate-400 uppercase">Mata Pelajaran</div>

@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <div>Wali Kelas: <span class="font-bold text-slate-800">Bambang S.Pd</span> (Kelas 5A)</div>
+                    <div>Wali Kelas: <span class="font-bold text-slate-800">{{ $classroom->homeroom_teacher ?? 'Bambang S.Pd' }}</span> (Kelas {{ $classroomCode }})</div>
                     <div class="text-emerald-700 font-semibold flex items-center gap-1">
                         <i class="bi bi-shield-check"></i> Notifikasi Terverifikasi Sistem
                     </div>

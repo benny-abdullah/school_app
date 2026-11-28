@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $classrooms = Classroom::orderBy('grade_level')->orderBy('section')->get();
         $totalStudents = Classroom::sum('total_students');
         $totalClasses = Classroom::count();
-        $totalTeachers = 32;
+        $totalTeachers = User::whereIn('role', ['guru/walikelas', 'operator', 'admin'])->count();
 
         $currentTimeWib = Carbon::now('Asia/Jakarta')->translatedFormat('l, d F Y - H:i:s') . ' WIB';
 

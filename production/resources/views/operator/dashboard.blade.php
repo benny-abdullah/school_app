@@ -12,7 +12,7 @@
             </div>
             <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Pusat Manajemen Data Sekolah</h1>
             <p class="text-xs text-slate-500 mt-1">
-                Pengelolaan master 29 rombel kelas, cetak kartu pelajar CR-80, dan konfigurasi scanner presensi.
+                Pengelolaan master rombongan belajar, cetak kartu pelajar CR-80, dan konfigurasi scanner presensi.
             </p>
         </div>
 
@@ -53,7 +53,7 @@
     <div class="card overflow-hidden">
         <div class="card-header flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <h2 class="text-base font-bold text-slate-900">Daftar Lengkap 29 Master Rombongan Belajar</h2>
+                <h2 class="text-base font-bold text-slate-900">Daftar Lengkap Master Rombongan Belajar</h2>
                 <p class="text-xs text-slate-500">Master data rombel SDN Kebonagung Kota Pasuruan</p>
             </div>
 
@@ -61,7 +61,7 @@
             <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
                 <a href="{{ route('operator.dashboard', ['grade' => 'all']) }}" 
                     class="px-3 py-1.5 rounded-lg transition {{ $selectedGrade === 'all' ? 'bg-white text-rose-600 shadow-xs' : 'text-slate-600 hover:text-slate-900' }}">
-                    Semua (29)
+                    Semua ({{ $totalClasses ?? count($classrooms) }})
                 </a>
                 @for($g = 1; $g <= 6; $g++)
                     <a href="{{ route('operator.dashboard', ['grade' => $g]) }}" 

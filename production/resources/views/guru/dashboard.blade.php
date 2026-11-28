@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dasbor Guru & Wali Kelas 5A')
+@section('title', 'Dasbor Guru & Wali Kelas ' . ($classroom->code ?? 'Binaan'))
 
 @section('content')
 <div class="space-y-6">
@@ -10,7 +10,7 @@
             <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold mb-2">
                 <i class="bi bi-person-video3"></i> Portal Wali Kelas
             </div>
-            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Presensi & Kesiswaan Kelas {{ $classroom->code ?? '5A' }}</h1>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Presensi & Kesiswaan Kelas {{ $classroom->code ?? 'Binaan' }}</h1>
             <p class="text-xs text-slate-500 mt-1">
                 Wali Kelas: <span class="font-bold text-slate-800">{{ Auth::user()->name }}</span> (NIP: {{ Auth::user()->nip_nuptk }}) - SDN Kebonagung
             </p>
@@ -28,12 +28,12 @@
         </div>
     </div>
 
-    <!-- Quick Stats Cards Class 5A -->
+    <!-- Quick Stats Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <div class="card p-4">
-            <span class="text-[11px] font-bold text-slate-500 uppercase">Total Siswa 5A</span>
+            <span class="text-[11px] font-bold text-slate-500 uppercase">Total Siswa {{ $classroom->code ?? '' }}</span>
             <div class="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900">{{ $classroom->total_students ?? 30 }}</div>
-            <p class="text-[11px] text-slate-400 mt-0.5">Kapasitas Maksimal 32</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Kapasitas Maksimal {{ $classroom->capacity ?? 32 }}</p>
         </div>
 
         <div class="card p-4">
