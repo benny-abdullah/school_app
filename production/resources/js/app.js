@@ -1,5 +1,12 @@
 // Star Kids SDN Kebonagung - Application Client Assets
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import Chart from 'chart.js/auto';
+
+// Expose Libraries on Global Window for Livewire & Alpine.js
+window.Html5Qrcode = Html5Qrcode;
+window.Html5QrcodeSupportedFormats = Html5QrcodeSupportedFormats;
+window.Chart = Chart;
 
 // Web Audio API Synthesizer (Audio Feedback for Barcode Scan & Actions)
 window.playAudioFeedback = (type) => {
