@@ -110,6 +110,7 @@ class DashboardController extends Controller
         $classroomCode = $studentInfo['classroom'] ?? '5A';
 
         $classroom = Classroom::where('code', $classroomCode)->first();
+        $student = \App\Models\Student::where('nisn', $studentNisn)->first();
 
         // Riwayat kehadiran 5 hari terakhir siswa bersangkutan
         $attendanceHistory = [
@@ -122,6 +123,7 @@ class DashboardController extends Controller
 
         return view('ortu.dashboard', compact(
             'user',
+            'student',
             'studentName',
             'studentNisn',
             'classroomCode',

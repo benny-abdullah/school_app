@@ -76,6 +76,7 @@ Fokus: Membangun struktur database relasional berstandar enterprise dengan UUIDv
 - [x] **2.5 Master CRUD Operator (Siswa, Mutasi Rombel, Orang Tua & Impor Dapodik)**
   - [x] Model & Migrasi Tabel `students` (NISN, Nama, Gender, Classroom, Ortu, No WA, Poin Tatib, Status)
   - [x] CRUD Master Siswa: Form tambah siswa, edit biodata, NISN 10 digit, nomor kontak ortu/WA
+  - [x] Fitur Unggah Berkas Pas Foto Siswa (JPEG/PNG/WebP maks 2MB, live preview & penyimpanan storage public)
   - [x] Fitur Mutasi Rombel Siswa: Pindah kelas antar rombel (misal 1A ke 1B) & sinkronisasi otomatis kapasitas
   - [x] CRUD Relasi Orang Tua / Wali Murid: Pengaturan kontak WhatsApp untuk notifikasi gerbang real-time
   - [x] Filter Cerdas Direktori Siswa (Pencarian nama/NISN, Filter 29 Rombel, Status Kesiswaan, Gender)
@@ -105,6 +106,7 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] **Dashboard Guru / Wali Kelas**: Rekap kelas binaan (5A), presensi siswa 5A realtime, tombol scanner kamera
     - [x] **Dashboard Orang Tua**: Profil ananda (Ahmad Rifai 5A), jam tap gerbang realtime, pratinjau kartu pelajar CR-80 barcode
   - [x] Notifikasi Alert Flash (Success, Error, Warning, Info)
+  - [x] Halaman & Menu Lihat Profil Pengguna Terintegrasi untuk 4 Role (Admin, Operator, Guru, Orang Tua) beserta fitur pembaruan kontak & sandi
 - [ ] **3.4 Master CRUD Admin / Kepala Sekolah (Manajemen Akun, GTK & Penetapan Wali Kelas)**
   - [ ] CRUD Manajemen Akun Pengguna (*User Management*): Tambah user baru, suspend akun, reset password ke default NIP/NISN
   - [ ] CRUD Master GTK (Guru & Tenaga Kependidikan): Form tambah/edit guru, NIP (18 digit), NUPTK (16 digit), jabatan, mapel

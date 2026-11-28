@@ -141,20 +141,33 @@
                         </div>
                     </div>
 
-                    <!-- Student Details -->
-                    <div class="space-y-2 text-xs">
-                        <div>
-                            <div class="text-[10px] text-rose-200 uppercase font-medium">Nama Siswa</div>
-                            <div class="font-extrabold text-sm tracking-wide">{{ $studentName }}</div>
+                    <!-- Student Details with Photo Frame -->
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-14 h-18 bg-white/20 border border-white/30 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 shadow-xs">
+                            @if(isset($student) && $student?->photo)
+                                <img src="{{ asset('storage/' . $student->photo) }}" alt="Foto {{ $studentName }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="text-center p-1 text-white/80">
+                                    <i class="bi bi-person-fill text-2xl"></i>
+                                    <span class="block text-[8px] font-mono mt-0.5">3 x 4</span>
+                                </div>
+                            @endif
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
+
+                        <div class="space-y-1.5 text-xs flex-1">
                             <div>
-                                <div class="text-[10px] text-rose-200 uppercase font-medium">NISN</div>
-                                <div class="font-mono font-bold">{{ $studentNisn }}</div>
+                                <div class="text-[10px] text-rose-200 uppercase font-medium">Nama Siswa</div>
+                                <div class="font-extrabold text-sm tracking-wide">{{ $studentName }}</div>
                             </div>
-                            <div>
-                                <div class="text-[10px] text-rose-200 uppercase font-medium">Rombel</div>
-                                <div class="font-bold">Kelas {{ $classroomCode }}</div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <div class="text-[10px] text-rose-200 uppercase font-medium">NISN</div>
+                                    <div class="font-mono font-bold">{{ $studentNisn }}</div>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-rose-200 uppercase font-medium">Rombel</div>
+                                    <div class="font-bold">Kelas {{ $classroomCode }}</div>
+                                </div>
                             </div>
                         </div>
                     </div>

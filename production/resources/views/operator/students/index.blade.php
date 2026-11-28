@@ -148,9 +148,20 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="font-bold text-slate-900">{{ $s->name }}</div>
-                                <div class="text-[11px] text-slate-400">
-                                    {{ $s->birth_place ? $s->birth_place . ', ' : '' }}{{ $s->birth_date ? $s->birth_date->translatedFormat('d M Y') : '-' }}
+                                <div class="flex items-center gap-3">
+                                    @if($s->photo)
+                                        <img src="{{ asset('storage/' . $s->photo) }}" alt="{{ $s->name }}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shadow-2xs flex-shrink-0">
+                                    @else
+                                        <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                                            {{ strtoupper(substr($s->name, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <div class="font-bold text-slate-900">{{ $s->name }}</div>
+                                        <div class="text-[11px] text-slate-400">
+                                            {{ $s->birth_place ? $s->birth_place . ', ' : '' }}{{ $s->birth_date ? $s->birth_date->translatedFormat('d M Y') : '-' }}
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                             <td class="text-center">

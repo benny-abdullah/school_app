@@ -51,25 +51,27 @@
                 </div>
 
                 <!-- User Profile Dropdown Pill -->
-                <div class="flex items-center gap-2.5 pl-2">
-                    <div class="text-right hidden sm:block">
-                        <div class="text-xs font-bold text-slate-800 leading-tight">{{ Auth::user()->name }}</div>
-                        <div class="text-[11px] font-medium text-slate-500">
-                            @if(Auth::user()->isAdmin())
-                                <span class="text-rose-600 font-bold"><i class="bi bi-shield-check"></i> Kepala Sekolah</span>
-                            @elseif(Auth::user()->isOperator())
-                                <span class="text-indigo-600 font-bold"><i class="bi bi-gear-fill"></i> Operator Sekolah</span>
-                            @elseif(Auth::user()->isGuru())
-                                <span class="text-emerald-600 font-bold"><i class="bi bi-person-video3"></i> Guru / Wali 5A</span>
-                            @elseif(Auth::user()->isOrangTua())
-                                <span class="text-amber-600 font-bold"><i class="bi bi-people-fill"></i> Wali Murid (Ahmad Rifai)</span>
-                            @endif
+                <div class="flex items-center gap-2 pl-2">
+                    <a href="{{ route('profile.show') }}" title="Lihat Profil Saya" class="flex items-center gap-2.5 p-1.5 rounded-xl hover:bg-slate-100 transition group">
+                        <div class="text-right hidden sm:block">
+                            <div class="text-xs font-bold text-slate-800 leading-tight group-hover:text-rose-600 transition">{{ Auth::user()->name }}</div>
+                            <div class="text-[11px] font-medium text-slate-500">
+                                @if(Auth::user()->isAdmin())
+                                    <span class="text-rose-600 font-bold"><i class="bi bi-shield-check"></i> Kepala Sekolah</span>
+                                @elseif(Auth::user()->isOperator())
+                                    <span class="text-indigo-600 font-bold"><i class="bi bi-gear-fill"></i> Operator Sekolah</span>
+                                @elseif(Auth::user()->isGuru())
+                                    <span class="text-emerald-600 font-bold"><i class="bi bi-person-video3"></i> Guru / Wali 5A</span>
+                                @elseif(Auth::user()->isOrangTua())
+                                    <span class="text-amber-600 font-bold"><i class="bi bi-people-fill"></i> Wali Murid</span>
+                                @endif
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="w-9 h-9 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 font-bold text-sm shadow-xs">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                    </div>
+                        <div class="w-9 h-9 rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 font-bold text-sm shadow-xs group-hover:scale-105 transition">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                        </div>
+                    </a>
 
                     <!-- Logout Button -->
                     <form action="{{ route('logout') }}" method="POST" class="inline">
@@ -202,6 +204,13 @@
                         <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
                     </a>
                 @endif
+
+                <!-- Menu Profil Pengguna (Semua Role) -->
+                <div class="px-3 pt-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Akun Saya</div>
+                <a href="{{ route('profile.show') }}" class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-circle text-base mr-3 text-slate-400"></i>
+                    <span class="sidebar-text">Lihat Profil Saya</span>
+                </a>
 
                 <div class="pt-6 px-3">
                     <div class="p-3 bg-rose-50/70 border border-rose-100 rounded-xl text-center">

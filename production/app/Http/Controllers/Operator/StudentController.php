@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classroom;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
@@ -51,7 +52,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Simpan data siswa baru ke database
+     * Simpan data siswa baru beserta upload pas foto
      */
     public function store(Request $request)
     {
@@ -68,13 +69,21 @@ class StudentController extends Controller
             'guardian_relation' => 'nullable|string|max:40',
             'guardian_phone'    => 'nullable|string|max:30',
             'status'            => 'required|in:active,graduated,moved,inactive',
+            'photo'             => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
             'nisn.required'       => 'NISN 10 digit wajib diisi.',
             'nisn.digits'         => 'NISN harus tepat 10 digit angka resmi Kemdikbud.',
             'nisn.unique'         => 'NISN tersebut sudah terdaftar di sistem.',
             'name.required'       => 'Nama lengkap siswa wajib diisi.',
             'classroom_id.exists' => 'Rombel kelas tidak valid.',
+            'photo.image'         => 'File pas foto harus berupa gambar.',
+            'photo.mimes'         => 'Format foto harus berupa JPG, JPEG, PNG, atau WebP.',
+            'photo.max'           => 'Ukuran berkas foto maksimal 2 MB.',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('students', 'public');
+        }
 
         $student = Student::create($validated);
 
@@ -95,7 +104,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Perbarui data siswa & proses mutasi rombel jika ada perubahan kelas
+     * Perbarui data siswa, proses mutasi rombel, dan upload foto baru
      */
     public function update(Request $request, Student $student)
     {
@@ -112,7 +121,20 @@ class StudentController extends Controller
             'guardian_relation' => 'nullable|string|max:40',
             'guardian_phone'    => 'nullable|string|max:30',
             'status'            => 'required|in:active,graduated,moved,inactive',
+            'photo'             => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'photo.image'       => 'File pas foto harus berupa gambar.',
+            'photo.mimes'       => 'Format foto harus berupa JPG, JPEG, PNG, atau WebP.',
+            'photo.max'         => 'Ukuran berkas foto maksimal 2 MB.',
         ]);
+
+        if ($request->hasFile('photo')) {
+            // Hapus pas foto lama jika ada
+            if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+                Storage::disk('public')->delete($student->photo);
+            }
+            $validated['photo'] = $request->file('photo')->store('students', 'public');
+        }
 
         $oldClassroomId = $student->classroom_id;
         $newClassroomId = (int)$validated['classroom_id'];
@@ -135,12 +157,17 @@ class StudentController extends Controller
     }
 
     /**
-     * Hapus data siswa
+     * Hapus data siswa dan fotonya jika ada
      */
     public function destroy(Student $student)
     {
         $name = $student->name;
         $classroomId = $student->classroom_id;
+
+        if ($student->photo && Storage::disk('public')->exists($student->photo)) {
+            Storage::disk('public')->delete($student->photo);
+        }
+
         $student->delete();
 
         $this->updateClassroomStudentCount($classroomId);

@@ -32,7 +32,7 @@
             </div>
         @endif
 
-        <form action="{{ route('operator.students.store') }}" method="POST" class="space-y-6">
+        <form action="{{ route('operator.students.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- Section 1: Identitas Pokok Siswa -->
@@ -43,6 +43,25 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Upload Pas Foto Siswa -->
+                    <div class="sm:col-span-2 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                        <label class="block text-xs font-bold text-slate-700 mb-2">
+                            <i class="bi bi-camera-fill text-rose-600"></i> Pas Foto Resmi Siswa (Format JPG / PNG / WebP, Maks 2MB)
+                        </label>
+                        <div class="flex items-center gap-4">
+                            <!-- Preview Box -->
+                            <div class="w-16 h-20 rounded-xl border border-dashed border-slate-300 bg-white flex items-center justify-center overflow-hidden shadow-2xs flex-shrink-0" id="photoPreviewContainer">
+                                <i class="bi bi-person text-3xl text-slate-300" id="photoPreviewPlaceholder"></i>
+                                <img id="photoPreviewImg" src="" alt="Preview Pas Foto" class="w-full h-full object-cover hidden">
+                            </div>
+                            <div class="flex-1">
+                                <input type="file" id="photo" name="photo" accept="image/jpeg,image/png,image/jpg,image/webp"
+                                    onchange="previewStudentPhoto(event)"
+                                    class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-rose-50 file:text-rose-700 hover:file:bg-rose-100 transition cursor-pointer">
+                                <p class="text-[11px] text-slate-400 mt-1">Pas foto akan tercetak otomatis di Kartu Pelajar Digital (CR-80) dan scanner presensi.</p>
+                            </div>
+                        </div>
+                    </div>
                     <!-- NISN -->
                     <div>
                         <label for="nisn" class="block text-xs font-bold text-slate-700 mb-1.5">
@@ -198,4 +217,21 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewStudentPhoto(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('photoPreviewImg');
+                const placeholder = document.getElementById('photoPreviewPlaceholder');
+                img.src = e.target.result;
+                img.classList.remove('hidden');
+                if (placeholder) placeholder.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection
