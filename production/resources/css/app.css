@@ -344,24 +344,79 @@ body {
 
 /* Laser Scanner & Camera Viewport Animation */
 @keyframes scanLaser {
-  0% { top: 8%; opacity: 0.8; }
-  50% { top: 88%; opacity: 1; }
-  100% { top: 8%; opacity: 0.8; }
+  0% { top: 6%; opacity: 0.85; }
+  50% { top: 92%; opacity: 1; }
+  100% { top: 6%; opacity: 0.85; }
 }
 .scanner-laser {
   position: absolute;
-  left: 10%;
-  right: 10%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #e11d48, #f43f5e, #e11d48, transparent);
-  box-shadow: 0 0 14px 3px rgba(225, 29, 72, 0.85);
-  animation: scanLaser 2s ease-in-out infinite;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #e11d48 20%, #f43f5e 50%, #e11d48 80%, transparent);
+  box-shadow: 0 0 16px 4px rgba(225, 29, 72, 0.9);
+  animation: scanLaser 1.8s ease-in-out infinite;
   pointer-events: none;
-  z-index: 10;
+  z-index: 25;
 }
-#camera-reader-viewport video {
-  border-radius: 1rem;
-  object-fit: cover;
+
+/* Full Bleed Camera Viewer Fix */
+#cameraReader,
+#camera-reader-viewport {
   width: 100% !important;
   height: 100% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: #000000 !important;
 }
+
+#cameraReader video,
+#camera-reader-viewport video {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+#cameraReader div {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+#cameraReader canvas {
+  display: none !important;
+}
+
+#cameraReader img {
+  display: none !important;
+}
+
+/* Reticle targeting viewfinder corners */
+.scanner-reticle {
+  position: absolute;
+  inset: 10%;
+  pointer-events: none;
+  z-index: 20;
+  border: 1.5px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 1rem;
+}
+.scanner-corner {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-color: #f43f5e;
+  border-style: solid;
+  pointer-events: none;
+  z-index: 22;
+}
+.scanner-corner-tl { top: -2px; left: -2px; border-width: 4px 0 0 4px; border-top-left-radius: 12px; }
+.scanner-corner-tr { top: -2px; right: -2px; border-width: 4px 4px 0 0; border-top-right-radius: 12px; }
+.scanner-corner-bl { bottom: -2px; left: -2px; border-width: 0 0 4px 4px; border-bottom-left-radius: 12px; }
+.scanner-corner-br { bottom: -2px; right: -2px; border-width: 0 4px 4px 0; border-bottom-right-radius: 12px; }

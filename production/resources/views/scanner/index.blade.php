@@ -118,11 +118,25 @@
                     </form>
                 </div>
 
-                <!-- 2. METODE KAMERA WEBRTC (HP / LAPTOP CAMERA SCANNER) -->
+                <!-- 2. METODE KAMERA WEBRTC (HP / LAPTOP HIGH-SPEED CAMERA SCANNER) -->
                 <div x-show="activeMethod === 'camera'" class="space-y-3" style="display: none;">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-700">Pemindai Kamera Video (html5-qrcode)</span>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-slate-700">Kamera Pemindai Video</span>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-500" :class="cameraRunning ? 'animate-ping' : ''"></span>
+                                <span x-text="cameraRunning ? '25 FPS Turbo Scan' : 'Siaga'"></span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <!-- Tombol Balik Kamera (Depan / Belakang) -->
+                            <button type="button" @click="flipCamera()" :disabled="!cameraRunning" title="Ganti Kamera Depan/Belakang"
+                                class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center gap-1 transition disabled:opacity-40 cursor-pointer">
+                                <i class="bi bi-arrow-repeat"></i>
+                                <span class="hidden sm:inline" x-text="cameraFacing === 'environment' ? 'Kamera Belakang' : 'Kamera Depan'"></span>
+                            </button>
+
+                            <!-- Tombol Buka / Matikan Kamera -->
                             <button type="button" @click="toggleCamera()" class="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition"
                                 :class="cameraRunning ? 'bg-rose-500 hover:bg-rose-600 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'">
                                 <i :class="cameraRunning ? 'bi bi-camera-video-off' : 'bi bi-camera-video'"></i>
@@ -131,13 +145,45 @@
                         </div>
                     </div>
 
-                    <!-- Viewfinder Kamera Frame -->
-                    <div class="relative bg-black rounded-xl overflow-hidden aspect-video border border-slate-700 flex items-center justify-center">
-                        <div id="cameraReader" class="w-full h-full"></div>
-                        <div x-show="!cameraRunning" class="text-slate-400 text-xs flex flex-col items-center gap-2">
-                            <i class="bi bi-camera text-4xl text-slate-500"></i>
-                            <span>Klik "Buka Kamera" untuk mengaktifkan pemindai WebRTC</span>
+                    <!-- Viewfinder Kamera Frame (Full Bleed Aspect-Video) -->
+                    <div class="relative bg-black rounded-2xl overflow-hidden aspect-video border-2 border-slate-700 shadow-md flex items-center justify-center">
+                        <div id="cameraReader" class="w-full h-full" style="width: 100% !important; height: 100% !important; position: absolute; inset: 0;"></div>
+
+                        <!-- Laser Scanner Animasi Merah saat Kamera Aktif -->
+                        <div x-show="cameraRunning && !isScanLocked" class="scanner-laser"></div>
+
+                        <!-- Reticle Bingkai Sudut Target Pindai -->
+                        <div x-show="cameraRunning" class="scanner-reticle">
+                            <div class="scanner-corner scanner-corner-tl"></div>
+                            <div class="scanner-corner scanner-corner-tr"></div>
+                            <div class="scanner-corner scanner-corner-bl"></div>
+                            <div class="scanner-corner scanner-corner-br"></div>
                         </div>
+
+                        <!-- Efek Flash Hijau Berhasil Scan -->
+                        <div x-show="scanSuccessFlash" x-transition.opacity.duration.200ms class="absolute inset-0 bg-emerald-500/25 border-4 border-emerald-400 pointer-events-none z-30 flex items-center justify-center">
+                            <span class="px-3.5 py-1.5 bg-emerald-600 text-white font-extrabold text-xs rounded-full shadow-lg flex items-center gap-1.5">
+                                <i class="bi bi-check-circle-fill"></i> KARTU SISWA TERDETEKSI!
+                            </span>
+                        </div>
+
+                        <!-- Layar Siaga saat Kamera Mati -->
+                        <div x-show="!cameraRunning" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 text-xs bg-slate-900/90 p-4 text-center z-10">
+                            <div class="w-12 h-12 rounded-full bg-slate-800 text-rose-500 flex items-center justify-center mb-2 shadow-inner">
+                                <i class="bi bi-camera text-2xl"></i>
+                            </div>
+                            <span class="font-bold text-slate-200">Kamera Pemindai Sedang Nonaktif</span>
+                            <span class="text-slate-400 text-[11px] mt-0.5 max-w-xs">Klik tombol "Buka Kamera" untuk mengaktifkan pemindai WebRTC berkecepatan tinggi</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[11px] text-slate-500 px-1">
+                        <span class="flex items-center gap-1">
+                            <i class="bi bi-lightning-charge-fill text-amber-500"></i> Mode Cepat: QR Code & Barcode 1D Code 128
+                        </span>
+                        <span x-show="isScanLocked" class="text-rose-600 font-bold flex items-center gap-1">
+                            <i class="bi bi-hourglass-split"></i> Memproses siswa...
+                        </span>
                     </div>
                 </div>
 
@@ -378,6 +424,9 @@ function scannerApp() {
         recentLogs: [],
         clockTime: '{{ $currentTimeWib }}',
         cameraRunning: false,
+        cameraFacing: 'environment',
+        isScanLocked: false,
+        scanSuccessFlash: false,
         html5QrCode: null,
         manualQuery: '',
         manualResults: [],
@@ -574,43 +623,123 @@ function scannerApp() {
             });
         },
 
+        // Flip Kamera Depan <-> Belakang
+        flipCamera() {
+            if (!this.cameraRunning) return;
+            this.cameraFacing = (this.cameraFacing === 'environment') ? 'user' : 'environment';
+            if (this.html5QrCode) {
+                this.html5QrCode.stop().then(() => {
+                    this.startCameraStream();
+                }).catch(() => {
+                    this.startCameraStream();
+                });
+            }
+        },
+
         // Toggle Kamera WebRTC menggunakan html5-qrcode
         toggleCamera() {
             if (this.cameraRunning) {
-                if (this.html5QrCode) {
-                    this.html5QrCode.stop().then(() => {
-                        this.cameraRunning = false;
-                    }).catch(err => {
-                        console.error('Stop camera error:', err);
-                        this.cameraRunning = false;
-                    });
-                }
+                this.stopCameraStream();
             } else {
-                if (typeof Html5Qrcode === 'undefined') {
-                    alert('Library scanner kamera sedang dimuat, silakan coba sesaat lagi.');
-                    return;
-                }
+                this.startCameraStream();
+            }
+        },
 
-                this.html5QrCode = new Html5Qrcode('cameraReader');
-                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-
-                this.html5QrCode.start(
-                    { facingMode: 'environment' },
-                    config,
-                    (decodedText) => {
-                        // Anti-duplikasi debouncing
-                        this.submitScan('camera_qr', decodedText);
-                    },
-                    (error) => {
-                        // scanning frame
-                    }
-                ).then(() => {
-                    this.cameraRunning = true;
+        stopCameraStream() {
+            if (this.html5QrCode) {
+                this.html5QrCode.stop().then(() => {
+                    this.cameraRunning = false;
                 }).catch(err => {
-                    alert('Gagal mengakses kamera: ' + err);
+                    console.error('Stop camera error:', err);
                     this.cameraRunning = false;
                 });
+            } else {
+                this.cameraRunning = false;
             }
+        },
+
+        startCameraStream() {
+            if (typeof Html5Qrcode === 'undefined') {
+                alert('Library pemindai kamera sedang dimuat, silakan coba sesaat lagi.');
+                return;
+            }
+
+            const container = document.getElementById('cameraReader');
+            if (!container) return;
+
+            // Inisialisasi library dengan format spesifik yang digunakan kartu pelajar (Code 128 & QR Code)
+            const formats = window.Html5QrcodeSupportedFormats ? [
+                window.Html5QrcodeSupportedFormats.QR_CODE,
+                window.Html5QrcodeSupportedFormats.CODE_128,
+                window.Html5QrcodeSupportedFormats.CODE_39,
+                window.Html5QrcodeSupportedFormats.EAN_13
+            ] : undefined;
+
+            this.html5QrCode = new Html5Qrcode('cameraReader', {
+                formatsToSupport: formats,
+                verbose: false
+            });
+
+            // Konfigurasi Turbo High-Speed: FPS 25, Area Pindai Lebar 85% x 80%
+            const config = {
+                fps: 25,
+                qrbox: (viewfinderWidth, viewfinderHeight) => {
+                    const w = Math.floor(viewfinderWidth * 0.85);
+                    const h = Math.floor(viewfinderHeight * 0.80);
+                    return { width: Math.max(w, 240), height: Math.max(h, 200) };
+                },
+                aspectRatio: 16 / 9,
+                disableFlip: false
+            };
+
+            const onScanSuccess = (decodedText) => {
+                if (this.isScanLocked) return;
+
+                // Lock jeda 1.8 detik per siswa untuk mencegah double-tap bertubi-tubi
+                this.isScanLocked = true;
+                this.scanSuccessFlash = true;
+                setTimeout(() => { this.scanSuccessFlash = false; }, 500);
+
+                this.submitScan('camera_qr', decodedText);
+
+                setTimeout(() => {
+                    this.isScanLocked = false;
+                }, 1800);
+            };
+
+            const onScanFailure = (error) => {
+                // scanning frame (silent)
+            };
+
+            // Jalankan stream kamera dengan fallback jika kamera belakang tidak tersedia (misal di webcam laptop)
+            this.html5QrCode.start(
+                { facingMode: this.cameraFacing },
+                config,
+                onScanSuccess,
+                onScanFailure
+            ).then(() => {
+                this.cameraRunning = true;
+            }).catch(err => {
+                console.warn('Percobaan kamera ' + this.cameraFacing + ' gagal, mencoba fallback mode:', err);
+                // Fallback ke kamera depan jika kamera belakang tidak ada
+                if (this.cameraFacing === 'environment') {
+                    this.cameraFacing = 'user';
+                    this.html5QrCode.start(
+                        { facingMode: 'user' },
+                        config,
+                        onScanSuccess,
+                        onScanFailure
+                    ).then(() => {
+                        this.cameraRunning = true;
+                    }).catch(finalErr => {
+                        alert('Tidak dapat mengakses kamera: ' + finalErr);
+                        this.cameraRunning = false;
+                    });
+                } else {
+                    alert('Tidak dapat mengakses kamera: ' + err);
+                    this.cameraRunning = false;
+                }
+            });
         },
 
         // Pencarian Manual Siswa
