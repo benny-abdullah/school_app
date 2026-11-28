@@ -23,7 +23,7 @@ Fokus: Membangun kerangka dasar aplikasi Laravel 13 bersih di dalam folder `prod
 
 - [x] **1.1 Inisialisasi Kerangka Laravel 13 (PHP 8.4)**
   - [x] Generate struktur proyek Laravel 13 di `production/`
-  - [x] Konfigurasi file `.env` (Database, App Name, Timezone `Asia/Jakarta`, Locale `id`)
+  - [x] Konfigurasi file `.env` (Database MySQL `db_starkids`, App Name, Timezone `Asia/Jakarta` WIB, Locale `id`)
   - [x] Konfigurasi Composer dependencies (`livewire/livewire`, `predis/predis`, dsb.)
 - [ ] **1.2 Setup Aset Antarmuka & Desain Sistem (Tailwind CSS v4 & Alpine.js)**
   - [ ] Setup Tailwind CSS dengan palet warna resmi: Primary Rose-600 (`#e11d48`), Emerald-600, Slate-900
