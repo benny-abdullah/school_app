@@ -265,18 +265,34 @@ Fokus: Analisis data kesiswaan terpadu pada halaman khusus mandiri (*Dedicated A
 
 ---
 
-## 👥 Tahap 8: Master Data GTK, Log Audit & Backup Data ISO 27001
-Fokus: Tata kelola kepegawaian Dapodik dan kepatuhan standar keamanan data internasional.
+## 🛡️ Tahap 8: Master Data GTK, Log Audit & Tata Kelola Keamanan Siber ISO (ISO/IEC 27001, ISO 27701 & ISO 25010)
+Fokus: Tata kelola kepegawaian Dapodik dan kepatuhan standar keamanan data internasional (Information Security Management System, Privacy Information Management, dan Software Quality).
 
 - [x] **8.1 Master Data Guru & Tenaga Kependidikan (Eksklusif Admin/Kepsek & Operator)**
   - [x] Manajemen CRUD data GTK (NIP, NUPTK, Nama & Gelar, Gender, Status Kepegawaian, Jabatan, Rombel Binaan, No WA)
   - [x] Validasi penomoran NIP 18 digit & NUPTK 16 digit
-- [x] **8.2 Log Audit Kekal ISO/IEC 27001 A.12.4**
-  - [x] Pencatatan transaksi sistem (aktor, peran, timestamp, IP address, modul, payload sebelum/sesudah)
+- [x] **8.2 Log Audit Forensik Kekal ISO/IEC 27001:2022 Klausul A.12.4 (Logging & Monitoring)**
+  - [x] Pencatatan transaksi sistem otomatis (`ActivityLog::record()`): Aktor, Peran, Timestamp, IP Address, User Agent, Modul, Payload sebelum/sesudah
   - [x] Fitur pelindung integritas log (*append-only*, tidak dapat di-edit atau dihapus oleh siapapun)
-- [ ] **8.3 Manajemen Snapshot Backup 3-2-1**
+  - [x] Fitur Ekspor Audit Trail ISO 27001 (Download PDF Berita Acara & Download Excel .xlsx untuk Admin)
+- [ ] **8.3 Manajemen Snapshot Backup 3-2-1 ISO/IEC 27001:2022 Klausul A.8.13 (Information Backup)**
   - [ ] Jadwal backup otomatis database & berkas terenkripsi
   - [ ] Simulasi uji restore pemulihan data bencana (*disaster recovery verification*)
+- [x] **8.4 Standar Keamanan Aplikasi & Jaringan ISO/IEC 27001:2022 Klausul A.8.20 & A.8.26 (Application Security Requirements)**
+  - [x] Middleware HTTP Security Headers: `X-Frame-Options: SAMEORIGIN` (proteksi Clickjacking), `X-Content-Type-Options: nosniff` (proteksi MIME sniffing), `X-XSS-Protection: 1; mode=block`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(self)` (izin WebRTC kamera presensi resmi)
+  - [x] Proteksi OWASP Top 10: Sanitasi XSS Blade auto-escaping, proteksi CSRF Token pada setiap request POST/PUT/DELETE, dan pencegahan SQL Injection mutlak via Eloquent Parameterized PDO
+  - [x] Proteksi Serangan Brute-Force: Rate limiting pada rute autentikasi login (pembatasan request per IP)
+  - [x] Proteksi Kredensial Akun: Enkripsi kata sandi menggunakan salted hash Bcrypt/Argon2id dan regenerasi Session ID saat login untuk mencegah *Session Fixation & Hijacking*
+- [ ] **8.5 Kriptografi & Perlindungan Data Sensitif ISO/IEC 27001:2022 Klausul A.8.24 (Cryptography)**
+  - [ ] Enkripsi Kolom Sensitif *At-Rest* menggunakan cipher AES-256-GCM (data aduan whistleblower & token rahasia kartu)
+  - [ ] Digital Signature HMAC-SHA256 Token untuk validasi integritas QR Code kartu fisik agar tidak dapat dipalsukan
+- [x] **8.6 Manajemen Informasi Privasi Siswa ISO/IEC 27701:2019 & Kepatuhan UU PDP No. 27/2022**
+  - [x] Hak Kendali Orang Tua & Proteksi Anti-Hapus (*Strict Zero-IDOR & Forbidden Delete*): Orang tua berhak memperbarui pas foto anak kandung, namun dilarang keras menghapus/merusak data pokok Dapodik (403 Forbidden)
+  - [x] Pembatasan Akses Berprinsip *Least Privilege & Need-to-Know*: Guru hanya mengakses rombel binaannya, orang tua hanya mengakses data anak kandungnya sendiri
+  - [ ] Penyamaran Data Pribadi (*Data Masking*): Penyensoran nomor kontak pribadi wali murid dan NIK pada antarmuka publik atau tampilan audit
+- [ ] **8.7 Standar Kualitas Kinerja & Keandalan Perangkat Lunak ISO/IEC 25010**
+  - [ ] Performance Efficiency: Optimasi waktu respon pemindaian gerbang (*gate scan latency*) < 50 milidetik per siswa untuk kelancaran antrean 791 peserta didik
+  - [ ] Reliability & Fault Tolerance: Mekanisme ketahanan sistem pemindai saat fluktuasi jaringan (*offline resilience*)
 
 ---
 
@@ -325,7 +341,7 @@ Fokus: Penerapan sistem di server produksi dan serah terima operasional.
 | **Tahap 5** | Direktori Siswa & Cetak Kartu Pelajar ISO CR-80 | ⏳ Pending |
 | **Tahap 6** | Kesiswaan, Presensi KBM, Tatib, Prestasi & Whistleblower | ⏳ Pending |
 | **Tahap 7** | Dasbor Analisis AI (Rule-Based & Google Gemini 1.5) | ⏳ Pending |
-| **Tahap 8** | Master GTK, Log Audit & Backup ISO 27001 | ⏳ Pending |
+| **Tahap 8** | Master GTK, Log Audit & Keamanan Siber ISO 27001 | ⏳ Pending |
 | **Tahap 9** | Pengujian Kualitas Sistem (Testing & QA) | ⏳ Pending |
 | **Tahap 10**| Deployment Server Produksi & Go-Live | ⏳ Pending |
 
