@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // AI Copilot & Asisten Pedagogis Kesiswaan
-    Route::post('/ai/copilot/chat', [\App\Http\Controllers\AiCopilotController::class, 'chat'])->name('ai.copilot.chat');
+    Route::post('/ai/copilot/chat', [\App\Http\Controllers\AiAnalyticsController::class, 'chat'])->name('ai.copilot.chat');
 
     // Dashboard Super Admin / Kepala Sekolah
     Route::middleware('role:admin')->group(function () {
@@ -110,6 +110,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/scanner', [\App\Http\Controllers\ScannerController::class, 'index'])->name('scanner.index');
         Route::post('/scanner/scan', [\App\Http\Controllers\ScannerController::class, 'scan'])->name('scanner.scan');
         Route::get('/scanner/search-students', [\App\Http\Controllers\ScannerController::class, 'searchStudents'])->name('scanner.search');
+
+        // Halaman Khusus Mandiri Analisis Data AI & Kesiswaan (Eksklusif Admin, Operator, Guru)
+        Route::get('/ai-analytics', [\App\Http\Controllers\AiAnalyticsController::class, 'index'])->name('ai.analytics.index');
+        Route::post('/ai-analytics/chat', [\App\Http\Controllers\AiAnalyticsController::class, 'chat'])->name('ai.analytics.chat');
+        Route::post('/ai-analytics/test-connection', [\App\Http\Controllers\AiAnalyticsController::class, 'testConnection'])->name('ai.analytics.test');
+        Route::post('/ai-analytics/save-settings', [\App\Http\Controllers\AiAnalyticsController::class, 'saveSettings'])->name('ai.analytics.settings');
     });
 
     // Dashboard Orang Tua Murid / Siswa

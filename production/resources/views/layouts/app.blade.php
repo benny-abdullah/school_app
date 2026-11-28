@@ -155,10 +155,10 @@
 
                     <!-- Menu Laporan & Audit -->
                     <div class="px-3 pt-3 pb-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Laporan & Evaluasi</div>
-                    <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
-                        <i class="bi bi-pie-chart text-base mr-3 text-slate-400"></i>
-                        <span class="sidebar-text">Analitik Kehadiran</span>
-                        <span class="ml-auto text-[10px] bg-slate-100 text-slate-400 px-1.5 py-0.5 rounded font-bold">Soon</span>
+                    <a href="{{ route('ai.analytics.index') }}" class="nav-link {{ request()->routeIs('ai.analytics.*') ? 'active' : '' }}">
+                        <i class="bi bi-stars text-base mr-3 text-violet-600"></i>
+                        <span class="sidebar-text">Analisis AI Kesiswaan</span>
+                        <span class="ml-auto text-[10px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded-full font-bold">Live AI</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-journal-check text-base mr-3 text-slate-400"></i>
@@ -198,6 +198,11 @@
                         <span class="sidebar-text">Scanner Gerbang</span>
                         <span class="ml-auto text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">Live</span>
                     </a>
+                    <a href="{{ route('ai.analytics.index') }}" class="nav-link {{ request()->routeIs('ai.analytics.*') ? 'active' : '' }}">
+                        <i class="bi bi-stars text-base mr-3 text-violet-600"></i>
+                        <span class="sidebar-text">Analisis AI Kesiswaan</span>
+                        <span class="ml-auto text-[10px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded-full font-bold">AI</span>
+                    </a>
 
                 @elseif(Auth::user()->isGuru())
                     <!-- Menu Guru / Wali Kelas -->
@@ -213,6 +218,11 @@
                         <i class="bi bi-upc-scan text-base mr-3 text-emerald-500"></i>
                         <span class="sidebar-text">Scan Barcode Siswa</span>
                         <span class="ml-auto text-[10px] bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-bold">Live</span>
+                    </a>
+                    <a href="{{ route('ai.analytics.index') }}" class="nav-link {{ request()->routeIs('ai.analytics.*') ? 'active' : '' }}">
+                        <i class="bi bi-stars text-base mr-3 text-violet-600"></i>
+                        <span class="sidebar-text">Analisis AI Kesiswaan</span>
+                        <span class="ml-auto text-[10px] bg-violet-50 text-violet-700 px-2 py-0.5 rounded-full font-bold">AI</span>
                     </a>
                     <a href="#" class="nav-link text-slate-400 cursor-not-allowed" title="Tahap Berikutnya">
                         <i class="bi bi-chat-square-text text-base mr-3 text-slate-400"></i>
@@ -291,9 +301,6 @@
             @yield('content')
         </main>
     </div>
-
-    <!-- Floating AI Copilot & Slide-Out Drawer -->
-    @include('components.ai_copilot_drawer')
 
     @stack('scripts')
 </body>

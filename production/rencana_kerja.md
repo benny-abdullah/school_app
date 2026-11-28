@@ -144,7 +144,7 @@ Fokus: Keamanan autentikasi tanpa cela (*Zero IDOR*) dan antarmuka *Enterprise C
     - [x] Fitur Ekspor Audit Trail ISO 27001 (Download PDF Berita Acara & Download Excel .xlsx untuk Admin)
   - [x] Modul Penetapan & Rotasi Wali Kelas: Pengaturan guru pemegang rombel 1A s/d 6E secara terpusat oleh Kepsek
   - [ ] CRUD Master Aturan Poin Tatib & Prestasi: Konfigurasi ambang batas SP1, SP2, SP3, bobot minus pelanggaran, dan reward merit points
-  - [x] Floating AI Copilot Drawer (kanan bawah)
+  - [x] Halaman Khusus Analisis AI Kesiswaan & Manajemen API Key Gemini (Menggantikan Floating Drawer)
 
 ---
 
@@ -221,27 +221,33 @@ Fokus: Penegakan tata tertib humanis, pencegahan membolos, portofolio prestasi, 
 
 ---
 
-## 🤖 Tahap 7: Dasbor Analisis AI (Rule-Based & Google Gemini 1.5 Flash)
-Fokus: Deteksi dini siswa bermasalah dan rekomendasi tindakan pedagogik empatik via AI Copilot Drawer & Executive Insights.
+## 🤖 Tahap 7: Modul Analisis Data AI & Konfigurasi API Google Gemini (Dedicated Page)
+Fokus: Analisis data kesiswaan terpadu pada halaman khusus mandiri (*Dedicated AI Analytics Page*) khusus untuk **Role Admin, Operator, dan Guru/Wali Kelas** (Role Orang Tua tidak memiliki akses), penghapusan floating drawer mengambang agar antarmuka bersih, dan form manajemen API Key AI di dasbor admin.
 
 - [x] **7.1 Layanan Deteksi Dini Rule-Based (`AiStudentAnalysisService.php`)**
   - [x] Logika analisis kedisiplinan harian & pemantauan keterlambatan berulang (T-1, T-2, T-3)
   - [x] Logika filter absensi kritis & deteksi risiko kesiswaan
   - [x] Pengelompokan siswa berisiko secara dinamis dari basis data real-time
-- [x] **7.2 Integrasi Google Gemini 1.5 Flash API**
+- [x] **7.2 Integrasi Google Gemini 1.5 Flash API & Engine AI**
   - [x] Service caller ke Google Generative Language API v1beta (`models/gemini-1.5-flash:generateContent`)
   - [x] Format prompt pedagogis: asisten guru empatik, analisis maksimal 3 kalimat + 1 saran konkret ramah anak
   - [x] Fallback cerdas ke STAR-KIDS Rule-Based Expert Engine jika API key belum disetel / offline
-  - [x] Manajemen API Key aman via `.env` (`GEMINI_API_KEY`)
-- [x] **7.3 Tampilan UI Dasbor Analisis AI**
-  - [x] Banner wawasan pedagogik AI di Dasbor Eksekutif Admin & Dasbor Guru Kelas
-  - [x] Kartu putih sudut membulat dengan ikon bintang violet `bi-stars`
-  - [x] Teks analisis ringkas rekomendasi AI Gemini & deteksi siswa berisiko
-  - [x] Tombol "Buka AI Copilot Drawer" interaktif
-- [x] **7.4 Floating AI Copilot & Slide-Out Assistant**
-  - [x] Floating button dengan gradient violet-rose di pojok kanan bawah layar (`bi-stars`)
-  - [x] Slide-out drawer interaktif dengan 5 prompt cepat kesiswaan (Ringkasan Kehadiran Hari Ini, Deteksi Siswa Berisiko, Draf Surat Pemberitahuan Keterlambatan, Draf Pesan WA Santun ke Wali Murid, Rekomendasi Disiplin Positif)
-  - [x] Input bebas konsultasi kesiswaan untuk guru/operator/admin dengan jawaban real-time & format Markdown
+  - [x] Pembacaan dinamis API Key dari basis data (`app_settings`) atau fallback `.env` (`GEMINI_API_KEY`)
+- [x] **7.3 Form Pengaturan API Key AI di Dasbor Admin (`/ai-analytics` Pengaturan Gemini)**
+  - [x] Form input API Key Google Gemini (input bertipe password dengan tombol intip show/hide)
+  - [x] Pilihan model AI: Google Gemini 1.5 Flash (Rekomendasi Cepat & Ringan) vs Gemini 1.5 Pro
+  - [x] Tombol 1-Klik "Uji Koneksi API" (*Test Connection*) dengan indikator status aktif/gagal secara visual dan latensi ms
+  - [x] Penyimpanan konfigurasi API Key ke basis data (tabel `app_settings`)
+  - [x] Panduan praktis mendapatkan Google Gemini API Key gratis dari Google AI Studio
+- [x] **7.4 Halaman Khusus Mandiri Analisis Data AI (*Dedicated Page: `/ai-analytics`*)**
+  - [x] Penghapusan floating icon/drawer mengambang di kanan bawah agar layar bersih dan tidak menutupi tombol lain
+  - [x] Penambahan menu baru di Sidebar: **"Analisis AI Kesiswaan"** (dengan ikon `bi-stars` & badge AI untuk Admin, Operator, Guru)
+  - [x] 4 Kartu KPI Analisis AI: Total Siswa Binaan, Indeks Kehadiran Sekolah, Keterlambatan Gerbang, Early Warning System
+  - [x] Matriks Deteksi Dini Kesiswaan (*Early Warning System Table*): Daftar siswa berisiko tinggi beserta riwayat dan faktor pemicu
+  - [x] Stasiun Konsultasi AI Interaktif Layar Penuh (*Full-Page AI Copilot Workstation*):
+    - [x] 5 Tombol Analisis Cepat: Ringkas Presensi Hari Ini, Deteksi Siswa Berisiko, Draf SP Kedisiplinan, Draf Pesan WA Santun Wali Murid, Tips Disiplin Positif
+    - [x] Kolom tanya-jawab bebas konsultasi data sekolah secara real-time
+    - [x] Konsultasi 1-klik terarah langsung dari tabel siswa berisiko (Early Warning)
 
 ---
 

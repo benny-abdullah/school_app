@@ -115,10 +115,10 @@
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
-            <button type="button" @click="$dispatch('open-ai-copilot')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1.5 cursor-pointer">
-                <i class="bi bi-chat-dots-fill text-amber-300"></i>
-                <span>Buka AI Copilot Drawer</span>
-            </button>
+            <a href="{{ route('ai.analytics.index') }}" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1.5 cursor-pointer">
+                <i class="bi bi-stars text-amber-300"></i>
+                <span>Buka Pusat Analisis AI</span>
+            </a>
         </div>
     </div>
 

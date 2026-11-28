@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AppSetting;
 use App\Models\Attendance;
 use App\Models\Classroom;
 use App\Models\Student;
@@ -11,6 +12,106 @@ use Illuminate\Support\Facades\Log;
 
 class AiStudentAnalysisService
 {
+    /**
+     * Dapatkan API Key Gemini aktif dari Basis Data (AppSetting) atau Fallback ke .env
+     */
+    public static function getActiveApiKey(): ?string
+    {
+        $dbKey = AppSetting::get('gemini_api_key');
+        if (!empty($dbKey) && $dbKey !== 'your_gemini_api_key_here') {
+            return trim($dbKey);
+        }
+
+        $envKey = env('GEMINI_API_KEY');
+        if (!empty($envKey) && $envKey !== 'your_gemini_api_key_here') {
+            return trim($envKey);
+        }
+
+        return null;
+    }
+
+    /**
+     * Dapatkan Model Gemini yang dipilih (default: gemini-1.5-flash)
+     */
+    public static function getActiveModel(): string
+    {
+        return AppSetting::get('gemini_model', 'gemini-1.5-flash');
+    }
+
+    /**
+     * Uji Koneksi API Google Gemini secara langsung
+     */
+    public static function testApiConnection(?string $apiKey = null, ?string $model = null): array
+    {
+        $key = $apiKey ?: self::getActiveApiKey();
+        $targetModel = $model ?: self::getActiveModel();
+
+        if (empty($key)) {
+            return [
+                'success' => false,
+                'message' => 'API Key belum diisi atau belum tersimpan.',
+                'latency' => 0,
+            ];
+        }
+
+        $startTime = microtime(true);
+
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->timeout(10)->post("https://generativelanguage.googleapis.com/v1beta/models/{$targetModel}:generateContent?key={$key}", [
+                'contents' => [
+                    [
+                        'role'  => 'user',
+                        'parts' => [
+                            ['text' => 'Halo Google Gemini. Ini adalah uji verifikasi API Key dari sistem UPTD SDN Kebonagung Pasuruan. Balas dalam 1 kalimat pendek konfirmasi.'],
+                        ],
+                    ],
+                ],
+                'generationConfig' => [
+                    'temperature'     => 0.2,
+                    'maxOutputTokens' => 50,
+                ],
+            ]);
+
+            $latency = round((microtime(true) - $startTime) * 1000);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Koneksi berhasil diverifikasi.';
+
+                // Simpan status sukses ke database
+                AppSetting::set('gemini_status', 'active', 'ai', 'Status koneksi API Gemini');
+                AppSetting::set('gemini_last_tested_at', now()->toDateTimeString(), 'ai', 'Waktu uji koneksi terakhir');
+
+                return [
+                    'success' => true,
+                    'message' => 'Koneksi API Google Gemini Terhubung Sukses!',
+                    'reply'   => trim($reply),
+                    'latency' => $latency,
+                    'model'   => $targetModel,
+                ];
+            }
+
+            $errorData = $response->json();
+            $errorMessage = $errorData['error']['message'] ?? 'Kode HTTP ' . $response->status();
+
+            return [
+                'success' => false,
+                'message' => 'Gagal terhubung ke Google Gemini: ' . $errorMessage,
+                'latency' => $latency,
+            ];
+
+        } catch (\Throwable $e) {
+            $latency = round((microtime(true) - $startTime) * 1000);
+            return [
+                'success' => false,
+                'message' => 'Pengecualian jaringan/koneksi: ' . $e->getMessage(),
+                'latency' => $latency,
+            ];
+        }
+    }
+
     /**
      * Dapatkan ringkasan metrik kesiswaan dan presensi untuk prompt AI
      */
@@ -67,7 +168,7 @@ class AiStudentAnalysisService
                 if (empty($ctx['late_students'])) {
                     return "Berdasarkan evaluasi sistem realtime, tidak ditemukan anomali atau siswa dengan keterlambatan berulang hari ini. Seluruh rombel binaan 1A s/d 6E terpantau mematuhi tata tertib jam masuk sekolah.";
                 }
-                $list = collect($ctx['late_students'])->take(3)->map(fn($s) => "• **{$s['nama']}** (Kelas {$s['kelas']}): Terlambat {$s['level']} (+{$s['menit']} menit)")->implode("\n");
+                $list = collect($ctx['late_students'])->take(4)->map(fn($s) => "• **{$s['nama']}** (Kelas {$s['kelas']}): Terlambat {$s['level']} (+{$s['menit']} menit)")->implode("\n");
                 return "Terdeteksi **{$late} siswa** memerlukan perhatian kedisiplinan hari ini:\n{$list}\n\n**Rekomendasi Pedagogik**: Wali kelas disarankan melakukan dialog empatik saat jam istirahat untuk mengidentifikasi kendala transportasi atau jam tidur siswa di rumah.";
 
             case 'draft_sp':
@@ -80,20 +181,21 @@ class AiStudentAnalysisService
 
             case 'pedagogic':
             default:
-                return "💡 **REKOMENDASI PENDEKATAN DISIPLIN POSITIF RAMAH ANAK**\n\n1. **Apresiasi Murid Tepat Waktu**: Berikan stiker bintang atau poin karakter bagi siswa yang konsisten hadir sebelum 06:45 WIB.\n2. **Identifikasi Akar Masalah Keterlambatan**: Pisahkan antara faktor kemalasan dengan faktor eksternal (jarak tempuh, hujan, antar jemput adik).\n3. **Pendekatan Restitusi**: Bimbing siswa memahami pentingnya waktu tanpa rasa malu atau hukuman fisik di depan teman-temannya.";
+                return "💡 **REKOMENDASI PENDEKATAN DISIPLIN POSITIF RAMAH ANAK**\n\n1. **Apresiasi Murid Tepat Waktu**: Berikan apresiasi karakter bagi siswa yang konsisten hadir sebelum 06:45 WIB.\n2. **Identifikasi Akar Masalah Keterlambatan**: Pisahkan antara faktor kemalasan dengan faktor eksternal (jarak tempuh, hujan, antar jemput adik).\n3. **Pendekatan Restitusi**: Bimbing siswa memahami pentingnya waktu tanpa rasa malu atau hukuman fisik di depan teman-temannya.";
         }
     }
 
     /**
-     * Panggil Google Gemini 1.5 Flash API untuk analisis cerdas
+     * Panggil Google Gemini API untuk analisis cerdas
      */
     public static function askGemini(string $userPrompt, string $promptType = 'custom'): string
     {
-        $apiKey = env('GEMINI_API_KEY');
+        $apiKey = self::getActiveApiKey();
+        $model = self::getActiveModel();
         $ctx = self::getSchoolContextData();
 
         // Jika API Key belum dikonfigurasi, gunakan mesin rule-based cerdas
-        if (empty($apiKey) || $apiKey === 'your_gemini_api_key_here') {
+        if (empty($apiKey)) {
             return self::generateRuleBasedAnalysis($promptType, $ctx);
         }
 
@@ -102,7 +204,7 @@ class AiStudentAnalysisService
 
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->timeout(8)->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}", [
+            ])->timeout(8)->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
                 'contents' => [
                     [
                         'role'  => 'user',
